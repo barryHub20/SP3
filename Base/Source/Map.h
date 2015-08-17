@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "BoundBox_3D.h"
 using namespace std;
 
 class Map
@@ -32,11 +33,17 @@ public:
 
 	void Init(const int num_of_tile_Width, const int num_of_tile_Height, const int tileSize);
 	bool LoadMap(const string mapName);
+	void LoadBBox(void); //Create the bounding boxes from the file
 	int GetNumOfTiles_Height(void);
 	int GetNumOfTiles_Width(void);
 	int GetTileSize(void);
 
 	vector<vector<int> > theScreenMap;
+
+	//RP
+	vector<BoundBox_3D> GetBBList(void); //Returns the bounding box list
+	void CleanUp(void); //reset bounding box list
+	
 
 private:
 	int theScreen_Height;
@@ -44,6 +51,11 @@ private:
 	int theNumOfTiles_Height;
 	int theNumOfTiles_Width;
 	int theTileSize;
-
+	
 	bool LoadFile(const string mapName);
+
+	//RP
+	vector<BoundBox_3D> BoundBoxList; //Store the bounding boxes created
+
+	
 };

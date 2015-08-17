@@ -10,11 +10,11 @@ Map::Map(void)
 , theTileSize(0)
 {
 	theScreenMap.clear();
+	BoundBoxList.clear();
 }
 
 Map::~Map(void)
 {
-	theScreenMap.clear();
 }
 
 void Map::Init(const int num_of_tile_Width, const int num_of_tile_Height, const int tileSize)
@@ -42,6 +42,43 @@ bool Map::LoadMap(const string mapName)
 	}
 
 	return false;
+}
+
+void Map::LoadBBox(void)
+{
+	int m = 0;
+	BoundBox_3D box;
+	//mapFineOffset_x = mapOffset_x % m_cMap->GetTileSize();
+	for (int i = 0; i < GetNumOfTiles_Height(); i++)
+	{
+		for (int k = 0; k < GetNumOfTiles_Width(); k++)
+		{
+			//m = tileOffset_x + k;
+			Vector3 boxPos;
+			Vector3 scale(theTileSize, theTileSize, theTileSize);
+			if (theScreenMap[i][k] > 0)
+			{
+				boxPos.Set(k * theTileSize, i * theTileSize);	
+				//cout << boxPos << endl;
+				box.Set(boxPos, scale);
+				BoundBoxList.push_back(box);
+			}
+		/*	else if (theScreenMap[i][k] == 5)
+			{
+				boxPos.Set(k * theTileSize, 575.f - i * theTileSize);
+				box = new BoundingBox(boxPos, 25.f, 25.f, true);
+				theOriginalBoxMap.push_back(box);
+				theBoundingBoxMap.push_back(*box);
+			}
+			else if (theScreenMap[i][k] == 6)
+			{
+				boxPos.Set(k * theTileSize, 575.f - i * theTileSize);
+				box = new BoundingBox(boxPos, 25.f, 25.f, true);
+				secondBoundingBoxMap.push_back(*box);
+				delete box;
+			}*/
+		}
+	}
 }
 
 bool Map::LoadFile(const string mapName)
@@ -109,4 +146,15 @@ int Map::GetNumOfTiles_Width(void)
 int Map::GetTileSize(void)
 {
 	return theTileSize;
+}
+
+vector<BoundBox_3D> Map::GetBBList(void)
+{
+	return BoundBoxList;
+}
+
+void Map::CleanUp(void)
+{
+	BoundBoxList.clear();
+	theScreenMap.clear();
 }

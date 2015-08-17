@@ -26,9 +26,11 @@ void Model_2D::Init()
 	
 	InitMaps();
 	mapManager->SetMap(0);
+	mapManager->GetCurrentMap()->LoadBBox();
+
 	/* Coord of screen */
-	m_view_width = 180.f;
-	m_view_height = 140.f;
+	m_view_width = 1024.f;
+	m_view_height = 800.f;
 
 	/* World boundaries */
 	worldDimension.Set(800, 800, 100);
@@ -99,9 +101,6 @@ void Model_2D::InitMaps()
 	mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign_lvl2.csv");
 }
 
-
-
-
 void Model_2D::Update(double dt, bool* myKeys)
 {
 	/* model update */
@@ -132,6 +131,8 @@ void Model_2D::Update(double dt, bool* myKeys)
 	{
 		elementObject[0]->translateObject(50 * dt, 0, 0);
 	}
+
+	//Key B to move to next map (RP)
 	static bool ButtonBState = false;
 	if (!ButtonBState && myKeys[KEY_B])
 	{
@@ -145,14 +146,13 @@ void Model_2D::Update(double dt, bool* myKeys)
 		std::cout << "BBUTTON UP" << std::endl;
 	}
 
-
 	/* Check collision */
 	elementObject[0]->checkCollision(*elementObject[1]);
 	elementObject[0]->checkCollision(*elementObject[2]);
 	elementObject[0]->getBbox()->Reset();	//RMB to reset
 
 	/* fov */
-	UpdateFOV(dt, myKeys);
+	//UpdateFOV(dt, myKeys);
 }
 
 void Model_2D::UpdateLight(double dt, bool* myKeys, Light* light)
