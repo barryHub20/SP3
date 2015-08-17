@@ -11,8 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\GDT%2714\SP3\Base\Source\Inventory.cpp" />
-    <ClCompile Include="..\..\..\GDT%2714\SP3\Base\Source\Item.cpp" />
     <ClCompile Include="Source\BoundBox_2D.cpp" />
     <ClCompile Include="Source\BoundBox_3D.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
@@ -22,6 +20,8 @@
     <ClCompile Include="Source\DepthFBO.cpp" />
     <ClCompile Include="Source\FontData.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
+    <ClCompile Include="Source\Inventory.cpp" />
+    <ClCompile Include="Source\Item.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
