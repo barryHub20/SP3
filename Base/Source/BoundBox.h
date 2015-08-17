@@ -82,7 +82,7 @@ protected:
 	Vector3 scale;	//if 2D, z == 0
 	Vector3 position;
 	Vector3 start;
-	Vector3 end;// PUSH
+	Vector3 end;// PUSH TEST IF GT PUSH FUCK GIT
 
 	/* internal variables */
 	Vector3 previousPos;
