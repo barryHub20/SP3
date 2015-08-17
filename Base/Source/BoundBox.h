@@ -81,9 +81,8 @@ protected:
 	/* flag variables */
 	Vector3 scale;	//if 2D, z == 0
 	Vector3 position;
-	y
 	Vector3 start;
-	Vector3 end;
+	Vector3 end;//
 
 	/* internal variables */
 	Vector3 previousPos;
