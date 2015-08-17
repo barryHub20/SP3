@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Controller">
+      <UniqueIdentifier>{09ad9422-d95a-4b1c-99b5-db0112236f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\View">
+      <UniqueIdentifier>{ad71e317-fe1b-479e-9783-d6345b9277bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Model">
+      <UniqueIdentifier>{a9d633ca-feb6-4aa2-939c-c893fe246288}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\View">
+      <UniqueIdentifier>{18ffb7be-949c-4a9c-b15f-6c73cc4db5ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Controller">
+      <UniqueIdentifier>{992bc3dd-d5cd-4a0e-a648-49ef5d034185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects">
+      <UniqueIdentifier>{751e0b6c-6b0d-45bb-949b-8c6823d10cbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Files">
+      <UniqueIdentifier>{5d2233f0-c67f-4695-83dc-4ca775dcdbf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Files">
+      <UniqueIdentifier>{2201ae7d-e4a7-4e74-b431-117b2fedc854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AABB">
+      <UniqueIdentifier>{e4033b8a-48eb-403c-a3e3-078cc92c80cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AABB">
+      <UniqueIdentifier>{0634b2da-d81d-47df-b49b-fde91a26c629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects">
+      <UniqueIdentifier>{cfb26df3-fdb5-4ea3-bb19-82343044e97e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Useful Utilities">
+      <UniqueIdentifier>{996e7d72-3368-4a87-80b6-74559b7bc634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Useful Utilities">
+      <UniqueIdentifier>{94a7c0bd-937d-478b-80ab-09f883e95b86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Model">
+      <UniqueIdentifier>{3b9f3fd6-a773-4c74-b5d7-96b92f2b4eee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shadow">
+      <UniqueIdentifier>{a3d300e1-3304-4ddc-963f-0ef489f713da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shadow">
+      <UniqueIdentifier>{c483814b-b1a5-48d7-a0cc-4ff2433b0bd7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Controller.cpp">
+      <Filter>Source Files\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Model.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera3.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadHmap.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadOBJ.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadTGA.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mesh.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshBuilder.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shader.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpriteAnimation.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MiniMap.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FontData.cpp">
+      <Filter>Source Files\Useful Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshList.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CollideBox.cpp">
+      <Filter>Source Files\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Map.cpp">
+      <Filter>Source Files\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BoundBox_3D.cpp">
+      <Filter>Source Files\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BoundBox_2D.cpp">
+      <Filter>Source Files\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DepthFBO.cpp">
+      <Filter>Source Files\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\View_Shadow.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\View.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\utilities.cpp">
+      <Filter>Source Files\Useful Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Model_3D.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Model_2D.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Controller.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vertex.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera3.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadHmap.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadOBJ.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadTGA.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Material.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshBuilder.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shader.hpp">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpriteAnimation.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BoundBox.h">
+      <Filter>Header Files\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MiniMap.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\model_3D.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FontData.h">
+      <Filter>Header Files\Useful Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\utilities.h">
+      <Filter>Header Files\Useful Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshList.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Map.h">
+      <Filter>Header Files\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BoundBox_3D.h">
+      <Filter>Header Files\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BoundBox_2D.h">
+      <Filter>Header Files\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DepthFBO.h">
+      <Filter>Header Files\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\View_Shadow.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\View.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model_2D.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
