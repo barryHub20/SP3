@@ -19,6 +19,7 @@
     <ClCompile Include="Source\Controller.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
     <ClCompile Include="Source\FontData.cpp" />
+    <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="Source\Model_2D.cpp" />
     <ClCompile Include="Source\Model_3D.cpp" />
     <ClCompile Include="Source\Object.cpp" />
+    <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\utilities.cpp" />
@@ -48,6 +50,7 @@
     <ClInclude Include="Source\Controller.h" />
     <ClInclude Include="Source\DepthFBO.h" />
     <ClInclude Include="Source\FontData.h" />
+    <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
@@ -63,6 +66,7 @@
     <ClInclude Include="Source\Model_2D.h" />
     <ClInclude Include="Source\model_3D.h" />
     <ClInclude Include="Source\Object.h" />
+    <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\utilities.h" />
