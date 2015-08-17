@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\GDT%2714\SP3\Base\Source\Inventory.cpp" />
+    <ClCompile Include="..\..\..\GDT%2714\SP3\Base\Source\Item.cpp" />
     <ClCompile Include="Source\BoundBox_2D.cpp" />
     <ClCompile Include="Source\BoundBox_3D.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
@@ -42,6 +44,8 @@
     <ClCompile Include="Source\View.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Inventory.h" />
+    <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Item.h" />
     <ClInclude Include="Source\BoundBox.h" />
     <ClInclude Include="Source\BoundBox_2D.h" />
     <ClInclude Include="Source\BoundBox_3D.h" />

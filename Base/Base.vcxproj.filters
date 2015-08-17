@@ -73,6 +73,12 @@
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{cfa61c9f-9fdb-4654-8ffd-9356db024ed2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Inventory">
+      <UniqueIdentifier>{9a1f2936-acff-4da2-a8f9-62bd8f211e60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Inventory">
+      <UniqueIdentifier>{759b2cf9-a113-448c-99d6-9844a4b327ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Controller.cpp">
