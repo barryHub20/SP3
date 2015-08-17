@@ -13,17 +13,21 @@ const float	Model::MAX_FOV = 100.f;
 const float Model::DEFAULT_FOV = 45.f;
 
 /*********** constructor/destructor ***************/
-Model::Model() : m_Map(NULL)
+Model::Model() :
+	mapManager(NULL)
 {
 }
 
 Model::~Model()
 {
+	delete mapManager;
 }
 
 /*********** core functions ***************/
 void Model::Init()
 {
+	mapManager = new MapManager();
+
 	/* Must Init */
 	InitMesh();
 
@@ -73,6 +77,7 @@ void Model::UpdateOpenGL(double dt, bool* myKeys)
 
 void Model::Exit()
 {
+	mapManager->CleanUp();
 	Geometry::Exit();
 }
 

@@ -12,6 +12,7 @@ public:
 /*********** core functions ***************/
 	virtual void Init();
 	void InitObject();
+	void InitMaps();
 
 	virtual void Update(double dt, bool* myKeys);
 	void UpdateLight(double dt, bool* myKeys, Light* light);	//get light from view

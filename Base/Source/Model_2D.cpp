@@ -24,6 +24,8 @@ void Model_2D::Init()
 {
 	Model::Init();
 	
+	InitMaps();
+	mapManager->SetMap(0);
 	/* Coord of screen */
 	m_view_width = 180.f;
 	m_view_height = 140.f;
@@ -90,6 +92,15 @@ void Model_2D::InitObject()
 	}
 }
 
+void Model_2D::InitMaps()
+{
+	mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign.csv");
+	mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign_lvl1.csv");
+	mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign_lvl2.csv");
+}
+
+
+
 
 void Model_2D::Update(double dt, bool* myKeys)
 {
@@ -121,6 +132,19 @@ void Model_2D::Update(double dt, bool* myKeys)
 	{
 		elementObject[0]->translateObject(50 * dt, 0, 0);
 	}
+	static bool ButtonBState = false;
+	if (!ButtonBState && myKeys[KEY_B])
+	{
+		ButtonBState = true;
+		std::cout << "BBUTTON DOWN" << std::endl;
+		mapManager->ChangeNextMap();
+	}
+	else if (ButtonBState && !(myKeys[KEY_B]))
+	{
+		ButtonBState = false;
+		std::cout << "BBUTTON UP" << std::endl;
+	}
+
 
 	/* Check collision */
 	elementObject[0]->checkCollision(*elementObject[1]);

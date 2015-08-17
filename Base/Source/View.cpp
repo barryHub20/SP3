@@ -297,6 +297,9 @@ void View::Render(const float fps)
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
 
+	/*Map*/
+	RenderTileMap();
+
 	/* light */
 	//RenderLight();
 
@@ -420,37 +423,39 @@ void View::RenderObject()
 
 void View::RenderTileMap()
 {
+	
 	/* main tile */
 	float tileLoc;	//see if tile is out of screen, if is, do not RENDER SAFE FCKING FPS
-	for(int i = 0; i < model->m_Map->GetNumOfTiles_Height(); ++i)
+	for(int i = 0; i < model->mapManager->GetCurrentMap()->GetNumOfTiles_Height(); ++i)
 	{
-		for(int k = 0; k < model->m_Map->GetNumOfTiles_Width(); ++k)
+		for(int k = 0; k <model->mapManager->GetCurrentMap()->GetNumOfTiles_Width(); ++k)
 		{
-			tileLoc = static_cast<float>((k * model->m_Map->GetTileSize() - model->offset.x));
+			tileLoc = static_cast<float>((k * model->mapManager->GetCurrentMap()->GetTileSize() - model->offset.x));
 
-			if(model->m_Map->theScreenMap[i][k] != 0 && (tileLoc <= m_console_width && tileLoc + model->m_Map->GetTileSize() >= 0))
+			if(model->mapManager->GetCurrentMap()->theScreenMap[i][k] != 0 && (tileLoc <= m_console_width && tileLoc + model->mapManager->GetCurrentMap()->GetTileSize() >= 0))
 			{
 				//mesh, enableLight, size X, size Y, pos X, pos Y
-				Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.0f, (float)(k * model->m_Map->GetTileSize()) - model->offset.x, i * model->m_Map->GetTileSize(), model->m_Map->theScreenMap[i][k]);
+				Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.0f, (float)(k * model->mapManager->GetCurrentMap()->GetTileSize()) - model->offset.x, i *model->mapManager->GetCurrentMap()->GetTileSize(), model->mapManager->GetCurrentMap()->theScreenMap[i][k]);
 			}
 		}
 	}
 
+	//
+	///* background layer 1: parallex scrolling */
+	//for(int i = 0; i < model->m_backgroundMap->GetNumOfTiles_Height(); ++i)
+	//{
+	//	for(int k = 0; k < model->m_backgroundMap->GetNumOfTiles_Width(); ++k)
+	//	{
+	//		tileLoc = static_cast<float>((k * (model->m_backgroundMap->GetTileSize()) - (model->offset.x * model->m_backgroundSpeed_Percent)));
 
-	/* background layer 1: parallex scrolling */
-	for(int i = 0; i < model->m_backgroundMap->GetNumOfTiles_Height(); ++i)
-	{
-		for(int k = 0; k < model->m_backgroundMap->GetNumOfTiles_Width(); ++k)
-		{
-			tileLoc = static_cast<float>((k * (model->m_backgroundMap->GetTileSize()) - (model->offset.x * model->m_backgroundSpeed_Percent)));
-
-			if(model->m_backgroundMap->theScreenMap[i][k] != 0 && (tileLoc <= m_console_width && tileLoc + model->m_backgroundMap->GetTileSize() >= 0))
-			{
-				//mesh, enableLight, size X, size Y, pos X, pos Y
-				Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.0f, (float)(k * model->m_backgroundMap->GetTileSize()) - (int)(model->offset.x * model->m_backgroundSpeed_Percent), i * model->m_backgroundMap->GetTileSize(), model->m_backgroundMap->theScreenMap[i][k]);
-			}
-		}
-	}
+	//		if(model->m_backgroundMap->theScreenMap[i][k] != 0 && (tileLoc <= m_console_width && tileLoc + model->m_backgroundMap->GetTileSize() >= 0))
+	//		{
+	//			//mesh, enableLight, size X, size Y, pos X, pos Y
+	//			Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.0f, (float)(k * model->m_backgroundMap->GetTileSize()) - (int)(model->offset.x * model->m_backgroundSpeed_Percent), i * model->m_backgroundMap->GetTileSize(), model->m_backgroundMap->theScreenMap[i][k]);
+	//		}
+	//	}
+	//}
+	//
 }
 
 void View::Exit()

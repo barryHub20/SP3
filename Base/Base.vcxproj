@@ -24,6 +24,7 @@
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Map.cpp" />
+    <ClCompile Include="Source\MapManager.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\MeshList.cpp" />
@@ -37,7 +38,6 @@
     <ClCompile Include="Source\utilities.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
     <ClCompile Include="Source\View.cpp" />
-    <ClCompile Include="Source\View_Shadow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\BoundBox.h" />
@@ -53,6 +53,7 @@
     <ClInclude Include="Source\LoadOBJ.h" />
     <ClInclude Include="Source\LoadTGA.h" />
     <ClInclude Include="Source\Map.h" />
+    <ClInclude Include="Source\MapManager.h" />
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
@@ -68,7 +69,6 @@
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
     <ClInclude Include="Source\View.h" />
-    <ClInclude Include="Source\View_Shadow.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B172635-4E2B-46F1-A403-08F4194D00F5}</ProjectGuid>

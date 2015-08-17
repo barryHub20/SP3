@@ -129,9 +129,6 @@
     <ClCompile Include="Source\DepthFBO.cpp">
       <Filter>Source Files\Shadow</Filter>
     </ClCompile>
-    <ClCompile Include="Source\View_Shadow.cpp">
-      <Filter>Source Files\View</Filter>
-    </ClCompile>
     <ClCompile Include="Source\View.cpp">
       <Filter>Source Files\View</Filter>
     </ClCompile>
@@ -143,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="Source\Model_2D.cpp">
       <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MapManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,14 +224,14 @@
     <ClInclude Include="Source\DepthFBO.h">
       <Filter>Header Files\Shadow</Filter>
     </ClInclude>
-    <ClInclude Include="Source\View_Shadow.h">
-      <Filter>Header Files\View</Filter>
-    </ClInclude>
     <ClInclude Include="Source\View.h">
       <Filter>Header Files\View</Filter>
     </ClInclude>
     <ClInclude Include="Source\Model_2D.h">
       <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MapManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

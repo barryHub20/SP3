@@ -1,6 +1,7 @@
 #ifndef MODEL_H
 #define MODEL_H
 #include "Map.h"
+#include "MapManager.h"
 #include "MeshList.h"
 #include "MatrixStack.h"
 #include "Mtx44.h"
@@ -100,6 +101,7 @@ public:
 
 	virtual void Exit();
 
+
 	/*********** getter / setters ***************/
 	bool getbLightEnabled();
 	float getFOV();
@@ -117,10 +119,9 @@ public:
 
 	//!! 2D Map Stuff should not be in Model (parent class), should be in child classes
 	/************* TileMap *****************/
-	Map* m_Map;
+	MapManager *mapManager;
 	Map* m_backgroundMap;
 	Map* MapList[LEVEL_2 + 1];	//store the maps for each level
-
 	float m_backgroundSpeed_Percent;	//background scrolls at % speed of normal scrolling speed
 
 	/* constrain hero */
