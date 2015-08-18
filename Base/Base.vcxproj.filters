@@ -79,12 +79,6 @@
     <Filter Include="Source Files\Inventory">
       <UniqueIdentifier>{759b2cf9-a113-448c-99d6-9844a4b327ce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Enemy">
-      <UniqueIdentifier>{618af0b6-f5f9-4b02-98e7-c416e340150e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Enemy">
-      <UniqueIdentifier>{e04b889c-af6c-4ab1-b571-3baf2d1b65c8}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Controller.cpp">
@@ -179,9 +173,6 @@
     </ClCompile>
     <ClCompile Include="Source\Item.cpp">
       <Filter>Source Files\Inventory</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Source Files\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,14 +269,11 @@
     <ClInclude Include="Source\GameObject.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Item.h">
-      <Filter>Header Files\Inventory</Filter>
+    <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Inventory.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Inventory.h">
-      <Filter>Header Files\Inventory</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy.h">
-      <Filter>Header Files\Enemy</Filter>
+    <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Item.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

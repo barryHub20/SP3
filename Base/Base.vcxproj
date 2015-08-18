@@ -18,7 +18,6 @@
     <ClCompile Include="Source\CollideBox.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
-    <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\FontData.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\Inventory.cpp" />
@@ -45,6 +44,8 @@
     <ClCompile Include="Source\View.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Inventory.h" />
+    <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Item.h" />
     <ClInclude Include="Source\BoundBox.h" />
     <ClInclude Include="Source\BoundBox_2D.h" />
     <ClInclude Include="Source\BoundBox_3D.h" />
@@ -52,11 +53,8 @@
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\Controller.h" />
     <ClInclude Include="Source\DepthFBO.h" />
-    <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\FontData.h" />
     <ClInclude Include="Source\GameObject.h" />
-    <ClInclude Include="Source\Inventory.h" />
-    <ClInclude Include="Source\Item.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
