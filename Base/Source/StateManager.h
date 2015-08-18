@@ -31,7 +31,7 @@ public:
 	~StateManager();
 
 	StateManager::STATES GetState();
-	void ChangeState(STATES state, float dt);
+	void ChangeState(STATES state);
 	void SetTransitionTime(float transitionTime);
 	void UpdateTransitionTime(float dt);
 	bool isTransition();

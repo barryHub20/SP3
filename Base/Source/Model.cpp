@@ -29,6 +29,8 @@ void Model::Init()
 	mapManager = new MapManager();
 	stateManager = new StateManager();
 
+	stateManager->ChangeState(StateManager::MAIN_MENU);
+
 	/* Must Init */
 	InitMesh();
 

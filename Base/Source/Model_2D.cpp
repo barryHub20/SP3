@@ -107,41 +107,56 @@ void Model_2D::Update(double dt, bool* myKeys)
 	/* model update */
 	Model::Update(dt, myKeys);
 
-	Vector3 vel;
-	vel.SetZero();
-
-	/* Camera */
-	//camera.Update(dt, myKeys);
-
-	/* control character Test */
-	//cout << elementObject[0]->getBbox()->collideArea.collideSide;
-	float velPlayer = 750.f;	//tmp only
-
-	if(myKeys[KEY_W])
+	if (stateManager->GetState() == stateManager->MAIN_MENU) // Atm, a placeholder title screen with standard "Press Start" behaviour.
 	{
-		vel.Set(0, velPlayer * dt, 0);
-		elementObject[0]->translateObject(vel);
+		if(myKeys[KEY_SPACE])
+		{
+			stateManager->ChangeState(stateManager->GAME);
+		}
 	}
 
-	if(myKeys[KEY_A])	
+	if (stateManager->GetState() == stateManager->GAME)		// Game objects will only be 'active'/controllable when in the GAME state.
 	{
-		vel.Set(-velPlayer * dt, 0, 0);
-		elementObject[0]->translateObject(vel);
+		Vector3 vel;
+		vel.SetZero();
+
+		/* Camera */
+		//camera.Update(dt, myKeys);
+
+		/* control character Test */
+		//cout << elementObject[0]->getBbox()->collideArea.collideSide;
+		float velPlayer = 750.f;	//tmp only
+
+		if(myKeys[KEY_W])
+		{
+			vel.Set(0, velPlayer * dt, 0);
+			elementObject[0]->translateObject(vel);
+		}
+
+		if(myKeys[KEY_A])	
+		{
+			vel.Set(-velPlayer * dt, 0, 0);
+			elementObject[0]->translateObject(vel);
+		}
+
+		if(myKeys[KEY_S])	
+		{
+			vel.Set(0, -velPlayer * dt, 0);
+			elementObject[0]->translateObject(vel);
+		}
+
+		if(myKeys[KEY_D])	
+		{
+			vel.Set(velPlayer * dt, 0, 0);
+			elementObject[0]->translateObject(vel);
+		}
+
+		/* Check collision */
+		elementObject[0]->getBbox()->Start(elementObject[0]->getPosition());
+		elementObject[0]->checkCollision(*elementObject[1]);
+		elementObject[0]->checkCollision(*elementObject[2]);
+		elementObject[0]->getBbox()->Reset();	//RMB to reset
 	}
-
-	if(myKeys[KEY_S])	
-	{
-		vel.Set(0, -velPlayer * dt, 0);
-		elementObject[0]->translateObject(vel);
-	}
-
-	if(myKeys[KEY_D])	
-	{
-		vel.Set(velPlayer * dt, 0, 0);
-		elementObject[0]->translateObject(vel);
-	}
-
-
 
 	//Key B to move to next map (RP)
 	static bool ButtonBState = false;
@@ -149,7 +164,7 @@ void Model_2D::Update(double dt, bool* myKeys)
 	{
 		ButtonBState = true;
 		std::cout << "BBUTTON DOWN" << std::endl;
-		stateManager->ChangeState(StateManager::MAIN_MENU, (float)dt);
+		stateManager->ChangeState(StateManager::MAIN_MENU);
 		mapManager->ChangeNextMap();
 	}
 	else if (ButtonBState && !(myKeys[KEY_B]))
@@ -163,12 +178,6 @@ void Model_2D::Update(double dt, bool* myKeys)
 	{
 		stateManager->UpdateTransitionTime(dt);
 	}
-
-	/* Check collision */
-	elementObject[0]->getBbox()->Start(elementObject[0]->getPosition());
-	elementObject[0]->checkCollision(*elementObject[1]);
-	elementObject[0]->checkCollision(*elementObject[2]);
-	elementObject[0]->getBbox()->Reset();	//RMB to reset
 
 	/* fov */
 	//UpdateFOV(dt, myKeys);

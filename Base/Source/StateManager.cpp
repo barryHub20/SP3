@@ -21,7 +21,7 @@ bool StateManager::isTransition()
 	return transition;
 }
 
-StateManager::StateManager()
+StateManager::StateManager()			// Constructor
 {
 	state = NO_STATE;
 	stateToChangeTo = NO_STATE;
@@ -39,7 +39,7 @@ StateManager::STATES StateManager::GetState()
 	return state;
 }
 
-void StateManager::ChangeState(STATES state, float dt)
+void StateManager::ChangeState(STATES state)
 {
 	std::cout << "Switching state with transition" << std::endl;
 	stateToChangeTo = state;

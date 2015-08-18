@@ -328,12 +328,7 @@ void View::RenderCollideBox()
 
 	//cout << model->mapManager->GetCurrentMap()->GetBBList().size() << endl;
 
-
-	if (model->stateManager->isTransition())
-	{
-		
-	}
-	else
+	if (model->stateManager->GetState() == model->stateManager->GAME)	// If GAME is current state
 	{
 		for (int i = 0; i < model->mapManager->CurrentBBox.size(); i++)
 		{
@@ -344,7 +339,14 @@ void View::RenderCollideBox()
 			modelStack.PopMatrix();
 		}
 	}
-	
+	else if (model->stateManager->GetState() == model->stateManager->MAIN_MENU)
+	{
+		// Render main menu
+	}
+	else if (model->stateManager->isTransition()) // if TRANSITION is current state
+	{
+		
+	}
 }
 
 void View::RenderHUD()
@@ -443,12 +445,7 @@ void View::RenderObject()
 
 void View::RenderTileMap()
 {
-	
-	if (model->stateManager->isTransition())
-	{
-
-	}
-	else
+	if (model->stateManager->GetState() == model->stateManager->GAME)
 	{
 		/* main tile */
 		float tileLoc;	//see if tile is out of screen, if is, do not RENDER SAFE FCKING FPS
@@ -466,7 +463,14 @@ void View::RenderTileMap()
 			}
 		}
 	}
-	
+	else if (model->stateManager->GetState() == model->stateManager->MAIN_MENU)
+	{
+		// Render main menu
+	}
+	else if (model->stateManager->isTransition()) // if TRANSITION is current state
+	{
+		
+	}
 
 	//
 	///* background layer 1: parallex scrolling */
