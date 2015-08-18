@@ -72,7 +72,7 @@ class GameObject
 	GameObject(Vector3 Pos, Vector3 scale, Vector3 Dir, float Speed, bool active);
 	virtual ~GameObject(void);
 
-private:
+protected:
 	Object object;
 	Physics info;
 	GO_TYPE Type;

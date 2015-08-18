@@ -1,22 +1,20 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "Character.h"
+#include "GameObject.h"
 
-class Player : public Character
+class Player : public GameObject
 {
-	/* points */
+private:	
 	int score;
+
 public:
-	/* constructor / destrutor */
 	Player();
-	virtual ~Player();
+	Player(Vector3 Pos, Vector3 scale, Vector3 Dir, float Speed, bool active);
+	~Player();
+	
+	void Update(double dt, bool* myKey);
 
-	/* core */
-	virtual void Set(Mesh* mesh, Vector3 scale, Vector3 position, float angle, Vector3 axis, float mass, Object* parent, bool light, int healthPoint, Gun::TYPE initType);
-	void Update(bool keyPressedFire, bool keyPressedReload, bool* myKeys, const double dt);		//Controller::myKeys
-	void changeWeapons(bool goDown, bool goUp);
-
-	void increaseScore(int amt);
+	void setScore(int amtScore);
 	int getScore();
 };
 
