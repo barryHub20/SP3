@@ -52,9 +52,12 @@ void Model_2D::InitObject()
 {	
 	/** Setup game object */
 	test_obj = new GameObject(Vector3(1, 1, 1), Vector3(50, 50, 1), Vector3(1, 0, 0), 10, true);
-
-	/** Push Object address of GameObject into the vector to render **/
 	elementObject.push_back(test_obj->getObject());
+
+	/** Set up player **/
+	player = new Player(Vector3(1, 1, 1), Vector3(50, 50, 1), Vector3(1, 0, 0), 10, true);
+	elementObject.push_back(player->getObject());
+
 
 	/** init **/
 	for(std::vector<Object*>::iterator it = elementObject.begin(); it != elementObject.end(); ++it)
@@ -75,8 +78,6 @@ void Model_2D::Update(double dt, bool* myKeys)
 {
 	/* model update */
 	Model::Update(dt, myKeys);
-
-	
 	
 	if (stateManager->GetState() == stateManager->MAIN_MENU) // Atm, a placeholder title screen with standard "Press Start" behaviour.
 	{
@@ -101,7 +102,9 @@ void Model_2D::Update(double dt, bool* myKeys)
 
 	if (stateManager->GetState() == stateManager->GAME)		// Game objects will only be 'active'/controllable when in the GAME state.
 	{
-		test_obj->Update();	//RMB to reset
+		//->Update();	//RMB to reset
+		/* Update player */
+		player->Update(dt, myKeys);
 	}
 
 	//Key B to move to next map (RP)
@@ -110,7 +113,7 @@ void Model_2D::Update(double dt, bool* myKeys)
 	{
 		ButtonBState = true;
 		std::cout << "BBUTTON DOWN" << std::endl;
-		stateManager->ChangeState(StateManager::MAIN_MENU);
+		//stateManager->ChangeState(StateManager::MAIN_MENU);
 		mapManager->ChangeNextMap();
 	}
 	else if (ButtonBState && !(myKeys[KEY_B]))

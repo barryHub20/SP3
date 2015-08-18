@@ -5,6 +5,7 @@
 class Model_2D : public Model
 {
 	GameObject* test_obj;
+	Player* player;
 public:
 /*********** constructor/destructor ***************/
 	Model_2D();

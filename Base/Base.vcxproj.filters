@@ -180,6 +180,9 @@
     <ClCompile Include="Source\Collision.cpp">
       <Filter>Header Files\AABB</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\GDT%2714\SP3\Base\Source\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Controller.h">
@@ -282,6 +285,9 @@
       <Filter>Header Files\Inventory</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

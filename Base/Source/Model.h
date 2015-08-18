@@ -12,6 +12,7 @@
 #include "MiniMap.h"
 #include "Object.h"
 #include <vector>
+#include "Player.h"
 #include "StateManager.h"
 using namespace std;
 
