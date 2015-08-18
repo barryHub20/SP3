@@ -172,6 +172,11 @@ bool Controller::getKeyboardUpdate()
 	return true;
 }
 
+bool Controller::KeyPressed(KEYS key)
+{
+	return myKeys[key];
+}
+
 void Controller::UpdateMouseClick()
 {
 }

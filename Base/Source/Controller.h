@@ -32,6 +32,7 @@ public:
 
 	/********************** controller functions **********************/
 	static bool IsKeyPressed(unsigned short key);
+	static bool KeyPressed(KEYS key);
 	static bool getKeyboardUpdate();
 
 	/********************** mouse **********************/

@@ -50,42 +50,11 @@ void Model_2D::Init()
 
 void Model_2D::InitObject()
 {	
-	/** Default pos : 0, 0, 0
-		Default scale: 1, 1, 1
-	**/
+	/** Setup game object */
+	test_obj = new GameObject(Vector3(1, 1, 1), Vector3(50, 50, 1), Vector3(1, 0, 0), 10, true);
 
-	Object* obj_ptr;
-
-	/* resize vector to contain 4 spaces */
-	elementObject.resize(4);
-
-	//FOLLOW CAMERA OBJECT
-	obj_ptr = new Object;
-	obj_ptr->Set("character", Geometry::meshList[Geometry::GEO_CUBE], NULL, false, true);
-	obj_ptr->translateObject(10, 10, 0);
-	obj_ptr->scaleObject(50);
-	elementObject[0] = obj_ptr;
-
-	/*********** TEST 1: child translates to above parent Obj 1 and 2 ***********/
-	Object* parent = NULL;
-	parent = new Object;
-	parent->Set("Parent", Geometry::meshList[Geometry::GEO_CUBE], NULL, false, true);
-	parent->translateObject(m_view_width * 0.5f, m_view_height * 0.5f, 0);
-	//parent->rotateObject(56, 1, 0, 0);
-	parent->scaleObject(300, 10, 1);
-	elementObject[1] = parent;
-
-	obj_ptr = new Object;
-	obj_ptr->Set("Child", Geometry::meshList[Geometry::GEO_CUBE], parent, false, true);
-	obj_ptr->translateObject(0, 3.f, 0);	//translates 2 times of scale of parent
-	//obj_ptr->scaleObject(2, 1, 2);	//scales 2 times of parent
-	elementObject[2] = obj_ptr;
-
-
-	/* Axes */
-	obj_ptr = new Object;
-	obj_ptr->Set("Axes", Geometry::meshList[Geometry::GEO_AXES], NULL, false, true);
-	elementObject[3] = obj_ptr;
+	/** Push Object address of GameObject into the vector to render **/
+	elementObject.push_back(test_obj->getObject());
 
 	/** init **/
 	for(std::vector<Object*>::iterator it = elementObject.begin(); it != elementObject.end(); ++it)
@@ -107,6 +76,8 @@ void Model_2D::Update(double dt, bool* myKeys)
 	/* model update */
 	Model::Update(dt, myKeys);
 
+	
+	
 	if (stateManager->GetState() == stateManager->MAIN_MENU) // Atm, a placeholder title screen with standard "Press Start" behaviour.
 	{
 		if(myKeys[KEY_SPACE])
@@ -130,45 +101,7 @@ void Model_2D::Update(double dt, bool* myKeys)
 
 	if (stateManager->GetState() == stateManager->GAME)		// Game objects will only be 'active'/controllable when in the GAME state.
 	{
-		Vector3 vel;
-		vel.SetZero();
-
-		/* Camera */
-		//camera.Update(dt, myKeys);
-
-		/* control character Test */
-		//cout << elementObject[0]->getBbox()->collideArea.collideSide;
-		float velPlayer = 750.f;	//tmp only
-
-		if(myKeys[KEY_W])
-		{
-			vel.Set(0, velPlayer * dt, 0);
-			elementObject[0]->translateObject(vel);
-		}
-
-		if(myKeys[KEY_A])	
-		{
-			vel.Set(-velPlayer * dt, 0, 0);
-			elementObject[0]->translateObject(vel);
-		}
-
-		if(myKeys[KEY_S])	
-		{
-			vel.Set(0, -velPlayer * dt, 0);
-			elementObject[0]->translateObject(vel);
-		}
-
-		if(myKeys[KEY_D])	
-		{
-			vel.Set(velPlayer * dt, 0, 0);
-			elementObject[0]->translateObject(vel);
-		}
-
-		/* Check collision */
-		elementObject[0]->getBbox()->Start(elementObject[0]->getPosition());
-		elementObject[0]->checkCollision(*elementObject[1]);
-		elementObject[0]->checkCollision(*elementObject[2]);
-		elementObject[0]->getBbox()->Reset();	//RMB to reset
+		test_obj->Update();	//RMB to reset
 	}
 
 	//Key B to move to next map (RP)
@@ -191,9 +124,6 @@ void Model_2D::Update(double dt, bool* myKeys)
 	{
 		stateManager->UpdateTransitionTime(dt);
 	}
-
-	/* fov */
-	//UpdateFOV(dt, myKeys);
 }
 
 void Model_2D::UpdateLight(double dt, bool* myKeys, Light* light)

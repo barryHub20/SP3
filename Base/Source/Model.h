@@ -1,5 +1,6 @@
 #ifndef MODEL_H
 #define MODEL_H
+#include "GameObject.h"
 #include "Map.h"
 #include "MapManager.h"
 #include "MeshList.h"
@@ -13,36 +14,6 @@
 #include <vector>
 #include "StateManager.h"
 using namespace std;
-
-/** Put here for controller and model and character to access, got better way? **/
-enum KEYS
-{
-	/* keyboard */
-	KEY_B,
-	KEY_V,
-	KEY_W,
-	KEY_A,
-	KEY_S,
-	KEY_D,
-	KEY_C,
-	KEY_T,
-	KEY_K,
-	KEY_L,
-	KEY_I,
-	KEY_O,
-	KEY_SPACE,
-	KEY_1,
-	KEY_2,
-	KEY_3,
-	KEY_4,
-	KEY_5,
-	KEY_6,
-
-	/* non-keyboard */
-	KEY_LMOUSE,
-	KEY_RMOUSE,
-	TOTAL_KEY,
-};
 
 class Model
 {
