@@ -18,6 +18,7 @@ bool Collision::CheckCollision(Collision& check)
 
 		break;
 	}
+	return false;
 }
 
 Collision::~Collision()
@@ -27,8 +28,10 @@ Collision::~Collision()
 
 bool Collision::CheckSphereDetection(Collision& check)
 {
+	return true;
 }
 
 bool Collision::CheckBoxDetection(Collision& check)
 {
+	return true;
 }
