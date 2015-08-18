@@ -11,6 +11,7 @@
 #include "MiniMap.h"
 #include "Object.h"
 #include <vector>
+#include "StateManager.h"
 using namespace std;
 
 /** Put here for controller and model and character to access, got better way? **/
@@ -136,6 +137,7 @@ public:
 
 	/******************** Game state ************************/
 	GAME_STATE game_state;
+	StateManager *stateManager;
 };
 
 #endif

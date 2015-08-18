@@ -435,21 +435,29 @@ void View::RenderObject()
 void View::RenderTileMap()
 {
 	
-	/* main tile */
-	float tileLoc;	//see if tile is out of screen, if is, do not RENDER SAFE FCKING FPS
-	for(int i = 0; i < model->mapManager->GetCurrentMap()->GetNumOfTiles_Height(); ++i)
+	if (model->stateManager->isTransition())
 	{
-		for(int k = 0; k <model->mapManager->GetCurrentMap()->GetNumOfTiles_Width(); ++k)
-		{
-			tileLoc = static_cast<float>((k * model->mapManager->GetCurrentMap()->GetTileSize() - model->offset.x));
 
-			if(model->mapManager->GetCurrentMap()->theScreenMap[i][k] != 0 && (tileLoc <= m_console_width && tileLoc + model->mapManager->GetCurrentMap()->GetTileSize() >= 0))
+	}
+	else
+	{
+		/* main tile */
+		float tileLoc;	//see if tile is out of screen, if is, do not RENDER SAFE FCKING FPS
+		for (int i = 0; i < model->mapManager->GetCurrentMap()->GetNumOfTiles_Height(); ++i)
+		{
+			for (int k = 0; k <model->mapManager->GetCurrentMap()->GetNumOfTiles_Width(); ++k)
 			{
-				//mesh, enableLight, size X, size Y, pos X, pos Y
-				Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.0f, (float)(k * model->mapManager->GetCurrentMap()->GetTileSize()) - model->offset.x, i *model->mapManager->GetCurrentMap()->GetTileSize(), model->mapManager->GetCurrentMap()->theScreenMap[i][k]);
+				tileLoc = static_cast<float>((k * model->mapManager->GetCurrentMap()->GetTileSize() - model->offset.x));
+
+				if (model->mapManager->GetCurrentMap()->theScreenMap[i][k] != 0 && (tileLoc <= m_console_width && tileLoc + model->mapManager->GetCurrentMap()->GetTileSize() >= 0))
+				{
+					//mesh, enableLight, size X, size Y, pos X, pos Y
+					Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.0f, (float)(k * model->mapManager->GetCurrentMap()->GetTileSize()) - model->offset.x, i *model->mapManager->GetCurrentMap()->GetTileSize(), model->mapManager->GetCurrentMap()->theScreenMap[i][k]);
+				}
 			}
 		}
 	}
+	
 
 	//
 	///* background layer 1: parallex scrolling */

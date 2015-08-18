@@ -141,18 +141,27 @@ void Model_2D::Update(double dt, bool* myKeys)
 		elementObject[0]->translateObject(vel);
 	}
 
+
+
 	//Key B to move to next map (RP)
 	static bool ButtonBState = false;
 	if (!ButtonBState && myKeys[KEY_B])
 	{
 		ButtonBState = true;
 		std::cout << "BBUTTON DOWN" << std::endl;
+		stateManager->ChangeState(StateManager::MAIN_MENU, (float)dt);
 		mapManager->ChangeNextMap();
 	}
 	else if (ButtonBState && !(myKeys[KEY_B]))
 	{
 		ButtonBState = false;
 		std::cout << "BBUTTON UP" << std::endl;
+	}
+
+	//State
+	if (stateManager->isTransition())
+	{
+		stateManager->UpdateTransitionTime(dt);
 	}
 
 	/* Check collision */

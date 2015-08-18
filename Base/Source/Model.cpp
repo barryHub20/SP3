@@ -27,6 +27,7 @@ Model::~Model()
 void Model::Init()
 {
 	mapManager = new MapManager();
+	stateManager = new StateManager();
 
 	/* Must Init */
 	InitMesh();
