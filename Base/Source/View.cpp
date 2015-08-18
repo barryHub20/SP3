@@ -328,14 +328,23 @@ void View::RenderCollideBox()
 
 	//cout << model->mapManager->GetCurrentMap()->GetBBList().size() << endl;
 
-	for (int i = 0; i < model->mapManager->CurrentBBox.size(); i++)
+
+	if (model->stateManager->isTransition())
 	{
-		modelStack.PushMatrix();
-		modelStack.Translate(model->mapManager->CurrentBBox[i].getPosition().x, model->mapManager->CurrentBBox[i].getPosition().y, model->mapManager->CurrentBBox[i].getPosition().z);
-		modelStack.Scale(32, 32, 32);
-		RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
-		modelStack.PopMatrix();
+		
 	}
+	else
+	{
+		for (int i = 0; i < model->mapManager->CurrentBBox.size(); i++)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(model->mapManager->CurrentBBox[i].getPosition().x, model->mapManager->CurrentBBox[i].getPosition().y, model->mapManager->CurrentBBox[i].getPosition().z);
+			modelStack.Scale(32, 32, 32);
+			RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
+			modelStack.PopMatrix();
+		}
+	}
+	
 }
 
 void View::RenderHUD()

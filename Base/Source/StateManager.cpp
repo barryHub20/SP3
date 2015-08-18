@@ -14,7 +14,6 @@ void StateManager::UpdateTransitionTime(float dt)
 		}
 		stateToChangeTo = NO_STATE;
 	}	
-	std::cout << stateToChangeTo << std::endl;
 }
 
 bool StateManager::isTransition()

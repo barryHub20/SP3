@@ -174,6 +174,9 @@
     <ClCompile Include="Source\Item.cpp">
       <Filter>Source Files\Inventory</Filter>
     </ClCompile>
+    <ClCompile Include="Source\StateManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Controller.h">
@@ -270,9 +273,12 @@
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Inventory.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Inventory</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Item.h">
+      <Filter>Header Files\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

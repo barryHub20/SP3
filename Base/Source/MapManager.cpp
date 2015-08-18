@@ -58,6 +58,7 @@ void MapManager::ChangeNextMap()
 	CurrentMap = MapList[MapNo]; //Move to next map
 	ResetBBoxList(); //Reset the bbox lis
 	UpdateBBoxList(); //Update bbox list according to new map
+	cout << "Changing map to " << MapNo << endl;
 }
 
 void MapManager::ResetBBoxList()
