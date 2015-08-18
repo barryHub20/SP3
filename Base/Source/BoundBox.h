@@ -64,14 +64,9 @@ public:
 	virtual ~CollideBox();
 
 	/* core */
-	virtual void Set(const Vector3& objectPos, Vector3 scale);
-	virtual void Reset() = 0;
-	virtual void Update(const Vector3& objectPos) = 0;	//if object is static, do not need to update
-
-	/* utilities */
-	//virtual void CheckCollide(CollideBox* checkBox, Vector3& position) = 0;
-	//virtual void UpdateCollide(CollideBox* checkBox, Vector3& pos) = 0;
-
+	virtual void Set(const Vector3& objectPos, Vector3 scale);	//Set all parameters
+	virtual void Update(const Vector3& objectPos) = 0;	//Update pos, start and end
+	
 	/* geter/setter */
 	Vector3 getScale();
 	Vector3 getPosition();

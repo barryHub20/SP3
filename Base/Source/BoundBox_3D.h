@@ -17,13 +17,16 @@ public:
 
 	/* core */
 	virtual void Set(const Vector3& objectPos, Vector3 scale);
-	virtual void Reset();
+	void Reset();
 	virtual void Update(const Vector3& objectPos);	//if object is static, do not need to update
 
-	/* utilities */
+	virtual bool Collide(BoundBox_3D* checkBox);	//detect if got collide
+	virtual Vector3 Response(BoundBox_3D* checkBox);	//response
+	void Start(Vector3& objectPos);
+
+	/* Internal functions */
 	bool inZone(float& start, float& end, float& checkStart, float& checkEnd);
-	virtual bool CheckCollide(BoundBox_3D* check, Vector3& position);
-	virtual void UpdateCollide(BoundBox_3D* check, Vector3& pos);
+	void UpdateCollide(BoundBox_3D* check, Vector3& pos);
 };
 
 #endif
