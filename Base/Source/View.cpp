@@ -315,21 +315,22 @@ void View::Render(const float fps)
 
 void View::RenderCollideBox()
 {
-	for(vector<Object*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
-	{
-		Object* o = (Object*)*it;
-
-		modelStack.PushMatrix();
-		modelStack.Translate(o->getBbox()->getPosition().x, o->getBbox()->getPosition().y, o->getBbox()->getPosition().z);
-		modelStack.Scale(o->getBbox()->getScale().x, o->getBbox()->getScale().y, o->getBbox()->getScale().z);
-		RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
-		modelStack.PopMatrix();
-	}
-
-	//cout << model->mapManager->GetCurrentMap()->GetBBList().size() << endl;
-
 	if (model->stateManager->GetState() == model->stateManager->GAME)	// If GAME is current state
 	{
+		for(vector<Object*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
+		{
+			Object* o = (Object*)*it;
+
+			modelStack.PushMatrix();
+			modelStack.Translate(o->getBbox()->getPosition().x, o->getBbox()->getPosition().y, o->getBbox()->getPosition().z);
+			modelStack.Scale(o->getBbox()->getScale().x, o->getBbox()->getScale().y, o->getBbox()->getScale().z);
+			RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
+			modelStack.PopMatrix();
+		}
+
+		//cout << model->mapManager->GetCurrentMap()->GetBBList().size() << endl;
+
+	
 		for (int i = 0; i < model->mapManager->CurrentBBox.size(); i++)
 		{
 			modelStack.PushMatrix();
@@ -365,6 +366,28 @@ void View::RenderHUD()
 		/* Pos */
 		ss << "Pos: " << model->getCamera()->position;
 		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 6, 5, 12);
+	}
+
+	if (model->stateManager->GetState() == model->stateManager->TRANSITION)
+	{
+		std::ostringstream ss;	//universal
+		ss.precision(5);
+		ss << "----- WAIT -----";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 270, 300);
+		ss.str("");
+	}
+
+	if (model->stateManager->GetState() == model->stateManager->MAIN_MENU)
+	{
+		// Render main menu
+		std::ostringstream ss;	//universal
+		ss.precision(5);
+		ss << "TITLE";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 450, 600);
+		ss.str("");
+
+		ss << "Press SPACE to start!";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 300, 150);
 	}
 }
 
@@ -429,16 +452,19 @@ void View::RenderObject()
 		RenderTileMap();*/
 
 	/* Renders all objects */
-	for(vector<Object*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
+	if (model->stateManager->GetState() == model->stateManager->GAME)
 	{
-		Object* o = (Object*)*it;
-
-		if(o->getActive())
+		for(vector<Object*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
 		{
-			modelStack.PushMatrix();
-			modelStack.LoadMatrix( *(o->getTRS()) );
-			RenderMesh(o->getMesh(), o->getLight());
-			modelStack.PopMatrix();
+			Object* o = (Object*)*it;
+
+			if(o->getActive())
+			{
+				modelStack.PushMatrix();
+				modelStack.LoadMatrix( *(o->getTRS()) );
+				RenderMesh(o->getMesh(), o->getLight());
+				modelStack.PopMatrix();
+			}
 		}
 	}
 }
@@ -466,6 +492,7 @@ void View::RenderTileMap()
 	else if (model->stateManager->GetState() == model->stateManager->MAIN_MENU)
 	{
 		// Render main menu
+
 	}
 	else if (model->stateManager->isTransition()) // if TRANSITION is current state
 	{
