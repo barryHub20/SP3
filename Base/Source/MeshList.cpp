@@ -100,6 +100,10 @@ void Geometry::Init()
 	meshList[GEO_TILEMAP]->textureID[0] = LoadTGA("Image//tile2_ground.tga");
 	
 
+	/* Title Screen Image */
+	meshList[IMAGE_TITLE] = MeshBuilder::GenerateQuad("IMG_TITLE", Color(1, 1, 1), 1.f);
+	meshList[IMAGE_TITLE]->textureID[0] = LoadTGA("Image//Brisbane_City_Night.tga");
+
 	animation.resize(2);	//2 animations
 
 	animation[0] = dynamic_cast<SpriteAnimation*>(meshList[GEO_GIRL]);

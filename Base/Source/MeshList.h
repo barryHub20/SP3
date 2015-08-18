@@ -60,6 +60,7 @@ public:
 
 		/* 2D */
 		GEO_TILEMAP,
+		IMAGE_TITLE,
 
 		NUM_GEOMETRY,
 	};

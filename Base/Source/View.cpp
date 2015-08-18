@@ -110,7 +110,8 @@ void View::Init()
 
 	/************* openGL stuff ****************/
 	// Black background
-	glClearColor(72.f / 255.f, 240.f / 255.f, 125.f / 255.f, 0.0f);
+//	glClearColor(72.f / 255.f, 240.f / 255.f, 125.f / 255.f, 0.0f);
+	glClearColor(0.f, 0.f, 0.f, 0.0f);
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
@@ -383,15 +384,15 @@ void View::RenderHUD()
 		std::ostringstream ss;	//universal
 		ss.precision(5);
 		ss << "TITLE";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 450, 600);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 450, 670);
 		ss.str("");
 
 		ss << "Press SPACE to start!";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 300, 150);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 300, 50);
 		ss.str("");
 
 		ss << "( I - Instructions )";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 400, 130);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 400, 30);
 	}
 
 	if (model->stateManager->GetState() == model->stateManager->INSTRUCTION)
@@ -483,6 +484,11 @@ void View::RenderObject()
 			}
 		}
 	}
+
+	if (model->stateManager->GetState() == model->stateManager->MAIN_MENU || model->stateManager->GetState() == model->stateManager->INSTRUCTION || model->stateManager->GetState() == model->stateManager->TRANSITION)
+	{
+		RenderMeshIn2D(Geometry::meshList[Geometry::IMAGE_TITLE],false,160,0,0,0,0);
+	}
 }
 
 void View::RenderTileMap()
@@ -508,7 +514,7 @@ void View::RenderTileMap()
 	else if (model->stateManager->GetState() == model->stateManager->MAIN_MENU)
 	{
 		// Render main menu
-
+		//RenderMesh(Geometry::meshList[Geometry::IMAGE_TITLE], 0);
 	}
 	else if (model->stateManager->isTransition()) // if TRANSITION is current state
 	{
