@@ -31,22 +31,22 @@ void Physics::setSpeed(int Speed)
 	this->Speed = Speed;
 }
 
-Vector3 Physics::getPos()
+Vector3 Physics::getPos(void)
 {
 	return Pos;
 }
 
-Vector3 Physics::getDir()
+Vector3 Physics::getDir(void)
 {
 	return Dir;
 }
 
-int Physics::getSpeed()
+int Physics::getSpeed(void)
 {
 	return Speed;
 }
 
-Vector3 Physics::getForce()
+Vector3 Physics::getForce(void)
 {
 	return Force;
 }

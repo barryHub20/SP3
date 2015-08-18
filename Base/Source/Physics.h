@@ -19,10 +19,10 @@ public:
 	void setForce(int Force);
 	void setSpeed(int Speed);
 
-	Vector3 getPos();
-	Vector3 getDir();
-	Vector3 getForce();
-	int getSpeed();
+	Vector3 getPos(void);
+	Vector3 getDir(void);
+	Vector3 getForce(void);
+	int getSpeed(void);
 
 	Physics(void);
 	~Physics(void);

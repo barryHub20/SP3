@@ -27,22 +27,22 @@ void GameObject::setType(GO_TYPE Type)
 	this->Type = Type;
 }
 
-int  GameObject::getObjCount()
+int  GameObject::getObjCount(void)
 {
 	return objCount;
 }
 
-Physics GameObject::getInfo()
+Physics GameObject::getInfo(void)
 {
 	return Info;
 }
 
-bool GameObject::getisActive()
+bool GameObject::getisActive(void)
 {
 	return isActive;
 }
 
-int GameObject::getType()
+int GameObject::getType(void)
 {
 	return Type;
 }

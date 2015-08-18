@@ -24,9 +24,9 @@ class GameObject
 	void setIsActive(bool isActive);
 	void setType(GO_TYPE Type);
 
-	Physics getInfo();
-	int getObjCount();
-	bool getisActive();
+	Physics getInfo(void);
+	int getObjCount(void);
+	bool getisActive(void);
 	int getType();
 	
 	GameObject(void);
