@@ -320,7 +320,7 @@ void View::RenderCollideBox()
 		Object* o = (Object*)*it;
 
 		modelStack.PushMatrix();
-		modelStack.Translate(o->getPosition().x, o->getPosition().y, o->getPosition().z);
+		modelStack.Translate(o->getBbox()->getPosition().x, o->getBbox()->getPosition().y, o->getBbox()->getPosition().z);
 		modelStack.Scale(o->getBbox()->getScale().x, o->getBbox()->getScale().y, o->getBbox()->getScale().z);
 		RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
 		modelStack.PopMatrix();

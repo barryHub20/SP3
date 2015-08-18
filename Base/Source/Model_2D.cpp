@@ -62,6 +62,7 @@ void Model_2D::InitObject()
 	//FOLLOW CAMERA OBJECT
 	obj_ptr = new Object;
 	obj_ptr->Set("character", Geometry::meshList[Geometry::GEO_CUBE], NULL, false, true);
+	obj_ptr->translateObject(10, 10, 0);
 	obj_ptr->scaleObject(10);
 	elementObject[0] = obj_ptr;
 
@@ -76,7 +77,7 @@ void Model_2D::InitObject()
 
 	obj_ptr = new Object;
 	obj_ptr->Set("Child", Geometry::meshList[Geometry::GEO_CUBE], parent, false, true);
-	obj_ptr->translateObject(0, 1.5f, 0);	//translates 2 times of scale of parent
+	obj_ptr->translateObject(0, 1.2f, 0);	//translates 2 times of scale of parent
 	//obj_ptr->scaleObject(2, 1, 2);	//scales 2 times of parent
 	elementObject[2] = obj_ptr;
 
@@ -106,6 +107,9 @@ void Model_2D::Update(double dt, bool* myKeys)
 	/* model update */
 	Model::Update(dt, myKeys);
 
+	Vector3 vel;
+	vel.SetZero();
+
 	/* Camera */
 	//camera.Update(dt, myKeys);
 
@@ -114,22 +118,26 @@ void Model_2D::Update(double dt, bool* myKeys)
 
 	if(myKeys[KEY_W])
 	{
-		elementObject[0]->translateObject(0, 50 * dt, 0);
+		vel.Set(0, 50 * dt, 0);
+		elementObject[0]->translateObject(vel);
 	}
 
 	if(myKeys[KEY_A])	
 	{
-		elementObject[0]->translateObject(-50 * dt, 0, 0);
+		vel.Set(-50 * dt, 0, 0);
+		elementObject[0]->translateObject(vel);
 	}
 
 	if(myKeys[KEY_S])	
 	{
-		elementObject[0]->translateObject(0, -50 * dt, 0);
+		vel.Set(0, -50 * dt, 0);
+		elementObject[0]->translateObject(vel);
 	}
 
 	if(myKeys[KEY_D])	
 	{
-		elementObject[0]->translateObject(50 * dt, 0, 0);
+		vel.Set(50 * dt, 0, 0);
+		elementObject[0]->translateObject(vel);
 	}
 
 	//Key B to move to next map (RP)
@@ -147,6 +155,7 @@ void Model_2D::Update(double dt, bool* myKeys)
 	}
 
 	/* Check collision */
+	elementObject[0]->getBbox()->Start(elementObject[0]->getPosition());
 	elementObject[0]->checkCollision(*elementObject[1]);
 	elementObject[0]->checkCollision(*elementObject[2]);
 	elementObject[0]->getBbox()->Reset();	//RMB to reset

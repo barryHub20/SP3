@@ -177,16 +177,12 @@ void Object::translate(float x, float y, float z)
 
 void Object::checkCollision(Object& checkObject)
 {
-	/* update boundbox position and checkObject too */
-	bbox.Update(position);
-	//checkObject.getBbox()->Update(checkObject.position);	//Redundant?
-
 	/* if theres collision */
-	if( bbox.CheckCollide(checkObject.getBbox(), position) )
+	if( bbox.Collide(checkObject.getBbox()) )
 	{
+		bbox.Response(checkObject.getBbox());
 	}
 }	
-
 
 /*** getters ***/
 Mesh* Object::getMesh(){return mesh;}
