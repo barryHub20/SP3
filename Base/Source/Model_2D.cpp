@@ -113,6 +113,19 @@ void Model_2D::Update(double dt, bool* myKeys)
 		{
 			stateManager->ChangeState(stateManager->GAME);
 		}
+
+		if(myKeys[KEY_I])
+		{
+			stateManager->ChangeState(stateManager->INSTRUCTION);
+		}
+	}
+
+	if (stateManager->GetState() == stateManager->INSTRUCTION)
+	{
+		if(myKeys[KEY_I])
+		{
+			stateManager->ChangeState(stateManager->MAIN_MENU);
+		}
 	}
 
 	if (stateManager->GetState() == stateManager->GAME)		// Game objects will only be 'active'/controllable when in the GAME state.

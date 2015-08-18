@@ -372,8 +372,8 @@ void View::RenderHUD()
 	{
 		std::ostringstream ss;	//universal
 		ss.precision(5);
-		ss << "----- WAIT -----";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 270, 300);
+		ss << "----- LOADING -----";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 240, 300);
 		ss.str("");
 	}
 
@@ -388,6 +388,22 @@ void View::RenderHUD()
 
 		ss << "Press SPACE to start!";
 		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 300, 150);
+		ss.str("");
+
+		ss << "( I - Instructions )";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 400, 130);
+	}
+
+	if (model->stateManager->GetState() == model->stateManager->INSTRUCTION)
+	{
+		std::ostringstream ss;	//universal
+		ss.precision(5);
+		ss << "WASD - Movement";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 100, 600);
+		ss.str("");
+
+		ss << "Press I to return to title screen";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 90, 150);
 	}
 }
 
