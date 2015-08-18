@@ -51,72 +51,71 @@ void getCollide(float& start, float& end, float& checkStart, float& checkEnd, Mo
 
 void BoundBox_3D::UpdateCollide(BoundBox_3D* check, Vector3& pos)
 {
-	//float offset = 0.1f;	//offset to translate not directly at the pos
-	//Vector3 halfScale = scale * 0.5f;
-	///* check collide */
-	///* check collision first */
-	//Vector3 posx = pos;
-
-	//if(collideArea.collideSide == Movement_3d::start_X)
-	//{
-	//	//pos.x = previousPos.x;
-	//	posx.x = check->end.x + halfScale.x + offset;
-	//}
-	//else if(collideArea.collideSide == Movement_3d::end_X)
-	//{
-	//	posx.x = check->start.x - halfScale.x - offset;
-	//}
-
-	////y
-	//else if(collideArea.collideSide == Movement_3d::start_Y)
-	//{
-	//	posx.y = check->end.y + halfScale.y + offset;
-	//}
-	//else if(collideArea.collideSide == Movement_3d::end_Y)
-	//{
-	//	posx.y = check->start.y - halfScale.y - offset;
-	//}
-
-	////z
-	//else if(collideArea.collideSide == Movement_3d::start_Z)
-	//{
-	//	posx.z = check->end.z + halfScale.z + offset;
-	//}
-	//else if(collideArea.collideSide == Movement_3d::end_Z)
-	//{
-	//	posx.z = check->start.z - halfScale.z - offset;
-	//}
-
+	float offset = 0.1f;	//offset to translate not directly at the pos
+	Vector3 halfScale = scale * 0.5f;
 	/* check collide */
 	/* check collision first */
+
 	if(collideArea.collideSide == Movement_3d::start_X)
 	{
-		pos.x = previousPos.x;
+		//pos.x = previousPos.x;
+		pos.x = check->end.x + halfScale.x + offset;
 	}
 	else if(collideArea.collideSide == Movement_3d::end_X)
 	{
-		pos.x = previousPos.x;
+		pos.x = check->start.x - halfScale.x - offset;
 	}
 
 	//y
 	else if(collideArea.collideSide == Movement_3d::start_Y)
 	{
-		pos.y = previousPos.y;
+		pos.y = check->end.y + halfScale.y + offset;
 	}
 	else if(collideArea.collideSide == Movement_3d::end_Y)
 	{
-		pos.y = previousPos.y;
+		pos.y = check->start.y - halfScale.y - offset;
 	}
 
 	//z
 	else if(collideArea.collideSide == Movement_3d::start_Z)
 	{
-		pos.z = previousPos.z;
+		pos.z = check->end.z + halfScale.z + offset;
 	}
 	else if(collideArea.collideSide == Movement_3d::end_Z)
 	{
-		pos.z = previousPos.z;
+		pos.z = check->start.z - halfScale.z - offset;
 	}
+
+	/* check collide */
+	/* check collision first */
+	//if(collideArea.collideSide == Movement_3d::start_X)
+	//{
+	//	pos.x = previousPos.x;
+	//}
+	//else if(collideArea.collideSide == Movement_3d::end_X)
+	//{
+	//	pos.x = previousPos.x;
+	//}
+
+	////y
+	//else if(collideArea.collideSide == Movement_3d::start_Y)
+	//{
+	//	pos.y = previousPos.y;
+	//}
+	//else if(collideArea.collideSide == Movement_3d::end_Y)
+	//{
+	//	pos.y = previousPos.y;
+	//}
+
+	////z
+	//else if(collideArea.collideSide == Movement_3d::start_Z)
+	//{
+	//	pos.z = previousPos.z;
+	//}
+	//else if(collideArea.collideSide == Movement_3d::end_Z)
+	//{
+	//	pos.z = previousPos.z;
+	//}
 }
 
 Vector3 current_pos;	

@@ -63,7 +63,7 @@ void Model_2D::InitObject()
 	obj_ptr = new Object;
 	obj_ptr->Set("character", Geometry::meshList[Geometry::GEO_CUBE], NULL, false, true);
 	obj_ptr->translateObject(10, 10, 0);
-	obj_ptr->scaleObject(10);
+	obj_ptr->scaleObject(50);
 	elementObject[0] = obj_ptr;
 
 	/*********** TEST 1: child translates to above parent Obj 1 and 2 ***********/
@@ -72,12 +72,12 @@ void Model_2D::InitObject()
 	parent->Set("Parent", Geometry::meshList[Geometry::GEO_CUBE], NULL, false, true);
 	parent->translateObject(m_view_width * 0.5f, m_view_height * 0.5f, 0);
 	//parent->rotateObject(56, 1, 0, 0);
-	parent->scaleObject(50, 20, 50);
+	parent->scaleObject(300, 10, 1);
 	elementObject[1] = parent;
 
 	obj_ptr = new Object;
 	obj_ptr->Set("Child", Geometry::meshList[Geometry::GEO_CUBE], parent, false, true);
-	obj_ptr->translateObject(0, 1.2f, 0);	//translates 2 times of scale of parent
+	obj_ptr->translateObject(0, 3.f, 0);	//translates 2 times of scale of parent
 	//obj_ptr->scaleObject(2, 1, 2);	//scales 2 times of parent
 	elementObject[2] = obj_ptr;
 
@@ -115,28 +115,29 @@ void Model_2D::Update(double dt, bool* myKeys)
 
 	/* control character Test */
 	//cout << elementObject[0]->getBbox()->collideArea.collideSide;
+	float velPlayer = 750.f;	//tmp only
 
 	if(myKeys[KEY_W])
 	{
-		vel.Set(0, 50 * dt, 0);
+		vel.Set(0, velPlayer * dt, 0);
 		elementObject[0]->translateObject(vel);
 	}
 
 	if(myKeys[KEY_A])	
 	{
-		vel.Set(-50 * dt, 0, 0);
+		vel.Set(-velPlayer * dt, 0, 0);
 		elementObject[0]->translateObject(vel);
 	}
 
 	if(myKeys[KEY_S])	
 	{
-		vel.Set(0, -50 * dt, 0);
+		vel.Set(0, -velPlayer * dt, 0);
 		elementObject[0]->translateObject(vel);
 	}
 
 	if(myKeys[KEY_D])	
 	{
-		vel.Set(50 * dt, 0, 0);
+		vel.Set(velPlayer * dt, 0, 0);
 		elementObject[0]->translateObject(vel);
 	}
 
