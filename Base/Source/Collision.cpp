@@ -1,27 +1,34 @@
-#ifndef COLLISION_H
-#define COLLISION_H
-#include <ostream>
-#include "Vector3.h"
-#include <vector>
-using std::vector;
+#include "Collision.h"
 
-
-class Collision
+Collision::Collision()
 {
-public:
-	enum TYPE
+}
+
+bool Collision::CheckCollision(Collision& check)
+{
+	switch(type)
 	{
-		BOX,
-		SPHERE,
-		SLANTED_BOX,
-	};
+	case BOX:
+		return CheckBoxDetection(check);
+		break;
+	case SPHERE:
+		return CheckSphereDetection(check);
+		break;
+	case SLANTED_BOX:
 
+		break;
+	}
+}
 
+Collision::~Collision()
+{
 
-private:
-	TYPE type;
+}
 
+bool Collision::CheckSphereDetection(Collision& check)
+{
+}
 
-};
-
-#endif
+bool Collision::CheckBoxDetection(Collision& check)
+{
+}
