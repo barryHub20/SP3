@@ -1,31 +1,9 @@
-﻿Build started 17/8/2015 10:22:29 AM.
+﻿Build started 18/8/2015 11:01:49 AM.
      1>Project "C:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\Base\Base.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Base.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\/Common/Source /IC:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\/glew/include /IC:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\BoundBox_2D.cpp Source\BoundBox_3D.cpp Source\Camera3.cpp Source\CollideBox.cpp Source\Controller.cpp Source\Model.cpp Source\Model_2D.cpp Source\Model_3D.cpp Source\Object.cpp Source\View.cpp Source\View_Shadow.cpp Source\main.cpp
-         Model_2D.cpp
-     1>c:\program files (x86)\microsoft sdks\windows\v7.0a\include\windef.h(126): warning C4005: 'APIENTRY' : macro redefinition
-                 c:\users\tanyiecher\desktop\semester_2\sp3\pre_sp3_framework\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-     1>c:\users\tanyiecher\desktop\semester_2\sp3\pre_sp3_framework\base\source\model_2d.cpp(28): warning C4244: '=' : conversion from 'float' to 'unsigned short', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester_2\sp3\pre_sp3_framework\base\source\model_2d.cpp(29): warning C4244: '=' : conversion from 'float' to 'unsigned short', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester_2\sp3\pre_sp3_framework\base\source\model_2d.cpp(107): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester_2\sp3\pre_sp3_framework\base\source\model_2d.cpp(112): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester_2\sp3\pre_sp3_framework\base\source\model_2d.cpp(117): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester_2\sp3\pre_sp3_framework\base\source\model_2d.cpp(122): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-         Generating Code...
-         Skipping... (no relevant changes detected)
-         main.cpp
-         View_Shadow.cpp
-         View.cpp
-         Object.cpp
-         Model_3D.cpp
-         Model.cpp
-         Controller.cpp
-         CollideBox.cpp
-         Camera3.cpp
-         BoundBox_3D.cpp
-         BoundBox_2D.cpp
+         All outputs are up-to-date.
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\Debug /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\/glfw/lib-msvc100" /LIBPATH:C:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\/glew/lib Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Base.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\Debug\Base.lib" /MACHINE:X86 Debug\BoundBox_2D.obj
          Debug\BoundBox_3D.obj
@@ -35,11 +13,15 @@
          Debug\Controller.obj
          Debug\DepthFBO.obj
          Debug\FontData.obj
+         Debug\GameObject.obj
+         Debug\Inventory.obj
+         Debug\Item.obj
          Debug\LoadHmap.obj
          Debug\LoadOBJ.obj
          Debug\LoadTGA.obj
          Debug\main.obj
          Debug\Map.obj
+         Debug\MapManager.obj
          Debug\Mesh.obj
          Debug\MeshBuilder.obj
          Debug\MeshList.obj
@@ -48,12 +30,12 @@
          Debug\Model_2D.obj
          Debug\Model_3D.obj
          Debug\Object.obj
+         Debug\Physics.obj
          Debug\shader.obj
          Debug\SpriteAnimation.obj
          Debug\utilities.obj
          Debug\Utility.obj
          Debug\View.obj
-         Debug\View_Shadow.obj
      1>BoundBox_2D.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
      1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
          Base.vcxproj -> C:\Users\tanyiecher\Desktop\SEMESTER_2\SP3\Pre_SP3_Framework\Debug\Base.exe
@@ -66,4 +48,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.67
+Time Elapsed 00:00:00.68
