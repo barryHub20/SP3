@@ -51,6 +51,9 @@ void Model_2D::InitObject()
 	player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(1, 1, 0), Vector3(50, 50, 1), 0, 10, true);
 	elementObject.push_back(player);
 
+	// Player start pos
+	player->translate(500,400,0);
+
 	/** Set up object */
 	float x = 100;
 	for(int i = 0; i < 10; ++i)
@@ -108,7 +111,8 @@ void Model_2D::Update(double dt, bool* myKeys)
 void Model_2D::UpdateGame(double dt, bool* myKeys)
 {
 	/* Update player */
-	player->Update(dt, myKeys);
+	//			dt, myKeys, rightwards boundary, top boundary
+	player->Update(dt, myKeys, (float)mapManager->GetCurrentMap()->GetNumOfTiles_Width()*32-player->getScale().x, (float)mapManager->GetCurrentMap()->GetNumOfTiles_Height()*32-player->getScale().x*1.5f);
 
 	getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
 	getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);

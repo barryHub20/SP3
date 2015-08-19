@@ -17,25 +17,30 @@ Player::~Player()
 {
 }
 
-void Player::Update(double dt, bool* myKey)
+void Player::Update(double dt, bool* myKey, float x_limit, float y_limit)
 {
+	// Movement
 	if(myKey[KEY_W])
 	{
+		if (position.y < y_limit)
 		translateObject(0, 10, 0);
 	}
 
 	if(myKey[KEY_S])
 	{
+		if (position.y > scale.x*0.25f)
 		translateObject(0, -10, 0);
 	}	
 
 	if(myKey[KEY_A])
 	{
+		if (position.x > scale.x*0.25f)
 		translateObject(-10, 0, 0);
 	}
 
 	if(myKey[KEY_D])
 	{
+		if (position.x < x_limit)
 		translateObject(10, 0, 0);
 	}
 

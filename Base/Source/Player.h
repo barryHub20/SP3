@@ -16,7 +16,7 @@ public:
 	Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active);
 	~Player();
 	
-	void Update(double dt, bool* myKey);
+	void Update(double dt, bool* myKey, float x_limit, float y_limit);
 
 	void setScore(int amtScore);
 	int getScore();
