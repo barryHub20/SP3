@@ -39,11 +39,6 @@ void Player::Update(double dt, bool* myKey)
 		translateObject(10, 0, 0);
 	}
 
-	if(myKey[KEY_D])
-	{
-		object.translateObject(Vector3(5, 0, 0));
-	}
-
 	if(myKey[KEY_SPACE])
 	{
 		PlayerInAir = true;
