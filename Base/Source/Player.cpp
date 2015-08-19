@@ -8,6 +8,9 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 {
 	score = 0;
 	Type = GO_PLAYER;
+	jumpSpeed = 0;
+	PlayerOnGround = true;
+	PlayerInAir = false;
 }
 
 Player::~Player()
@@ -34,6 +37,26 @@ void Player::Update(double dt, bool* myKey)
 	if(myKey[KEY_D])
 	{
 		translateObject(10, 0, 0);
+	}
+
+	if(myKey[KEY_D])
+	{
+		object.translateObject(Vector3(5, 0, 0));
+	}
+
+	if(myKey[KEY_SPACE])
+	{
+		PlayerInAir = true;
+		PlayerOnGround = false;
+	}
+
+	if(PlayerInAir == true && PlayerOnGround == false)
+	{
+		jumpSpeed += dt;
+		if(jumpSpeed >= 10)
+		{
+			jumpSpeed = 10;
+		}
 	}
 }
 

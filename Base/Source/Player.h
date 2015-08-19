@@ -6,6 +6,10 @@ class Player : public Character
 {
 private:	
 	int score;
+	bool PlayerInAir;
+	bool PlayerOnGround;
+	double jumpSpeed;
+	double jumpTimer;
 
 public:
 	Player();
