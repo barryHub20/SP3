@@ -502,11 +502,11 @@ void View::RenderTileMap()
 				if (model->mapManager->GetCurrentMap()->theScreenMap[i][k] != 0 && (tileLoc <= m_console_width && tileLoc + model->mapManager->GetCurrentMap()->GetTileSize() >= 0))
 				{
 					//mesh, enableLight, size X, size Y, pos X, pos Y
-					Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.0f, (float)(k * model->mapManager->GetCurrentMap()->GetTileSize()) - model->offset.x, i *model->mapManager->GetCurrentMap()->GetTileSize(), model->mapManager->GetCurrentMap()->theScreenMap[i][k]);
+					Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.0f, ((float)(k * model->mapManager->GetCurrentMap()->GetTileSize()) - model->offset.x)-getModel()->getCamera()->position.x, (i *model->mapManager->GetCurrentMap()->GetTileSize())-getModel()->getCamera()->position.y, model->mapManager->GetCurrentMap()->theScreenMap[i][k]);
 				}
 			}
 		}
-	}
+	} 
 	else if (model->stateManager->GetState() == model->stateManager->MAIN_MENU)
 	{
 		// Render main menu

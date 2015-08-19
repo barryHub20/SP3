@@ -180,7 +180,13 @@
     <ClCompile Include="Source\Collision.cpp">
       <Filter>Header Files\AABB</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\GDT%2714\SP3\Base\Source\Player.cpp">
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StaticObject.cpp">
+      <Filter>Source Files\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -287,7 +293,13 @@
     <ClInclude Include="Source\StateManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Player.h">
+    <ClInclude Include="Source\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StaticObject.h">
+      <Filter>Header Files\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

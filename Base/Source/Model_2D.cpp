@@ -9,6 +9,8 @@
 #include "SpriteAnimation.h"
 #include <sstream>
 
+#include "StaticObject.h"
+
 /*********** constructor/destructor ***************/
 Model_2D::Model_2D()
 {
@@ -107,6 +109,9 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 {
 	/* Update player */
 	player->Update(dt, myKeys);
+
+	getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
+	getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
 
 	/* check collision (double for loop) */
 	//start: Set up collision bound before checking with the others

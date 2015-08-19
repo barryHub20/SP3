@@ -11,11 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\GDT%2714\SP3\Base\Source\Player.cpp" />
     <ClCompile Include="Source\BoundBox_2D.cpp" />
     <ClCompile Include="Source\BoundBox_3D.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
+    <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\CollideBox.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
@@ -39,9 +39,11 @@
     <ClCompile Include="Source\Model_3D.cpp" />
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\Physics.cpp" />
+    <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\StateManager.cpp" />
+    <ClCompile Include="Source\StaticObject.cpp" />
     <ClCompile Include="Source\utilities.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
     <ClCompile Include="Source\View.cpp" />
@@ -49,12 +51,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Inventory.h" />
     <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Item.h" />
-    <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Player.h" />
     <ClInclude Include="Source\BoundBox.h" />
     <ClInclude Include="Source\BoundBox_2D.h" />
     <ClInclude Include="Source\BoundBox_3D.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
+    <ClInclude Include="Source\Character.h" />
     <ClInclude Include="Source\Controller.h" />
     <ClInclude Include="Source\DepthFBO.h" />
     <ClInclude Include="Source\FontData.h" />
@@ -75,9 +77,11 @@
     <ClInclude Include="Source\model_3D.h" />
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Physics.h" />
+    <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\StateManager.h" />
+    <ClInclude Include="Source\StaticObject.h" />
     <ClInclude Include="Source\utilities.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
