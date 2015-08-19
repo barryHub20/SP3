@@ -78,7 +78,7 @@ void Controller::Init()
 	model = view->getModel();
 
 	//hide the cursor
-	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 
 	model->Init();

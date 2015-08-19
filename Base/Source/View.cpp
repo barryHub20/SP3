@@ -491,18 +491,14 @@ void View::RenderTileMap()
 {
 	if (model->stateManager->GetState() == model->stateManager->GAME)
 	{
-		/* main tile */
-		float tileLoc;	//see if tile is out of screen, if is, do not RENDER SAFE FCKING FPS
 		for (int i = 0; i < model->mapManager->GetCurrentMap()->GetNumOfTiles_Height(); ++i)
 		{
-			for (int k = 0; k <model->mapManager->GetCurrentMap()->GetNumOfTiles_Width(); ++k)
+			for (int k = 0; k < model->mapManager->GetCurrentMap()->GetNumOfTiles_Width(); ++k)
 			{
-				tileLoc = static_cast<float>((k * model->mapManager->GetCurrentMap()->GetTileSize() - model->offset.x));
-
-				if (model->mapManager->GetCurrentMap()->theScreenMap[i][k] != 0 && (tileLoc <= m_console_width && tileLoc + model->mapManager->GetCurrentMap()->GetTileSize() >= 0))
+				if (model->mapManager->GetCurrentMap()->theScreenMap[i][k] != 0)
 				{
 					//mesh, enableLight, size X, size Y, pos X, pos Y
-					Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.0f, ((float)(k * model->mapManager->GetCurrentMap()->GetTileSize()) - model->offset.x)-getModel()->getCamera()->position.x, (i *model->mapManager->GetCurrentMap()->GetTileSize())-getModel()->getCamera()->position.y, model->mapManager->GetCurrentMap()->theScreenMap[i][k]);
+					Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 0.8751f, (((float)(k * model->mapManager->GetCurrentMap()->GetTileSize()) - model->offset.x)-getModel()->getCamera()->position.x)*0.8751f-15, ((i *model->mapManager->GetCurrentMap()->GetTileSize())-getModel()->getCamera()->position.y)*0.8751f-15, model->mapManager->GetCurrentMap()->theScreenMap[i][k]);
 				}
 			}
 		}
@@ -766,40 +762,40 @@ void View::Render2DTile(Mesh *mesh, bool enableLight, float size, float x, float
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, m_console_width, 0, m_console_height, -10, 10);
 	projectionStack.PushMatrix();
-	projectionStack.LoadMatrix(ortho);
-	viewStack.PushMatrix();
-	viewStack.LoadIdentity();
-	modelStack.PushMatrix();
-	modelStack.LoadIdentity();
-	modelStack.Translate(x, y, 2);
-	modelStack.Scale(size, size, 1);
+		projectionStack.LoadMatrix(ortho);
+		viewStack.PushMatrix();
+			viewStack.LoadIdentity();
+			modelStack.PushMatrix();
+				modelStack.LoadIdentity();
+				modelStack.Translate(x, y, -2);
+				modelStack.Scale(size, size, 1);
 
-	/*if (rotate)
-		modelStack.Rotate(rotateAngle, 0, 0, 1);*/
+				/*if (rotate)
+					modelStack.Rotate(rotateAngle, 0, 0, 1);*/
 
-	Mtx44 MVP, modelView, modelView_inverse_transpose;
-	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+				Mtx44 MVP, modelView, modelView_inverse_transpose;
+				MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+				glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 	
-	for(int i = 0; i < 2; ++i)
-	{
-		if(mesh->textureID[i] > 0)
-		{
-			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 1);
-			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, mesh->textureID[i]);
-			glUniform1i(m_parameters[U_COLOR_TEXTURE + i], i);
-		}
-		else
-			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 0);
-	}
+				for(int i = 0; i < 2; ++i)
+				{
+					if(mesh->textureID[i] > 0)
+					{
+						glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 1);
+						glActiveTexture(GL_TEXTURE0 + i);
+						glBindTexture(GL_TEXTURE_2D, mesh->textureID[i]);
+						glUniform1i(m_parameters[U_COLOR_TEXTURE + i], i);
+					}
+					else
+						glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 0);
+				}
 
-	mesh->Render((tileType - 1) * 6, 6);
+				mesh->Render((tileType - 1) * 6, 6);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+				glBindTexture(GL_TEXTURE_2D, 0);
 
-	modelStack.PopMatrix();
-	viewStack.PopMatrix();
+			modelStack.PopMatrix();
+		viewStack.PopMatrix();
 	projectionStack.PopMatrix();
 }
 
