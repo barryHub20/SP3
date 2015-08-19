@@ -4,9 +4,10 @@ Player::Player()
 {
 }
 
-Player::Player(Vector3 Pos, Vector3 scale, Vector3 Dir, float Speed, bool active) : GameObject(Pos, scale, Dir, Speed, active)
+Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active) : Character(mesh, Pos, scale, angle, Speed, active)
 {
 	score = 0;
+	Type = GO_PLAYER;
 }
 
 Player::~Player()
@@ -17,28 +18,36 @@ void Player::Update(double dt, bool* myKey)
 {
 	if(myKey[KEY_W])
 	{
-		object.translateObject(Vector3(0, 10, 0));
+		translateObject(0, 10, 0);
 	}
 
 	if(myKey[KEY_S])
 	{
-		object.translateObject(Vector3(0, -1, 0));
+		translateObject(0, -10, 0);
 	}	
 
 	if(myKey[KEY_A])
 	{
-		object.translateObject(Vector3(1, 0, 0));
+		translateObject(-10, 0, 0);
 	}
 
-	if(myKey[KEY_A])
+	if(myKey[KEY_D])
 	{
-		object.translateObject(Vector3(0, 0, 1));
+		translateObject(10, 0, 0);
 	}
 }
 
 void setScore(int amtScore)
 {
 	
+}
+
+void Player::CollisionResponse()
+{
+	if(collided)
+	{
+		translate(collideBound.position);
+	}
 }
 
 int Player::getScore()

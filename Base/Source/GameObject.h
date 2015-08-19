@@ -1,43 +1,16 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
-#include "Physics.h"
 #include "Object.h"
+#include "Physics.h"
+#include "Collision.h"
 #include "MeshList.h"
 
-/** Put here for controller and model and character to access, got better way? **/
-enum KEYS
+
+class GameObject : public Object
 {
-	/* keyboard */
-	KEY_B,
-	KEY_V,
-	KEY_W,
-	KEY_A,
-	KEY_S,
-	KEY_D,
-	KEY_C,
-	KEY_T,
-	KEY_K,
-	KEY_L,
-	KEY_I,
-	KEY_O,
-	KEY_SPACE,
-	KEY_1,
-	KEY_2,
-	KEY_3,
-	KEY_4,
-	KEY_5,
-	KEY_6,
+public:
 
-	/* non-keyboard */
-	KEY_LMOUSE,
-	KEY_RMOUSE,
-	TOTAL_KEY,
-};
-
-class GameObject
-{
-	public:
-
+	/* object type */
 	enum GO_TYPE
 	{
 		GO_START,
@@ -51,32 +24,55 @@ class GameObject
 		GO_TOTAL,
 	};
 
-
-	/* Set physics info only */
-	void setInfo(float Speed);
-
-	virtual void Update();
-	void setIsActive(bool isActive);
-	void setType(GO_TYPE Type);
-
-	/* getter/setter */
-	Object* getObject();
-	Physics getInfo();
-	int getObjCount();
-	bool getisActive();
-	int getType();
-	
+	/* constructor/destructor */
 	GameObject(void);
-
-	/* set everything in general */
-	GameObject(Vector3 Pos, Vector3 scale, Vector3 Dir, float Speed, bool active);
+	GameObject(Vector3 Pos, Vector3 scale, Vector3 Dir, float Speed, bool active);	//set everything in general
 	virtual ~GameObject(void);
 
+	/* Core */
+	virtual void Update();
+	void setInfo(float Speed);	//Set physics info only
+
+	/* getter/setter */
+	void setIsActive(bool isActive);
+	bool getisActive();
+
+	Vector3 getPosition();
+	Vector3 getScale();
+
+	void setType(GO_TYPE Type);
+	int getType();
+
+	void setMesh(Mesh* mesh);
+	Mesh* getMesh();
+
+	/* !! angle is only rotating along z axis */
+	void setAngle(float angle);
+	float getAngle();
+
+	float getSpeed();
+	void setSpeed(float speed);
+
+	Vector3 getDir();
+
+	Collision* getCollideBound();
+
+	/* utilities */
+	void Translate(Vector3 pos);
+	void TranslateOffset(Vector3 offset);
+
+	void StartCollisionCheck();	//set-up collision bound for checking
+	bool CollisionCheck(GameObject* checkWithMe);	//collision check
+	virtual void CollisionResponse();
+
+	static int getObjCount();
+
 protected:
-	Object object;
-	Physics info;
-	GO_TYPE Type;
-	//Collision collide;
+	GO_TYPE Type;	//type
+	Physics info;	// Physics related info
+	Collision collideBound;	//collision box
+	float angleZ;	//angle rotate on z axis (z faces outwards from screen)
+	bool collided;
 
 	static int objCount;
 };

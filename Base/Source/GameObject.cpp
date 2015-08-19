@@ -3,6 +3,7 @@
 
 int GameObject::objCount = 0;
 
+/*********************************** constructor/destructor ***********************************/
 GameObject::GameObject(void)
 {
 	objCount++;
@@ -10,84 +11,132 @@ GameObject::GameObject(void)
 
 GameObject::GameObject(Vector3 Pos, Vector3 scale, Vector3 Dir, float Speed, bool active)
 {
-	/* Set physics */
-	this->info.setDir(Vector2(1, 0));
-	this->info.setSpeed(Speed);
-
-	/* Set object */
-	this->object.Set("dfsdf", Geometry::meshList[Geometry::GEO_CUBE], NULL, false, false);
-	this->object.translateObject(Pos);	//set pos
-	this->object.scaleObject(scale.x, scale.y, scale.z);	//set scale
-	this->object.setActive(active); //set active
-
-	/* Set collision (FUTURE) */
 }
 
-void GameObject::setInfo(float Speed)
-{
-	/* Set physics */
-	this->info.setDir(Vector2(1, 0));	//x Dir
-	this->info.setSpeed(Speed);
-}
-
-Object* GameObject::getObject()
-{
-	return &object;
-}
-
+/*********************************** core ***********************************/
 void GameObject::Update()
 {
-	float velPlayer = 750.f;	//tmp only
-
-	if(Controller::KeyPressed(KEY_W))
-	{
-		object.translateObject(Vector3(0, 10, 0));
-	}
-
-	if(Controller::KeyPressed(KEY_A))	
-	{
-		object.translateObject(Vector3(-1, 0, 0));
-	}
-
-	if(Controller::KeyPressed(KEY_S))	
-	{
-		object.translateObject(Vector3(0, -1, 0));
-	}
-
-	if(Controller::KeyPressed(KEY_D))	
-	{
-		object.translateObject(Vector3(1, 0, 0));
-	}
 }
 
+/*********************************** getter/setter ***********************************/
+//active
 void GameObject::setIsActive(bool isActive)
 {
-	object.setActive(isActive);
+	Object::setActive(isActive);
 }
 
+bool GameObject::getisActive()
+{
+	return Object::getActive();
+}
+
+//type
 void GameObject::setType(GO_TYPE Type)
 {
 	this->Type = Type;
 }
 
-int  GameObject::getObjCount()
+int GameObject::getType()
+{
+	return Type;
+}
+
+//object count (static)
+int GameObject::getObjCount()
 {
 	return objCount;
 }
 
-Physics GameObject::getInfo()
+//dir
+Vector3 GameObject::getDir()
 {
-	return info;
+	return Vector3(1, 0, 0);
 }
 
-bool GameObject::getisActive()
+//angle
+void GameObject::setAngle(float angle)
 {
-	return object.getActive();
+	angleZ = angle;
+	Object::rotateObject(angle, 0, 0, 1);
 }
 
-int GameObject::getType()
+float GameObject::getAngle()
 {
-	return Type;
+	return angleZ;
+}
+
+//mesh
+void GameObject::setMesh(Mesh* mesh)
+{
+	Object::setMesh(mesh);
+}
+
+Mesh* GameObject::getMesh()
+{
+	return Object::getMesh();
+}
+
+//scale
+Vector3 GameObject::getScale()
+{
+	return Object::getScale();
+}
+
+//pos
+Vector3 GameObject::getPosition()
+{
+	return Object::getPosition();
+}
+
+float GameObject::getSpeed()
+{
+	return info.getSpeed();
+}
+
+void GameObject::setSpeed(float speed)
+{
+	info.setSpeed(speed);
+}
+
+Collision* GameObject::getCollideBound()
+{
+	return &collideBound;
+}
+
+/*********************************** utilities ***********************************/
+void GameObject::StartCollisionCheck()
+{
+	collided = false;
+	collideBound.Start(position);
+}
+
+bool GameObject::CollisionCheck(GameObject* checkWithMe)
+{
+	bool b = false;
+	b = collideBound.CheckCollision(checkWithMe->collideBound);
+
+	if(!collided)
+		collided = b;
+
+	return b;
+}
+
+void GameObject::CollisionResponse()
+{
+	if(collided)
+	{
+		translate(collideBound.position);
+	}
+}
+
+void GameObject::Translate(Vector3 pos)
+{
+	translate(pos);
+}
+
+void GameObject::TranslateOffset(Vector3 offset)
+{
+	translateObject(offset);
 }
 
 GameObject::~GameObject(void)

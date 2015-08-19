@@ -1,6 +1,7 @@
 #ifndef MODEL_H
 #define MODEL_H
 #include "GameObject.h"
+#include "StaticObject.h"
 #include "Map.h"
 #include "MapManager.h"
 #include "MeshList.h"
@@ -58,7 +59,8 @@ protected:
 	Position lightPos[TOTAL_LIGHTS];
 
 	/************ Game objects ************/ 
-	vector<Object*> elementObject;	//sky, clouds stuff player cannot reach
+	vector<Object*> elementObject;	//render all in-game objects
+	vector<Collision*> collisionList;	//render all collision boxes (debug purpose only pls remove)
 public:
 	/*********** constructor/destructor ***************/
 	Model();

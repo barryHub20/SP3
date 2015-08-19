@@ -316,17 +316,13 @@ void View::Render(const float fps)
 
 void View::RenderCollideBox()
 {
+	Vector3 pos, scale;
+
 	if (model->stateManager->GetState() == model->stateManager->GAME)	// If GAME is current state
 	{
 		for(vector<Object*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
 		{
-			Object* o = (Object*)*it;
-
-			modelStack.PushMatrix();
-			modelStack.Translate(o->getBbox()->getPosition().x, o->getBbox()->getPosition().y, o->getBbox()->getPosition().z);
-			modelStack.Scale(o->getBbox()->getScale().x, o->getBbox()->getScale().y, o->getBbox()->getScale().z);
-			RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
-			modelStack.PopMatrix();
+			
 		}
 
 		//cout << model->mapManager->GetCurrentMap()->GetBBList().size() << endl;

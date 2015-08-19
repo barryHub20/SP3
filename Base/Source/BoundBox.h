@@ -2,43 +2,10 @@
 #define BOUNDBOX_H
 #include <ostream>
 #include "Vector3.h"
+#include "Collision.h"
 #include <vector>
 using std::vector;
 
-/**
-store bool for all 6 sides of a cuboid collision box
-**/
-struct Movement_3d
-{
-	/* For Bound Box */
-	enum COLLIDE
-	{
-		start_X,
-		end_X,
-		start_Y,
-		end_Y,
-		start_Z,
-		end_Z,
-		UNDEFINED,
-	};
-
-	/* constructor destructor */
-	COLLIDE collideSide;	//which side collide
-	Movement_3d(){collideSide = UNDEFINED;}
-	Movement_3d(const Movement_3d& copy){collideSide = copy.collideSide;}
-	~Movement_3d(){}
-
-	/* utilities */
-	void Reset(){collideSide = UNDEFINED;}
-
-	friend std::ostream& operator<< (std::ostream& os, Movement_3d& moveme){
-		std::cout << moveme.collideSide;
-		return os;
-	}
-
-	Movement_3d& operator= (Movement_3d& copy){collideSide = copy.collideSide;return *this;}
-	bool operator== (Movement_3d::COLLIDE& check){return collideSide == check;}
-};
 
 /** Parent of all collision boxes **/
 class CollideBox

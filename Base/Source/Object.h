@@ -8,6 +8,36 @@
 #include <string>
 using namespace std;
 
+/** Put here for controller and model and character to access, got better way? **/
+enum KEYS
+{
+	/* keyboard */
+	KEY_B,
+	KEY_V,
+	KEY_W,
+	KEY_A,
+	KEY_S,
+	KEY_D,
+	KEY_C,
+	KEY_T,
+	KEY_K,
+	KEY_L,
+	KEY_I,
+	KEY_O,
+	KEY_SPACE,
+	KEY_1,
+	KEY_2,
+	KEY_3,
+	KEY_4,
+	KEY_5,
+	KEY_6,
+
+	/* non-keyboard */
+	KEY_LMOUSE,
+	KEY_RMOUSE,
+	TOTAL_KEY,
+};
+
 /***********************************************************
 
 Class Object: the physical part of a in-game object
@@ -35,7 +65,7 @@ protected:
 	bool active;	//active?
 
 	/*** NON-modifyable data ***/
-	BoundBox_3D bbox;	//Not supposed to be here
+	//BoundBox_3D bbox;	//Not supposed to be here
 	Mtx44 TRS;
 public:
 	/*** constructor / destructor ***/
@@ -52,7 +82,7 @@ public:
 
 	/*** utilities ***/
 	void transformWithParent();	//position recalculated after transformation
-	void checkCollision(Object& checkObject);	//if collide, bounce back
+	//void checkCollision(Object& checkObject);	//if collide, bounce back
 
 	/*** transformation ***/
 	void scaleObject(float x, float y, float z);
@@ -65,10 +95,11 @@ public:
 
 	/*** getters setter ***/
 	Mesh* getMesh();
+	void setMesh(Mesh* mesh);
 	Vector3 getScale();
 	Vector3 getPosition();
 	Object* getParent();
-	BoundBox_3D* getBbox();
+	//BoundBox_3D* getBbox();
 	Mtx44* getTRS();
 	bool getLight();
 	void setActive(bool b);

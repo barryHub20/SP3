@@ -58,7 +58,7 @@ void Object::Init()
 	}
 
 	/* bound box */
-	bbox.Set(position, scale);	//scale to be manually set
+	//bbox.Set(position, scale);	//scale to be manually set
 }
 
 
@@ -175,19 +175,20 @@ void Object::translate(float x, float y, float z)
 	position = tmp_vec;
 }
 
-void Object::checkCollision(Object& checkObject)
-{
-	/* if theres collision */
-	if( bbox.Collide(checkObject.getBbox()) )
-	{
-		bbox.Response(checkObject.getBbox());
-	}
-}	
+//void Object::checkCollision(Object& checkObject)
+//{
+//	/* if theres collision */
+//	if( bbox.Collide(checkObject.getBbox()) )
+//	{
+//		bbox.Response(checkObject.getBbox());
+//	}
+//}	
 
 /*** getters ***/
 Mesh* Object::getMesh(){return mesh;}
+void Object::setMesh(Mesh* mesh){this->mesh = mesh;}
 Vector3 Object::getScale(){return scale;}
-BoundBox_3D* Object::getBbox(){return &bbox;}
+//BoundBox_3D* Object::getBbox(){return &bbox;}
 Vector3 Object::getPosition(){return position;}
 Object* Object::getParent(){return parent;}
 Mtx44* Object::getTRS(){return &TRS;}

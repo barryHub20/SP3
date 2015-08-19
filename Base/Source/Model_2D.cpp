@@ -35,14 +35,9 @@ void Model_2D::Init()
 	/* World boundaries */
 	worldDimension.Set(800, 800, 100);
 
-	//perspective
-	fovAngle = DEFAULT_FOV;
-	FovRate = 1.f;
-	storeFov = fovAngle;
-
-	//light
-	lightPos[0].Set(1000.f, 500.f, 0.f);
-	lightPos[1].Set(0.f, 800.f, 0.f);
+	/* timer and delay time */
+	delayTime = 0.3;
+	keyPressedTimer = delayTime;
 
 	//object
 	InitObject();
@@ -50,14 +45,19 @@ void Model_2D::Init()
 
 void Model_2D::InitObject()
 {	
-	/** Setup game object */
-	test_obj = new GameObject(Vector3(1, 1, 1), Vector3(50, 50, 1), Vector3(1, 0, 0), 10, true);
-	elementObject.push_back(test_obj->getObject());
-
 	/** Set up player **/
-	player = new Player(Vector3(1, 1, 1), Vector3(50, 50, 1), Vector3(1, 0, 0), 10, true);
-	elementObject.push_back(player->getObject());
+	player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(1, 1, 0), Vector3(50, 50, 1), 0, 10, true);
+	elementObject.push_back(player);
 
+	/** Set up object */
+	float x = 100;
+	for(int i = 0; i < 10; ++i)
+	{
+		x = i * 70 + 100;
+		obj_arr[i] = new StaticObject(Geometry::meshList[Geometry::GEO_CUBE], Vector3(x, 500, 0), 
+			Vector3(60, 10, 1), 10, 0, false, GameObject::GO_FURNITURE);
+		elementObject.push_back(obj_arr[i]);
+	}
 
 	/** init **/
 	for(std::vector<Object*>::iterator it = elementObject.begin(); it != elementObject.end(); ++it)
@@ -76,37 +76,60 @@ void Model_2D::InitMaps()
 
 void Model_2D::Update(double dt, bool* myKeys)
 {
-	/* model update */
+	/* parent class update */
 	Model::Update(dt, myKeys);
+
+	if(keyPressedTimer < delayTime)
+		keyPressedTimer += dt;
 	
-	if (stateManager->GetState() == stateManager->MAIN_MENU) // Atm, a placeholder title screen with standard "Press Start" behaviour.
+	/* Update based on states */
+	switch (stateManager->GetState())
 	{
-		if(myKeys[KEY_SPACE])
-		{
-			stateManager->ChangeState(stateManager->GAME);
-		}
-
-		if(myKeys[KEY_I])
-		{
-			stateManager->ChangeState(stateManager->INSTRUCTION);
-		}
+		case stateManager->MAIN_MENU:
+			UpdateMainMenu(dt, myKeys);
+			break;
+		case stateManager->GAME:
+			UpdateGame(dt, myKeys);
+			break;
+		case stateManager->INSTRUCTION:
+			UpdateInstructions(dt, myKeys);
+			break;
 	}
 
-	if (stateManager->GetState() == stateManager->INSTRUCTION)
+	/* If in transition */
+	if (stateManager->isTransition())
 	{
-		if(myKeys[KEY_I])
-		{
-			stateManager->ChangeState(stateManager->MAIN_MENU);
-		}
+		stateManager->UpdateTransitionTime(dt);
+	}
+}
+
+void Model_2D::UpdateGame(double dt, bool* myKeys)
+{
+	/* Update player */
+	player->Update(dt, myKeys);
+
+	/* check collision (double for loop) */
+	//start: Set up collision bound before checking with the others
+	player->StartCollisionCheck();
+
+	for(int i = 0; i < 10; ++i)
+	{
+		//check
+		player->CollisionCheck(obj_arr[i]);
 	}
 
-	if (stateManager->GetState() == stateManager->GAME)		// Game objects will only be 'active'/controllable when in the GAME state.
+	player->CollisionResponse();	//translate to new pos if collides
+
+	//cout << player->getPosition().x << endl;
+
+	/* Press space to go back main menu */
+	if(myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
 	{
-		//->Update();	//RMB to reset
-		/* Update player */
-		player->Update(dt, myKeys);
+		keyPressedTimer = 0.0;
+		stateManager->ChangeState(stateManager->MAIN_MENU);
 	}
 
+	/* Load/change map */
 	//Key B to move to next map (RP)
 	static bool ButtonBState = false;
 	if (!ButtonBState && myKeys[KEY_B])
@@ -121,11 +144,29 @@ void Model_2D::Update(double dt, bool* myKeys)
 		ButtonBState = false;
 		std::cout << "BBUTTON UP" << std::endl;
 	}
+}
 
-	//State
-	if (stateManager->isTransition())
+void Model_2D::UpdateInstructions(double dt, bool* myKeys)
+{
+	if(myKeys[KEY_I] && keyPressedTimer >= delayTime)
 	{
-		stateManager->UpdateTransitionTime(dt);
+		keyPressedTimer = 0.0;
+		stateManager->ChangeState(stateManager->MAIN_MENU);
+	}
+}
+
+void Model_2D::UpdateMainMenu(double dt, bool* myKeys)
+{
+	if(myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
+	{
+		keyPressedTimer = 0.0;
+		stateManager->ChangeState(stateManager->GAME);
+	}
+
+	if(myKeys[KEY_I] && keyPressedTimer >= delayTime)
+	{
+		keyPressedTimer = 0.0;
+		stateManager->ChangeState(stateManager->INSTRUCTION);
 	}
 }
 
