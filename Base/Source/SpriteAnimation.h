@@ -29,8 +29,9 @@ public:
 
 	/* init/update/render */
 	 //oppDir: if true, going from bottom to top and right to left
-	void init(float time, int startCol, int startRow, int endCol, int endRow, bool oppDir);
+	void init(float time, int startCol, int startRow, int endCol, int endRow, int repeatCount, bool oppDir);
 	void Update(double dt);
+	void Reset();
 	virtual void Render();
 
 	/* variables */
@@ -40,10 +41,14 @@ public:
 	int endRow;
 	int startCol;
 	int endCol;
+	int repeatCount;
+	int m_playCount;
 	bool oppDir;
+	bool ended;
 
 	float m_frameTime;		//time per frame
 	float m_currentTime;	//keep track of current time
+	float m_currentFrameTime;	//keep track of current frame time
 	int m_currentRow;		//keep track of current row
 	int m_currentCol;	//keep track of current col
 	int m_totalFrame;		//store total frame

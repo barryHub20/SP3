@@ -149,7 +149,7 @@ SpriteAnimation* GameObject::generateSpriteMesh()
 	return sa;
 }
 
-void GameObject::processSpriteAnimation(int state, float time, int startCol, int startRow, int endCol, int endRow, bool oppDir)
+void GameObject::processSpriteAnimation(int state, float time, int startCol, int startRow, int endCol, int endRow, int repeatCount, bool oppDir)
 {
 	//SpriteAnimation *sa;
 	//sa = dynamic_cast<SpriteAnimation*>(MeshBuilder::GenerateSpriteAnimation(name, numRow, numCol, 1.f));
@@ -162,7 +162,7 @@ void GameObject::processSpriteAnimation(int state, float time, int startCol, int
 		delete temp;
 		return;
 	}
-	temp->init(time, startCol, startRow, endCol, endRow, oppDir);
+	temp->init(time, startCol, startRow, endCol, endRow, repeatCount, oppDir);
 	animationList[state] = temp;
 }
 void GameObject::Translate(Vector3 pos)

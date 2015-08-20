@@ -299,7 +299,7 @@ void View::Render(const float fps)
 	modelStack.LoadIdentity();
 
 	/*Map*/
-	RenderTileMap();
+	// RenderTileMap();
 
 	/* light */
 	//RenderLight();
@@ -458,13 +458,13 @@ void View::RenderObject()
 			if(o->getActive())
 			{
 				modelStack.PushMatrix();
-				modelStack.LoadMatrix( *(o->getTRS()) );
-				RenderMesh(o->getMesh(), o->getLight());
+				modelStack.LoadMatrix(*(o->getTRS()));
+				RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
 				modelStack.PopMatrix();
 
 				modelStack.PushMatrix();
-				modelStack.LoadMatrix(*(o->getTRS()));
-				RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
+				modelStack.LoadMatrix( *(o->getTRS()) );
+				RenderMesh(o->getMesh(), o->getLight());
 				modelStack.PopMatrix();
 			}
 		}

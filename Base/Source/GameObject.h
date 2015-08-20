@@ -75,7 +75,7 @@ public:
 	virtual void storeSpriteAnimation(std::string name, unsigned int numRow, unsigned int numCol, const char * texture_file_path);
 
 	//Creates a line of sprite and adds it to the state
-	virtual void processSpriteAnimation(int state, float time, int startCol, int startRow, int endCol, int endRow, bool oppDir);
+	virtual void processSpriteAnimation(int state, float time, int startCol, int startRow, int endCol, int endRow, int repeatCount, bool oppDir = false);
 
 	static int getObjCount();
 

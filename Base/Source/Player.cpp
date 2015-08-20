@@ -49,30 +49,49 @@ void Player::Update(double dt, bool* myKey)
 	//setState(IDLE);
 	if(myKey[KEY_W])
 	{
-		setState(UP);
-		sf_walk = true;
+		//Movement / physics
 		translateObject(0, 4, 0);
+		//Animation
+		setState(UP);
+		if (animationList[UP]->ended == true)
+		{
+			animationList[UP]->Reset();
+		}
+		//Sound
+		sf_walk = true;
 	}
 
 	if(myKey[KEY_S])
 	{
-		setState(DOWN);
-		sf_walk = true;
 		translateObject(0, -4, 0);
+		setState(DOWN);
+		if (animationList[DOWN]->ended == true)
+		{
+			animationList[DOWN]->Reset();
+		}
+		sf_walk = true;
 	}	
 
 	if(myKey[KEY_A])
 	{
-		setState(LEFT);
-		sf_walk = true;
 		translateObject(-4, 0, 0);
+		setState(LEFT);
+		if (animationList[LEFT]->ended == true)
+		{
+			animationList[LEFT]->Reset();
+		}
+		sf_walk = true;
 	}
 
 	if(myKey[KEY_D])
 	{
-		setState(RIGHT);
-		sf_walk = true;
 		translateObject(4, 0, 0);
+		setState(RIGHT);
+		if (animationList[RIGHT]->ended == true)
+		{
+			animationList[RIGHT]->Reset();
+		}
+		sf_walk = true;
 	}
 
 	if(!myKey[KEY_W] && !myKey[KEY_A] && !myKey[KEY_S] && !myKey[KEY_D])
