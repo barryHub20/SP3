@@ -3,7 +3,7 @@
 #include "irrKlang.h"
 using namespace irrklang;
 
-extern ISoundEngine* sfxengine;
+extern ISoundEngine* sfxengine;		//
 extern ISound *sfx_plyr_step;
 
 Player::Player()

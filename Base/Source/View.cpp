@@ -367,8 +367,8 @@ void View::RenderHUD()
 		// Render main menu
 		std::ostringstream ss;	//universal
 		ss.precision(5);
-		ss << "TITLE";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 450, 670);
+		ss << "BREAK-IN!";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 400, 670);
 		ss.str("");
 
 		ss << "Press SPACE to start!";
