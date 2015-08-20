@@ -3,3 +3,8 @@ Release/
 Debug/Base.exe
 Debug/Base.pdb
 DM2231_Framework.suo
+glew/
+glfw/
+Common/Common
+Common/Common.vcxproj
+Common/Debug
