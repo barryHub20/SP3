@@ -8,6 +8,8 @@ Vector3 previousEnd;
 Vector3 checkStart;	//to be checked with collide bound
 Vector3 checkEnd;
 bool inZoneX, inZoneY, inZoneZ;
+Vector3 relativeDir;	//relative direction (for spherical collision)
+float offset = 0.1f;
 
 Collision::Collision()
 {
@@ -36,21 +38,62 @@ void Collision::Start(const Vector3& objectPos)
 	}
 }
 
-bool Collision::CheckCollision(Collision& check)
+Collision* a;
+Collision* b;
+bool Collision::CheckCollision(Collision& current, Collision& check)
 {
-	//see current type is what type of collide bound
-	switch(type)
-	{
-	case BOX:	//current type: box --- check type: ??
-		return CheckBoxDetection(check);
-		break;
-	case SPHERE:	//current type: sphere --- check type: ??
-		return CheckSphereDetection(check);
-		break;
-	case SLANTED_BOX:
+	/************ Standardise ************/
+	//BOX/SLANTED_BOX must always be current, unless current and check are both SPHERE
+	a = &current;
+	b = &check;
 
-		break;
+	/************ Reject ************/
+	if(a->type == SLANTED_BOX && b->type == SLANTED_BOX)
+		return false;
+
+	else if( (a->type == BOX && b->type == SLANTED_BOX) ||
+		(a->type == SLANTED_BOX && b->type == BOX) )
+		return false;
+
+	/************ Swap ************/
+	//current type: sphere --- check tye: box ===> Swap
+	//current type: sphere  --- check tye: slanted_box ===> Swap
+
+	if(a->type == BOX || a->type == SLANTED_BOX)
+	{
+		if(b->type == SPHERE)
+		{
+			a = &check;
+			b = &current;
+		}
 	}
+
+	/************ Check collide ************/
+	//possible combinations:
+	//1) current type: Sphere --- Check type: Sphere 
+	//3) current type: Sphere --- Check type: Slanted Box
+	//4) current type: Sphere --- Check type: Box
+	//2) current type: Box --- Check type: Box
+
+	//see current type is what type of collide bound
+	//1)
+	if(a->type == SPHERE && b->type == SPHERE)
+	{
+		return SphereToSphere(a, b);
+	}
+	else if(a->type == SPHERE && b->type == SLANTED_BOX)
+	{
+		return SphereToSlantedBox(a, b);
+	}
+	else if(a->type == SPHERE && b->type == BOX)
+	{
+		return SphereToBox(a, b);
+	}
+	else if(a->type == BOX && b->type == BOX)
+	{
+		return BoxToBox(a, b);
+	}
+
 	return false;
 }
 
@@ -59,69 +102,59 @@ Collision::~Collision()
 
 }
 
-bool Collision::CheckSphereDetection(Collision& check)
+/* Sphere (current) to Sphere (check) */
+bool Collision::SphereToSphere(Collision* current, Collision* check)
 {
-	//check other bound is of what type 
-	switch (check.type)
+	/* take scaleX as the radius */
+	float combinedRadiusX = current->scale.x + check->scale.x;
+	float distSquared = (current->position - check->position).LengthSquared();
+
+	/* IF COLLIDE */
+	if((combinedRadiusX * combinedRadiusX) < distSquared)
 	{
-	case BOX:	//current type: sphere ---- Check type: box
-		//return AABB_CheckCollision(check);
-		break;
-	case SPHERE:	//current type: sphere ---- Check type: sphere
-		//return AABB_CheckCollision(check);
-		break;
+		/* Offset pos of current to just touching the check object */
+
+		/* Get the relative direction */
+		if(!a->position.IsEqual(b->position.x, b->position.y))
+			relativeDir = (a->position - b->position).Normalized();
+
+		float combined_radius = a->scale.x + b->scale.x + offset;
+
+		/* Set pos to just touching */
+		Vector3 newPos = check->position + (relativeDir * combined_radius);
+		check->position = newPos;
+		cout << "sdfdsf" << endl;
+		return true;
 	}
+	return false;
+}
+
+/* Sphere (current) to Slanted Box (check) */
+bool Collision::SphereToSlantedBox(Collision* current, Collision* check)
+{
 
 	return false;
 }
 
-bool Collision::CheckBoxDetection(Collision& check)
-{
-	//check other bound is of what type 
-	switch (check.type)
-	{
-	case BOX:	//current type: box ---- Check type: box
-		return AABB_CheckCollision(check);
-		break;
-	case SPHERE:	//current type: box ---- Check type: sphere
-		//return AABB_CheckCollision(check);
-		break;
-	}
-
-	return false;
-}
-
-void Collision::Reset()
-{
-	if(type == BOX)
-	{
-		ResetAABB();
-	}
-}
-
-/* Sphere */
-bool Sphere_To_Box_CheckCollision(Collision& check)
+/* Sphere (current) to Box (check) */
+bool Collision::SphereToBox(Collision* current, Collision* check)
 {
 	/* check if got collision */
-	//current type == sphere
-	//check type == box
 
 	/* Set up check object currentStart and currentEnd */
-	checkStart = check.position - check.scale * 0.5f;
-	checkEnd = check.position + check.scale * 0.5f;
+	checkStart = check->position - check->scale * 0.5f;
+	checkEnd = check->position + check->scale * 0.5f;
 
-	/* 4 points of a circle */
-	Vector3 lowerLeft, upperRight;
 
 	return false;
 }
 
-/* AABB */
-bool Collision::AABB_CheckCollision(Collision& check)
+/* Box (current) to Box (check) */
+bool Collision::BoxToBox(Collision* current, Collision* check)
 {
 	/* Set up check object currentStart and currentEnd */
-	checkStart = check.position - check.scale * 0.5f;
-	checkEnd = check.position + check.scale * 0.5f;
+	checkStart = check->position - check->scale * 0.5f;
+	checkEnd = check->position + check->scale * 0.5f;
 
 	/*********************** check collision ***********************/
 	inZoneY = inZone(currentStart.y, currentEnd.y, checkStart.y, checkEnd.y);
@@ -139,24 +172,24 @@ bool Collision::AABB_CheckCollision(Collision& check)
 		///** Y dir **/
 		if(inZoneX && inZoneZ && !inZoneY)
 		{
-			getAABBCollide(previousStart.y, previousEnd.y, checkStart.y, checkEnd.y, Movement_3d::start_Y, Movement_3d::end_Y, collideArea.collideSide);
+			getAABBCollide(previousStart.y, previousEnd.y, checkStart.y, checkEnd.y, Movement_3d::start_Y, Movement_3d::end_Y, current->collideArea.collideSide);
 		}
 
 		/** X dir **/
 		else if(inZoneY && inZoneZ && !inZoneX)
 		{
-			getAABBCollide(previousStart.x, previousEnd.x, checkStart.x, checkEnd.x, Movement_3d::start_X, Movement_3d::end_X, collideArea.collideSide);
+			getAABBCollide(previousStart.x, previousEnd.x, checkStart.x, checkEnd.x, Movement_3d::start_X, Movement_3d::end_X, current->collideArea.collideSide);
 		}
 
 		/** Z dir **/
 		else if(inZoneY && inZoneX && !inZoneZ)
 		{
-			getAABBCollide(previousStart.z, previousEnd.z, checkStart.z, checkEnd.z, Movement_3d::start_Z, Movement_3d::end_Z, collideArea.collideSide);
+			getAABBCollide(previousStart.z, previousEnd.z, checkStart.z, checkEnd.z, Movement_3d::start_Z, Movement_3d::end_Z, current->collideArea.collideSide);
 		}
 
-		UpdateAABB(check, position);	//update position of boundbox
-		currentStart = position - (this->scale * 0.5f);	//currentStart and currentEnd too
-		currentEnd = position + (this->scale * 0.5f);
+		UpdateAABB(current, check);	//update position of boundbox
+		currentStart = current->position - (current->scale * 0.5f);	//currentStart and currentEnd too
+		currentEnd = current->position + (current->scale * 0.5f);
 
 		return true;
 	}
@@ -164,41 +197,49 @@ bool Collision::AABB_CheckCollision(Collision& check)
 	return false;
 }
 
-void Collision::UpdateAABB(Collision& check, Vector3& pos)
+void Collision::Reset()
 {
-	float offset = 0.8f;	//offset to translate not directly at the pos
-	Vector3 halfScale = scale * 0.5f;
+	if(type == BOX)
+	{
+		ResetAABB();
+	}
+}
+
+
+void Collision::UpdateAABB(Collision* current, Collision* check)
+{
+	Vector3 halfScale = current->scale * 0.5f;
 	/* check collide */
 	/* check collision first */
 
-	if(collideArea.collideSide == Movement_3d::start_X)
+	if(current->collideArea.collideSide == Movement_3d::start_X)
 	{
 		//pos.x = previousPos.x;
-		pos.x = checkEnd.x + halfScale.x + offset;
+		current->position.x = checkEnd.x + halfScale.x + offset;
 	}
-	else if(collideArea.collideSide == Movement_3d::end_X)
+	else if(current->collideArea.collideSide == Movement_3d::end_X)
 	{
-		pos.x = checkStart.x - halfScale.x - offset;
+		current->position.x = checkStart.x - halfScale.x - offset;
 	}
 
 	//y
-	else if(collideArea.collideSide == Movement_3d::start_Y)
+	else if(current->collideArea.collideSide == Movement_3d::start_Y)
 	{
-		pos.y = checkEnd.y + halfScale.y + offset;
+		current->position.y = checkEnd.y + halfScale.y + offset;
 	}
-	else if(collideArea.collideSide == Movement_3d::end_Y)
+	else if(current->collideArea.collideSide == Movement_3d::end_Y)
 	{
-		pos.y = checkStart.y - halfScale.y - offset;
+		current->position.y = checkStart.y - halfScale.y - offset;
 	}
 
 	//z
-	else if(collideArea.collideSide == Movement_3d::start_Z)
+	else if(current->collideArea.collideSide == Movement_3d::start_Z)
 	{
-		pos.z = checkEnd.z + halfScale.z + offset;
+		current->position.z = checkEnd.z + halfScale.z + offset;
 	}
-	else if(collideArea.collideSide == Movement_3d::end_Z)
+	else if(current->collideArea.collideSide == Movement_3d::end_Z)
 	{
-		pos.z = checkStart.z - halfScale.z - offset;
+		current->position.z = checkStart.z - halfScale.z - offset;
 	}
 }
 

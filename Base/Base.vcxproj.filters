@@ -55,9 +55,6 @@
     <Filter Include="Source Files\Model">
       <UniqueIdentifier>{3b9f3fd6-a773-4c74-b5d7-96b92f2b4eee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Shadow">
-      <UniqueIdentifier>{a3d300e1-3304-4ddc-963f-0ef489f713da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Shadow">
       <UniqueIdentifier>{c483814b-b1a5-48d7-a0cc-4ff2433b0bd7}</UniqueIdentifier>
     </Filter>
@@ -78,6 +75,9 @@
     </Filter>
     <Filter Include="Source Files\Inventory">
       <UniqueIdentifier>{759b2cf9-a113-448c-99d6-9844a4b327ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Useful Utilities\Shadow">
+      <UniqueIdentifier>{a3d300e1-3304-4ddc-963f-0ef489f713da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -132,20 +132,11 @@
     <ClCompile Include="Source\MeshList.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CollideBox.cpp">
-      <Filter>Source Files\AABB</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Map.cpp">
       <Filter>Source Files\Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\BoundBox_3D.cpp">
-      <Filter>Source Files\AABB</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BoundBox_2D.cpp">
-      <Filter>Source Files\AABB</Filter>
-    </ClCompile>
     <ClCompile Include="Source\DepthFBO.cpp">
-      <Filter>Source Files\Shadow</Filter>
+      <Filter>Source Files\Useful Utilities\Shadow</Filter>
     </ClCompile>
     <ClCompile Include="Source\View.cpp">
       <Filter>Source Files\View</Filter>
@@ -177,17 +168,26 @@
     <ClCompile Include="Source\StateManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collision.cpp">
-      <Filter>Header Files\AABB</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\StaticObject.cpp">
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Character.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Source\BoundBox_2D.cpp">
+      <Filter>Source Files\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BoundBox_3D.cpp">
+      <Filter>Source Files\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CollideBox.cpp">
+      <Filter>Source Files\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision.cpp">
+      <Filter>Source Files\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TileObject.cpp">
+      <Filter>Source Files\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,9 +233,6 @@
     <ClInclude Include="Source\Utility.h">
       <Filter>Header Files\Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\BoundBox.h">
-      <Filter>Header Files\AABB</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MiniMap.h">
       <Filter>Header Files\Files</Filter>
     </ClInclude>
@@ -259,9 +256,6 @@
     </ClInclude>
     <ClInclude Include="Source\Map.h">
       <Filter>Header Files\Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BoundBox_3D.h">
-      <Filter>Header Files\AABB</Filter>
     </ClInclude>
     <ClInclude Include="Source\BoundBox_2D.h">
       <Filter>Header Files\AABB</Filter>
@@ -299,8 +293,23 @@
     <ClInclude Include="Source\StaticObject.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Character.h">
+    <ClInclude Include="Source\BoundBox_2D.h">
+      <Filter>Header Files\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BoundBox_3D.h">
+      <Filter>Header Files\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BoundBox.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BoundBox_3D.h">
+      <Filter>Header Files\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision.h">
+      <Filter>Header Files\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TileObject.h">
+      <Filter>Header Files\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
 #include <sstream>
 
 #include "StaticObject.h"
+//(tip) If create bullet, bullet class has a static TRS so that TRS update with current bullet pos
 
 /*********** constructor/destructor ***************/
 Model_2D::Model_2D()
@@ -26,9 +27,8 @@ void Model_2D::Init()
 {
 	Model::Init();
 	
-	InitMaps();
-	mapManager->SetMap(0);
-	mapManager->GetCurrentMap()->LoadBBox();
+	InitMaps();	//create map for all levels
+	mapManager->SetMap(0);	//set to map 0 first
 
 	/* Coord of screen */
 	m_view_width = 1024.f;
@@ -58,9 +58,9 @@ void Model_2D::InitObject()
 	float x = 100;
 	for(int i = 0; i < 10; ++i)
 	{
-		x = i * 70 + 100;
+		x = i * 111 + 100;
 		obj_arr[i] = new StaticObject(Geometry::meshList[Geometry::GEO_CUBE], Vector3(x, 500, 0), 
-			Vector3(60, 10, 1), 10, 0, false, GameObject::GO_FURNITURE);
+			Vector3(60, 60, 1), 10, 0, false, GameObject::GO_FURNITURE);
 		elementObject.push_back(obj_arr[i]);
 	}
 
@@ -111,13 +111,12 @@ void Model_2D::Update(double dt, bool* myKeys)
 void Model_2D::UpdateGame(double dt, bool* myKeys)
 {
 	/* Update player */
-	//			dt, myKeys, rightwards boundary, top boundary
-	player->Update(dt, myKeys, (float)mapManager->GetCurrentMap()->GetNumOfTiles_Width()*32-player->getScale().x, (float)mapManager->GetCurrentMap()->GetNumOfTiles_Height()*32-player->getScale().x*1.5f);
+	player->Update(dt, myKeys);
 
-	getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
-	getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
+	//getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
+	//getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
 
-	/* check collision (double for loop) */
+	/* check collision with object */
 	//start: Set up collision bound before checking with the others
 	player->StartCollisionCheck();
 
@@ -127,9 +126,20 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		player->CollisionCheck(obj_arr[i]);
 	}
 
+	/* check collision with map */
+	mapManager->GetCurrentMap()->CheckCollisionWith(player);
+
+	/* Collision response */
 	player->CollisionResponse();	//translate to new pos if collides
 
-	//cout << player->getPosition().x << endl;
+	if(myKeys[KEY_K])
+	{
+		camera.position.x += 1;
+	}
+
+	/* Update target */
+	camera.target = camera.position;
+	camera.target.z -= 10;
 
 	/* Press space to go back main menu */
 	if(myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)

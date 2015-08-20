@@ -61,8 +61,8 @@ public:
 	void Translate(Vector3 pos);
 	void TranslateOffset(Vector3 offset);
 
-	void StartCollisionCheck();	//set-up collision bound for checking
-	bool CollisionCheck(GameObject* checkWithMe);	//collision check
+	virtual void StartCollisionCheck();	//set-up collision bound for checking
+	virtual bool CollisionCheck(GameObject* checkWithMe);	//collision check
 	virtual void CollisionResponse();
 
 	static int getObjCount();

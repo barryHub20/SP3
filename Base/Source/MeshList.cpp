@@ -96,7 +96,7 @@ void Geometry::Init()
 	meshList[GEO_DERELICT_BUILDING_01] = MeshBuilder::GenerateOBJ("derelict building 01", "OBJ//derelict_building01.obj");
 	meshList[GEO_DERELICT_BUILDING_01]->textureID[0] = LoadTGA("Image//derelict_building01.tga");
 
-	meshList[GEO_TILEMAP] = MeshBuilder::GenerateTileMap("Tile Map", Color(1, 1, 1), 32.f, 32.f, 8, 8);	//set the width/heignt of each tile same as the .tga w/h
+	meshList[GEO_TILEMAP] = MeshBuilder::GenerateTileMap("Tile Map", Color(1, 1, 1), 1.f, 1.f, 8, 8);	//set the width/heignt as 1 (can scale later)
 	meshList[GEO_TILEMAP]->textureID[0] = LoadTGA("Image//tile2_ground.tga");
 	
 

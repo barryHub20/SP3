@@ -4,7 +4,8 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include "BoundBox_3D.h"
+#include "TileObject.h"
+
 using namespace std;
 
 class Map
@@ -32,18 +33,18 @@ public:
 	~Map(void);
 
 	void Init(const int num_of_tile_Width, const int num_of_tile_Height, const int tileSize);
-	bool LoadMap(const string mapName);
-	void LoadBBox(void); //Create the bounding boxes from the file
+
 	int GetNumOfTiles_Height(void);
 	int GetNumOfTiles_Width(void);
 	int GetTileSize(void);
 
-	vector<vector<int> > theScreenMap;
+	bool LoadMap(const string mapName);	//load from csv to double vector
+	bool SetUp();	//setup each tile
 
 	//RP
-	vector<BoundBox_3D> GetBBList(void); //Returns the bounding box list
-	void CleanUp(void); //reset bounding box list
-	
+	void CleanUp(void); //reset tile object list list
+	TileObject* getTileObject(int x, int y);	//get tile based on x and y
+	void CheckCollisionWith(GameObject* checkWithMe);	//Utility function: pass in to check collision with this map
 
 private:
 	int theScreen_Height;
@@ -51,11 +52,9 @@ private:
 	int theNumOfTiles_Height;
 	int theNumOfTiles_Width;
 	int theTileSize;
-	
-	bool LoadFile(const string mapName);
 
 	//RP
-	vector<BoundBox_3D> BoundBoxList; //Store the bounding boxes created
-
+	vector<vector<TileObject> > theScreenMap;
 	
+	bool LoadFile(const string mapName);
 };

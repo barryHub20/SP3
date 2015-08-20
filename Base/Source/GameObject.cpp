@@ -113,7 +113,7 @@ void GameObject::StartCollisionCheck()
 bool GameObject::CollisionCheck(GameObject* checkWithMe)
 {
 	bool b = false;
-	b = collideBound.CheckCollision(checkWithMe->collideBound);
+	b = collideBound.CheckCollision(this->collideBound, checkWithMe->collideBound);
 
 	if(!collided)
 		collided = b;

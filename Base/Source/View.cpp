@@ -324,18 +324,6 @@ void View::RenderCollideBox()
 		{
 			
 		}
-
-		//cout << model->mapManager->GetCurrentMap()->GetBBList().size() << endl;
-
-	
-		for (int i = 0; i < model->mapManager->CurrentBBox.size(); i++)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(model->mapManager->CurrentBBox[i].getPosition().x, model->mapManager->CurrentBBox[i].getPosition().y, model->mapManager->CurrentBBox[i].getPosition().z);
-			modelStack.Scale(32, 32, 32);
-			RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
-			modelStack.PopMatrix();
-		}
 	}
 	else if (model->stateManager->GetState() == model->stateManager->MAIN_MENU)
 	{
@@ -357,12 +345,12 @@ void View::RenderHUD()
 		/* FPS */
 		ss.precision(5);
 		ss << "FPS: " << fps;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0, 1, 0), 6, 5, 6);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0, 1, 0), 30, 15, 730);
 		ss.str("");
 
 		/* Pos */
 		ss << "Pos: " << model->getCamera()->position;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 6, 5, 12);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 15, 760);
 	}
 
 	if (model->stateManager->GetState() == model->stateManager->TRANSITION)
@@ -460,10 +448,6 @@ void View::RenderLight()
 
 void View::RenderObject()
 {
-	/* 2D Tile Map render: tiles should be rendered together with the object vector */
-	/*if(mode == TWO_D)
-		RenderTileMap();*/
-
 	/* Renders all objects */
 	if (model->stateManager->GetState() == model->stateManager->GAME)
 	{
@@ -489,17 +473,24 @@ void View::RenderObject()
 
 void View::RenderTileMap()
 {
+	TileObject* tileObject = NULL;
+
+	float tileSize = model->mapManager->GetCurrentMap()->GetTileSize();
+
 	if (model->stateManager->GetState() == model->stateManager->GAME)
 	{
-		for (int i = 0; i < model->mapManager->GetCurrentMap()->GetNumOfTiles_Height(); ++i)
+		for (int i = 0; i < model->mapManager->GetCurrentMap()->GetNumOfTiles_Height(); ++i)	//y
 		{
-			for (int k = 0; k < model->mapManager->GetCurrentMap()->GetNumOfTiles_Width(); ++k)
-			{
-				if (model->mapManager->GetCurrentMap()->theScreenMap[i][k] != 0)
-				{
-					//mesh, enableLight, size X, size Y, pos X, pos Y
-					Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 0.8751f, (((float)(k * model->mapManager->GetCurrentMap()->GetTileSize()) - model->offset.x)-getModel()->getCamera()->position.x)*0.8751f-15, ((i *model->mapManager->GetCurrentMap()->GetTileSize())-getModel()->getCamera()->position.y)*0.8751f-15, model->mapManager->GetCurrentMap()->theScreenMap[i][k]);
-				}
+			for (int k = 0; k < model->mapManager->GetCurrentMap()->GetNumOfTiles_Width(); ++k)	//x
+			{	
+				tileObject = model->mapManager->GetCurrentMap()->getTileObject(k, i);
+				
+				modelStack.PushMatrix();
+				modelStack.Translate(tileObject->getPosition().x, tileObject->getPosition().y, -1);
+				modelStack.Scale(tileObject->getScale().x, tileObject->getScale().y, 1);
+				RenderMesh(tileObject->getMesh(), false);
+				modelStack.PopMatrix();
+				//Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.f, (((float)(k * model->mapManager->GetCurrentMap()->GetTileSize()) - model->offset.x)-getModel()->getCamera()->position.x)*0.8751f-15, ((i *model->mapManager->GetCurrentMap()->GetTileSize())-getModel()->getCamera()->position.y)*0.8751f-15, model->mapManager->GetCurrentMap()->theScreenMap[i][k]);
 			}
 		}
 	} 
@@ -512,23 +503,6 @@ void View::RenderTileMap()
 	{
 		
 	}
-
-	//
-	///* background layer 1: parallex scrolling */
-	//for(int i = 0; i < model->m_backgroundMap->GetNumOfTiles_Height(); ++i)
-	//{
-	//	for(int k = 0; k < model->m_backgroundMap->GetNumOfTiles_Width(); ++k)
-	//	{
-	//		tileLoc = static_cast<float>((k * (model->m_backgroundMap->GetTileSize()) - (model->offset.x * model->m_backgroundSpeed_Percent)));
-
-	//		if(model->m_backgroundMap->theScreenMap[i][k] != 0 && (tileLoc <= m_console_width && tileLoc + model->m_backgroundMap->GetTileSize() >= 0))
-	//		{
-	//			//mesh, enableLight, size X, size Y, pos X, pos Y
-	//			Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.0f, (float)(k * model->m_backgroundMap->GetTileSize()) - (int)(model->offset.x * model->m_backgroundSpeed_Percent), i * model->m_backgroundMap->GetTileSize(), model->m_backgroundMap->theScreenMap[i][k]);
-	//		}
-	//	}
-	//}
-	//
 }
 
 void View::Exit()

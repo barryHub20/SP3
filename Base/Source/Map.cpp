@@ -10,7 +10,6 @@ Map::Map(void)
 , theTileSize(0)
 {
 	theScreenMap.clear();
-	BoundBoxList.clear();
 }
 
 Map::~Map(void)
@@ -44,41 +43,30 @@ bool Map::LoadMap(const string mapName)
 	return false;
 }
 
-void Map::LoadBBox(void)
+bool Map::SetUp()
 {
-	int m = 0;
-	BoundBox_3D box;
-	//mapFineOffset_x = mapOffset_x % m_cMap->GetTileSize();
+	//assume start pos is: (0, 0, 0), better if set parameters float startX, float startY
+	Vector3 pos;
+	pos.x = pos.y = theTileSize * 0.5f;
+
 	for (int i = 0; i < GetNumOfTiles_Height(); i++)
 	{
 		for (int k = 0; k < GetNumOfTiles_Width(); k++)
 		{
-			//m = tileOffset_x + k;
-			Vector3 boxPos;
-			Vector3 scale(theTileSize, theTileSize, theTileSize);
-			if (theScreenMap[i][k] > 0)
-			{
-				boxPos.Set(k * theTileSize, i * theTileSize);	
-				//cout << boxPos << endl;
-				box.Set(boxPos, scale);
-				BoundBoxList.push_back(box);
-			}
-		/*	else if (theScreenMap[i][k] == 5)
-			{
-				boxPos.Set(k * theTileSize, 575.f - i * theTileSize);
-				box = new BoundingBox(boxPos, 25.f, 25.f, true);
-				theOriginalBoxMap.push_back(box);
-				theBoundingBoxMap.push_back(*box);
-			}
-			else if (theScreenMap[i][k] == 6)
-			{
-				boxPos.Set(k * theTileSize, 575.f - i * theTileSize);
-				box = new BoundingBox(boxPos, 25.f, 25.f, true);
-				secondBoundingBoxMap.push_back(*box);
-				delete box;
-			}*/
+			//testing only: floor and wall diff mesh
+			if(theScreenMap[i][k].getTileNum() == 0)
+				theScreenMap[i][k].Set(Geometry::meshList[Geometry::GEO_LEFT], pos, (float)theTileSize);
+			else
+				theScreenMap[i][k].Set(Geometry::meshList[Geometry::GEO_CUBE], pos, (float)theTileSize);
+
+			pos.x += theTileSize;	//set to next column
 		}
+
+		pos.y += theTileSize;	//set to next row
+		pos.x = theTileSize * 0.5f;	//reset to first column
 	}
+
+	return true;
 }
 
 bool Map::LoadFile(const string mapName)
@@ -122,7 +110,7 @@ bool Map::LoadFile(const string mapName)
 					istringstream iss(aLineOfText);
 					while(getline(iss, token, ',') && (theColumnCounter<theNumOfTiles_Width))
 					{
-						theScreenMap[(theNumOfTiles_Height - 1) - theLineCounter][theColumnCounter++] = atoi(token.c_str());
+						theScreenMap[(theNumOfTiles_Height - 1) - theLineCounter][theColumnCounter++].setTileNum( atoi(token.c_str()) );
 					}
 				}
 			}
@@ -148,13 +136,31 @@ int Map::GetTileSize(void)
 	return theTileSize;
 }
 
-vector<BoundBox_3D> Map::GetBBList(void)
+TileObject* Map::getTileObject(int x, int y)
 {
-	return BoundBoxList;
+	if(x > theNumOfTiles_Width || y > theNumOfTiles_Height)	//error check
+		 return NULL;
+
+	return &theScreenMap[y][x];
+}
+
+void Map::CheckCollisionWith(GameObject* checkWithMe)
+{
+	TileObject* tileObj = NULL;
+	for (int i = 0; i < GetNumOfTiles_Height(); i++)
+	{
+		for (int k = 0; k < GetNumOfTiles_Width(); k++)
+		{
+			/* Check collide with individual tile */
+			tileObj = getTileObject(k, i);
+
+			if(tileObj != NULL && tileObj->getTileNum() != 0)
+				checkWithMe->CollisionCheck( tileObj );
+		}
+	}
 }
 
 void Map::CleanUp(void)
 {
-	BoundBoxList.clear();
 	theScreenMap.clear();
 }

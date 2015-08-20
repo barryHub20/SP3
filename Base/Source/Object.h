@@ -3,7 +3,6 @@
 
 #include "Mesh.h"
 #include "Mtx44.h"
-#include "BoundBox_3D.h"
 #include <vector>
 #include <string>
 using namespace std;

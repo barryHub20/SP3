@@ -5,6 +5,7 @@
 using namespace std;
 
 /**
+STRICTLY FOR AABB ONLY
 store bool for all 6 sides of a cuboid collision box for AABB only
 **/
 struct Movement_3d
@@ -30,11 +31,6 @@ struct Movement_3d
 	/* utilities */
 	void Reset(){collideSide = UNDEFINED;}
 
-	friend std::ostream& operator<< (std::ostream& os, Movement_3d& moveme){
-		std::cout << moveme.collideSide;
-		return os;
-	}
-
 	Movement_3d& operator= (Movement_3d& copy){collideSide = copy.collideSide;return *this;}
 	bool operator== (Movement_3d::COLLIDE& check){return collideSide == check;}
 };
@@ -59,17 +55,25 @@ public:
 	void Reset();
 
 	/* Check if collide: */
-	bool CheckCollision(Collision& check);
+	//pass in current object's collide box and collide box of object being compared
+	static bool CheckCollision(Collision& current, Collision& check);
 
-		/* if current type is sphere */
-		bool CheckSphereDetection(Collision& check);
+	//1) current type: Sphere --- Check type: Sphere 
+	//3) current type: Sphere --- Check type: Slanted Box
+	//4) current type: Sphere --- Check type: Box
+	//2) current type: Box --- Check type: Box
 
-		/* if current type is AABB Box */
-		bool CheckBoxDetection(Collision& check);
+		/* Sphere (current) to Sphere (check) */
+		static bool SphereToSphere(Collision* current, Collision* check);
 
+		/* Sphere (current) to Slanted Box (check) */
+		static bool SphereToSlantedBox(Collision* current, Collision* check);
 
-		bool AABB_CheckCollision(Collision& check);	//box to box aabb
-		bool Sphere_To_Box_CheckCollision(Collision& check);	//sphere to box
+		/* Sphere (current) to Box (check) */
+		static bool SphereToBox(Collision* current, Collision* check);
+
+		/* Box (current) to Box (check) */
+		static bool BoxToBox(Collision* current, Collision* check);
 
 	/* Collision response */
 	//for respone, set object pos to collision pos
@@ -81,7 +85,7 @@ public:
 
 	/* Variables for all collision type */
 	Vector3 position;
-	Vector3 scale;	//if 2D, z == 0
+	Vector3 scale;	//if is Sphere, scale.set(radius, radius, radius);
 
 	/* aabb variables */
 	Vector3 previousPos;
@@ -90,8 +94,8 @@ public:
 private:
 
 	/** internal functions please ignore (DO NOT CALL FROM OUTSIDE CLASS) **/
-	bool inZone(float& start, float& end, float& checkStart, float& checkEnd);
-	void getAABBCollide(float& start, float& end, float& checkStart, float& checkEnd, Movement_3d::COLLIDE startDir, Movement_3d::COLLIDE endDir, Movement_3d::COLLIDE& collideSide);
-	void UpdateAABB(Collision& check, Vector3& pos);
+	static bool inZone(float& start, float& end, float& checkStart, float& checkEnd);
+	static void getAABBCollide(float& start, float& end, float& checkStart, float& checkEnd, Movement_3d::COLLIDE startDir, Movement_3d::COLLIDE endDir, Movement_3d::COLLIDE& collideSide);
+	static void UpdateAABB(Collision* current, Collision* check);
 	void ResetAABB();
 };

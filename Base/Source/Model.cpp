@@ -26,6 +26,7 @@ Model::~Model()
 /*********** core functions ***************/
 void Model::Init()
 {
+	/* game state setup */
 	mapManager = new MapManager();
 	stateManager = new StateManager();
 

@@ -81,21 +81,28 @@ Mesh* MeshBuilder::GenerateQuad(const std::string &meshName, Color color, float 
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
 
+	//1
 	v.pos.Set(-0.5f * length,-0.5f * length,0);
 	v.color = color;
 	v.normal.Set(0, 0, 1);
 	v.texCoord.Set(0, 0);
 	vertex_buffer_data.push_back(v);
+
+	//2
 	v.pos.Set(0.5f * length,-0.5f * length,0);
 	v.color = color;
 	v.normal.Set(0, 0, 1);
 	v.texCoord.Set(texCoord, 0);
 	vertex_buffer_data.push_back(v);
+
+	//3
 	v.pos.Set(0.5f * length, 0.5f * length,0);
 	v.color = color;
 	v.normal.Set(0, 0, 1);
 	v.texCoord.Set(texCoord, texCoord);
 	vertex_buffer_data.push_back(v);
+
+	//4
 	v.pos.Set(-0.5f * length, 0.5f * length,0);
 	v.color = color;
 	v.normal.Set(0, 0, 1);
@@ -1075,9 +1082,13 @@ Mesh* MeshBuilder::GenerateTileMap(const std::string &meshName, Color color, int
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
 
+	/* for texcoord*/
 	float texWidth = 1.f / numCol;
 	float texHeight = 1.f / numRow;
 	int offset = 0;
+
+	float halfWidth = width * 0.5f;
+	float halfHeight = height * 0.5f;
 
 	for(unsigned i = 0; i < numRow; ++i)
 	{
@@ -1087,28 +1098,28 @@ Mesh* MeshBuilder::GenerateTileMap(const std::string &meshName, Color color, int
 			float v1 = 1.f - texHeight - i * texHeight;
 
 			// Vertex #1
-			v.pos.Set(0, 0, 0);
+			v.pos.Set(-halfWidth, -halfHeight, 0);
 			v.color = color;
 			v.normal.Set(0, 0, 1);
 			v.texCoord.Set(u1, v1);
 			vertex_buffer_data.push_back(v);
 
 			// Vertex #2
-			v.pos.Set(width, 0, 0);
+			v.pos.Set(halfWidth, -halfHeight, 0);
 			v.color = color;
 			v.normal.Set(0, 0, 1);
 			v.texCoord.Set(u1 + texWidth, v1);
 			vertex_buffer_data.push_back(v);
 
 			// Vertex #3
-			v.pos.Set(width, height, 0);
+			v.pos.Set(halfWidth, halfHeight, 0);
 			v.color = color;
 			v.normal.Set(0, 0, 1);
 			v.texCoord.Set(u1 + texWidth, v1 + texHeight);
 			vertex_buffer_data.push_back(v);
 
 			// Vertex #4
-			v.pos.Set(0, height, 0);
+			v.pos.Set(-halfWidth, halfHeight, 0);
 			v.color = color;
 			v.normal.Set(0, 0, 1);
 			v.texCoord.Set(u1, v1 + texHeight);
