@@ -49,6 +49,7 @@ void Model_2D::Init()
 
 	//object
 	InitObject();
+	InitSprites();
 
 	//Init sound
 	sfxengine = createIrrKlangDevice();
@@ -80,6 +81,20 @@ void Model_2D::InitObject()
 		Object *go = (Object *)*it;
 		go->Init();
 	}
+}
+
+void Model_2D::InitSprites()
+{
+	//Player sprites
+	player->storeSpriteAnimation("black guard", 21, 13, "Image//Sprites//guard.tga");
+	player->processSpriteAnimation(Player::UP, 0.5f, 0, 8, 8, 8, false);
+	player->processSpriteAnimation(Player::DOWN, 0.5f, 0, 10, 8, 10, false);
+	player->processSpriteAnimation(Player::LEFT, 0.5f, 0, 9, 8, 9, false);
+	player->processSpriteAnimation(Player::RIGHT, 0.5f, 0, 11, 8, 11, false);
+	player->processSpriteAnimation(Player::ATTACKUP, 0.5f, 0, 4, 7, 4, false);
+	player->processSpriteAnimation(Player::ATTACKDOWN, 0.5f, 0, 6, 7, 6, false);
+	player->processSpriteAnimation(Player::ATTACKLEFT, 0.5f, 0, 5, 7, 5, false);
+	player->processSpriteAnimation(Player::ATTACKRIGHT, 0.5f, 0, 7, 7, 7, false);
 }
 
 void Model_2D::InitMaps()

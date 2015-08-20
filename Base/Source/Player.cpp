@@ -8,6 +8,11 @@ extern ISound *sfx_plyr_step;
 
 Player::Player()
 {
+	for(int i = 0; i < MAX_STATES; i++)
+	{
+		animationList[i] = NULL;
+	}
+
 }
 
 Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active)
@@ -40,26 +45,32 @@ Player::~Player()
 
 void Player::Update(double dt, bool* myKey)
 {
+	//cout << animationList[UP]->startRow << " " << animationList[DOWN]->startRow << endl;
+	//setState(IDLE);
 	if(myKey[KEY_W])
 	{
+		setState(UP);
 		sf_walk = true;
 		translateObject(0, 4, 0);
 	}
 
 	if(myKey[KEY_S])
 	{
+		setState(DOWN);
 		sf_walk = true;
 		translateObject(0, -4, 0);
 	}	
 
 	if(myKey[KEY_A])
 	{
+		setState(LEFT);
 		sf_walk = true;
 		translateObject(-4, 0, 0);
 	}
 
 	if(myKey[KEY_D])
 	{
+		setState(RIGHT);
 		sf_walk = true;
 		translateObject(4, 0, 0);
 	}
@@ -84,12 +95,88 @@ void Player::Update(double dt, bool* myKey)
 		}
 	}
 
+	switch(state)
+	{
+	case UP:
+		{
+			if(mesh != animationList[UP])
+			{
+				setMesh(animationList[UP]);
+			}
+			animationList[UP]->Update(dt);
+			break;
+		}
+	case DOWN:
+		{
+			if(mesh != animationList[DOWN])
+			{
+				setMesh(animationList[DOWN]);
+			}
+			animationList[DOWN]->Update(dt);
+			break;
+		}
+	case LEFT:
+		{
+			if(mesh != animationList[LEFT])
+			{
+				setMesh(animationList[LEFT]);
+			}
+			animationList[LEFT]->Update(dt);
+			break;
+		}
+	case RIGHT:
+		{
+			if(mesh != animationList[RIGHT])
+			{
+				setMesh(animationList[RIGHT]);
+			}
+			animationList[RIGHT]->Update(dt);
+			break;
+		}
+	case ATTACKUP:
+		{
+			if(mesh != animationList[ATTACKUP])
+			{
+				setMesh(animationList[ATTACKUP]);
+			}
+			animationList[ATTACKUP]->Update(dt);
+			break;
+		}
+	case ATTACKDOWN:
+		{
+			if(mesh != animationList[ATTACKDOWN])
+			{
+				setMesh(animationList[ATTACKDOWN]);
+			}
+			animationList[ATTACKDOWN]->Update(dt);
+			break;
+		}
+	case ATTACKLEFT:
+		{
+			if(mesh != animationList[ATTACKLEFT])
+			{
+				setMesh(animationList[ATTACKLEFT]);
+			}
+			animationList[ATTACKLEFT]->Update(dt);
+			break;
+		}
+	case ATTACKRIGHT:
+		{
+			if(mesh != animationList[ATTACKRIGHT])
+			{
+				setMesh(animationList[ATTACKRIGHT]);
+			}
+			animationList[ATTACKRIGHT]->Update(dt);
+			break;
+		}
+	};
 
-
+	//Sound
 	if (sf_walk == true && !sfxengine->isCurrentlyPlaying("soundfiles/step(max).ogg"))
 	{
 		sfx_plyr_step = sfxengine->play2D("soundfiles/step(max).ogg");
 	}
+
 }
 
 void setScore(int amtScore)
@@ -108,4 +195,14 @@ void Player::CollisionResponse()
 int Player::getScore()
 {
 	return score;
+}
+
+void Player::setState(STATES state)
+{
+	this->state = state;
+}
+
+Player::STATES Player::getState()
+{
+	return state;
 }

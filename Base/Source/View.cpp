@@ -308,7 +308,7 @@ void View::Render(const float fps)
 	RenderObject();
 
 	/* collide box */
-	RenderCollideBox();
+	RenderCollideBox();	
 
 	/* HUD */
 	RenderHUD();
@@ -460,6 +460,11 @@ void View::RenderObject()
 				modelStack.PushMatrix();
 				modelStack.LoadMatrix( *(o->getTRS()) );
 				RenderMesh(o->getMesh(), o->getLight());
+				modelStack.PopMatrix();
+
+				modelStack.PushMatrix();
+				modelStack.LoadMatrix(*(o->getTRS()));
+				RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
 				modelStack.PopMatrix();
 			}
 		}

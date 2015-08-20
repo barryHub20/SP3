@@ -4,10 +4,16 @@
 #include "Physics.h"
 #include "Collision.h"
 #include "MeshList.h"
-
+#include "SpriteAnimation.h"
+#include <map>
 
 class GameObject : public Object
 {
+private:
+	std::string SpriteName;
+	unsigned int SpriteCol;
+	unsigned int SpriteRow;
+	const char * Sprite_texture_file_path;
 public:
 
 	/* object type */
@@ -65,6 +71,12 @@ public:
 	virtual bool CollisionCheck(GameObject* checkWithMe);	//collision check
 	virtual void CollisionResponse();
 
+	//Stores the values for the sprite sheet so the class can use it later on
+	virtual void storeSpriteAnimation(std::string name, unsigned int numRow, unsigned int numCol, const char * texture_file_path);
+
+	//Creates a line of sprite and adds it to the state
+	virtual void processSpriteAnimation(int state, float time, int startCol, int startRow, int endCol, int endRow, bool oppDir);
+
 	static int getObjCount();
 
 protected:
@@ -75,6 +87,10 @@ protected:
 	bool collided;
 
 	static int objCount;
+	
+	std::map<int, SpriteAnimation*> animationList;
+
+	virtual SpriteAnimation* generateSpriteMesh(); //Creates a sprite animation from the stored values
 };
 
 #endif 

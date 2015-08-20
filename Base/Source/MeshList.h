@@ -4,6 +4,7 @@
 #include "MeshBuilder.h"
 #include "DepthFBO.h"
 #include <vector>
+
 using std::vector;
 
 class Geometry
@@ -38,8 +39,7 @@ public:
 		GEO_TERRAIN,
 
 		/* animation */
-		GEO_GIRL,
-		GEO_RUNNING_CAT,
+		GEO_GUARD,
 
 
 		/* world objects */

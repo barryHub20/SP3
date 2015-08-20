@@ -1,12 +1,17 @@
 #include "GameObject.h"
 #include "Controller.h"
-
+#include "MeshList.h"
+#include "LoadTGA.h"
 int GameObject::objCount = 0;
 
 /*********************************** constructor/destructor ***********************************/
 GameObject::GameObject(void)
 {
 	objCount++;
+	SpriteName = "";
+	SpriteCol = NULL;
+	SpriteRow = NULL;
+	Sprite_texture_file_path = "";
 }
 
 GameObject::GameObject(Vector3 Pos, Vector3 scale, Vector3 Dir, float Speed, bool active)
@@ -128,7 +133,38 @@ void GameObject::CollisionResponse()
 		translate(collideBound.position);
 	}
 }
+void GameObject::storeSpriteAnimation(std::string name, unsigned int numRow, unsigned int numCol, const char * texture_file_path)
+{
+	this->SpriteName = name;
+	this->SpriteRow = numRow;
+	this->SpriteCol = numCol;
+	this->Sprite_texture_file_path = texture_file_path;
+}
 
+SpriteAnimation* GameObject::generateSpriteMesh()
+{
+	SpriteAnimation *sa;
+	sa = dynamic_cast<SpriteAnimation*>(MeshBuilder::GenerateSpriteAnimation(SpriteName, SpriteRow, SpriteCol, 1.f));
+	sa->textureID[0] = LoadTGA(Sprite_texture_file_path);
+	return sa;
+}
+
+void GameObject::processSpriteAnimation(int state, float time, int startCol, int startRow, int endCol, int endRow, bool oppDir)
+{
+	//SpriteAnimation *sa;
+	//sa = dynamic_cast<SpriteAnimation*>(MeshBuilder::GenerateSpriteAnimation(name, numRow, numCol, 1.f));
+	//sa->textureID[0] = LoadTGA(texture_path);
+	SpriteAnimation *temp;
+	temp = generateSpriteMesh();
+	if(temp->name == "" || temp->textureID[0] == 0)
+	{
+		cout << "Sprite empty" << endl;
+		delete temp;
+		return;
+	}
+	temp->init(time, startCol, startRow, endCol, endRow, oppDir);
+	animationList[state] = temp;
+}
 void GameObject::Translate(Vector3 pos)
 {
 	translate(pos);

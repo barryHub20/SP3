@@ -22,6 +22,7 @@ public:
 	//Initialize
 	virtual void Init();
 	void InitObject();
+	void InitSprites();
 	void InitMaps(); //Initialize maps (RP)
 
 	//Update

@@ -14,7 +14,8 @@ public:
 		DRAW_LINES,
 		DRAW_MODE_LAST,
 	};
-
+	
+	Mesh();
 	Mesh(const std::string &meshName);
 	~Mesh();
 	virtual void Render();

@@ -3,6 +3,11 @@
 #include "GL\glew.h"
 #include "Vertex.h"
 
+Mesh::Mesh()
+{
+
+}
+
 Mesh::Mesh(const std::string &meshName)
 	: name(meshName)
 	, mode(DRAW_TRIANGLES)

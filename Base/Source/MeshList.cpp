@@ -69,13 +69,7 @@ void Geometry::Init()
 	meshList[GEO_SNOWFLAKE] = MeshBuilder::GenerateOBJ("snow flake", "OBJ//snow_flake.obj");
 	meshList[GEO_SNOWFLAKE]->textureID[0] = LoadTGA("Image//snow_flake.tga");
 
-	/* animation */
-	meshList[GEO_GIRL] = MeshBuilder::GenerateSpriteAnimation("girl", 3, 7, 1);
-	meshList[GEO_GIRL]->textureID[0] = LoadTGA("Image//sprite1.tga");
-
-	meshList[GEO_RUNNING_CAT] = MeshBuilder::GenerateSpriteAnimation("hot cat", 1, 6, 1);
-	meshList[GEO_RUNNING_CAT]->textureID[0] = LoadTGA("Image//cat.tga");
-
+	
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//building-2.obj");//MeshBuilder::GenerateCube("cube", 1);
 	meshList[GEO_BUILDING]->textureID[0] = LoadTGA("Image//building-1.tga");
 
@@ -104,14 +98,9 @@ void Geometry::Init()
 	meshList[IMAGE_TITLE] = MeshBuilder::GenerateQuad("IMG_TITLE", Color(1, 1, 1), 1.f);
 	meshList[IMAGE_TITLE]->textureID[0] = LoadTGA("Image//Brisbane_City_Night.tga");
 
-	animation.resize(2);	//2 animations
-
-	animation[0] = dynamic_cast<SpriteAnimation*>(meshList[GEO_GIRL]);
-	animation[1] = dynamic_cast<SpriteAnimation*>(meshList[GEO_RUNNING_CAT]);
-
-	//startCol, startRow, endCol, endRow, opp dir
-	animation[0]->init(2.5f, 0, 0, 0, 0, false);
-	animation[1]->init(5.5f, 0, 0, 0, 2, true);
+	/* animation */
+	meshList[GEO_GUARD] = MeshBuilder::GenerateSpriteAnimation("guard", 21, 13, 1.f);
+	meshList[GEO_GUARD]->textureID[0] = LoadTGA("Image//Sprites//guard.tga");
 }
 
 void Geometry::Exit()

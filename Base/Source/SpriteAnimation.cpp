@@ -3,6 +3,11 @@
 #include "GL\glew.h"
 #include "Vertex.h"
 
+SpriteAnimation::SpriteAnimation()
+{
+
+}
+
 SpriteAnimation::SpriteAnimation(const std::string &meshName, int row, int col)
  : Mesh(meshName)
  , m_row(row)

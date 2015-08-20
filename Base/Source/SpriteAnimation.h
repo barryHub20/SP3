@@ -23,6 +23,7 @@ class SpriteAnimation : public Mesh
 {
 public:
 	/* constructor/destructor */
+	SpriteAnimation();
 	 SpriteAnimation(const std::string &meshName, int row, int col);
 	 ~SpriteAnimation();
 
