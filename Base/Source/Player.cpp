@@ -1,5 +1,11 @@
 #include "Player.h"
 
+#include "irrKlang.h"
+using namespace irrklang;
+
+extern ISoundEngine* sfxengine;
+extern ISound *sfx_plyr_step;
+
 Player::Player()
 {
 }
@@ -36,22 +42,31 @@ void Player::Update(double dt, bool* myKey)
 {
 	if(myKey[KEY_W])
 	{
+		sf_walk = true;
 		translateObject(0, 4, 0);
 	}
 
 	if(myKey[KEY_S])
 	{
+		sf_walk = true;
 		translateObject(0, -4, 0);
 	}	
 
 	if(myKey[KEY_A])
 	{
+		sf_walk = true;
 		translateObject(-4, 0, 0);
 	}
 
 	if(myKey[KEY_D])
 	{
+		sf_walk = true;
 		translateObject(4, 0, 0);
+	}
+
+	if(!myKey[KEY_W] && !myKey[KEY_A] && !myKey[KEY_S] && !myKey[KEY_D])
+	{
+		sf_walk = false;
 	}
 
 	if(myKey[KEY_SPACE])
@@ -67,6 +82,13 @@ void Player::Update(double dt, bool* myKey)
 		{
 			jumpSpeed = 10;
 		}
+	}
+
+
+
+	if (sf_walk == true && !sfxengine->isCurrentlyPlaying("soundfiles/step(max).ogg"))
+	{
+		sfx_plyr_step = sfxengine->play2D("soundfiles/step(max).ogg");
 	}
 }
 

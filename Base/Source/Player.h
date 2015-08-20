@@ -10,6 +10,9 @@ private:
 	bool PlayerOnGround;
 	double jumpSpeed;
 	double jumpTimer;
+
+	bool sf_walk;
+
 public:
 	Player();
 	Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active);
