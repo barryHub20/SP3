@@ -1,0 +1,8 @@
+//Player Info
+PLAYER: pos(500, 400, 0)  scale(50, 50, 1)
+//Enemy Info
+ENEMY: pos(50, 50, 0)  scale(50, 50, 1)  
+ENEMY: pos(50, 50, 0)  scale(50, 50, 1) 
+ENEMY: pos(50, 50, 0)  scale(50, 50, 1) 
+//Furniture Info
+SOFA: pos(50, 500, 0)  scale(50, 50, 1)

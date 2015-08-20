@@ -15,6 +15,7 @@
 #include <vector>
 #include "Player.h"
 #include "StateManager.h"
+#include "Inventory.h"
 using namespace std;
 
 class Model

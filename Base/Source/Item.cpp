@@ -1,44 +1,28 @@
 #include "Item.h"
 
-Item::Item()
+Item::Item(void) : itemID()
 {
-
 }
 
-Item::~Item()
+Item::Item(int itemID)
 {
-
+	this->itemID = itemID;
 }
 
-void Item::Set(const char newName[], const int newID)
+Item::Item(const Item& item) : itemID(item.itemID)
 {
-	for(int i = 0; i < 32; i++)
-	{
-		this->itemName[i] = newName[i];
-	}
-
-	this->itemID = newID;
 }
 
-void Item::setName(char newName[])
+Item::~Item(void)
 {
-	for(int i = 0; i < 32; i++)
-	{
-		this->itemName[i] = newName[i];
-	}
 }
 
-char* Item::getName(void)
+void Item::setItemID(int newItemID)
 {
-	return itemName;
+	this->itemID = newItemID;
 }
 
-void Item::setID(int newID)
-{
-	this->itemID = newID;
-}
-
-int Item::getID(void)
+int Item::getItemID(void)
 {
 	return itemID;
 }

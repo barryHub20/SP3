@@ -6,7 +6,8 @@ class Model_2D : public Model
 {
 	/* player */
 	Player* player;
-
+	Inventory* inventory;
+	Item item;
 	/* array of static objects (non-moving) */
 	StaticObject* obj_arr[10];
 
@@ -34,6 +35,9 @@ public:
 	void UpdateLight(double dt, bool* myKeys, Light* light);	//get light from view
 
 	virtual void Exit();
+
+/********** save load functions *************/
+	bool ReadFromFile(char* text);
 };
 
 #endif

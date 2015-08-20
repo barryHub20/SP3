@@ -6,25 +6,17 @@
 class Inventory : public Item
 {
 private:
-	const static int SIZE = 6;
-
-	static Item* arrSize[SIZE];
+	const static int MAX_SIZE = 6;
+	static Item arrSize[MAX_SIZE];
 	int currentSize;
-	int getCount;
-	bool isFull;
-	bool isEmpty;
-
+	 
 public:
 	Inventory(void);
 	~Inventory(void);
 
 	void addItem(Item& item);
-	bool deleteItemID(int index);
-	bool deleteItemName(char* indexName);
-	//bool deleteItemObj(int itemCount);
+	bool deleteItem(int index);
 
 	int getCurrentSize(void);
-
-
 };
 #endif

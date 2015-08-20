@@ -7,20 +7,16 @@ class Item
 {
 private:
 	static const int MAX_SIZE = 32;
-	char itemName[MAX_SIZE];
 	int itemID;
 
 public:
-	Item();
-	~Item();
+	Item(void);
+	Item(int itemID);
+	Item(const Item& item);
+	~Item(void);
 
-	void Set(const char newName[], const int newID);
-
-	void setName(char newName[]);
-	char* getName(void);
-
-	void setID(int newID);
-	int getID(void);
+	void setItemID(int newItemID);
+	int getItemID(void);
 };
 
 #endif
