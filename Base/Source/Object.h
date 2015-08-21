@@ -7,6 +7,8 @@
 #include <string>
 using namespace std;
 
+#include "SoundManager.h"
+
 /** Put here for controller and model and character to access, got better way? **/
 enum KEYS
 {

@@ -192,6 +192,9 @@
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SoundManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Controller.h">
@@ -315,6 +318,9 @@
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SoundManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

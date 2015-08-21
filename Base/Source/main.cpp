@@ -3,18 +3,6 @@
 #include "Model_3D.h"
 #include "Model_2D.h"
 
-#include "irrKlang.h"
-using namespace irrklang;
-
-#pragma comment(lib, "irrklang/lib/Win32-visualStudio/irrKlang.lib") // link with irrKlang.dll
-
-
-//Declaration of sound variables
-ISoundEngine* sfxengine;
-ISound *sfx_plyr_step;
-ISound *sfx_ambience;
-
-
 int main( void )
 {
 	/* Memory leak checker */

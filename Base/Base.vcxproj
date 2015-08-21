@@ -41,6 +41,7 @@
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\SoundManager.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\StateManager.cpp" />
     <ClCompile Include="Source\StaticObject.cpp" />
@@ -81,6 +82,7 @@
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\SoundManager.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\StateManager.h" />
     <ClInclude Include="Source\StaticObject.h" />

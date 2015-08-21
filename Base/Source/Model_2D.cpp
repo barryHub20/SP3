@@ -12,12 +12,6 @@
 #include "StaticObject.h"
 //(tip) If create bullet, bullet class has a static TRS so that TRS update with current bullet pos
 
-#include "irrKlang.h"
-using namespace irrklang;
-
-extern ISoundEngine* sfxengine;
-extern ISound *sfx_ambience;
-
 /*********** constructor/destructor ***************/
 Model_2D::Model_2D()
 {
@@ -52,10 +46,7 @@ void Model_2D::Init()
 	InitSprites();
 
 	//Init sound
-	sfxengine = createIrrKlangDevice();
-//	if (!sfxengine) exit(0);	//error starting up engine // Is it possible to continue running regardless?
-	
-	
+	sfx_man->sfx_init();
 
 	//For inventory
 	inventory = new Inventory;
@@ -152,10 +143,8 @@ void Model_2D::Update(double dt, bool* myKeys)
 void Model_2D::UpdateGame(double dt, bool* myKeys)
 {
 	// Sound - ambience
-	if (!sfxengine->isCurrentlyPlaying("musfiles/Verdant_Forest.ogg"))
-	{
-		sfx_ambience = sfxengine->play2D("musfiles/Verdant_Forest.ogg");
-	}
+	sfx_man->play_ambience();
+	
 	UpdateEnemy(dt);
 	/* Update player */
 	player->Update(dt, myKeys);
@@ -472,7 +461,7 @@ bool Model_2D::ReadFromFile(char* text)
 		/************************** Create Relevant object **************************/
 		if(object_word == "PLAYER")
 		{
-			player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true);
+			player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
 			goList.push_back(player);
 		}
 	}

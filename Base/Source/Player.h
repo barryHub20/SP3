@@ -32,9 +32,13 @@ private:
 	double jumpTimer;
 	STATES state;
 	bool sf_walk;
+
+	// Sound
+	SoundManager *my_sfx_man;
+
 public:
 	Player();
-	Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active);
+	Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano);
 	~Player();
 	
 	void Update(double dt, bool* myKey);

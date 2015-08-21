@@ -1,11 +1,5 @@
 #include "Player.h"
 
-#include "irrKlang.h"
-using namespace irrklang;
-
-extern ISoundEngine* sfxengine;		//
-extern ISound *sfx_plyr_step;
-
 Player::Player()
 {
 	for(int i = 0; i < MAX_STATES; i++)
@@ -18,7 +12,7 @@ Player::Player()
 	damage = 0;
 }
 
-Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active)
+Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano)
 {
 	score = 0;
 	health = 100;
@@ -43,6 +37,9 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	jumpSpeed = 0;
 	PlayerOnGround = true;
 	PlayerInAir = false;
+
+	// Sound setup
+	my_sfx_man = &sfx_mano;
 }
 
 Player::~Player()
@@ -197,9 +194,9 @@ void Player::Update(double dt, bool* myKey)
 	};
 
 	//Sound
-	if (sf_walk == true && !sfxengine->isCurrentlyPlaying("soundfiles/step(max).ogg"))
+	if (sf_walk == true)
 	{
-		sfx_plyr_step = sfxengine->play2D("soundfiles/step(max).ogg");
+		my_sfx_man->play_plyr_steps();
 	}
 
 }

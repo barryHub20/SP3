@@ -19,6 +19,8 @@
 #include "Inventory.h"
 using namespace std;
 
+#include "SoundManager.h"
+
 class Model
 {
 public:
@@ -114,6 +116,10 @@ public:
 	/******************** Game state ************************/
 	GAME_STATE game_state;
 	StateManager *stateManager;
+
+	// ================== Audio =================
+
+	SoundManager *sfx_man;
 };
 
 #endif

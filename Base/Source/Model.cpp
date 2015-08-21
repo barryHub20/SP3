@@ -14,7 +14,8 @@ const float Model::DEFAULT_FOV = 45.f;
 
 /*********** constructor/destructor ***************/
 Model::Model() :
-	mapManager(NULL)
+	mapManager(NULL),
+	sfx_man(NULL)
 {
 }
 
@@ -29,6 +30,7 @@ void Model::Init()
 	/* game state setup */
 	mapManager = new MapManager();
 	stateManager = new StateManager();
+	sfx_man = new SoundManager();
 
 	stateManager->ChangeState(StateManager::MAIN_MENU);
 
