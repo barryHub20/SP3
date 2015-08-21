@@ -65,8 +65,8 @@ void Model_2D::Init()
 void Model_2D::InitObject()
 {	
 	/** Set up player **/
-	player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(1, 1, 0), Vector3(70, 50, 1), 0, 10, true);
-	goList.push_back(player);
+	//player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(1, 1, 0), Vector3(70, 50, 1), 0, 10, true);
+	//goList.push_back(player);
 	ReadFromFile("Save_Load_File.txt");
 	// Player start pos
 	player->translate(300,300,0);
@@ -151,11 +151,11 @@ void Model_2D::Update(double dt, bool* myKeys)
 
 void Model_2D::UpdateGame(double dt, bool* myKeys)
 {
-	//// Sound - ambience
-	//if (!sfxengine->isCurrentlyPlaying("musfiles/Verdant_Forest.ogg"))
-	//{
-	//	sfx_ambience = sfxengine->play2D("musfiles/Verdant_Forest.ogg");
-	//}
+	// Sound - ambience
+	if (!sfxengine->isCurrentlyPlaying("musfiles/Verdant_Forest.ogg"))
+	{
+		sfx_ambience = sfxengine->play2D("musfiles/Verdant_Forest.ogg");
+	}
 	UpdateEnemy(dt);
 	/* Update player */
 	player->Update(dt, myKeys);
@@ -177,24 +177,16 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	//start: Set up collision bound before checking with the others
 	player->StartCollisionCheck();
 
-	//for(int i = 0; i < 10; ++i)
-	//{
-	//	//check
-	//	player->CollisionCheck(obj_arr[i]);
-	//}
 
 	///* check collision with map */
 	mapManager->GetCurrentMap()->CheckCollisionWith(player);
 
-	///* Collision response */
-	//player->CollisionResponse();	//translate to new pos if collides
 	/* reset */
 	player->getCollideBound()->Reset();
 
 	/* Collision response */
 	player->CollisionResponse();	//translate to new pos if collides
 
-	//cout << player->getCollideBound()->position - posp << endl;
 
 	/* Update target */
 	camera.target = camera.position;
@@ -227,6 +219,20 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 void Model_2D::UpdateEnemy(double dt)
 {
 	enemy->Update(dt,mapManager);
+
+	/* start set up */
+	enemy->StartCollisionCheck();
+
+	/* check with wall */
+	mapManager->GetCurrentMap()->CheckCollisionWith(player);
+
+	/* check with all other objects */
+
+	/* reset */
+	enemy->getCollideBound()->Reset();
+
+	//response
+	enemy->CollisionResponse();
 }
 
 void Model_2D::UpdateInstructions(double dt, bool* myKeys)
@@ -467,7 +473,7 @@ bool Model_2D::ReadFromFile(char* text)
 		if(object_word == "PLAYER")
 		{
 			player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true);
-			elementObject.push_back(player);
+			goList.push_back(player);
 		}
 	}
 	myFile.close();

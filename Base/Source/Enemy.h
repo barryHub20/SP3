@@ -47,7 +47,7 @@ public:
 	~Enemy(void);
 
 private:
-	
+	Collision Detection;
 	bool DestinationReached;
 	Vector2 Destination;
 	string Name;

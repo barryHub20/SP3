@@ -70,7 +70,7 @@ public:
 	void TranslateOffset(Vector3 offset);
 
 	virtual void StartCollisionCheck();	//set-up collision bound for checking
-	virtual bool CollisionCheck(GameObject* checkWithMe);	//collision check
+	bool CollisionCheck(GameObject* checkWithMe);	//collision check
 	virtual void CollisionResponse();
 
 	//Stores the values for the sprite sheet so the class can use it later on
