@@ -22,6 +22,10 @@ public:
 	};
 private:	
 	int score;
+	double health;
+	double stamina;
+	double damage;
+
 	bool PlayerInAir;
 	bool PlayerOnGround;
 	double jumpSpeed;
@@ -36,7 +40,17 @@ public:
 	void Update(double dt, bool* myKey);
 
 	void setScore(int amtScore);
-	int getScore();
+	int getScore(void);
+
+	void setHealth(double health);
+	double getHealth(void);
+
+	void setStamina(double stamina);
+	double getStamina(void);
+
+	void setDamage(double damage);
+	double getDamage(void);
+
 	void setState(STATES state);
 	Player::STATES getState();
 

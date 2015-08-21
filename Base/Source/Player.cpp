@@ -13,12 +13,18 @@ Player::Player()
 		animationList[i] = NULL;
 	}
 
+	health = 0;
+	stamina = 0;
+	damage = 0;
 }
 
 Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active)
 {
 	score = 0;
-	
+	health = 100;
+	stamina = 100;
+	damage = 10;
+
 	/* set object */
 	Set("sdfdf", mesh, NULL, false, false);
 	translateObject(Pos.x, Pos.y, Pos.z);
@@ -214,6 +220,36 @@ void Player::CollisionResponse()
 int Player::getScore()
 {
 	return score;
+}
+
+void Player::setHealth(double health)
+{
+	this->health = health;
+}
+
+double Player::getHealth(void)
+{
+	return health;
+}
+
+void Player::setStamina(double stamina)
+{
+	this->stamina = stamina;
+}
+
+double Player::getStamina(void)
+{
+	return stamina;
+}
+
+void Player::setDamage(double damage)
+{
+	this->damage = damage;
+}
+
+double Player::getDamage(void)
+{
+	return damage;
 }
 
 void Player::setState(STATES state)

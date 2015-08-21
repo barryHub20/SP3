@@ -8,6 +8,8 @@ class Physics
 {
 private:
 	Vector3 Dir;
+	Vector3 vel;
+	Vector3 acceleration;
 	float Speed;
 	float Timer;	//general timer
 

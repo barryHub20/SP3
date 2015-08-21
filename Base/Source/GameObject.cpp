@@ -185,4 +185,5 @@ void GameObject::TranslateOffset(Vector3 offset)
 GameObject::~GameObject(void)
 {
 	objCount--;
+	animationList.clear();
 }
