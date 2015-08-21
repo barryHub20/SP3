@@ -311,7 +311,7 @@ void View::Render(const float fps)
 	RenderCollideBox();	
 
 	/* HUD */
-	RenderHUD();
+	RenderHUD(Controller::mouse_current_x, Controller::mouse_current_y);
 }
 
 void View::RenderCollideBox()
@@ -335,7 +335,7 @@ void View::RenderCollideBox()
 	}
 }
 
-void View::RenderHUD()
+void View::RenderHUD(double mouse_x, double mouse_y)
 {
 	//On screen text
 	if(Geometry::meshList[Geometry::GEO_AR_CHRISTY] != NULL)
@@ -351,6 +351,14 @@ void View::RenderHUD()
 		/* Pos */
 		ss << "Pos: " << model->getCamera()->position;
 		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 15, 760);
+
+		// Mouse position
+		if (model->stateManager->GetState() != model->stateManager->GAME)
+		{
+			ss.str("");
+			ss << "MousePos_X: " << Controller::mouse_current_x << " MousePos_Y: " << Controller::mouse_current_y;
+			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 30, 15, 5);
+		}
 	}
 
 	if (model->stateManager->GetState() == model->stateManager->TRANSITION)
@@ -371,12 +379,29 @@ void View::RenderHUD()
 		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 400, 670);
 		ss.str("");
 
-		ss << "Press SPACE to start!";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 300, 50);
-		ss.str("");
+		if(mouse_x < 618 && mouse_x > 243 && mouse_y < 631 && mouse_y > 600)
+		{
+			ss << "Click HERE to start!";
+			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 300, 50);
+			ss.str("");
+		}
+		else
+		{
+			ss << "Click HERE to start!";
+			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 40, 300, 50);
+			ss.str("");
+		}
 
-		ss << "( I - Instructions )";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 400, 30);
+		if(mouse_x < 581 && mouse_x > 336 && mouse_y < 656 && mouse_y > 636)
+		{
+			ss << "( Instructions )";
+			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 400, 30);
+		}
+		else
+		{
+			ss << "( Instructions )";
+			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 30, 400, 30);
+		}
 	}
 
 	if (model->stateManager->GetState() == model->stateManager->INSTRUCTION)
@@ -387,8 +412,16 @@ void View::RenderHUD()
 		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 100, 600);
 		ss.str("");
 
-		ss << "Press I to return to title screen";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 90, 150);
+		if(mouse_x < 280 && mouse_x > 60 && mouse_y < 540 && mouse_y > 520)
+		{
+			ss << "<--- Back";
+			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 90, 150);
+		}
+		else
+		{
+			ss << "<--- Back";
+			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 40, 90, 150);
+		}
 	}
 }
 

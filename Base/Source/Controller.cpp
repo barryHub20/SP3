@@ -103,7 +103,7 @@ void Controller::Run()
 		if(m_dAccumulatedTime_thread1 > 0.01)	//update: update fps is _dAccumulatedTime_thread1 > fps
 		{
 			/** controller update **/
-			//GetMouseUpdate();
+			GetMouseUpdate();
 			getKeyboardUpdate();
 
 			/** model update **/
@@ -189,7 +189,7 @@ bool Controller::GetMouseUpdate()
 	// Calculate the difference in positions
 	mouse_diff_x = mouse_current_x - mouse_last_x;
 	mouse_diff_y = mouse_current_y - mouse_last_y;
-	//Calculate the yaw and pitch
+/*	//Calculate the yaw and pitch
 	camera_yaw = (float) mouse_diff_x * 0.0174555555555556f;// * 3.142f / 180.0f;
 	camera_pitch = (float) mouse_diff_y * 0.0174555555555556f;// 3.142f / 180.0f );
 	
@@ -203,7 +203,7 @@ bool Controller::GetMouseUpdate()
 	{
 		mouse_current_y = view->getConsoleHeight() >> 1;
 		glfwSetCursorPos(view->getWindow(), mouse_current_x, mouse_current_y);
-	}
+	} */
 	// Store the current position as the last position
 	mouse_last_x = mouse_current_x;
 	mouse_last_y = mouse_current_y;

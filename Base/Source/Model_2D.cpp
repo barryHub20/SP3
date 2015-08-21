@@ -127,13 +127,13 @@ void Model_2D::Update(double dt, bool* myKeys)
 	switch (stateManager->GetState())
 	{
 		case stateManager->MAIN_MENU:
-			UpdateMainMenu(dt, myKeys);
+			UpdateMainMenu(dt, myKeys, Controller::mouse_current_x, Controller::mouse_current_y);
 			break;
 		case stateManager->GAME:
 			UpdateGame(dt, myKeys);
 			break;
 		case stateManager->INSTRUCTION:
-			UpdateInstructions(dt, myKeys);
+			UpdateInstructions(dt, myKeys, Controller::mouse_current_x, Controller::mouse_current_y);
 			break;
 	}
 
@@ -235,24 +235,24 @@ void Model_2D::UpdateEnemy(double dt)
 	enemy->CollisionResponse();
 }
 
-void Model_2D::UpdateInstructions(double dt, bool* myKeys)
+void Model_2D::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)
 {
-	if(myKeys[KEY_I] && keyPressedTimer >= delayTime)
+	if(mouse_x < 280 && mouse_x > 60 && mouse_y < 540 && mouse_y > 520 && myKeys[KEY_LMOUSE] && keyPressedTimer >= delayTime)
 	{
 		keyPressedTimer = 0.0;
 		stateManager->ChangeState(stateManager->MAIN_MENU);
 	}
 }
 
-void Model_2D::UpdateMainMenu(double dt, bool* myKeys)
+void Model_2D::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
 {
-	if(myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
+	if(mouse_x < 618 && mouse_x > 243 && mouse_y < 631 && mouse_y > 600 && myKeys[KEY_LMOUSE] && keyPressedTimer >= delayTime)
 	{
 		keyPressedTimer = 0.0;
 		stateManager->ChangeState(stateManager->GAME);
 	}
 
-	if(myKeys[KEY_I] && keyPressedTimer >= delayTime)
+	if(mouse_x < 581 && mouse_x > 336 && mouse_y < 656 && mouse_y > 636 && myKeys[KEY_LMOUSE] && keyPressedTimer >= delayTime)
 	{
 		keyPressedTimer = 0.0;
 		stateManager->ChangeState(stateManager->INSTRUCTION);

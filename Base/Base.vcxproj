@@ -19,6 +19,7 @@
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
+    <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\FontData.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\Inventory.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\Controller.h" />
     <ClInclude Include="Source\DepthFBO.h" />
+    <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\FontData.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\Light.h" />

@@ -29,9 +29,9 @@ public:
 
 	//Update
 	virtual void Update(double dt, bool* myKeys);
-	void UpdateMainMenu(double dt, bool* myKeys);	//updating main menu
+	void UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y);	//updating main menu
 	void UpdateGame(double dt, bool* myKeys);
-	void UpdateInstructions(double dt, bool* myKeys);
+	void UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y);
 	void UpdateEnemy(double dt);
 
 	void UpdateLight(double dt, bool* myKeys, Light* light);	//get light from view
