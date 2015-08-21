@@ -299,7 +299,7 @@ void View::Render(const float fps)
 	modelStack.LoadIdentity();
 
 	/*Map*/
-	// RenderTileMap();
+	RenderTileMap();
 
 	/* light */
 	//RenderLight();
@@ -489,13 +489,15 @@ void View::RenderTileMap()
 			for (int k = 0; k < model->mapManager->GetCurrentMap()->GetNumOfTiles_Width(); ++k)	//x
 			{	
 				tileObject = model->mapManager->GetCurrentMap()->getTileObject(k, i);
+
+				if(tileObject->getTileType() == TileObject::FLOOR)	//skip rendering floors
+					continue;
 				
 				modelStack.PushMatrix();
 				modelStack.Translate(tileObject->getPosition().x, tileObject->getPosition().y, -1);
 				modelStack.Scale(tileObject->getScale().x, tileObject->getScale().y, 1);
-				RenderMesh(tileObject->getMesh(), false);
+				RenderTile(tileObject->getMesh(), false, tileObject->getTileNum());
 				modelStack.PopMatrix();
-				//Render2DTile(Geometry::meshList[Geometry::GEO_TILEMAP], false, 1.f, (((float)(k * model->mapManager->GetCurrentMap()->GetTileSize()) - model->offset.x)-getModel()->getCamera()->position.x)*0.8751f-15, ((i *model->mapManager->GetCurrentMap()->GetTileSize())-getModel()->getCamera()->position.y)*0.8751f-15, model->mapManager->GetCurrentMap()->theScreenMap[i][k]);
 			}
 		}
 	} 
@@ -508,6 +510,56 @@ void View::RenderTileMap()
 	{
 		
 	}
+}
+
+void View::RenderTile(Mesh* mesh, bool enableLight, int tileNum)
+{
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	/* week 6 fog */
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+
+	if(enableLight && model->getbLightEnabled())
+	{
+		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
+
+		modelView = viewStack.Top() * modelStack.Top();
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
+
+		//load material
+		glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
+		glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
+		glUniform3fv(m_parameters[U_MATERIAL_SPECULAR], 1, &mesh->material.kSpecular.r);
+		glUniform1f(m_parameters[U_MATERIAL_SHININESS], mesh->material.kShininess);
+	}
+	else
+	{	
+		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	}
+
+
+	for(int i = 0; i < 2; ++i)
+	{
+		if(mesh->textureID[i] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 1);
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, mesh->textureID[i]);
+			glUniform1i(m_parameters[U_COLOR_TEXTURE + i], i);
+		}
+		else
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 0);
+	}
+
+	mesh->Render((tileNum - 1) * 6, 6);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void View::Exit()

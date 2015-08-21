@@ -96,6 +96,6 @@ private:
 	/** internal functions please ignore (DO NOT CALL FROM OUTSIDE CLASS) **/
 	static bool inZone(float& start, float& end, float& checkStart, float& checkEnd);
 	static void getAABBCollide(float& start, float& end, float& checkStart, float& checkEnd, Movement_3d::COLLIDE startDir, Movement_3d::COLLIDE endDir, Movement_3d::COLLIDE& collideSide);
-	static void UpdateAABB(Collision* current, Collision* check);
+	static void UpdateAABB(Collision* current, Collision* check, Vector3& pos);
 	void ResetAABB();
 };

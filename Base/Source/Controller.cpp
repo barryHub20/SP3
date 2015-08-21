@@ -78,7 +78,7 @@ void Controller::Init()
 	model = view->getModel();
 
 	//hide the cursor
-	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 
 	model->Init();
@@ -103,7 +103,7 @@ void Controller::Run()
 		if(m_dAccumulatedTime_thread1 > 0.01)	//update: update fps is _dAccumulatedTime_thread1 > fps
 		{
 			/** controller update **/
-			GetMouseUpdate();
+			//GetMouseUpdate();
 			getKeyboardUpdate();
 
 			/** model update **/

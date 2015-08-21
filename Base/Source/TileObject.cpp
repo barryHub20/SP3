@@ -10,13 +10,16 @@ TileObject::~TileObject()
 }
 
 /* Core */
-void TileObject::Set(Mesh* mesh, Vector3 Pos, float tileScale)
+void TileObject::Set(Mesh* mesh, Vector3 Pos, float tileScale, TILE_TYPE tile_type)
 {
 	/* Set object */
 	Object::Set("dfsdf", mesh, NULL, false, false);
 	translateObject(Pos);	//set pos
 	scaleObject(tileScale, tileScale, 1);	//set scale
 	setActive(true); //set active
+
+	/* set type */
+	this->tile_type = tile_type;
 
 	/* set collide box */
 	collideBound.Set(Pos, scale, Collision::BOX);
@@ -31,6 +34,11 @@ int TileObject::getTileNum()
 void TileObject::setTileNum(int t)
 {
 	tileNum = t;
+}
+
+TileObject::TILE_TYPE TileObject::getTileType()
+{
+	return tile_type;
 }
 
 /* collision check */

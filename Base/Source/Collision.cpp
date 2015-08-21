@@ -8,6 +8,7 @@ Vector3 previousEnd;
 Vector3 checkStart;	//to be checked with collide bound
 Vector3 checkEnd;
 bool inZoneX, inZoneY, inZoneZ;
+Vector3 tmp_pos;
 Vector3 relativeDir;	//relative direction (for spherical collision)
 float offset = 0.1f;
 
@@ -29,12 +30,14 @@ void Collision::Start(const Vector3& objectPos)
 {
 	if(type == BOX)
 	{
-		ResetAABB();
 		position = objectPos;
-	
-		/* update currentStart and currentEnd (For AABB) */
+
+		/* update start and end */
 		currentStart = position - (this->scale * 0.5f);
 		currentEnd = position + (this->scale * 0.5f);
+
+		previousStart = previousPos - (this->scale * 0.5f);
+		previousEnd = previousPos + (this->scale * 0.5f);
 	}
 }
 
@@ -123,7 +126,6 @@ bool Collision::SphereToSphere(Collision* current, Collision* check)
 		/* Set pos to just touching */
 		Vector3 newPos = check->position + (relativeDir * combined_radius);
 		check->position = newPos;
-		cout << "sdfdsf" << endl;
 		return true;
 	}
 	return false;
@@ -145,24 +147,24 @@ bool Collision::SphereToBox(Collision* current, Collision* check)
 	checkStart = check->position - check->scale * 0.5f;
 	checkEnd = check->position + check->scale * 0.5f;
 
-
 	return false;
 }
 
 /* Box (current) to Box (check) */
 bool Collision::BoxToBox(Collision* current, Collision* check)
 {
-	/* Set up check object currentStart and currentEnd */
-	checkStart = check->position - check->scale * 0.5f;
-	checkEnd = check->position + check->scale * 0.5f;
+	inZoneY = inZoneX = inZoneZ = false;
+
+	/* chck box */
+	checkStart = check->position - (check->scale * 0.5f);
+	checkEnd = check->position + (check->scale * 0.5f);
 
 	/*********************** check collision ***********************/
 	inZoneY = inZone(currentStart.y, currentEnd.y, checkStart.y, checkEnd.y);
 	inZoneX = inZone(currentStart.x, currentEnd.x, checkStart.x, checkEnd.x);
 	inZoneZ = inZone(currentStart.z, currentEnd.z, checkStart.z, checkEnd.z);
 
-	/*********************** If Collide ***********************/
-	if(inZoneX && inZoneY && inZoneZ)
+	if(inZoneY && inZoneX && inZoneZ)
 	{
 		inZoneY = inZone(previousStart.y, previousEnd.y, checkStart.y, checkEnd.y);
 		inZoneX = inZone(previousStart.x, previousEnd.x, checkStart.x, checkEnd.x);
@@ -172,28 +174,31 @@ bool Collision::BoxToBox(Collision* current, Collision* check)
 		///** Y dir **/
 		if(inZoneX && inZoneZ && !inZoneY)
 		{
+			//start/end
 			getAABBCollide(previousStart.y, previousEnd.y, checkStart.y, checkEnd.y, Movement_3d::start_Y, Movement_3d::end_Y, current->collideArea.collideSide);
 		}
 
 		/** X dir **/
 		else if(inZoneY && inZoneZ && !inZoneX)
 		{
+			//start/end
 			getAABBCollide(previousStart.x, previousEnd.x, checkStart.x, checkEnd.x, Movement_3d::start_X, Movement_3d::end_X, current->collideArea.collideSide);
 		}
 
 		/** Z dir **/
 		else if(inZoneY && inZoneX && !inZoneZ)
 		{
+			//start/end
 			getAABBCollide(previousStart.z, previousEnd.z, checkStart.z, checkEnd.z, Movement_3d::start_Z, Movement_3d::end_Z, current->collideArea.collideSide);
 		}
 
-		UpdateAABB(current, check);	//update position of boundbox
-		currentStart = current->position - (current->scale * 0.5f);	//currentStart and currentEnd too
+
+		UpdateAABB(current, check, current->position);	//update position of boundbox
+		currentStart = current->position - (current->scale * 0.5f);	//start and end too
 		currentEnd = current->position + (current->scale * 0.5f);
 
 		return true;
 	}
-
 	return false;
 }
 
@@ -206,7 +211,7 @@ void Collision::Reset()
 }
 
 
-void Collision::UpdateAABB(Collision* current, Collision* check)
+void Collision::UpdateAABB(Collision* current, Collision* check, Vector3& pos)
 {
 	Vector3 halfScale = current->scale * 0.5f;
 	/* check collide */
@@ -215,46 +220,46 @@ void Collision::UpdateAABB(Collision* current, Collision* check)
 	if(current->collideArea.collideSide == Movement_3d::start_X)
 	{
 		//pos.x = previousPos.x;
-		current->position.x = checkEnd.x + halfScale.x + offset;
+		pos.x = checkEnd.x + halfScale.x + offset;
 	}
 	else if(current->collideArea.collideSide == Movement_3d::end_X)
 	{
-		current->position.x = checkStart.x - halfScale.x - offset;
+		pos.x = checkStart.x - halfScale.x - offset;
 	}
 
 	//y
 	else if(current->collideArea.collideSide == Movement_3d::start_Y)
 	{
-		current->position.y = checkEnd.y + halfScale.y + offset;
+		pos.y = checkEnd.y + halfScale.y + offset;
 	}
 	else if(current->collideArea.collideSide == Movement_3d::end_Y)
 	{
-		current->position.y = checkStart.y - halfScale.y - offset;
+		pos.y = checkStart.y - halfScale.y - offset;
 	}
 
 	//z
 	else if(current->collideArea.collideSide == Movement_3d::start_Z)
 	{
-		current->position.z = checkEnd.z + halfScale.z + offset;
+		pos.z = checkEnd.z + halfScale.z + offset;
 	}
 	else if(current->collideArea.collideSide == Movement_3d::end_Z)
 	{
-		current->position.z = checkStart.z - halfScale.z - offset;
+		pos.z = checkStart.z - halfScale.z - offset;
 	}
 }
 
 bool Collision::inZone(float& currentStart, float& currentEnd, float& checkStart, float& checkEnd)
 {
-	return (currentEnd > checkStart && currentStart < checkEnd);
+	return (currentEnd >= checkStart && currentStart <= checkEnd);
 }
 
 void Collision::getAABBCollide(float& currentStart, float& currentEnd, float& checkStart, float& checkEnd, Movement_3d::COLLIDE startDir, Movement_3d::COLLIDE endDir, Movement_3d::COLLIDE& collideSide)
 {
-	if(currentStart >= checkEnd)
+	if(currentStart > checkEnd)
 	{
 		collideSide = startDir;
 	}
-	else if(currentEnd <= checkStart)
+	else if(currentEnd < checkStart)
 	{
 		collideSide = endDir;
 	}
@@ -262,6 +267,4 @@ void Collision::getAABBCollide(float& currentStart, float& currentEnd, float& ch
 void Collision::ResetAABB()
 {
 	previousPos = position;
-	previousStart = position - scale * 0.5f;
-	previousEnd = position + scale * 0.5f;
 }

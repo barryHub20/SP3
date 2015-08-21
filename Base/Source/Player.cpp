@@ -74,7 +74,7 @@ void Player::Update(double dt, bool* myKey)
 
 	if(myKey[KEY_A])
 	{
-		translateObject(-4, 0, 0);
+		translateObject(-8, 0, 0);
 		setState(LEFT);
 		if (animationList[LEFT]->ended == true)
 		{
@@ -85,7 +85,7 @@ void Player::Update(double dt, bool* myKey)
 
 	if(myKey[KEY_D])
 	{
-		translateObject(4, 0, 0);
+		translateObject(8, 0, 0);
 		setState(RIGHT);
 		if (animationList[RIGHT]->ended == true)
 		{

@@ -65,21 +65,21 @@ void Model_2D::Init()
 void Model_2D::InitObject()
 {	
 	/** Set up player **/
-	//player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(1, 1, 0), Vector3(50, 50, 1), 0, 10, true);
+	//player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(659, 589, 0), Vector3(150, 50, 1), 0, 10, true);
 	//elementObject.push_back(player);
 	ReadFromFile("Save_Load_File.txt");
 	// Player start pos
 	//player->translate(500,400,0);
 
-	/** Set up object */
-	float x = 100;
-	for(int i = 0; i < 10; ++i)
-	{
-		x = i * 111 + 100;
-		obj_arr[i] = new StaticObject(Geometry::meshList[Geometry::GEO_CUBE], Vector3(x, 500, 0), 
-			Vector3(60, 60, 1), 10, 0, false, GameObject::GO_FURNITURE);
-		elementObject.push_back(obj_arr[i]);
-	}
+	///** Set up object */
+	//float x = 100;
+	//for(int i = 0; i < 10; ++i)
+	//{
+	//	x = i * 111 + 100;
+	//	obj_arr[i] = new StaticObject(Geometry::meshList[Geometry::GEO_CUBE], Vector3(x, 500, 0), 
+	//		Vector3(60, 60, 1), 10, 0, false, GameObject::GO_FURNITURE);
+	//	elementObject.push_back(obj_arr[i]);
+	//}
 
 	/** init **/
 	for(std::vector<Object*>::iterator it = elementObject.begin(); it != elementObject.end(); ++it)
@@ -146,38 +146,46 @@ void Model_2D::Update(double dt, bool* myKeys)
 
 void Model_2D::UpdateGame(double dt, bool* myKeys)
 {
-	// Sound - ambience
-	if (!sfxengine->isCurrentlyPlaying("musfiles/Verdant_Forest.ogg"))
-	{
-		sfx_ambience = sfxengine->play2D("musfiles/Verdant_Forest.ogg");
-	}
+	//// Sound - ambience
+	//if (!sfxengine->isCurrentlyPlaying("musfiles/Verdant_Forest.ogg"))
+	//{
+	//	sfx_ambience = sfxengine->play2D("musfiles/Verdant_Forest.ogg");
+	//}
 
 	/* Update player */
 	player->Update(dt, myKeys);
 
-	getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
-	getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
+	if(myKeys[KEY_K])
+	{
+		player->Translate(Vector3(659, 389, 0));
+	}
 
+	/*getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
+	getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
+*/
 	/* check collision with object */
 	//start: Set up collision bound before checking with the others
+	//Vector3 posp = player->getCollideBound()->position;
+
+
 	player->StartCollisionCheck();
 
-	for(int i = 0; i < 10; ++i)
-	{
-		//check
-		player->CollisionCheck(obj_arr[i]);
-	}
+	//for(int i = 0; i < 10; ++i)
+	//{
+	//	//check
+	//	player->CollisionCheck(obj_arr[i]);
+	//}
 
 	/* check collision with map */
 	mapManager->GetCurrentMap()->CheckCollisionWith(player);
 
+	/* reset */
+	player->getCollideBound()->Reset();
+
 	/* Collision response */
 	player->CollisionResponse();	//translate to new pos if collides
 
-	if(myKeys[KEY_K])
-	{
-		camera.position.x += 1;
-	}
+	//cout << player->getCollideBound()->position - posp << endl;
 
 	/* Update target */
 	camera.target = camera.position;

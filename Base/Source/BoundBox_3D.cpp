@@ -2,12 +2,18 @@
 using std::cin;
 using std::cout;
 using std::endl;
+Vector3 _previousStart;
+Vector3 _previousEnd;
+Vector3 _currentStart;
+Vector3 _currentEnd;
+Vector3 _checkStart;
+Vector3 _checkEnd;
 
 /******************************* Utilities ********************************/
 /** check if bound box <start to end> is in another BoundBox_3D's zone **/
-bool BoundBox_3D::inZone(float& start, float& end, float& checkStart, float& checkEnd)
+bool BoundBox_3D::inZone(float& start, float& end, float& _checkStart, float& _checkEnd)
 {
-	return (end > checkStart && start < checkEnd);
+	return (end >= _checkStart && start <= _checkEnd);
 }
 
 
@@ -33,17 +39,17 @@ void BoundBox_3D::Update(const Vector3& objectPos)
 {
 	position = objectPos;
 	/* update start and end */
-	start = position - (this->scale * 0.5f);
-	end = position + (this->scale * 0.5f);
+	_currentStart = position - (this->scale * 0.5f);
+	_currentEnd = position + (this->scale * 0.5f);
 }
 
-void getCollide(float& start, float& end, float& checkStart, float& checkEnd, Movement_3d::COLLIDE startDir, Movement_3d::COLLIDE endDir, Movement_3d::COLLIDE& collideSide)
+void getCollide(float& start, float& end, float& _checkStart, float& _checkEnd, Movement_3d::COLLIDE startDir, Movement_3d::COLLIDE endDir, Movement_3d::COLLIDE& collideSide)
 {
-	if(start > checkEnd)
+	if(start > _checkEnd)
 	{
 		collideSide = startDir;
 	}
-	else if(end < checkStart)
+	else if(end < _checkStart)
 	{
 		collideSide = endDir;
 	}
@@ -59,35 +65,35 @@ void BoundBox_3D::UpdateCollide(BoundBox_3D* check, Vector3& pos)
 	if(collideArea.collideSide == Movement_3d::start_X)
 	{
 		//pos.x = previousPos.x;
-		pos.x = check->end.x + halfScale.x + offset;
+		pos.x = _checkEnd.x + halfScale.x + offset;
 	}
 	else if(collideArea.collideSide == Movement_3d::end_X)
 	{
-		pos.x = check->start.x - halfScale.x - offset;
+		pos.x = _checkStart.x - halfScale.x - offset;
 	}
 
 	//y
 	else if(collideArea.collideSide == Movement_3d::start_Y)
 	{
-		pos.y = check->end.y + halfScale.y + offset;
+		pos.y = _checkEnd.y + halfScale.y + offset;
 	}
 	else if(collideArea.collideSide == Movement_3d::end_Y)
 	{
-		pos.y = check->start.y - halfScale.y - offset;
+		pos.y = _checkStart.y - halfScale.y - offset;
 	}
 
 	//z
 	else if(collideArea.collideSide == Movement_3d::start_Z)
 	{
-		pos.z = check->end.z + halfScale.z + offset;
+		pos.z = _checkEnd.z + halfScale.z + offset;
 	}
 	else if(collideArea.collideSide == Movement_3d::end_Z)
 	{
-		pos.z = check->start.z - halfScale.z - offset;
+		pos.z = _checkStart.z - halfScale.z - offset;
 	}
 
-	/* check collide */
-	/* check collision first */
+	///* check collide */
+	///* check collision first */
 	//if(collideArea.collideSide == Movement_3d::start_X)
 	//{
 	//	pos.x = previousPos.x;
@@ -121,15 +127,26 @@ void BoundBox_3D::UpdateCollide(BoundBox_3D* check, Vector3& pos)
 Vector3 current_pos;	
 void BoundBox_3D::Start(Vector3& objectPos)
 {
-	Update(objectPos);
+	position = objectPos;
+
+	/* update start and end */
+	_currentStart = position - (this->scale * 0.5f);
+	_currentEnd = position + (this->scale * 0.5f);
+
+	_previousStart = previousPos - (this->scale * 0.5f);
+	_previousEnd = previousPos + (this->scale * 0.5f);
 }
 
 bool BoundBox_3D::Collide(BoundBox_3D* checkBox)
 {
+	/* chck box */
+	_checkStart = checkBox->position - (checkBox->scale * 0.5f);
+	_checkEnd = checkBox->position + (checkBox->scale * 0.5f);
+
 	/*********************** check collision ***********************/
-	inZoneY = inZone(start.y, end.y, checkBox->start.y, checkBox->end.y);
-	inZoneX = inZone(start.x, end.x, checkBox->start.x, checkBox->end.x);
-	inZoneZ = inZone(start.z, end.z, checkBox->start.z, checkBox->end.z);
+	inZoneY = inZone(_currentStart.y, _currentEnd.y, _checkStart.y, _checkEnd.y);
+	inZoneX = inZone(_currentStart.x, _currentEnd.x, _checkStart.x, _checkEnd.x);
+	inZoneZ = inZone(_currentStart.z, _currentEnd.z, _checkStart.z, _checkEnd.z);
 	
 	/** if collide **/
 	return (inZoneY && inZoneX && inZoneZ);
@@ -137,36 +154,36 @@ bool BoundBox_3D::Collide(BoundBox_3D* checkBox)
 
 Vector3 BoundBox_3D::Response(BoundBox_3D* checkBox)
 {
-	inZoneY = inZone(previousStart.y, previousEnd.y, checkBox->start.y, checkBox->end.y);
-	inZoneX = inZone(previousStart.x, previousEnd.x, checkBox->start.x, checkBox->end.x);
-	inZoneZ = inZone(previousStart.z, previousEnd.z, checkBox->start.z, checkBox->end.z);
+	inZoneY = inZone(_previousStart.y, _previousEnd.y, _checkStart.y, _checkEnd.y);
+	inZoneX = inZone(_previousStart.x, _previousEnd.x, _checkStart.x, _checkEnd.x);
+	inZoneZ = inZone(_previousStart.z, _previousEnd.z, _checkStart.z, _checkEnd.z);
 
 
 	///** Y dir **/
 	if(inZoneX && inZoneZ && !inZoneY)
 	{
 		//start/end
-		getCollide(previousStart.y, previousEnd.y, checkBox->start.y, checkBox->end.y, Movement_3d::start_Y, Movement_3d::end_Y, collideArea.collideSide);
+		getCollide(_previousStart.y, _previousEnd.y, _checkStart.y, _checkEnd.y, Movement_3d::start_Y, Movement_3d::end_Y, collideArea.collideSide);
 	}
 
 	/** X dir **/
 	else if(inZoneY && inZoneZ && !inZoneX)
 	{
 		//start/end
-		getCollide(previousStart.x, previousEnd.x, checkBox->start.x, checkBox->end.x, Movement_3d::start_X, Movement_3d::end_X, collideArea.collideSide);
+		getCollide(_previousStart.x, _previousEnd.x, _checkStart.x, _checkEnd.x, Movement_3d::start_X, Movement_3d::end_X, collideArea.collideSide);
 	}
 
 	/** Z dir **/
 	else if(inZoneY && inZoneX && !inZoneZ)
 	{
 		//start/end
-		getCollide(previousStart.z, previousEnd.z, checkBox->start.z, checkBox->end.z, Movement_3d::start_Z, Movement_3d::end_Z, collideArea.collideSide);
+		getCollide(_previousStart.z, _previousEnd.z, _checkStart.z, _checkEnd.z, Movement_3d::start_Z, Movement_3d::end_Z, collideArea.collideSide);
 	}
 
 
 	UpdateCollide(checkBox, position);	//update position of boundbox
-	start = position - (this->scale * 0.5f);	//start and end too
-	end = position + (this->scale * 0.5f);
+	_currentStart = position - (this->scale * 0.5f);	//start and end too
+	_currentEnd = position + (this->scale * 0.5f);
 
 	return position;
 }
@@ -174,6 +191,4 @@ Vector3 BoundBox_3D::Response(BoundBox_3D* checkBox)
 void BoundBox_3D::Reset()
 {
 	previousPos = position;
-	previousStart = start;
-	previousEnd = end;
 }

@@ -124,6 +124,7 @@ public:
 	void RenderMeshInLines(Mesh* mesh, const Vector3& position, const Vector3& scale);
 	void Render2DMesh(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float x, float y);
 	void Render2DTile(Mesh *mesh, bool enableLight, float size, float x, float y, int tileType);
+	void RenderTile(Mesh* mesh, bool enableLight, int tileNum);
 
 /********************** Console screen size *****************************/
 	unsigned short getConsoleHeight();

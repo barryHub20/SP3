@@ -55,9 +55,9 @@ bool Map::SetUp()
 		{
 			//testing only: floor and wall diff mesh
 			if(theScreenMap[i][k].getTileNum() == 0)
-				theScreenMap[i][k].Set(Geometry::meshList[Geometry::GEO_LEFT], pos, (float)theTileSize);
+				theScreenMap[i][k].Set(Geometry::meshList[Geometry::GEO_TILEMAP], pos, (float)theTileSize, TileObject::FLOOR);
 			else
-				theScreenMap[i][k].Set(Geometry::meshList[Geometry::GEO_CUBE], pos, (float)theTileSize);
+				theScreenMap[i][k].Set(Geometry::meshList[Geometry::GEO_TILEMAP], pos, (float)theTileSize, TileObject::WALL);
 
 			pos.x += theTileSize;	//set to next column
 		}
