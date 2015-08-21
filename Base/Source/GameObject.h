@@ -6,6 +6,7 @@
 #include "MeshList.h"
 #include "SpriteAnimation.h"
 #include <map>
+#include "MyMath.h"
 
 class GameObject : public Object
 {
@@ -29,7 +30,6 @@ public:
 		GO_LASER,
 		GO_TOTAL,
 	};
-
 	/* constructor/destructor */
 	GameObject(void);
 	GameObject(Vector3 Pos, Vector3 scale, Vector3 Dir, float Speed, bool active);	//set everything in general
@@ -37,7 +37,9 @@ public:
 
 	/* Core */
 	virtual void Update();
+	
 	void setInfo(float Speed);	//Set physics info only
+	Physics getInfo();
 
 	/* getter/setter */
 	void setIsActive(bool isActive);

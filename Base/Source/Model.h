@@ -2,6 +2,7 @@
 #define MODEL_H
 #include "GameObject.h"
 #include "StaticObject.h"
+#include "Enemy.h"
 #include "Map.h"
 #include "MapManager.h"
 #include "MeshList.h"
@@ -60,7 +61,7 @@ protected:
 	Position lightPos[TOTAL_LIGHTS];
 
 	/************ Game objects ************/ 
-	vector<Object*> elementObject;	//render all in-game objects
+	vector<GameObject*> goList;	//render all in-game objects
 	vector<Collision*> collisionList;	//render all collision boxes (debug purpose only pls remove)
 public:
 	/*********** constructor/destructor ***************/
@@ -84,7 +85,7 @@ public:
 	Camera3* getCamera();
 	float getFPS();
 	Position getLightPos(int index);
-	vector<Object*>* getObject();
+	vector<GameObject*>* getObject();
 	Object* getObject(int index);
 	unsigned short getViewWidth();
 	unsigned short getViewHeight();

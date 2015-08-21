@@ -1,8 +1,9 @@
 #include "Physics.h"
 
 
-Physics::Physics(void) :
-	Speed(0)
+Physics::Physics(void) 
+	: Speed(0)
+	, Timer(0)
 {
 
 }
@@ -18,6 +19,11 @@ void Physics::setSpeed(float Speed)
 	this->Speed = Speed;
 }
 
+void Physics::setTimer(float Timer)
+{
+	this->Timer = Timer;
+}
+
 Vector3 Physics::getDir()
 {
 	return Dir;
@@ -31,6 +37,11 @@ float Physics::getSpeed()
 Vector3 Physics::getForce()
 {
 	return Dir * Speed;
+}
+
+float Physics::getTimer()
+{
+	return Timer;
 }
 
 Physics::~Physics(void)

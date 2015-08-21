@@ -320,7 +320,7 @@ void View::RenderCollideBox()
 
 	if (model->stateManager->GetState() == model->stateManager->GAME)	// If GAME is current state
 	{
-		for(vector<Object*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
+		for(vector<GameObject*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
 		{
 			
 		}
@@ -451,7 +451,7 @@ void View::RenderObject()
 	/* Renders all objects */
 	if (model->stateManager->GetState() == model->stateManager->GAME)
 	{
-		for(vector<Object*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
+		for(vector<GameObject*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
 		{
 			Object* o = (Object*)*it;
 

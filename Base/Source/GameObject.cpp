@@ -52,6 +52,13 @@ int GameObject::getObjCount()
 	return objCount;
 }
 
+//return physics variables
+
+Physics GameObject::getInfo()
+{
+	return info;
+}
+
 //dir
 Vector3 GameObject::getDir()
 {

@@ -150,9 +150,9 @@ Position Model::getLightPos(int index)
 		return lightPos[index];
 }
 
-vector<Object*>* Model::getObject(){return &elementObject;}
+vector<GameObject*>* Model::getObject(){return &goList;}
 
 Object* Model::getObject(int index)
 {
-	return elementObject[index];
+	return goList[index];
 }

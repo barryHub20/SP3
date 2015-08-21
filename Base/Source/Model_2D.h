@@ -6,6 +6,7 @@ class Model_2D : public Model
 {
 	/* player */
 	Player* player;
+	Enemy* enemy;
 	Inventory* inventory;
 	Item item;
 	/* array of static objects (non-moving) */
@@ -31,6 +32,7 @@ public:
 	void UpdateMainMenu(double dt, bool* myKeys);	//updating main menu
 	void UpdateGame(double dt, bool* myKeys);
 	void UpdateInstructions(double dt, bool* myKeys);
+	void UpdateEnemy(double dt);
 
 	void UpdateLight(double dt, bool* myKeys, Light* light);	//get light from view
 

@@ -121,6 +121,16 @@ bool Map::LoadFile(const string mapName)
 	return true;
 }
 
+bool Map::getWalkable(int x, int y)
+{
+	if(theScreenMap[y/GetTileSize()][x/GetTileSize()].getTileType() == TileObject::FLOOR)
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 int Map::GetNumOfTiles_Height(void)
 {
 	return theNumOfTiles_Height;

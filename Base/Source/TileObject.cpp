@@ -49,3 +49,8 @@ bool TileObject::CollisionCheck(GameObject* checkWithMe)
 
 	return GameObject::CollisionCheck(checkWithMe);
 }
+
+TileObject::TILE_TYPE TileObject::getTileType()
+{
+	return tile_type;
+}
