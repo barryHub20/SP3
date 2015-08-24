@@ -37,9 +37,19 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	jumpSpeed = 0;
 	PlayerOnGround = true;
 	PlayerInAir = false;
+
 	setType(GO_PLAYER);
 	// Sound setup
 	my_sfx_man = &sfx_mano;
+
+	deceleration = 10;
+	vel.x = 0;
+	vel.y = 0;
+	LeftOrRight = false;
+	UpOrDown = false;
+	checkLR = false;
+	checkUD = false;
+
 }
 
 Player::~Player()
@@ -48,36 +58,78 @@ Player::~Player()
 
 void Player::Update(double dt, bool* myKey)
 {
+	Vector3 Pos;
+
 	//cout << animationList[UP]->startRow << " " << animationList[DOWN]->startRow << endl;
 	//setState(IDLE);
 	if(myKey[KEY_W])
 	{
+		UpOrDown = false;
+		checkUD = false;
+		if(vel.y < 5)
+		{
+			vel.y += 1;
+			Pos.y = vel.y;
+		}
+		else
+		{
+			vel.y = 5;
+			Pos.y = vel.y;
+		}
+
 		//Movement / physics
-		translateObject(0, 4, 0);
+		//translateObject(0, 4, 0);
 		//Animation
 		setState(UP);
 		if (animationList[UP]->ended == true)
 		{
 			animationList[UP]->Reset();
 		}
+
 		//Sound
 		sf_walk = true;
 	}
 
 	if(myKey[KEY_S])
 	{
-		translateObject(0, -4, 0);
+		UpOrDown = true;
+		checkUD = true;
+		if(vel.y > -5)
+		{
+			vel.y -= 1;
+			Pos.y = vel.y;
+		}
+		else
+		{
+			vel.y = -5;
+			Pos.y = vel.y;
+		}
+
 		setState(DOWN);
 		if (animationList[DOWN]->ended == true)
 		{
 			animationList[DOWN]->Reset();
 		}
+
 		sf_walk = true;
 	}	
 
+
 	if(myKey[KEY_A])
 	{
-		translateObject(-8, 0, 0);
+		LeftOrRight = true;
+		checkLR = true;
+		if(vel.x > -5)
+		{
+			vel.x -= 1;
+			Pos.x = vel.x;
+		}
+		else
+		{
+			vel.x = -5;
+			Pos.x = vel.x;
+		}
+		
 		setState(LEFT);
 		if (animationList[LEFT]->ended == true)
 		{
@@ -88,7 +140,19 @@ void Player::Update(double dt, bool* myKey)
 
 	if(myKey[KEY_D])
 	{
-		translateObject(8, 0, 0);
+		LeftOrRight = false;
+		checkLR = false;
+		if(vel.x < 5)
+		{
+			vel.x += 1;
+			Pos.x = vel.x;
+		}
+		else
+		{
+			vel.x = 5;
+			Pos.x = vel.x;
+		}
+		
 		setState(RIGHT);
 		if (animationList[RIGHT]->ended == true)
 		{
@@ -96,6 +160,52 @@ void Player::Update(double dt, bool* myKey)
 		}
 		sf_walk = true;
 	}
+
+	if(!myKey[KEY_W] && !myKey[KEY_S] && vel.y != 0)
+	{
+		if(UpOrDown == false && checkUD == false)
+		{
+			vel.y -= deceleration * dt;
+			if(vel.y < 0 && !myKey[KEY_W])
+			{
+				vel.y = 0;
+			}
+		}
+
+		if(UpOrDown == true && checkUD == true)
+		{
+			vel.y += deceleration * dt;
+			if(vel.y > 0 && !myKey[KEY_S])
+			{
+				vel.y = 0;
+			}
+		}
+		Pos.y += vel.y;
+	}
+
+	if(!myKey[KEY_A] && !myKey[KEY_D] && vel.x != 0)
+	{
+		if(LeftOrRight == false && checkLR == false)
+		{
+			vel.x -= deceleration * dt;
+			if(vel.x < 0 && !myKey[KEY_D])
+			{
+				vel.x= 0;
+			}
+		}
+
+		if(LeftOrRight == true && checkLR == true)
+		{
+			vel.x += deceleration * dt;
+			if(vel.x > 0 && !myKey[KEY_A])
+			{
+				vel.x = 0;
+			}
+		}
+		Pos.x += vel.x;
+	}
+
+	translateObject(Pos);
 
 	if(!myKey[KEY_W] && !myKey[KEY_A] && !myKey[KEY_S] && !myKey[KEY_D])
 	{
