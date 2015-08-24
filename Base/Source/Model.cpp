@@ -29,6 +29,7 @@ void Model::Init()
 {
 	/* game state setup */
 	mapManager = new MapManager();
+	mapManager->Init();
 	stateManager = new StateManager();
 	sfx_man = new SoundManager();
 

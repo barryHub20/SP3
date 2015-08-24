@@ -32,7 +32,7 @@ public:
 	Map(void);
 	~Map(void);
 
-	void Init(const int num_of_tile_Width, const int num_of_tile_Height, const int tileSize);
+	void Init(const int num_of_tile_Width, const int num_of_tile_Height, const int tileSize, Mesh* tileSet);
 
 	int GetNumOfTiles_Height(void);
 	int GetNumOfTiles_Width(void);
@@ -54,6 +54,7 @@ private:
 	int theTileSize;
 
 	//RP
+	Mesh* tileSet;
 	vector<vector<TileObject> > theScreenMap;
 	
 	bool LoadFile(const string mapName);

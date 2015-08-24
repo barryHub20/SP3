@@ -93,6 +93,8 @@ void Geometry::Init()
 	meshList[GEO_TILEMAP] = MeshBuilder::GenerateTileMap("Tile Map", Color(1, 1, 1), 1.f, 1.f, 8, 8);	//set the width/heignt as 1 (can scale later)
 	meshList[GEO_TILEMAP]->textureID[0] = LoadTGA("Image//tile2_ground.tga");
 	
+	meshList[GEO_DUNGEONTILE] = MeshBuilder::GenerateTileMap("Dungeon tile map", Color(1, 1, 1), 1.f, 1.f, 4, 4);
+	meshList[GEO_DUNGEONTILE]->textureID[0] = LoadTGA("Image//Sprites//dungeonwall.tga");
 
 	/* Title Screen Image */
 	meshList[IMAGE_TITLE] = MeshBuilder::GenerateQuad("IMG_TITLE", Color(1, 1, 1), 1.f);

@@ -299,8 +299,12 @@ void View::Render(const float fps)
 	modelStack.LoadIdentity();
 
 	/*Map*/
-	RenderTileMap();
-
+	if (model->stateManager->GetState() == model->stateManager->GAME)
+	{
+		RenderTileMap();
+		//RenderRearMap();
+	}
+	
 	/* light */
 	//RenderLight();
 
@@ -513,19 +517,23 @@ void View::RenderTileMap()
 {
 	TileObject* tileObject = NULL;
 
-	float tileSize = model->mapManager->GetCurrentMap()->GetTileSize();
+	//Render main and other tile maps
+	//Number of maps
 
-	if (model->stateManager->GetState() == model->stateManager->GAME)
+	for (int noMap = 0; noMap < model->mapManager->GetCurrentMap()->size(); noMap++) //start with first map, then move on
 	{
-		for (int i = 0; i < model->mapManager->GetCurrentMap()->GetNumOfTiles_Height(); ++i)	//y
-		{
-			for (int k = 0; k < model->mapManager->GetCurrentMap()->GetNumOfTiles_Width(); ++k)	//x
-			{	
-				tileObject = model->mapManager->GetCurrentMap()->getTileObject(k, i);
 
-				if(tileObject->getTileType() == TileObject::FLOOR)	//skip rendering floors
+		float tileSize = (*model->mapManager->GetCurrentMap())[noMap]->GetTileSize(); //Get current tile size
+
+		for (int i = 0; i < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
+		{
+			for (int k = 0; k < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width(); ++k)	//x
+			{
+				tileObject = (*model->mapManager->GetCurrentMap())[noMap]->getTileObject(k, i);
+
+				if (tileObject->getTileType() == TileObject::FLOOR)	//skip rendering floors
 					continue;
-				
+
 				modelStack.PushMatrix();
 				modelStack.Translate(tileObject->getPosition().x, tileObject->getPosition().y, -1);
 				modelStack.Scale(tileObject->getScale().x, tileObject->getScale().y, 1);
@@ -533,16 +541,12 @@ void View::RenderTileMap()
 				modelStack.PopMatrix();
 			}
 		}
-	} 
-	else if (model->stateManager->GetState() == model->stateManager->MAIN_MENU)
-	{
-		// Render main menu
-		//RenderMesh(Geometry::meshList[Geometry::IMAGE_TITLE], 0);
 	}
-	else if (model->stateManager->isTransition()) // if TRANSITION is current state
-	{
-		
-	}
+}
+
+void View::RenderRearMap()
+{
+	
 }
 
 void View::RenderTile(Mesh* mesh, bool enableLight, int tileNum)

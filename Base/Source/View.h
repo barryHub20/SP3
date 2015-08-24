@@ -116,6 +116,7 @@ public:
 
 	/* If theres TileMap */
 	void RenderTileMap();
+	void RenderRearMap();
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

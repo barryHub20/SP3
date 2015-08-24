@@ -60,6 +60,7 @@ public:
 
 		/* 2D */
 		GEO_TILEMAP,
+		GEO_DUNGEONTILE,
 		IMAGE_TITLE,
 
 		NUM_GEOMETRY,

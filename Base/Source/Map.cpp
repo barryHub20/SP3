@@ -16,7 +16,7 @@ Map::~Map(void)
 {
 }
 
-void Map::Init(const int num_of_tile_Width, const int num_of_tile_Height, const int tileSize)
+void Map::Init(const int num_of_tile_Width, const int num_of_tile_Height, const int tileSize, Mesh* tileSet)
 {
 	this->theTileSize			= tileSize;		//tile dimension
 	this->theNumOfTiles_Height	= num_of_tile_Height; //how many tiles horizontal
@@ -30,6 +30,8 @@ void Map::Init(const int num_of_tile_Width, const int num_of_tile_Height, const 
 
 	for (int i = 0; i < theNumOfTiles_Height; ++i)
 		theScreenMap[i].resize(theNumOfTiles_Width);	//set the number of column per row
+
+	this->tileSet = tileSet;
 }
 
 bool Map::LoadMap(const string mapName)
@@ -54,10 +56,10 @@ bool Map::SetUp()
 		for (int k = 0; k < GetNumOfTiles_Width(); k++)
 		{
 			//testing only: floor and wall diff mesh
-			if(theScreenMap[i][k].getTileNum() == 0)
-				theScreenMap[i][k].Set(Geometry::meshList[Geometry::GEO_TILEMAP], pos, (float)theTileSize, TileObject::FLOOR);
+			if(theScreenMap[i][k].getTileNum() <= 0)
+				theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::FLOOR);
 			else
-				theScreenMap[i][k].Set(Geometry::meshList[Geometry::GEO_TILEMAP], pos, (float)theTileSize, TileObject::WALL);
+				theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::WALL);
 
 			pos.x += theTileSize;	//set to next column
 		}

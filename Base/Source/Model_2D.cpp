@@ -101,9 +101,11 @@ void Model_2D::InitSprites()
 
 void Model_2D::InitMaps()
 {
-	mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign.csv");
-	//mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign_lvl1.csv");
-	//mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign_lvl2.csv");
+	mapManager->CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	//mapManager->AddRear(MapManager::MAP1, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
+	//mapManager->AddRear(MapManager::MAP1, 64, 50, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	mapManager->CreateMap(MapManager::MAP2, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
+	mapManager->CreateMap(MapManager::MAP3, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
 }
 
 void Model_2D::Update(double dt, bool* myKeys)
@@ -117,13 +119,13 @@ void Model_2D::Update(double dt, bool* myKeys)
 	/* Update based on states */
 	switch (stateManager->GetState())
 	{
-		case stateManager->MAIN_MENU:
+	case StateManager::MAIN_MENU:
 			UpdateMainMenu(dt, myKeys, Controller::mouse_current_x, Controller::mouse_current_y);
 			break;
-		case stateManager->GAME:
+	case StateManager::GAME:
 			UpdateGame(dt, myKeys);
 			break;
-		case stateManager->INSTRUCTION:
+	case StateManager::INSTRUCTION:
 			UpdateInstructions(dt, myKeys, Controller::mouse_current_x, Controller::mouse_current_y);
 			break;
 	}
@@ -145,6 +147,7 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	// Sound - ambience
 	sfx_man->play_ambience();
 	
+	//Update enemy
 	UpdateEnemy(dt);
 	/* Update player */
 	player->Update(dt, myKeys);
@@ -159,16 +162,21 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 
 	//cout << player->getPosition() << endl;
 
-	mapManager->GetCurrentMap()->getWalkable(player->getPosition().x,player->getPosition().y);
-	
+	for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
+	{
+		(*mapManager->GetCurrentMap())[i]->getWalkable(player->getPosition().x, player->getPosition().y);
+	}
 	
 	/* check collision with object */
 	//start: Set up collision bound before checking with the others
 	player->StartCollisionCheck();
 
 
-	///* check collision with map */
-	mapManager->GetCurrentMap()->CheckCollisionWith(player);
+	/* check collision with map */
+	for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
+	{
+		(*mapManager->GetCurrentMap())[i]->CheckCollisionWith(player);
+	}
 
 	/* reset */
 	player->getCollideBound()->Reset();
@@ -213,7 +221,10 @@ void Model_2D::UpdateEnemy(double dt)
 	E_Ogre->StartCollisionCheck();
 
 	/* check with wall */
-	mapManager->GetCurrentMap()->CheckCollisionWith(player);
+	for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
+	{
+		(*mapManager->GetCurrentMap())[i]->CheckCollisionWith(player);
+	}
 
 	/* check with all other objects */
 

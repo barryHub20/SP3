@@ -13,6 +13,7 @@ Class to manage maps
 
 class MapManager
 {
+public:
 	enum MAPS
 	{
 		MAP1,
@@ -21,17 +22,19 @@ class MapManager
 		MAX_MAP,
 	};
 private:
-	vector<Map*> MapList; //Vector to store all maps
-	Map *CurrentMap; //Pointer to current map
+	vector<vector<Map*>> MapList; //Vector to store all maps
+	vector<Map*> CurrentMap; //Pointer to current map
 	int MapNo; //Track current map
 public:
 	MapManager();
 	~MapManager();
 
-	void CreateMap(const int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char* mapName); //Create map and add into maplist
+	void Init();
+	void CreateMap(MapManager::MAPS map, const int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char * mapName, Mesh* tileSet); //Create map and add into maplist
+	void AddRear(MapManager::MAPS map, const int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char * mapName, Mesh* tileSet); //Add a rear map
 	void SetMap(int Map); //Set map
 	void SetMap(MAPS Map); //Set map
-	Map* GetCurrentMap(); //Get the current map
+	vector<Map*>* GetCurrentMap(); //Get the current map
 	void ChangeNextMap(); //Move to next map
 
 	void SetMapNull(); //set current map to null

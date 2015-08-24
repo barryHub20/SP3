@@ -4,7 +4,8 @@
 
 MapManager::MapManager()
 {
-	CurrentMap = NULL;
+	CurrentMap.clear();
+	MapList.clear();
 	MapNo = NULL;
 }
 
@@ -12,15 +13,40 @@ MapManager::~MapManager()
 {
 }
 
-void MapManager::CreateMap(const int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char* mapName)
+void MapManager::Init()
+{
+	MapList.resize(MAX_MAP);
+}
+
+void MapManager::CreateMap(MapManager::MAPS map, const int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char * mapName, Mesh* tileSet)
 {
 	Map *tempMap;
 	tempMap = new Map();
-	tempMap->Init(numOfTileWidth, numOfTileHeight, tileSize); //Init new map
+	tempMap->Init(numOfTileWidth, numOfTileHeight, tileSize, tileSet); //Init new map
 	tempMap->LoadMap(mapName); //Load it
 	tempMap->SetUp(); //set up
-	MapList.push_back(tempMap); //Push it back into map list
+	MapList[map].push_back(tempMap);
+	//MapList.push_back(tempMap); //Push it back into map list
 }
+
+void MapManager::AddRear(MapManager::MAPS map, const int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char * mapName, Mesh* tileSet)
+{
+	if (MapList[map][0] == NULL)
+	{
+		cout << "No main map" << endl;
+	}
+	else
+	{
+		Map *tempMap;
+		tempMap = new Map();
+		tempMap->Init(numOfTileWidth, numOfTileHeight, tileSize, tileSet); //Init new map
+		tempMap->LoadMap(mapName); //Load it
+		tempMap->SetUp(); //set up
+		MapList[map].push_back(tempMap);
+	}
+}
+
+
 
 void MapManager::SetMap(int Map)
 {
@@ -34,9 +60,9 @@ void MapManager::SetMap(MAPS Map)
 	MapNo = Map;
 }
 
-Map * MapManager::GetCurrentMap()
+vector<Map*>* MapManager::GetCurrentMap()
 {
-	return CurrentMap;
+	return &CurrentMap;
 }
 
 void MapManager::ChangeNextMap()
@@ -53,16 +79,22 @@ void MapManager::ChangeNextMap()
 
 void MapManager::SetMapNull()
 {
-	CurrentMap = NULL;
+	for (int i = 0; i < CurrentMap.size(); i++)
+	{
+		CurrentMap[i] = NULL;
+	}	
 }
 
 void MapManager::CleanUp()
 {
 	for (int i = 0; i < MapList.size(); i++)
 	{
-		MapList[i]->CleanUp();
-		delete MapList[i];
+		for (int j = 0; j < MapList[i].size(); j++)
+		{
+			MapList[i][j]->CleanUp();
+			delete MapList[i][j];
+		}
 	}
-	CurrentMap = NULL;
+	SetMapNull();
 }
 
