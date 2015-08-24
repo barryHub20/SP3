@@ -79,6 +79,12 @@
     <Filter Include="Source Files\Useful Utilities\Shadow">
       <UniqueIdentifier>{a3d300e1-3304-4ddc-963f-0ef489f713da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Enemy">
+      <UniqueIdentifier>{f4e74fc0-789c-4314-91b5-9b7e47285954}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Enemy">
+      <UniqueIdentifier>{312d501a-fb1d-4efc-a45c-ed5c41e35616}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Controller.cpp">
@@ -190,10 +196,17 @@
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
+<<<<<<< 523623c38b4c02c7355287f8d2125fdb3cd478db
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\SoundManager.cpp">
       <Filter>Source Files</Filter>
+=======
+      <Filter>Source Files\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Ogre.cpp">
+      <Filter>Source Files\Enemy</Filter>
+>>>>>>> 84c3366355557d55d1f667e908370cc19218e65b
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -318,10 +331,17 @@
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
+<<<<<<< 523623c38b4c02c7355287f8d2125fdb3cd478db
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\SoundManager.h">
       <Filter>Header Files</Filter>
+=======
+      <Filter>Header Files\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ogre.h">
+      <Filter>Header Files\Enemy</Filter>
+>>>>>>> 84c3366355557d55d1f667e908370cc19218e65b
     </ClInclude>
   </ItemGroup>
 </Project>

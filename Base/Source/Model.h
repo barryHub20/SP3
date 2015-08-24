@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "StaticObject.h"
 #include "Enemy.h"
+#include "Ogre.h"
 #include "Map.h"
 #include "MapManager.h"
 #include "MeshList.h"

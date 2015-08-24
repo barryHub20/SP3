@@ -60,12 +60,12 @@ void Model_2D::InitObject()
 	//goList.push_back(player);
 	ReadFromFile("Save_Load_File.txt");
 	// Player start pos
-	player->translate(300,300,0);
+	
 
-	enemy = new Enemy(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 500, 0), Vector3(50, 50, 1), 0, 10, true);
-	enemy->setState(Enemy::ES_IDLE);
+	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
 
-	goList.push_back(enemy);
+
+	goList.push_back(E_Ogre);
 
 	/*///** Set up object */
 	/*float x = 100;
@@ -102,8 +102,8 @@ void Model_2D::InitSprites()
 void Model_2D::InitMaps()
 {
 	mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign.csv");
-	mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign_lvl1.csv");
-	mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign_lvl2.csv");
+	//mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign_lvl1.csv");
+	//mapManager->CreateMap(32, 25, 32, "Image//Map//MapDesign_lvl2.csv");
 }
 
 void Model_2D::Update(double dt, bool* myKeys)
@@ -207,10 +207,10 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 
 void Model_2D::UpdateEnemy(double dt)
 {
-	enemy->Update(dt,mapManager);
+	E_Ogre->Update(dt,mapManager, goList);
 
 	/* start set up */
-	enemy->StartCollisionCheck();
+	E_Ogre->StartCollisionCheck();
 
 	/* check with wall */
 	mapManager->GetCurrentMap()->CheckCollisionWith(player);
@@ -218,10 +218,10 @@ void Model_2D::UpdateEnemy(double dt)
 	/* check with all other objects */
 
 	/* reset */
-	enemy->getCollideBound()->Reset();
+	E_Ogre->getCollideBound()->Reset();
 
 	//response
-	enemy->CollisionResponse();
+	E_Ogre->CollisionResponse();
 }
 
 void Model_2D::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)

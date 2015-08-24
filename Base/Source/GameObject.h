@@ -82,6 +82,7 @@ public:
 	static int getObjCount();
 
 protected:
+
 	GO_TYPE Type;	//type
 	Physics info;	// Physics related info
 	Collision collideBound;	//collision box

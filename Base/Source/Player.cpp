@@ -37,7 +37,7 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	jumpSpeed = 0;
 	PlayerOnGround = true;
 	PlayerInAir = false;
-
+	setType(GO_PLAYER);
 	// Sound setup
 	my_sfx_man = &sfx_mano;
 }

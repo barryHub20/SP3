@@ -6,7 +6,7 @@ class Model_2D : public Model
 {
 	/* player */
 	Player* player;
-	Enemy* enemy;
+	Ogre* E_Ogre;
 	Inventory* inventory;
 	Item item;
 	/* array of static objects (non-moving) */

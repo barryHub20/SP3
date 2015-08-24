@@ -38,12 +38,11 @@ public:
 	void setDestinationReached(bool DestinationReached);
 	bool getDestinationReached();
 
-	void Update(float dt,MapManager *mapManager);
+	virtual void Update(float dt,MapManager *mapManager,vector<GameObject*> goList);
 
-	void UpdateStateResponse(MapManager *mapManager);
+	virtual void UpdateStateResponse(MapManager *mapManager, GameObject* Player) = 0;
 
 	Enemy(void);
-	Enemy(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active);
 	~Enemy(void);
 
 private:
