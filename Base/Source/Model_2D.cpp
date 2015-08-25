@@ -101,9 +101,12 @@ void Model_2D::InitSprites()
 
 void Model_2D::InitMaps()
 {
-	mapManager->CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-	//mapManager->AddRear(MapManager::MAP1, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
-	//mapManager->AddRear(MapManager::MAP1, 64, 50, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	//mapManager->CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	//mapManager->CreateMap(MapManager::MAP1, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	mapManager->CreateMapFloor(MapManager::MAP1, Geometry::meshList[Geometry::GEO_JINFLOOR]);
+	mapManager->AddRear(MapManager::MAP1, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	mapManager->AddRear(MapManager::MAP1, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
+	mapManager->AddRear(MapManager::MAP1, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
 	mapManager->CreateMap(MapManager::MAP2, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
 	mapManager->CreateMap(MapManager::MAP3, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
 }
@@ -164,6 +167,10 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 
 	for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
 	{
+		if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::FLOORMAP)
+		{
+			continue;
+		}
 		(*mapManager->GetCurrentMap())[i]->getWalkable(player->getPosition().x, player->getPosition().y);
 	}
 	
@@ -211,7 +218,7 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		ButtonBState = false;
 		std::cout << "BBUTTON UP" << std::endl;
 	}
-}
+} 
 
 void Model_2D::UpdateEnemy(double dt)
 {

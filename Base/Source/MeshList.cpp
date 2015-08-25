@@ -96,6 +96,15 @@ void Geometry::Init()
 	meshList[GEO_DUNGEONTILE] = MeshBuilder::GenerateTileMap("Dungeon tile map", Color(1, 1, 1), 1.f, 1.f, 4, 4);
 	meshList[GEO_DUNGEONTILE]->textureID[0] = LoadTGA("Image//Sprites//dungeonwall.tga");
 
+	meshList[GEO_TILESET1] = MeshBuilder::GenerateTileMap("Tile set 1", Color(1, 1, 1), 1.f, 1.f, 16, 16);
+	meshList[GEO_TILESET1]->textureID[0] = LoadTGA("Image//Sprites//tileset1.tga");
+
+	meshList[GEO_TEMPFLOOR] = MeshBuilder::GenerateTileMap("Temp floor", Color(1, 1, 1), 1.f, 1.f, 16, 16);
+	meshList[GEO_TEMPFLOOR]->textureID[0] = LoadTGA("Image//Sprites//floor.tga");
+
+	meshList[GEO_JINFLOOR] = MeshBuilder::GenerateQuad("Jin", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_JINFLOOR]->textureID[0] = LoadTGA("Image//Map//jin.tga");
+
 	/* Title Screen Image */
 	meshList[IMAGE_TITLE] = MeshBuilder::GenerateQuad("IMG_TITLE", Color(1, 1, 1), 1.f);
 	meshList[IMAGE_TITLE]->textureID[0] = LoadTGA("Image//Brisbane_City_Night.tga");

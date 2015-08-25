@@ -15,17 +15,8 @@ public:
 	enum TYPE
 	{
 		NOTHING = 0,
-		DIRT = 1,
-		GOLD = 2,
-		IRON_ORE = 3,
-		REDSTONE_ORE = 4,
-		BRICK = 5,
-		DIAMOND = 6,
-		EMRRALD_ORE = 7,
-		GOLD_ORE = 8,
-		OAK_PLANK = 9,
-		OAK_WOOD = 10,
-		OAK_LEAF = 11,
+		FLOORMAP,
+		COLLISIONMAP,
 		TOTAL_TYPE
 	};
 
@@ -39,10 +30,16 @@ public:
 	int GetTileSize(void);
 
 	bool LoadMap(const string mapName);	//load from csv to double vector
-	bool SetUp();	//setup each tile
+	bool SetUp(bool haveCollision = true);	//setup each tile ( bounding box )
 
 	//RP
 	void CleanUp(void); //reset tile object list list
+	void createFloor(Mesh* floorMesh);
+	Mesh* getFloorMesh();
+	void setMapType(Map::TYPE mapType);
+	Map::TYPE getMapType();
+
+	//Yie cher
 	TileObject* getTileObject(int x, int y);	//get tile based on x and y
 	void CheckCollisionWith(GameObject* checkWithMe);	//Utility function: pass in to check collision with this map
 	bool getWalkable(int x, int y);
@@ -55,6 +52,10 @@ private:
 
 	//RP
 	Mesh* tileSet;
+	Mesh* floorMesh;
+	TYPE mapType;
+
+	//Cher
 	vector<vector<TileObject> > theScreenMap;
 	
 	bool LoadFile(const string mapName);

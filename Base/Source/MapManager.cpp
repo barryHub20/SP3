@@ -18,18 +18,28 @@ void MapManager::Init()
 	MapList.resize(MAX_MAP);
 }
 
-void MapManager::CreateMap(MapManager::MAPS map, const int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char * mapName, Mesh* tileSet)
+void MapManager::CreateMap(MapManager::MAPS map, const int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char * mapName, Mesh* tileSet, bool haveCollision)
 {
 	Map *tempMap;
 	tempMap = new Map();
 	tempMap->Init(numOfTileWidth, numOfTileHeight, tileSize, tileSet); //Init new map
 	tempMap->LoadMap(mapName); //Load it
-	tempMap->SetUp(); //set up
+	tempMap->SetUp(haveCollision); //set up
 	MapList[map].push_back(tempMap);
 	//MapList.push_back(tempMap); //Push it back into map list
 }
 
-void MapManager::AddRear(MapManager::MAPS map, const int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char * mapName, Mesh* tileSet)
+void MapManager::CreateMapFloor(MapManager::MAPS map, Mesh * floorMesh)
+{
+	Map *tempMap;
+	tempMap = new Map();
+	tempMap->Init(32, 25, 32, NULL);
+	tempMap->setMapType(Map::FLOORMAP);
+	tempMap->createFloor(floorMesh);
+	MapList[map].push_back(tempMap);
+}
+
+void MapManager::AddRear(MapManager::MAPS map, const int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char * mapName, Mesh* tileSet, bool haveCollision)
 {
 	if (MapList[map][0] == NULL)
 	{
@@ -41,12 +51,10 @@ void MapManager::AddRear(MapManager::MAPS map, const int numOfTileWidth, const i
 		tempMap = new Map();
 		tempMap->Init(numOfTileWidth, numOfTileHeight, tileSize, tileSet); //Init new map
 		tempMap->LoadMap(mapName); //Load it
-		tempMap->SetUp(); //set up
+		tempMap->SetUp(haveCollision); //set up
 		MapList[map].push_back(tempMap);
 	}
 }
-
-
 
 void MapManager::SetMap(int Map)
 {

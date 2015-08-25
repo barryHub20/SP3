@@ -7,8 +7,9 @@ class TileObject : public GameObject
 public:
 	enum TILE_TYPE
 	{
-		FLOOR,	//is floor
-		WALL,	//is wall
+		NONE,
+		NONCOLLIDABLE,
+		COLLIDABLE,
 	};
 
 	/* constructor/destructor */

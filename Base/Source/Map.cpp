@@ -8,6 +8,9 @@ Map::Map(void)
 , theNumOfTiles_Height(0)
 , theNumOfTiles_Width(0)
 , theTileSize(0)
+, mapType(NOTHING)
+, floorMesh(NULL)
+, tileSet(NULL)
 {
 	theScreenMap.clear();
 }
@@ -45,7 +48,7 @@ bool Map::LoadMap(const string mapName)
 	return false;
 }
 
-bool Map::SetUp()
+bool Map::SetUp(bool haveCollision)
 {
 	//assume start pos is: (0, 0, 0), better if set parameters float startX, float startY
 	Vector3 pos;
@@ -55,11 +58,18 @@ bool Map::SetUp()
 	{
 		for (int k = 0; k < GetNumOfTiles_Width(); k++)
 		{
-			//testing only: floor and wall diff mesh
-			if(theScreenMap[i][k].getTileNum() <= 0)
-				theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::FLOOR);
+			if (haveCollision)
+			{
+				//testing only: floor and wall diff mesh
+				if (theScreenMap[i][k].getTileNum() <= 0)
+					theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::NONE);
+				else
+					theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::COLLIDABLE);
+			}
 			else
-				theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::WALL);
+			{
+				theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::NONCOLLIDABLE);
+			}
 
 			pos.x += theTileSize;	//set to next column
 		}
@@ -125,7 +135,10 @@ bool Map::LoadFile(const string mapName)
 
 bool Map::getWalkable(int x, int y)
 {
-	if(theScreenMap[y/GetTileSize()][x/GetTileSize()].getTileType() == TileObject::FLOOR)
+
+	if (mapType == Map::FLOORMAP)
+		return false;
+	if(theScreenMap[y/GetTileSize()][x/GetTileSize()].getTileType() == ( TileObject::NONE || TileObject::NONCOLLIDABLE))
 	{
 		return true;
 	}
@@ -166,7 +179,7 @@ void Map::CheckCollisionWith(GameObject* checkWithMe)
 			/* Check collide with individual tile */
 			tileObj = getTileObject(k, i);
 
-			if(tileObj != NULL && tileObj->getTileNum() != 0)
+			if(tileObj != NULL && tileObj->getTileNum() != 0 && tileObj->getTileType() == TileObject::COLLIDABLE)
 				checkWithMe->CollisionCheck( tileObj );
 		}
 	}
@@ -175,4 +188,24 @@ void Map::CheckCollisionWith(GameObject* checkWithMe)
 void Map::CleanUp(void)
 {
 	theScreenMap.clear();
+}
+
+void Map::createFloor(Mesh * floorMesh)
+{
+	this->floorMesh = floorMesh;
+}
+
+Mesh* Map::getFloorMesh()
+{
+	return floorMesh;
+}
+
+void Map::setMapType(Map::TYPE mapType)
+{
+	this->mapType = mapType;
+}
+
+Map::TYPE Map::getMapType()
+{
+	return mapType;
 }

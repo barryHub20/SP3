@@ -111,7 +111,7 @@ void View::Init()
 	/************* openGL stuff ****************/
 	// Black background
 //	glClearColor(72.f / 255.f, 240.f / 255.f, 125.f / 255.f, 0.0f);
-	glClearColor(0.f, 0.f, 0.f, 0.0f);
+	glClearColor(0.4f, 0.4f, 0.4f, 0.0f);
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
@@ -520,9 +520,21 @@ void View::RenderTileMap()
 	//Render main and other tile maps
 	//Number of maps
 
+	float z = -2.f;
 	for (int noMap = 0; noMap < model->mapManager->GetCurrentMap()->size(); noMap++) //start with first map, then move on
 	{
-
+		//Render floor
+		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32 * 0.5f, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32 * 0.5f, z);
+			modelStack.Scale((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32, 1);
+			RenderMesh((*model->mapManager->GetCurrentMap())[noMap]->getFloorMesh(), false);
+			modelStack.PopMatrix();
+			z += 0.01f;
+			continue;
+		}
+		//Render tiles 
 		float tileSize = (*model->mapManager->GetCurrentMap())[noMap]->GetTileSize(); //Get current tile size
 
 		for (int i = 0; i < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
@@ -531,16 +543,17 @@ void View::RenderTileMap()
 			{
 				tileObject = (*model->mapManager->GetCurrentMap())[noMap]->getTileObject(k, i);
 
-				if (tileObject->getTileType() == TileObject::FLOOR)	//skip rendering floors
+				if (tileObject->getTileType() == TileObject::NONE)	//skip rendering floors
 					continue;
-
+	
 				modelStack.PushMatrix();
-				modelStack.Translate(tileObject->getPosition().x, tileObject->getPosition().y, -1);
+				modelStack.Translate(tileObject->getPosition().x, tileObject->getPosition().y, z);
 				modelStack.Scale(tileObject->getScale().x, tileObject->getScale().y, 1);
 				RenderTile(tileObject->getMesh(), false, tileObject->getTileNum());
 				modelStack.PopMatrix();
 			}
 		}
+		z += 0.01f;
 	}
 }
 
