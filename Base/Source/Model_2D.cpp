@@ -192,7 +192,7 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		(*mapManager->GetCurrentMap())[i]->CheckCollisionWith(player);
 	}
 
-	/* Test pick up item */
+	/* Test pick up items */
 	for(int i = 0; i < itemList.size(); ++i)
 	{
 		player->pickUp(itemList[i], myKeys);

@@ -111,7 +111,7 @@ bool Inventory::addItem(Item* item)
 	{
 		returnVal = arrSize[i]->addItem(item);
 
-		if(returnVal)	//successfully added
+		if(returnVal)	//succsessfully added
 		{
 			currentSlot = i;
 			return returnVal;

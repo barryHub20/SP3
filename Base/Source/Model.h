@@ -66,7 +66,7 @@ protected:
 	/************ Game objects ************/ 
 	vector<GameObject*> goList;	//render all in-game objects
 	vector<Collision*> collisionList;	//render all collision boxes (debug purpose only pls remove)
-	vector<Item*> itemList;	//all item
+	vector<Item*> itemList;	//all items
 public:
 	/*********** constructor/destructor ***************/
 	Model();
