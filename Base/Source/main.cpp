@@ -21,6 +21,7 @@ int main( void )
 
 	/* Init, Run and Exit */
 	myController.Init();
+	
 	myController.Run();
 	myController.Exit();
 }

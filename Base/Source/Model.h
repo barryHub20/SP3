@@ -18,6 +18,7 @@
 #include "Player.h"
 #include "StateManager.h"
 #include "Inventory.h"
+#include "TriggerObject.h"
 using namespace std;
 
 #include "SoundManager.h"
@@ -121,6 +122,9 @@ public:
 
 	//player
 	Player* player;
+
+	//Triggering Objects
+	TriggerObject* triggerObject;
 
 	// ================== Audio =================
 

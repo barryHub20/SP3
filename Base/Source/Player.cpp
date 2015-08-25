@@ -15,11 +15,11 @@ Player::Player()
 Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano)
 {
 	score = 0;
-	health = 100;
+	health = 90;
 	stamina = 100;
 	damage = 10;
 
-	cout << health << endl;
+	cout << "Health: " << health << endl;
 
 	/* set object */
 	Set("sdfdf", mesh, NULL, false, false);
@@ -379,10 +379,12 @@ bool Player::pickUp(Item* item, bool* myKey)
 			if(inventory.addItem(item))
 			{
 				cout << "SUCCESSFUL" << endl;
+				return true;
 			}
 			else
 			{
 				cout << "NO SUCCESSFUL" << endl;
+				return false;
 			}
 		}
 	}
@@ -406,14 +408,22 @@ bool Player::dropItem(Item* item, bool* myKey)
 	return false;
 }
 
-bool Player::useItem(Item* item, bool* myKey)
+bool Player::useItem(bool* myKey)
 {
-	if(item->H_POTION && health < 100)
+	Item* item = inventory.useItem();
+
+	if(item == NULL)
+	{
+		return false;
+	}
+	
+	if(item->getType() == item->H_POTION && health < 100)
 	{
 		setHealth(getHealth() + 10);
 		if(getHealth() >= 100)
 		{
 			health = 100;
+			cout << "Health: " << health << endl;
 		}
 	}
 	return false;

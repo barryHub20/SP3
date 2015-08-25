@@ -28,6 +28,7 @@ public:
 		GO_ENEMY,
 		GO_CAMERA,
 		GO_LASER,
+		GO_DOOR,
 		GO_TOTAL,
 	};
 	/* constructor/destructor */
@@ -70,7 +71,7 @@ public:
 	void TranslateOffset(Vector3 offset);
 
 	virtual void StartCollisionCheck();	//set-up collision bound for checking
-	bool CollisionCheck(GameObject* checkWithMe);	//collision check
+	virtual bool CollisionCheck(GameObject* checkWithMe);	//collision check
 	virtual void CollisionResponse();
 
 	//Stores the values for the sprite sheet so the class can use it later on

@@ -122,6 +122,15 @@ void Geometry::Init()
 	meshList[GEO_GUARD] = MeshBuilder::GenerateSpriteAnimation("guard", 21, 13, 1.f);
 	meshList[GEO_GUARD]->textureID[0] = LoadTGA("Image//Sprites//guard.tga");
 
+	meshList[GEO_DOOR] = MeshBuilder::GenerateQuad("Door", Color(1, 1, 1), 1.f);
+	meshList[GEO_DOOR]->textureID[0] = LoadTGA("Image//door.tga");
+
+	meshList[GEO_ISTRIGGER] = MeshBuilder::GenerateQuad("is triggered", Color(1, 1, 1), 1.f);
+	meshList[GEO_ISTRIGGER]->textureID[0] = LoadTGA("Image//isTriggered.tga");
+	
+	meshList[GEO_NOTTRIGGER] = MeshBuilder::GenerateQuad("not triggered", Color(1, 1, 1), 1.f);
+	meshList[GEO_NOTTRIGGER]->textureID[0] = LoadTGA("Image//notTriggered.tga");
+
 	/* Dungeon Stuffs */
 	meshList[GEO_KEY] = MeshBuilder::GenerateQuad("Key", Color(1, 1, 1), 1.f);
 	meshList[GEO_KEY]->textureID[0] = LoadTGA("Image//key.tga");

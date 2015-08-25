@@ -41,6 +41,8 @@ void Model_2D::Init()
 	delayTime = 0.3;
 	keyPressedTimer = delayTime;
 
+	doorUnlocked = false;
+
 	//object
 	InitObject();
 	InitSprites();
@@ -61,6 +63,9 @@ void Model_2D::InitObject()
 
 	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
 	goList.push_back(E_Ogre);
+
+	triggerObject = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::NOTTRIGGERED, Vector3(120, 100, 0), Vector3(50, 50, 1), 0, true, *sfx_man);
+	goList.push_back(triggerObject);
 
 	//inventory = new Inventory(Geometry::meshList[Geometry::GEO_RING], Vector3(500, 400, 0), Vector3
 
@@ -159,9 +164,10 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	
 	//Update enemy
 	UpdateEnemy(dt);
+
 	/* Update player */
 	player->Update(dt, myKeys);
-
+	triggerObject->Update(dt, myKeys);
 	if(myKeys[KEY_K])
 	{
 		player->Translate(Vector3(659, 389, 0));
@@ -184,13 +190,26 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	//start: Set up collision bound before checking with the others
 	player->StartCollisionCheck();
 
-
 	/* check collision with map */
 	for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
 	{
 		if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
 		{
 			(*mapManager->GetCurrentMap())[i]->CheckCollisionWith(player);
+		}
+	}
+
+	player->CollisionCheck(triggerObject);
+
+
+	if(door->getActive())
+	{
+		if(player->CollisionCheck(door))
+		{
+			if(doorUnlocked)
+			{
+				door->setActive(false);
+			}
 		}
 	}
 
@@ -202,11 +221,22 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	/* Collision response */
 	player->CollisionResponse();	//translate to new pos if collides
 
+
 	/* Test pick up items */
 	for(int i = 0; i < itemList.size(); ++i)
 	{
-		player->pickUp(itemList[i], myKeys);
+		if(player->pickUp(itemList[i], myKeys))	//if successfully pick up
+		{
+			//if item is key
+			//cout << itemList[i]->getItemID() << endl;
+			if(itemList[i]->getItemID() == Item::KEY)
+			{
+				doorUnlocked = true;
+			}
+		}
 	}
+
+	player->useItem(myKeys);
 
 	/* Update target */
 	camera.target = camera.position;
@@ -499,6 +529,12 @@ bool Model_2D::ReadFromFile(char* text)
 		{
 			player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
 			goList.push_back(player);
+		}
+
+		if(object_word == "DOOR")
+		{
+			door = new TriggerObject(Geometry::meshList[Geometry::GEO_DOOR], TriggerObject::DOOR, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man);
+			goList.push_back(door);
 		}
 	}
 	myFile.close();

@@ -4,6 +4,11 @@
 
 class Model_2D : public Model
 {
+	/* door/checkpoint */
+	TriggerObject* triggerObject;
+	TriggerObject* door;
+	bool doorUnlocked;
+
 	/* player */
 	Ogre* E_Ogre;
 	Item* item;
