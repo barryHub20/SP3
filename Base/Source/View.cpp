@@ -560,33 +560,61 @@ void View::RenderTileMap()
 	//Number of maps
 
 	float z = -2.f;
-	for (int noMap = 0; noMap < model->mapManager->GetCurrentMap()->size(); noMap++) //start with first map, then move on
+	//Render first map, usually floor
+	for (int noMap = 0; noMap < model->mapManager->GetCurrentMap()->size(); noMap++)
 	{
 		//Render floor
 		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP)
 		{
-			modelStack.PushMatrix();
-			modelStack.Translate((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32 * 0.5f, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32 * 0.5f, z);
-			modelStack.Scale((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32, 1);
-			RenderMesh((*model->mapManager->GetCurrentMap())[noMap]->getFloorMesh(), false);
-			modelStack.PopMatrix();
+			if ((*model->mapManager->GetCurrentMap())[noMap]->getFloorMesh() == NULL) //If no quad, render floor tile
+			{
+				//Render tiles 
+				float tileSize = (*model->mapManager->GetCurrentMap())[noMap]->GetTileSize(); //Get current tile size
+
+				for (int i = 0; i < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
+				{
+					for (int k = 0; k < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width(); ++k)	//x
+					{
+						tileObject = (*model->mapManager->GetCurrentMap())[noMap]->getTileObject(k, i);
+
+						if (tileObject->getTileType() == TileObject::NONE)	//skip rendering floors
+							continue;
+
+						modelStack.PushMatrix();
+						modelStack.Translate(tileObject->getPosition().x, tileObject->getPosition().y, z);
+						modelStack.Scale(tileObject->getScale().x, tileObject->getScale().y, 1);
+						RenderTile(tileObject->getMesh(), false, tileObject->getTileNum());
+						modelStack.PopMatrix();
+					}
+				}
+			}
+			else //Render floor quad
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32 * 0.5f, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32 * 0.5f, z);
+				modelStack.Scale((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32, 1);
+				RenderMesh((*model->mapManager->GetCurrentMap())[noMap]->getFloorMesh(), false);
+				modelStack.PopMatrix();
+			}
 			z += 0.01f;
 			continue;
 		}
 	}
 
+	//Render game objects
 	RenderObject();
 
-	for (int noMap = 0; noMap < model->mapManager->GetCurrentMap()->size(); noMap++) //start with first map, then move on
+	//Render rest of the map
+	for (int noMap = 0; noMap < model->mapManager->GetCurrentMap()->size(); noMap++) 
 	{
-		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP)
+		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP) //If map is a floor, do not render again
 		{
-			continue;
+			continue; 
 		}
 
 		else if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
 		{
-			z += 2.f;
+			z += 2.f; //To create depth
 		}
 		
 		for (int i = 0; i < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
@@ -605,7 +633,6 @@ void View::RenderTileMap()
 				modelStack.PopMatrix();
 			}
 		}
-
 
 		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
 		{

@@ -28,13 +28,13 @@ void MapManager::CreateMap(MapManager::MAPS map, Map::TYPE mapType,const int num
 	tempMap->setMapType(mapType);
 	MapList[map].push_back(tempMap);
 	//MapList.push_back(tempMap); //Push it back into map list
-}
+}	
 
-void MapManager::CreateMapFloor(MapManager::MAPS map, Mesh * floorMesh)
+void MapManager::CreateMapFloor(MapManager::MAPS map, int numOfTileWidth, const int numOfTileHeight, const int tileSize, Mesh* floorMesh)
 {
 	Map *tempMap;
 	tempMap = new Map();
-	tempMap->Init(32, 25, 32, NULL);
+	tempMap->Init(numOfTileWidth, numOfTileHeight, tileSize, NULL);
 	tempMap->setMapType(Map::FLOORMAP);
 	tempMap->createFloor(floorMesh);
 	MapList[map].push_back(tempMap);
