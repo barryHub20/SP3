@@ -303,29 +303,27 @@ void View::Render(const float fps)
 
 	switch (model->stateManager->GetState())
 	{
-	case StateManager::GAME:
-	{
-		RenderGame();
-		break;
+		case StateManager::GAME:
+		{
+			RenderGame();
+			break;
+		}
+		case StateManager::MAIN_MENU:
+		{
+			RenderMainMenu();
+			break;
+		}
+		case StateManager::INSTRUCTION:
+		{
+			RenderInstruction();
+			break;
+		}
+		case StateManager::TRANSITION:
+		{
+			RenderTransition();
+			break;
+		}
 	}
-	case StateManager::MAIN_MENU:
-	{
-		RenderMainMenu();
-		break;
-	}
-	case StateManager::INSTRUCTION:
-	{
-		RenderInstruction();
-		break;
-	}
-	case StateManager::TRANSITION:
-	{
-		RenderTransition();
-		break;
-	}
-	}
-	/* light */
-	//RenderLight();
 }
 
 void View::RenderCollideBox()
@@ -449,14 +447,15 @@ void View::RenderGame()
 {
 	/* tile map */
 	RenderTileMap();
-	/* test object */
-	//RenderObject();
 
 	/* collide box */
 	RenderCollideBox();
 
 	/* HUD */
 	RenderHUD();
+
+	/* Inventory */
+	RenderInventory();
 }
 
 void View::RenderTransition()
@@ -548,7 +547,7 @@ void View::RenderObject()
 
 	if (model->stateManager->GetState() == model->stateManager->MAIN_MENU || model->stateManager->GetState() == model->stateManager->INSTRUCTION || model->stateManager->GetState() == model->stateManager->TRANSITION)
 	{
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_JINFLOOR],false,160,0,0,0,0);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_JINFLOOR],false,160,1,1,0,0);
 	}
 }
 
@@ -588,9 +587,7 @@ void View::RenderTileMap()
 		{
 			z += 2.f;
 		}
-		//Render tiles 
-		float tileSize = (*model->mapManager->GetCurrentMap())[noMap]->GetTileSize(); //Get current tile size
-
+		
 		for (int i = 0; i < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
 		{
 			for (int k = 0; k < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width(); ++k)	//x
@@ -607,11 +604,25 @@ void View::RenderTileMap()
 				modelStack.PopMatrix();
 			}
 		}
+
+
 		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
 		{
 			z -= 2.f;
 		}
 		z += 0.01f;
+	}
+}
+
+void View::RenderInventory()
+{
+	float startX = model->player->getInventory()->getStartX();
+	Vector3 scale = model->player->getInventory()->getSlotScale();
+
+	for(int i = 0; i < model->player->getInventory()->MAX_SLOT; ++i)
+	{
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_CUBE], false, scale.x, scale.y, 1,startX, 9, 1, 0);
+		startX += model->player->getInventory()->getDistBtwSlot();
 	}
 }
 

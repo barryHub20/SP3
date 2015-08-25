@@ -4,23 +4,6 @@
 
 class Model_2D : public Model
 {
-	/* UI */
-	UI_Object cursor;
-	UI_Object start_Game;
-	UI_Object instruction;
-	UI_Object go_back;
-
-	/* door/checkpoint */
-	TriggerObject* triggerObject;
-	TriggerObject* door;
-	bool doorUnlocked;
-
-	/* player */
-	Ogre* E_Ogre;
-	Item* item;
-	/* array of static objects (non-moving) */
-	StaticObject* obj_arr[10];
-
 	/** key pressed check **/
 	double keyPressedTimer;
 	double delayTime;	//everytime press a button, delay before register button press again

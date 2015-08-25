@@ -96,6 +96,40 @@ Inventory::~Inventory(void)
 
 }
 
+void Inventory::Set(float percent_widthOfScreen, float percent_gapPerSlot, float TWOD_Window_Width, float leftPercent)
+{
+	this->percent_widthOfScreen = percent_widthOfScreen;
+	this->percent_gapPerSlot = percent_gapPerSlot;
+
+	//calculate
+	float inventory_width = percent_widthOfScreen * TWOD_Window_Width;	//width of inventory
+	float slot_Width = inventory_width / MAX_SLOT;	//width per slot
+	float gap_width = slot_Width * percent_gapPerSlot;	//width per gap
+
+	scalePerSlot.Set(slot_Width - gap_width, slot_Width - gap_width, 1.f);	//scale
+	distBtwSlot = slot_Width;	//dist from one slot to the other
+	startX = (scalePerSlot.x / 2.f) - (gap_width / 2);	//starting pos for the first slot
+
+	float distFromEdgeLeft = ((1.f - percent_widthOfScreen)) * TWOD_Window_Width;
+	startX += distFromEdgeLeft * leftPercent;	
+}
+
+/* getter */
+float Inventory::getStartX()
+{
+	return startX;
+}
+
+Vector3 Inventory::getSlotScale()
+{
+	return scalePerSlot;
+}
+
+float Inventory::getDistBtwSlot()
+{
+	return distBtwSlot;
+}
+
 int Inventory::getCurrentSlot(void)
 {
 	return currentSlot;

@@ -58,17 +58,19 @@ bool Map::SetUp(bool haveCollision)
 	{
 		for (int k = 0; k < GetNumOfTiles_Width(); k++)
 		{
-			if (haveCollision)
-			{
-				//testing only: floor and wall diff mesh
-				if (theScreenMap[i][k].getTileNum() <= 0)
-					theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::NONE);
-				else
-					theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::COLLIDABLE);
-			}
+			//testing only: floor and wall diff mesh
+			if (theScreenMap[i][k].getTileNum() <= 0)
+				theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::NONE);
 			else
 			{
-				theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::NONCOLLIDABLE);
+				if (haveCollision)
+				{
+					theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::COLLIDABLE);
+				}
+				else
+				{
+					theScreenMap[i][k].Set(tileSet, pos, (float)theTileSize, TileObject::NONCOLLIDABLE);
+				}
 			}
 
 			pos.x += theTileSize;	//set to next column

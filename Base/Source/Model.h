@@ -113,17 +113,6 @@ public:
 	MapManager *mapManager;
 	Map* m_backgroundMap;
 	Map* MapList[LEVEL_2 + 1];	//store the maps for each level
-	float m_backgroundSpeed_Percent;	//background scrolls at % speed of normal scrolling speed
-
-	/* constrain hero */
-	int hero_Health;	//keeps track of hero health
-	float constrain_PercentX;	//how much of screen you want to constrain
-	Vector2 middlePos;	//pos of middle of screen X
-	int constrain_DistX;	//how much far from middle then constrain
-
-	/* side scrolling */
-	int tileOffset_X, tileOffset_Y;
-	Vector2 offset;	//offset X by how many pixels
 
 	/******************** Game state ************************/
 	GAME_STATE game_state;
@@ -131,12 +120,28 @@ public:
 
 	//player
 	Player* player;
+	float hero_Health;
 
 	//Triggering Objects
 	TriggerObject* triggerObject;
 
-	// ================== Audio =================
+	/* UI */
+	UI_Object cursor;
+	UI_Object start_Game;
+	UI_Object instruction;
+	UI_Object go_back;
 
+	/* door/checkpoint */
+	TriggerObject* door;
+	bool doorUnlocked;
+
+	/* player */
+	Ogre* E_Ogre;
+	Item* item;
+	/* array of static objects (non-moving) */
+	StaticObject* obj_arr[10];
+
+	// ================== Audio =================
 	SoundManager *sfx_man;
 };
 

@@ -82,6 +82,21 @@ public:
 	/* particle */
 	virtual void Update(const double& dt, Vector3& playerPos){};
 
+
+	/*** getters setter ***/
+	Mesh* getMesh();
+	void setMesh(Mesh* mesh);
+	Vector3 getScale();
+	Vector3 getPosition();
+	Object* getParent();
+	Mtx44* getTRS();
+	bool getLight();
+	void setActive(bool b);
+	bool getActive();
+	void setShadow(bool s);
+	bool getShadow();
+
+protected:
 	/*** utilities ***/
 	void transformWithParent();	//position recalculated after transformation
 	//void checkCollision(Object& checkObject);	//if collide, bounce back
@@ -94,20 +109,6 @@ public:
 	void rotateObject(float angle, float xAxis, float yAxis, float zAxis);
 	void translate(const Vector3& pos);
 	void translate(float x, float y, float z);
-
-	/*** getters setter ***/
-	Mesh* getMesh();
-	void setMesh(Mesh* mesh);
-	Vector3 getScale();
-	Vector3 getPosition();
-	Object* getParent();
-	//BoundBox_3D* getBbox();
-	Mtx44* getTRS();
-	bool getLight();
-	void setActive(bool b);
-	bool getActive();
-	void setShadow(bool s);
-	bool getShadow();
 };
 
 

@@ -85,7 +85,7 @@ void Model_2D::InitUI()
 	/* background main menu */
 	UI_Object* obj;
 	obj = new UI_Object;
-	obj->Init(Geometry::meshList[Geometry::GEO_JINFLOOR], winDimension, Vector3(m_2D_view_width, m_2D_view_height, 1), "", UI_Object::MAIN_MENU_BACKGROUND, true);
+	obj->Init(Geometry::meshList[Geometry::GEO_BOTTOM], winDimension, Vector3(m_2D_view_width, m_2D_view_height, 1), "", UI_Object::MAIN_MENU_BACKGROUND, true);
 	UI_List.push_back(obj);
 
 	/* UI Objects */
@@ -563,6 +563,7 @@ bool Model_2D::ReadFromFile(char* text)
 		if(object_word == "PLAYER")
 		{
 			player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
+			player->getInventory()->Set(0.6f, 0.2f, m_2D_view_width, 0.95f);
 			goList.push_back(player);
 		}
 
