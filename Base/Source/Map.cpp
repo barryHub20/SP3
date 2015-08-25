@@ -95,7 +95,7 @@ bool Map::LoadFile(const string mapName)
 			string aLineOfText = "";
 			getline(file, aLineOfText);
 
-			if  (theLineCounter>=theNumOfTiles_Height)
+			if(theLineCounter>=theNumOfTiles_Height)
 				break;
 
 			// If this line is not a comment line, then process it
@@ -114,16 +114,14 @@ bool Map::LoadFile(const string mapName)
 					}
 					theMaxNumOfColumns = theNumOfTiles_Width;
 				}
-				else
-				{
-					int theColumnCounter = 0;
+				
+				int theColumnCounter = 0;
 
-					string token;
-					istringstream iss(aLineOfText);
-					while(getline(iss, token, ',') && (theColumnCounter<theNumOfTiles_Width))
-					{
-						theScreenMap[(theNumOfTiles_Height - 1) - theLineCounter][theColumnCounter++].setTileNum( atoi(token.c_str()) );
-					}
+				string token;
+				istringstream iss(aLineOfText);
+				while(getline(iss, token, ',') && (theColumnCounter<theNumOfTiles_Width))
+				{
+					theScreenMap[(theNumOfTiles_Height - 1) - theLineCounter][theColumnCounter++].setTileNum( atoi(token.c_str()) );
 				}
 			}
 
