@@ -57,14 +57,12 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 	{
 		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
 		{
-			if((*mapManager->GetCurrentMap())[i]->getMapType() == Map::FLOORMAP)
+			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				continue;
-			}
-
-			if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x, getPosition().y - 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 25, getPosition().y - 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 25, getPosition().y - 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 25, getPosition().y - 50) == false)
-			{
-				this->setState(ES_IDLE);
+				if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x, getPosition().y - 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 25, getPosition().y - 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 25, getPosition().y - 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 25, getPosition().y - 50) == false)
+				{
+					this->setState(ES_IDLE);
+				}
 			}
 		}
 		translateObject(0, -1, 0);
@@ -75,13 +73,12 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 	{
 		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
 		{
-			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::FLOORMAP)
+			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				continue;
-			}
-			if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x, getPosition().y + 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 25, getPosition().y + 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 25, getPosition().y + 50) == false)
-			{
-				this->setState(ES_IDLE);
+				if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x, getPosition().y + 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 25, getPosition().y + 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 25, getPosition().y + 50) == false)
+				{
+					this->setState(ES_IDLE);
+				}
 			}
 		}
 		translateObject(0, 1, 0);
@@ -92,13 +89,12 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 	{
 		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
 		{
-			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::FLOORMAP)
+			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				continue;
-			}
-			if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 50, getPosition().y) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 50, getPosition().y + 25) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 50, getPosition().y - 25) == false)
-			{
-				this->setState(ES_IDLE);
+				if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 50, getPosition().y) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 50, getPosition().y + 25) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 50, getPosition().y - 25) == false)
+				{
+					this->setState(ES_IDLE);
+				}
 			}
 		}
 		translateObject(1, 0, 0);
@@ -109,13 +105,12 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 	{
 		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
 		{
-			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::FLOORMAP)
+			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				continue;
-			}
-			if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 50, getPosition().y) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 50, getPosition().y + 25) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 50, getPosition().y - 25) == false)
-			{
-				this->setState(ES_IDLE);
+				if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 50, getPosition().y) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 50, getPosition().y + 25) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 50, getPosition().y - 25) == false)
+				{
+					this->setState(ES_IDLE);
+				}
 			}
 		}
 		translateObject(-1, 0, 0);
