@@ -100,12 +100,15 @@ void Model_2D::spawnItems()
 {
 	item = new Item(Geometry::meshList[Geometry::GEO_KEY], Item::KEY, true, Vector3(300, 100, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
+	itemList.push_back(item);
 
 	item = new Item(Geometry::meshList[Geometry::GEO_HPOTION], Item::H_POTION, true, Vector3(400, 100, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
+	itemList.push_back(item);
 
 	item = new Item(Geometry::meshList[Geometry::GEO_SPOTION], Item::S_POTION, true, Vector3(500, 100, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
+	itemList.push_back(item);
 }
 
 void Model_2D::InitMaps()
@@ -190,7 +193,10 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	}
 
 	/* Test pick up item */
-	player->pickUp(item, myKeys);
+	for(int i = 0; i < itemList.size(); ++i)
+	{
+		player->pickUp(itemList[i], myKeys);
+	}
 
 	player->dropItem(item, myKeys);
 

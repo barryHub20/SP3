@@ -103,7 +103,28 @@ int Inventory::getCurrentSlot(void)
 
 bool Inventory::addItem(Item* item)
 {
-	return arrSize[currentSlot]->addItem(item);
+	bool returnVal = false;
+
+	/* loop thru all slots */
+	int counter = 0;
+	for(int i = currentSlot; counter < MAX_SLOT;++i)
+	{
+		returnVal = arrSize[i]->addItem(item);
+
+		if(returnVal)	//successfully added
+		{
+			currentSlot = i;
+			return returnVal;
+		}
+		else	//not added
+			++i;
+
+		if(i >= MAX_SLOT)	//if reach last slot, loop back to first slot
+			i = 0;
+
+		++counter;
+	}
+	return false;
 }
 
 Item* Inventory::useItem()
