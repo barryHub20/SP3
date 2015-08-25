@@ -79,7 +79,7 @@ void Controller::Init()
 	model = view->getModel();
 
 	//hide the cursor
-	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 
 	model->Init();
@@ -108,7 +108,7 @@ void Controller::Run()
 			getKeyboardUpdate();
 
 			/** model update **/
-			model->Update(m_dElapsedTime, myKeys);
+			model->Update(m_dElapsedTime, myKeys, GetMousePos());
 
 			m_dAccumulatedTime_thread1 = 0.0;
 		}
@@ -218,6 +218,17 @@ double Controller::getCameraYaw()
 double Controller::getCameraPitch()
 {
 	return camera_pitch;
+}
+
+Vector3 Controller::GetMousePos()
+{
+	Vector3 r(model->get2DViewWidth() * (mouse_current_x * (1.f / View::getConsoleWidth())), 
+		 (model->get2DViewHeight() *  ((View::getConsoleHeight() - mouse_current_y) * (1.f / View::getConsoleHeight()))),
+		0);
+
+	cout << r << endl;
+
+	return r;
 }
 
 /********************** getter setter **********************/

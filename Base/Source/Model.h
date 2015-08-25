@@ -1,6 +1,7 @@
 #ifndef MODEL_H
 #define MODEL_H
 #include "GameObject.h"
+#include "UI_Object.h"
 #include "StaticObject.h"
 #include "Enemy.h"
 #include "Ogre.h"
@@ -50,6 +51,10 @@ protected:
 /********************** View size *****************************/
 	unsigned short m_view_width;	//camera view size X
 	unsigned short m_view_height;	//camera view size Y
+
+	unsigned short m_2D_view_width;
+	unsigned short m_2D_view_height;
+
 	Vector3 worldDimension;	//max dimemsion for in-game world (eg. 1000 by 1000 by 1000 world space)
 
 	/************* Camera *****************/
@@ -68,6 +73,7 @@ protected:
 	vector<GameObject*> goList;	//render all in-game objects
 	vector<Collision*> collisionList;	//render all collision boxes (debug purpose only pls remove)
 	vector<Item*> itemList;	//all items
+	vector<UI_Object*> UI_List;	//all ui stuff
 public:
 	/*********** constructor/destructor ***************/
 	Model();
@@ -77,7 +83,7 @@ public:
 	virtual void Init();
 	void InitMesh();
 
-	virtual void Update(double dt, bool* myKeys);
+	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
 	void UpdateOpenGL(double dt, bool* myKeys);
 	void UpdateFOV(double dt, bool* myKeys);
 
@@ -91,9 +97,12 @@ public:
 	float getFPS();
 	Position getLightPos(int index);
 	vector<GameObject*>* getObject();
+	vector<UI_Object*>* getUIList();
 	Object* getObject(int index);
 	unsigned short getViewWidth();
 	unsigned short getViewHeight();
+	unsigned short get2DViewWidth();
+	unsigned short get2DViewHeight();
 	Vector3 getWorldDimension();
 
 	/************* Minimap *****************/

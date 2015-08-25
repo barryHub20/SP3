@@ -4,6 +4,12 @@
 
 class Model_2D : public Model
 {
+	/* UI */
+	UI_Object cursor;
+	UI_Object start_Game;
+	UI_Object instruction;
+	UI_Object go_back;
+
 	/* door/checkpoint */
 	TriggerObject* triggerObject;
 	TriggerObject* door;
@@ -26,13 +32,14 @@ public:
 /*********** core functions ***************/
 	//Initialize
 	virtual void Init();
+	void InitUI();
 	void InitObject();
 	void InitSprites();
 	void spawnItems();
 	void InitMaps(); //Initialize maps (RP)
 
 	//Update
-	virtual void Update(double dt, bool* myKeys);
+	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
 	void UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y);	//updating main menu
 	void UpdateGame(double dt, bool* myKeys);
 	void UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y);

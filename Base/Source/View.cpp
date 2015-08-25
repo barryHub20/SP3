@@ -20,6 +20,8 @@
 
 //openGL
 GLFWwindow* View:: m_window_view;
+unsigned short View::m_console_width = 0;
+unsigned short View::m_console_height = 0;
 
 //Define an error callback
 static void error_callback_view(int error, const char* description)
@@ -45,10 +47,10 @@ View::View() : model(NULL)
 }
 
 View::View(Model* model, unsigned short console_width, unsigned short console_height, MODE mode) : model(model) 
-	,m_console_width(console_width)
-	,m_console_height(console_height)
 	,mode(mode)
 {
+	m_console_width = console_width;
+	m_console_height = console_height;
 }
 
 View::~View()
@@ -107,6 +109,7 @@ void View::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
+
 
 	/************* openGL stuff ****************/
 	// Black background
@@ -360,27 +363,36 @@ void View::RenderHUD()
 		int playerStamina;
 		playerStamina = model->player->getStamina();
 		
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARBG], false, 50.f, 5.f, 1.f, -75.f, 50.f, 0.f, 0.f);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARCOLOR], false, 47.f * 0.01f * playerHealth, 1.5f, 1.f, -74.5f, 52.25f, 1.f, 0.f);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARMARKER], false, 1.f, 4.f, 2.f,  47.f * 0.01f * playerHealth - 75.f, 51.f, 2.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARBG], false, 50.f, 5.f, 1.f, 5.f, 114.f, 0.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARCOLOR], false, 47.f * 0.01f * playerHealth, 1.5f, 1.f, 4.5f, 116.25f, 1.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARMARKER], false, 1.f, 4.f, 2.f,  47.f * 0.01f * playerHealth + 3.75f, 115.f, 2.f, 0.f);
 		
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARCOLOR], false, 47.f * 0.01f * playerStamina, 3.f, 1.f, -74.5f, 46.25f, 1.f, 0.f);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARMARKER], false, 8.f, 8.f, 2.f, 47.f * 0.01f * playerStamina - 80.f, 45.f, 2.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARCOLOR], false, 47.f * 0.01f * playerStamina, 3.f, 1.f, 4.5f, 110.25f, 1.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARMARKER], false, 8.f, 8.f, 2.f, 47.f * 0.01f * playerStamina - 1.f, 109.f, 2.f, 0.f);
 
-		// Mouse position
-		if (model->stateManager->GetState() != model->stateManager->GAME)
-		{
-			ss.str("");
-			ss << "MousePos_X: " << Controller::mouse_current_x << " MousePos_Y: " << Controller::mouse_current_y;
-			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 30, 15, 5);
-		}
+		//fps
+		ss.str("");
+		ss << "MousePos_X: " << model->getFPS();
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 30, 15, 10);
 	}
 }
 
 void View::RenderMainMenu()
 {
-	// Render main menu
-	RenderMeshIn2D(Geometry::meshList[Geometry::GEO_JINFLOOR], false, 160, 160, 0, 0.f, 0.f);
+	//render UI
+	/* UI List */
+	for(vector<UI_Object*>::iterator it = model->getUIList()->begin(); it != model->getUIList()->end(); ++it)
+	{
+		UI_Object* o = (UI_Object*)*it;
+
+		if(o->getActive())
+		{
+			modelStack.PushMatrix();
+			modelStack.LoadMatrix( *(o->getTRS()) );
+			RenderMeshIn2D(o->getMesh(), o->getLight(), o->getScale().x, o->getScale().y, o->getScale().z, o->getPosition().x, o->getPosition().y, o->getPosition().z, 0);
+			modelStack.PopMatrix();
+		}
+	}
 
 	std::ostringstream ss;	//universal
 	ss.precision(5);
@@ -803,7 +815,7 @@ void View::RenderMesh(Mesh *mesh, bool enableLight)
 void View::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizex, float sizey, float sizez, float x, float y, float z, float angle)
 {
 	Mtx44 ortho;
-	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
+	ortho.SetToOrtho(0, model->get2DViewWidth(), 0, model->get2DViewHeight(), -10, 10);
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
@@ -836,48 +848,6 @@ void View::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizex, float sizey
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-
-	modelStack.PopMatrix();
-	viewStack.PopMatrix();
-	projectionStack.PopMatrix();
-}
-
-void View::Render2DMesh(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float x, float y)
-{
-	Mtx44 ortho;
-	ortho.SetToOrtho(0, m_console_width, 0, m_console_height, -10, 10);
-	projectionStack.PushMatrix();
-	projectionStack.LoadMatrix(ortho);
-	viewStack.PushMatrix();
-	viewStack.LoadIdentity();
-	modelStack.PushMatrix();
-	modelStack.LoadIdentity();
-	modelStack.Translate(x, y, 0);
-	modelStack.Scale(sizeX, sizeY, 1);
-
-	/*if (rotate)
-		modelStack.Rotate(rotateAngle, 0, 0, 1);*/
-
-	Mtx44 MVP, modelView, modelView_inverse_transpose;
-	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	
-	for(int i = 0; i < 2; ++i)
-	{
-		if(mesh->textureID[i] > 0)
-		{
-			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 1);
-			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, mesh->textureID[i]);
-			glUniform1i(m_parameters[U_COLOR_TEXTURE + i], i);
-		}
-		else
-			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 0);
-	}
-
-	mesh->Render();
-
-	glBindTexture(GL_TEXTURE_2D, 0);
 
 	modelStack.PopMatrix();
 	viewStack.PopMatrix();

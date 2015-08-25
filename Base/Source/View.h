@@ -22,8 +22,8 @@ private:
 
 /********************** Window screen size *****************************/
 	//dimension on computer screen
-	unsigned short m_console_width;
-	unsigned short m_console_height;
+	static unsigned short m_console_width;
+	static unsigned short m_console_height;
 
 public:
 /********************** Light *****************************/
@@ -128,13 +128,12 @@ public:
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizex=1.0f, float sizey = 1.0f, float sizez = 1.0f, float x=0.0f, float y=0.0f, float z = 0.f, float angle = 0.f);
 	void RenderMeshInLines(Mesh* mesh, const Vector3& position, const Vector3& scale);
-	void Render2DMesh(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float x, float y);
 	void Render2DTile(Mesh *mesh, bool enableLight, float size, float x, float y, int tileType);
 	void RenderTile(Mesh* mesh, bool enableLight, int tileNum);
 
 /********************** Console screen size *****************************/
-	unsigned short getConsoleHeight();
-	unsigned short getConsoleWidth();
+	static unsigned short getConsoleHeight();
+	static unsigned short getConsoleWidth();
 
 /********************** openGL *********************************/
 	static GLFWwindow* getWindow();

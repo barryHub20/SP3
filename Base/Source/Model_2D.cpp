@@ -34,6 +34,10 @@ void Model_2D::Init()
 	m_view_width = 1024.f;
 	m_view_height = 800.f;
 
+	/* Coord for UI */
+	m_2D_view_width = 160.f;
+	m_2D_view_height = 120.f;
+
 	/* World boundaries */
 	worldDimension.Set(800, 800, 100);
 
@@ -48,6 +52,9 @@ void Model_2D::Init()
 	InitSprites();
 	spawnItems();
 
+	//UI
+	InitUI();
+
 	//Init sound
 	sfx_man->sfx_init();
 }
@@ -55,11 +62,7 @@ void Model_2D::Init()
 void Model_2D::InitObject()
 {	
 	/** Set up player **/
-	//player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(1, 1, 0), Vector3(70, 50, 1), 0, 10, true);
-	//goList.push_back(player);
 	ReadFromFile("Save_Load_File.txt");
-	// Player start pos
-	
 
 	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
 	goList.push_back(E_Ogre);
@@ -67,24 +70,35 @@ void Model_2D::InitObject()
 	triggerObject = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::NOTTRIGGERED, Vector3(120, 100, 0), Vector3(50, 50, 1), 0, true, *sfx_man);
 	goList.push_back(triggerObject);
 
-	//inventory = new Inventory(Geometry::meshList[Geometry::GEO_RING], Vector3(500, 400, 0), Vector3
-
-	/*///** Set up object */
-	/*float x = 100;
-	for(int i = 0; i < 10; ++i)
-	{
-		x = i * 111 + 100;
-		obj_arr[i] = new StaticObject(Geometry::meshList[Geometry::GEO_CUBE], Vector3(x, 500, 0), 
-			Vector3(60, 60, 1), 10, 0, false, GameObject::GO_FURNITURE);
-		goList.push_back(obj_arr[i]);
-	}*/
-
 	/** init **/
 	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
 	{
 		Object *go = (Object *)*it;
 		go->Init();
 	}
+}
+
+void Model_2D::InitUI()
+{
+	Vector3 winDimension(m_2D_view_width/2, m_2D_view_height/2, 1);
+
+	/* background main menu */
+	UI_Object* obj;
+	obj = new UI_Object;
+	obj->Init(Geometry::meshList[Geometry::GEO_JINFLOOR], winDimension, Vector3(m_2D_view_width, m_2D_view_height, 1), "", UI_Object::MAIN_MENU_BACKGROUND, true);
+	UI_List.push_back(obj);
+
+	/* UI Objects */
+	Controller::mouse_current_x;
+	Vector3 mousePos(Controller::mouse_current_x, Controller::mouse_current_y, 3);
+	cursor.Init(Geometry::meshList[Geometry::GEO_BACK], mousePos, Vector3(5, 5, 1), "", UI_Object::MOUSE_CURSOR, true);
+	UI_List.push_back(&cursor);
+
+	start_Game.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y + 11, 1.1), Vector3(40, 15, 1), "Start Game", UI_Object::BUTTON, true);
+	UI_List.push_back(&start_Game);	
+
+	instruction.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y - 11, 1.1), Vector3(40, 15, 1), "Instructions", UI_Object::BUTTON, true);
+	UI_List.push_back(&instruction);
 }
 
 void Model_2D::InitSprites()
@@ -128,10 +142,10 @@ void Model_2D::InitMaps()
 	mapManager->CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
 }
 
-void Model_2D::Update(double dt, bool* myKeys)
+void Model_2D::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
 	/* parent class update */
-	Model::Update(dt, myKeys);
+	Model::Update(dt, myKeys, mousePos);
 
 	if(keyPressedTimer < delayTime)
 		keyPressedTimer += dt;
@@ -140,13 +154,13 @@ void Model_2D::Update(double dt, bool* myKeys)
 	switch (stateManager->GetState())
 	{
 	case StateManager::MAIN_MENU:
-			UpdateMainMenu(dt, myKeys, Controller::mouse_current_x, Controller::mouse_current_y);
+			UpdateMainMenu(dt, myKeys, mousePos.x,  mousePos.y);
 			break;
 	case StateManager::GAME:
 			UpdateGame(dt, myKeys);
 			break;
 	case StateManager::INSTRUCTION:
-			UpdateInstructions(dt, myKeys, Controller::mouse_current_x, Controller::mouse_current_y);
+			UpdateInstructions(dt, myKeys, mousePos.x, mousePos.y);
 			break;
 	}
 
@@ -292,26 +306,47 @@ void Model_2D::UpdateEnemy(double dt)
 
 void Model_2D::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)
 {
-	if(mouse_x < 280 && mouse_x > 60 && mouse_y < 540 && mouse_y > 520 && myKeys[KEY_LMOUSE] && keyPressedTimer >= delayTime)
+	/* Update cursor */
+	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
+
+	/* Check collide */
+	cursor.StartCollisionCheck();
+
+	if(cursor.CheckCollision(go_back) && myKeys[KEY_LMOUSE])	//go back to main menu
 	{
-		keyPressedTimer = 0.0;
+		go_back.SetActive(false);
+		start_Game.SetActive(true);
+		instruction.SetActive(true);
 		stateManager->ChangeState(stateManager->MAIN_MENU);
 	}
+
+	cursor.getCollideBound()->Reset();
 }
 
 void Model_2D::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
 {
-	if(mouse_x < 618 && mouse_x > 243 && mouse_y < 631 && mouse_y > 600 && myKeys[KEY_LMOUSE] && keyPressedTimer >= delayTime)
+	/* Update cursor */
+	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
+
+	/* Check collide */
+	cursor.StartCollisionCheck();
+
+	if(cursor.CheckCollision(start_Game) && myKeys[KEY_LMOUSE])	//pressed start game button
 	{
-		keyPressedTimer = 0.0;
+		start_Game.SetActive(false);
+		instruction.SetActive(false);
+		go_back.SetActive(true);
 		stateManager->ChangeState(stateManager->GAME);
 	}
-
-	if(mouse_x < 581 && mouse_x > 336 && mouse_y < 656 && mouse_y > 636 && myKeys[KEY_LMOUSE] && keyPressedTimer >= delayTime)
+	else if(cursor.CheckCollision(instruction) && myKeys[KEY_LMOUSE])	//pressed instructions
 	{
-		keyPressedTimer = 0.0;
+		start_Game.SetActive(false);
+		instruction.SetActive(false);
+		go_back.SetActive(true);
 		stateManager->ChangeState(stateManager->INSTRUCTION);
 	}
+
+	cursor.getCollideBound()->Reset();
 }
 
 void Model_2D::UpdateLight(double dt, bool* myKeys, Light* light)

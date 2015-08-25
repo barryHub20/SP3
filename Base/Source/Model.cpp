@@ -51,7 +51,7 @@ void Model::InitMesh()
 	Geometry::Init();
 }
 
-void Model::Update(double dt, bool* myKeys)
+void Model::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
 	/* openGL stuff */
 	UpdateOpenGL(dt, myKeys);
@@ -64,10 +64,6 @@ void Model::Update(double dt, bool* myKeys)
 	}
 
 	fps = (float)(1.f / dt);
-
-	/* Framerate checker: if drop below 57, performance issues */
-	//if(fps <= 57.f)
-	//	cout << "Framerate dropped to: " << fps << endl;
 }
 
 void Model::UpdateOpenGL(double dt, bool* myKeys)
@@ -139,10 +135,13 @@ void Model::UpdateFOV(double dt, bool* myKeys)
 /*********** getter / setters ***************/
 bool Model::getbLightEnabled(){return bLightEnabled;}
 float Model::getFOV(){return fovAngle;}
+float Model::getFPS(){return fps;}
 Camera3* Model::getCamera(){return &camera;}
 Vector3 Model::getWorldDimension(){return worldDimension;}
 unsigned short Model::getViewWidth(){return m_view_width;}
 unsigned short Model::getViewHeight(){return m_view_height;}
+unsigned short Model::get2DViewWidth(){return m_2D_view_width;}
+unsigned short Model::get2DViewHeight(){return m_2D_view_height;}
 
 Position Model::getLightPos(int index)
 {
@@ -154,6 +153,7 @@ Position Model::getLightPos(int index)
 }
 
 vector<GameObject*>* Model::getObject(){return &goList;}
+vector<UI_Object*>* Model::getUIList(){return &UI_List;}
 
 Object* Model::getObject(int index)
 {

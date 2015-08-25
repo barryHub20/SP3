@@ -50,7 +50,8 @@ public:
 	static void incrementPitchAngle(float i);
 	static void incrementYawAngle(float i);
 	static void setYawAngle(float y);
-	static  void setPitchAngle(float p);
+	static void setPitchAngle(float p);
+	Vector3 GetMousePos();
 	float getFPS();
 
 	/********************* constructor / destructor *********************/

@@ -162,14 +162,11 @@ bool Collision::BoxToBox(Collision* current, Collision* check)
 	/*********************** check collision ***********************/
 	inZoneY = inZone(currentStart.y, currentEnd.y, checkStart.y, checkEnd.y);
 	inZoneX = inZone(currentStart.x, currentEnd.x, checkStart.x, checkEnd.x);
-	inZoneZ = inZone(currentStart.z, currentEnd.z, checkStart.z, checkEnd.z);
-
-	if(inZoneY && inZoneX && inZoneZ)
+	
+	if(inZoneY && inZoneX)
 	{
 		inZoneY = inZone(previousStart.y, previousEnd.y, checkStart.y, checkEnd.y);
 		inZoneX = inZone(previousStart.x, previousEnd.x, checkStart.x, checkEnd.x);
-		inZoneZ = inZone(previousStart.z, previousEnd.z, checkStart.z, checkEnd.z);
-
 
 		///** Y dir **/
 		if(inZoneX && inZoneZ && !inZoneY)
@@ -183,13 +180,6 @@ bool Collision::BoxToBox(Collision* current, Collision* check)
 		{
 			//start/end
 			getAABBCollide(previousStart.x, previousEnd.x, checkStart.x, checkEnd.x, Movement_3d::start_X, Movement_3d::end_X, current->collideArea.collideSide);
-		}
-
-		/** Z dir **/
-		else if(inZoneY && inZoneX && !inZoneZ)
-		{
-			//start/end
-			getAABBCollide(previousStart.z, previousEnd.z, checkStart.z, checkEnd.z, Movement_3d::start_Z, Movement_3d::end_Z, current->collideArea.collideSide);
 		}
 
 
