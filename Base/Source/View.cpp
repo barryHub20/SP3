@@ -298,24 +298,31 @@ void View::Render(const float fps)
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
 
-	/*Map*/
-	if (model->stateManager->GetState() == model->stateManager->GAME)
+	switch (model->stateManager->GetState())
 	{
-		RenderTileMap();
-		//RenderRearMap();
+	case StateManager::GAME:
+	{
+		RenderGame();
+		break;
 	}
-	
+	case StateManager::MAIN_MENU:
+	{
+		RenderMainMenu();
+		break;
+	}
+	case StateManager::INSTRUCTION:
+	{
+		RenderInstruction();
+		break;
+	}
+	case StateManager::TRANSITION:
+	{
+		RenderTransition();
+		break;
+	}
+	}
 	/* light */
 	//RenderLight();
-
-	/* test object */
-	RenderObject();
-
-	/* collide box */
-	RenderCollideBox();	
-
-	/* HUD */
-	RenderHUD(Controller::mouse_current_x, Controller::mouse_current_y);
 }
 
 void View::RenderCollideBox()
@@ -329,17 +336,9 @@ void View::RenderCollideBox()
 			
 		}
 	}
-	else if (model->stateManager->GetState() == model->stateManager->MAIN_MENU)
-	{
-		// Render main menu
-	}
-	else if (model->stateManager->isTransition()) // if TRANSITION is current state
-	{
-		
-	}
 }
 
-void View::RenderHUD(double mouse_x, double mouse_y)
+void View::RenderHUD()
 {
 	//On screen text
 	if(Geometry::meshList[Geometry::GEO_AR_CHRISTY] != NULL)
@@ -347,14 +346,26 @@ void View::RenderHUD(double mouse_x, double mouse_y)
 		std::ostringstream ss;	//universal
 		
 		/* FPS */
-		ss.precision(5);
-		ss << "FPS: " << fps;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0, 1, 0), 30, 15, 730);
-		ss.str("");
+		//ss.precision(5);
+		//ss << "FPS: " << fps;
+		//RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0, 1, 0), 30, 15, 730);
+		//ss.str("");
 
-		/* Pos */
-		ss << "Pos: " << model->getCamera()->position;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 15, 760);
+		///* Pos */
+		//ss << "Pos: " << model->getCamera()->position;
+		//RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 15, 760);
+
+		int playerHealth;
+		playerHealth = model->player->getHealth();
+		int playerStamina;
+		playerStamina = model->player->getStamina();
+		
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARBG], false, 50.f, 5.f, 1.f, -75.f, 50.f, 0.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARCOLOR], false, 47.f * 0.01f * playerHealth, 1.5f, 1.f, -74.5f, 52.25f, 1.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARMARKER], false, 1.f, 4.f, 2.f,  47.f * 0.01f * playerHealth - 75.f, 51.f, 2.f, 0.f);
+		
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARCOLOR], false, 47.f * 0.01f * playerStamina, 3.f, 1.f, -74.5f, 46.25f, 1.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARMARKER], false, 8.f, 8.f, 2.f, 47.f * 0.01f * playerStamina - 80.f, 45.f, 2.f, 0.f);
 
 		// Mouse position
 		if (model->stateManager->GetState() != model->stateManager->GAME)
@@ -364,69 +375,85 @@ void View::RenderHUD(double mouse_x, double mouse_y)
 			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 30, 15, 5);
 		}
 	}
+}
 
-	if (model->stateManager->GetState() == model->stateManager->TRANSITION)
+void View::RenderMainMenu()
+{
+	// Render main menu
+	RenderMeshIn2D(Geometry::meshList[Geometry::GEO_JINFLOOR], false, 160, 160, 0, 0.f, 0.f);
+
+	std::ostringstream ss;	//universal
+	ss.precision(5);
+	ss << "BREAK-IN!";
+	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 400, 670);
+	ss.str("");
+
+	if (Controller::mouse_current_x < 618 && Controller::mouse_current_x > 243 && Controller::mouse_current_y < 631 && Controller::mouse_current_y > 600)
 	{
-		std::ostringstream ss;	//universal
-		ss.precision(5);
-		ss << "----- LOADING -----";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 240, 300);
+		ss << "Click HERE to start!";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 300, 50);
+		ss.str("");
+	}
+	else
+	{
+		ss << "Click HERE to start!";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 40, 300, 50);
 		ss.str("");
 	}
 
-	if (model->stateManager->GetState() == model->stateManager->MAIN_MENU)
+	if (Controller::mouse_current_x < 581 && Controller::mouse_current_x > 336 && Controller::mouse_current_y < 656 && Controller::mouse_current_y > 636)
 	{
-		// Render main menu
-		std::ostringstream ss;	//universal
-		ss.precision(5);
-		ss << "BREAK-IN!";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 400, 670);
-		ss.str("");
-
-		if(mouse_x < 618 && mouse_x > 243 && mouse_y < 631 && mouse_y > 600)
-		{
-			ss << "Click HERE to start!";
-			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 300, 50);
-			ss.str("");
-		}
-		else
-		{
-			ss << "Click HERE to start!";
-			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 40, 300, 50);
-			ss.str("");
-		}
-
-		if(mouse_x < 581 && mouse_x > 336 && mouse_y < 656 && mouse_y > 636)
-		{
-			ss << "( Instructions )";
-			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 400, 30);
-		}
-		else
-		{
-			ss << "( Instructions )";
-			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 30, 400, 30);
-		}
+		ss << "( Instructions )";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 400, 30);
 	}
-
-	if (model->stateManager->GetState() == model->stateManager->INSTRUCTION)
+	else
 	{
-		std::ostringstream ss;	//universal
-		ss.precision(5);
-		ss << "WASD - Movement";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 100, 600);
-		ss.str("");
-
-		if(mouse_x < 280 && mouse_x > 60 && mouse_y < 540 && mouse_y > 520)
-		{
-			ss << "<--- Back";
-			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 90, 150);
-		}
-		else
-		{
-			ss << "<--- Back";
-			RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 40, 90, 150);
-		}
+		ss << "( Instructions )";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 30, 400, 30);
 	}
+}
+
+void View::RenderInstruction()
+{
+	std::ostringstream ss;	//universal
+	ss.precision(5);
+	ss << "WASD - Movement";
+	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 100, 600);
+	ss.str("");
+
+	if (Controller::mouse_current_x < 280 && Controller::mouse_current_x > 60 && Controller::mouse_current_y < 540 && Controller::mouse_current_y > 520)
+	{
+		ss << "<--- Back";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 90, 150);
+	}
+	else
+	{
+		ss << "<--- Back";
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 40, 90, 150);
+	}
+}
+
+void View::RenderGame()
+{
+	/* tile map */
+	RenderTileMap();
+	/* test object */
+	//RenderObject();
+
+	/* collide box */
+	RenderCollideBox();
+
+	/* HUD */
+	RenderHUD();
+}
+
+void View::RenderTransition()
+{
+	std::ostringstream ss;	//universal
+	ss.precision(5);
+	ss << "----- LOADING -----";
+	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 240, 300);
+	ss.str("");
 }
 
 void View::RenderLight()
@@ -509,7 +536,7 @@ void View::RenderObject()
 
 	if (model->stateManager->GetState() == model->stateManager->MAIN_MENU || model->stateManager->GetState() == model->stateManager->INSTRUCTION || model->stateManager->GetState() == model->stateManager->TRANSITION)
 	{
-		RenderMeshIn2D(Geometry::meshList[Geometry::IMAGE_TITLE],false,160,0,0,0,0);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_JINFLOOR],false,160,0,0,0,0);
 	}
 }
 
@@ -534,6 +561,21 @@ void View::RenderTileMap()
 			z += 0.01f;
 			continue;
 		}
+	}
+
+	RenderObject();
+
+	for (int noMap = 0; noMap < model->mapManager->GetCurrentMap()->size(); noMap++) //start with first map, then move on
+	{
+		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP)
+		{
+			continue;
+		}
+
+		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
+		{
+			z += 2.f;
+		}
 		//Render tiles 
 		float tileSize = (*model->mapManager->GetCurrentMap())[noMap]->GetTileSize(); //Get current tile size
 
@@ -545,13 +587,17 @@ void View::RenderTileMap()
 
 				if (tileObject->getTileType() == TileObject::NONE)	//skip rendering floors
 					continue;
-	
+
 				modelStack.PushMatrix();
 				modelStack.Translate(tileObject->getPosition().x, tileObject->getPosition().y, z);
 				modelStack.Scale(tileObject->getScale().x, tileObject->getScale().y, 1);
 				RenderTile(tileObject->getMesh(), false, tileObject->getTileNum());
 				modelStack.PopMatrix();
 			}
+		}
+		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
+		{
+			z -= 2.f;
 		}
 		z += 0.01f;
 	}
@@ -754,7 +800,7 @@ void View::RenderMesh(Mesh *mesh, bool enableLight)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void View::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x, float y, float z, float angle)
+void View::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizex, float sizey, float sizez, float x, float y, float z, float angle)
 {
 	Mtx44 ortho;
 	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
@@ -766,7 +812,7 @@ void View::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x, flo
 	modelStack.LoadIdentity();
 	modelStack.Translate(x, y, z);
 	modelStack.Rotate(angle, 0, 0, 1);
-	modelStack.Scale(size, size, size);
+	modelStack.Scale(sizex, sizey, sizez);
 
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
@@ -806,7 +852,7 @@ void View::Render2DMesh(Mesh *mesh, bool enableLight, float sizeX, float sizeY, 
 	viewStack.LoadIdentity();
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
-	modelStack.Translate(x, y, 3);
+	modelStack.Translate(x, y, 0);
 	modelStack.Scale(sizeX, sizeY, 1);
 
 	/*if (rotate)
@@ -836,18 +882,6 @@ void View::Render2DMesh(Mesh *mesh, bool enableLight, float sizeX, float sizeY, 
 	modelStack.PopMatrix();
 	viewStack.PopMatrix();
 	projectionStack.PopMatrix();
-}
-
-void View::RenderInventory()
-{
-	//30, 15, 730);
-	float xPos = 10;//hardcode chaNGE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	for(int i = 0; i < model->player->getInventory()->MAX_SLOT; i++)
-	{
-		//Render2DMesh(Geometry::meshList[Geometry::GEO_QUAD], false, 100, 200, xPos, 5);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_QUAD], false, 20, 50, 50, 2, 0);
-		//xPos += 125
-	}
 }
 
 void View::Render2DTile(Mesh *mesh, bool enableLight, float size, float x, float y, int tileType)

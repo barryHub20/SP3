@@ -86,10 +86,23 @@ void Geometry::Init()
 	meshList[GEO_CAR_SIREN] = MeshBuilder::GenerateOBJ("car siren", "OBJ//siren.obj");
 	meshList[GEO_CAR_SIREN]->textureID[0] = LoadTGA("Image//siren.tga");
 
-	/* building */
-	meshList[GEO_DERELICT_BUILDING_01] = MeshBuilder::GenerateOBJ("derelict building 01", "OBJ//derelict_building01.obj");
-	meshList[GEO_DERELICT_BUILDING_01]->textureID[0] = LoadTGA("Image//derelict_building01.tga");
+	/* HUD */
+	meshList[GEO_HEALTHBARBG] = MeshBuilder::Generate2DMesh("healthbar background", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_HEALTHBARBG]->textureID[0] = LoadTGA("Image//HUD//healthbar-bg.tga");
 
+	meshList[GEO_HEALTHBARCOLOR] = MeshBuilder::Generate2DMesh("healthbar color", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_HEALTHBARCOLOR]->textureID[0] = LoadTGA("Image//HUD//healthbar-color.tga");
+
+	meshList[GEO_HEALTHBARMARKER] = MeshBuilder::Generate2DMesh("healthbar marker", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_HEALTHBARMARKER]->textureID[0] = LoadTGA("Image//HUD//healthbar-marker.tga");
+
+	meshList[GEO_STAMINABARCOLOR] = MeshBuilder::Generate2DMesh("staminabar color", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_STAMINABARCOLOR]->textureID[0] = LoadTGA("Image//HUD//staminabar-color.tga");
+
+	meshList[GEO_STAMINABARMARKER] = MeshBuilder::Generate2DMesh("staminabar marker", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_STAMINABARMARKER]->textureID[0] = LoadTGA("Image//HUD//staminabar-marker.tga");
+
+	/* Tile */
 	meshList[GEO_TILEMAP] = MeshBuilder::GenerateTileMap("Tile Map", Color(1, 1, 1), 1.f, 1.f, 8, 8);	//set the width/heignt as 1 (can scale later)
 	meshList[GEO_TILEMAP]->textureID[0] = LoadTGA("Image//tile2_ground.tga");
 	
@@ -104,10 +117,6 @@ void Geometry::Init()
 
 	meshList[GEO_JINFLOOR] = MeshBuilder::GenerateQuad("Jin", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_JINFLOOR]->textureID[0] = LoadTGA("Image//Map//jin.tga");
-
-	/* Title Screen Image */
-	meshList[IMAGE_TITLE] = MeshBuilder::GenerateQuad("IMG_TITLE", Color(1, 1, 1), 1.f);
-	meshList[IMAGE_TITLE]->textureID[0] = LoadTGA("Image//Brisbane_City_Night.tga");
 
 	/* animation */
 	meshList[GEO_GUARD] = MeshBuilder::GenerateSpriteAnimation("guard", 21, 13, 1.f);

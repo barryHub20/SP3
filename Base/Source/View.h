@@ -113,7 +113,11 @@ public:
 	void RenderObject();
 	void RenderCollideBox();
 	void RenderInventory();
-	void RenderHUD(double mouse_x, double mouse_y);
+	void RenderHUD();
+	void RenderMainMenu();
+	void RenderInstruction();
+	void RenderGame();
+	void RenderTransition();
 
 	/* If theres TileMap */
 	void RenderTileMap();
@@ -122,7 +126,7 @@ public:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMesh(Mesh *mesh, bool enableLight);
-	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float size=1.0f, float x=0.0f, float y=0.0f, float z = 0.f, float angle = 0.f);
+	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizex=1.0f, float sizey = 1.0f, float sizez = 1.0f, float x=0.0f, float y=0.0f, float z = 0.f, float angle = 0.f);
 	void RenderMeshInLines(Mesh* mesh, const Vector3& position, const Vector3& scale);
 	void Render2DMesh(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float x, float y);
 	void Render2DTile(Mesh *mesh, bool enableLight, float size, float x, float y, int tileType);

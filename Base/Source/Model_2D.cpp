@@ -216,9 +216,11 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	if(myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
 	{
 		keyPressedTimer = 0.0;
-		stateManager->ChangeState(stateManager->MAIN_MENU);
+		//stateManager->ChangeState(stateManager->MAIN_MENU);
+		player->setHealth(player->getHealth() - 10);
 	}
-
+	player->setHealth(player->getHealth() - dt);
+	player->setStamina(player->getStamina() - dt);
 	/* Load/change map */
 	//Key B to move to next map (RP)
 	static bool ButtonBState = false;
