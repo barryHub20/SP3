@@ -19,6 +19,8 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	stamina = 100;
 	damage = 10;
 
+	cout << health << endl;
+
 	/* set object */
 	Set("sdfdf", mesh, NULL, false, false);
 	translateObject(Pos.x, Pos.y, Pos.z);
@@ -159,7 +161,7 @@ void Player::Update(double dt, bool* myKey)
 		}
 		sf_walk = true;
 	}
-
+	
 	if(!myKey[KEY_W] && !myKey[KEY_S] && vel.y != 0)
 	{
 		if(UpOrDown == false && checkUD == false)
@@ -402,6 +404,18 @@ bool Player::dropItem(Item* item, bool* myKey)
 		}
 	}
 	return false;
+}
+
+bool Player::useItem(Item* item, bool* myKey)
+{
+	if(item->H_POTION && health < 100)
+	{
+		setHealth(getHealth() + 10);
+		if(getHealth() >= 100)
+		{
+			health = 100;
+		}
+	}
 }
 
 Inventory* Player::getInventory()
