@@ -806,7 +806,7 @@ void View::Render2DMesh(Mesh *mesh, bool enableLight, float sizeX, float sizeY, 
 	viewStack.LoadIdentity();
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
-	modelStack.Translate(x, y, 0);
+	modelStack.Translate(x, y, 3);
 	modelStack.Scale(sizeX, sizeY, 1);
 
 	/*if (rotate)
@@ -836,6 +836,18 @@ void View::Render2DMesh(Mesh *mesh, bool enableLight, float sizeX, float sizeY, 
 	modelStack.PopMatrix();
 	viewStack.PopMatrix();
 	projectionStack.PopMatrix();
+}
+
+void View::RenderInventory()
+{
+	//30, 15, 730);
+	float xPos = 10;//hardcode chaNGE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	for(int i = 0; i < model->player->getInventory()->MAX_SLOT; i++)
+	{
+		//Render2DMesh(Geometry::meshList[Geometry::GEO_QUAD], false, 100, 200, xPos, 5);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_QUAD], false, 20, 50, 50, 2, 0);
+		//xPos += 125
+	}
 }
 
 void View::Render2DTile(Mesh *mesh, bool enableLight, float size, float x, float y, int tileType)

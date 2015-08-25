@@ -2,21 +2,43 @@
 #define INVENTORY_H
 
 #include "Item.h"
+#include "MeshList.h"
 
-class Inventory : public Item
+class InventorySlot
 {
+public:
+	const static int MAX_SIZE = 5;
+
+	InventorySlot();
+	~InventorySlot();
+
+	bool addItem(Item*);
+	Item* deleteItem();
+	Item* getHighest();
+
+	int getCurrentSize();
+
 private:
-	const static int MAX_SIZE = 6;
-	static Item arrSize[MAX_SIZE];
+	Item* SlotSize[MAX_SIZE];
 	int currentSize;
-	 
+	Item::ITEM_TYPE currentType;
+};
+
+class Inventory
+{
 public:
 	Inventory(void);
 	~Inventory(void);
 
-	void addItem(Item& item);
-	bool deleteItem(int index);
+	const static int MAX_SLOT = 5;
+	bool addItem(Item* item);
+	Item* useItem();
+	Item* removeItem();
 
-	int getCurrentSize(void);
+	int getCurrentSlot(void);
+private:
+	InventorySlot* arrSize[MAX_SLOT];
+	int currentSlot;
 };
+
 #endif

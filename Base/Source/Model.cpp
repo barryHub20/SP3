@@ -66,8 +66,8 @@ void Model::Update(double dt, bool* myKeys)
 	fps = (float)(1.f / dt);
 
 	/* Framerate checker: if drop below 57, performance issues */
-	if(fps <= 57.f)
-		cout << "Framerate dropped to: " << fps << endl;
+	//if(fps <= 57.f)
+	//	cout << "Framerate dropped to: " << fps << endl;
 }
 
 void Model::UpdateOpenGL(double dt, bool* myKeys)

@@ -112,6 +112,19 @@ void Geometry::Init()
 	/* animation */
 	meshList[GEO_GUARD] = MeshBuilder::GenerateSpriteAnimation("guard", 21, 13, 1.f);
 	meshList[GEO_GUARD]->textureID[0] = LoadTGA("Image//Sprites//guard.tga");
+
+	/* Dungeon Stuffs */
+	meshList[GEO_KEY] = MeshBuilder::GenerateQuad("Key", Color(1, 1, 1), 1.f);
+	meshList[GEO_KEY]->textureID[0] = LoadTGA("Image//key.tga");
+
+	meshList[GEO_HPOTION] = MeshBuilder::GenerateQuad("Health Potion", Color(1, 1, 1), 1.f);
+	meshList[GEO_HPOTION]->textureID[0] = LoadTGA("Image//hPotion.tga");
+
+	meshList[GEO_SPOTION] = MeshBuilder::GenerateQuad("Stamina Potion", Color(1, 1, 1), 1.f);
+	meshList[GEO_SPOTION]->textureID[0] = LoadTGA("Image//sPotion.tga");
+
+	meshList[GEO_ATKPOTION] = MeshBuilder::GenerateQuad("Attack Potion", Color(1, 1, 1), 1.f);
+	meshList[GEO_ATKPOTION]->textureID[0] = LoadTGA("Image//atkPotion.tga");
 }
 
 void Geometry::Exit()

@@ -25,6 +25,7 @@ enum KEYS
 	KEY_L,
 	KEY_I,
 	KEY_O,
+	KEY_E,
 	KEY_SPACE,
 	KEY_1,
 	KEY_2,

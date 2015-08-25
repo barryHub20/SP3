@@ -44,13 +44,10 @@ void Model_2D::Init()
 	//object
 	InitObject();
 	InitSprites();
+	spawnItems();
 
 	//Init sound
 	sfx_man->sfx_init();
-
-	//For inventory
-	inventory = new Inventory;
-	inventory->addItem(item);
 }
 
 void Model_2D::InitObject()
@@ -63,9 +60,9 @@ void Model_2D::InitObject()
 	
 
 	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
-
-
 	goList.push_back(E_Ogre);
+
+	//inventory = new Inventory(Geometry::meshList[Geometry::GEO_RING], Vector3(500, 400, 0), Vector3
 
 	/*///** Set up object */
 	/*float x = 100;
@@ -97,6 +94,12 @@ void Model_2D::InitSprites()
 	player->processSpriteAnimation(Player::ATTACKDOWN, 0.5f, 0, 6, 7, 6, 1);
 	player->processSpriteAnimation(Player::ATTACKLEFT, 0.5f, 0, 5, 7, 5, 1);
 	player->processSpriteAnimation(Player::ATTACKRIGHT, 0.5f, 0, 7, 7, 7, 1);
+}
+
+void Model_2D::spawnItems()
+{
+	item = new Item(Geometry::meshList[Geometry::GEO_KEY], Item::KEY, true, Vector3(300, 100, 0), Vector3(35, 35, 1));
+	goList.push_back(item);
 }
 
 void Model_2D::InitMaps()
@@ -137,11 +140,6 @@ void Model_2D::Update(double dt, bool* myKeys)
 	if (stateManager->isTransition())
 	{
 		stateManager->UpdateTransitionTime(dt);
-	}
-
-	if(myKeys[KEY_D])
-	{
-		inventory->deleteItem(1);
 	}
 }
 
@@ -185,12 +183,17 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		(*mapManager->GetCurrentMap())[i]->CheckCollisionWith(player);
 	}
 
+	/* Test pick up item */
+	player->pickUp(item, myKeys);
+
+	player->dropItem(item, myKeys);
+
 	/* reset */
 	player->getCollideBound()->Reset();
 
+
 	/* Collision response */
 	player->CollisionResponse();	//translate to new pos if collides
-
 
 	/* Update target */
 	camera.target = camera.position;

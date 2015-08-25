@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "GameObject.h"
+#include "Inventory.h"
 
 class Player : public GameObject
 {
@@ -36,6 +37,9 @@ private:
 	// Sound
 	SoundManager *my_sfx_man;
 
+	//Inventory
+	Inventory inventory;
+
 public:
 	Player();
 	Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano);
@@ -63,8 +67,15 @@ public:
 	void setDamage(double damage);
 	double getDamage(void);
 
+	Inventory* getInventory();
+
 	void setState(STATES state);
 	Player::STATES getState();
+
+	//add item
+	bool pickUp(Item* item, bool* myKey);
+	//drop item
+	bool dropItem(Item* item, bool* myKey);
 
 	virtual void CollisionResponse();	//player specific collision response
 };

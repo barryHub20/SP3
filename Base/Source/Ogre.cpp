@@ -134,6 +134,13 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 			this->setState(ES_WALK_UP);
 			info.setTimer(Timer);
 			break;
+			//cout<<"Scanning"<<endl;
+			//cout<<this->CollisionCheck(Player);
+			//if(info.getTimer() < 0 && this->CollisionCheck(Player) == true)
+			//{
+			//
+			//}
+			//break;
 		}
 		case 2:
 		{

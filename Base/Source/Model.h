@@ -118,6 +118,9 @@ public:
 	GAME_STATE game_state;
 	StateManager *stateManager;
 
+	//player
+	Player* player;
+
 	// ================== Audio =================
 
 	SoundManager *sfx_man;

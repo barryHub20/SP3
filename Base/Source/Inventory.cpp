@@ -1,10 +1,94 @@
 #include "Inventory.h"
 
-Item Inventory::arrSize[MAX_SIZE];
+InventorySlot::InventorySlot(void)
+{
+	currentSize = 0;
+	currentType = Item::UNDEFINED;
+
+	for(int i = 0; i < MAX_SIZE; ++i)
+	{
+		SlotSize[i] = NULL;
+	}
+}
+
+InventorySlot::~InventorySlot(void)
+{
+
+}
+
+
+bool InventorySlot::addItem(Item* addItem)
+{
+	//If empty, item type will be undefined
+
+	if(currentSize == 0)
+	{
+		currentType = addItem->getItemID();
+	}
+
+	else if(currentSize > 0 && currentSize < MAX_SIZE)
+	{
+		if(currentType != addItem->getItemID())
+		{
+			return false;
+		}
+	}
+
+	else if(currentSize >= MAX_SIZE)
+	{
+		return false;
+	}
+
+	SlotSize[currentSize] = addItem;
+	addItem->itemLooted();
+	addItem->setActive(false);
+	currentSize++;
+
+	return true;
+}
+
+Item* InventorySlot::deleteItem()
+{
+	if(currentSize == 0)
+	{
+		return NULL;
+	}
+	else
+	{
+		Item* ptr = SlotSize[currentSize];
+		ptr->setActive(true);
+		SlotSize[currentSize]->setItemFloor(true);
+		SlotSize[currentSize] = NULL;
+		currentSize--;
+		return ptr;
+	}
+}
+
+Item* InventorySlot::getHighest()
+{
+	if(currentSize == 0)
+	{
+		return NULL;
+	}
+	else
+	{
+		return SlotSize[currentSize];
+	}
+}
+
+int InventorySlot::getCurrentSize()
+{
+	return currentSize;
+}
 
 Inventory::Inventory(void)
 {
-	currentSize = 0;
+	currentSlot = 0;
+
+	for(int i = 0; i < MAX_SLOT; ++i)
+	{
+		arrSize[i] = new InventorySlot;
+	}
 }
 
 Inventory::~Inventory(void)
@@ -12,51 +96,30 @@ Inventory::~Inventory(void)
 
 }
 
-int Inventory::getCurrentSize(void)
+int Inventory::getCurrentSlot(void)
 {
-	return currentSize;
+	return currentSlot;
 }
 
-void Inventory::addItem(Item& item)
+bool Inventory::addItem(Item* item)
 {
-	arrSize[currentSize] = item; //store the address of items
-	currentSize++;
+	return arrSize[currentSlot]->addItem(item);
 }
 
-bool Inventory::deleteItem(int index)
+Item* Inventory::useItem()
 {
-	Item* tempArrSize = new Item[currentSize];
+	return arrSize[currentSlot]->getHighest();
+}
 
-	for(int i = 0; i < currentSize; i++)
+Item* Inventory::removeItem()
+{
+	if(arrSize[currentSlot]->getCurrentSize() == 0)
 	{
-		tempArrSize[i] = arrSize[i];
+		return NULL;
 	}
 
-	int find = 0;
-
-	for(int i = 0; i < currentSize; i++)
+	else
 	{
-		if(arrSize[i].getItemID() == index)
-		{
-			find = i;
-			std::cout << std::endl;
-			std::cout << "This item will be deleted." << std::endl << std::endl;
-		}
+		return arrSize[currentSlot]->deleteItem();
 	}
-
-	for(int i = find; i < currentSize; i++)
-	{
-		//Replace
-		arrSize[i] = tempArrSize[i + 1];
-	}
-
-	currentSize--;
-
-	if(currentSize < 0)
-	{
-		currentSize = 0;
-	}
-
-	delete []tempArrSize;
-	return true;
 }

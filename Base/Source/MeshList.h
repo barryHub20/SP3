@@ -66,6 +66,12 @@ public:
 		GEO_JINFLOOR,
 		IMAGE_TITLE,
 
+		//Dungeon items
+		GEO_KEY,
+		GEO_HPOTION,
+		GEO_SPOTION,
+		GEO_ATKPOTION,
+
 		NUM_GEOMETRY,
 	};
 

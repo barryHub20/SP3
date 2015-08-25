@@ -5,10 +5,8 @@
 class Model_2D : public Model
 {
 	/* player */
-	Player* player;
 	Ogre* E_Ogre;
-	Inventory* inventory;
-	Item item;
+	Item* item;
 	/* array of static objects (non-moving) */
 	StaticObject* obj_arr[10];
 
@@ -25,6 +23,7 @@ public:
 	virtual void Init();
 	void InitObject();
 	void InitSprites();
+	void spawnItems();
 	void InitMaps(); //Initialize maps (RP)
 
 	//Update

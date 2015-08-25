@@ -49,7 +49,6 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	UpOrDown = false;
 	checkLR = false;
 	checkUD = false;
-
 }
 
 Player::~Player()
@@ -367,4 +366,45 @@ void Player::setState(STATES state)
 Player::STATES Player::getState()
 {
 	return state;
+}
+
+bool Player::pickUp(Item* item, bool* myKey)
+{
+	if(myKey[KEY_E])
+	{
+		if(Collision::CheckCollision(collideBound, *item->getCollideBound()))	//if player collide with item
+		{
+			if(inventory.addItem(item))
+			{
+				cout << "SUCCESSFUL" << endl;
+			}
+			else
+			{
+				cout << "NO SUCCESSFUL" << endl;
+			}
+		}
+	}
+	return false;
+}
+
+bool Player::dropItem(Item* item, bool* myKey)
+{
+	if(myKey[KEY_O])
+	{
+		if(inventory.removeItem())
+		{
+			cout << "DROP SUCCESSFUL" << endl;
+		}
+
+		else
+		{
+			cout << "NONONONONO" << endl;
+		}
+	}
+	return false;
+}
+
+Inventory* Player::getInventory()
+{
+	return &inventory;
 }

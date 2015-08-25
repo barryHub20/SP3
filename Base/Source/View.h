@@ -112,6 +112,7 @@ public:
 	void RenderLight();
 	void RenderObject();
 	void RenderCollideBox();
+	void RenderInventory();
 	void RenderHUD(double mouse_x, double mouse_y);
 
 	/* If theres TileMap */

@@ -2,21 +2,44 @@
 #define ITEM_H
 
 #include <iostream>
+#include <string>
 
-class Item
+#include "GameObject.h"
+#include "Mesh.h"
+
+using namespace std;
+
+class Item : public GameObject
 {
-private:
-	static const int MAX_SIZE = 32;
-	int itemID;
-
 public:
+
+	enum ITEM_TYPE
+	{
+		UNDEFINED = 0,
+		KEY,
+		NOTE,
+		H_POTION,
+		S_POTION,
+		ATK_POTION,
+		TOTAL_TYPE,
+	};
+
 	Item(void);
-	Item(int itemID);
+	Item(Mesh* mesh, ITEM_TYPE itemID, bool onFloor, Vector3 Pos, Vector3 scale);
 	Item(const Item& item);
 	~Item(void);
 
-	void setItemID(int newItemID);
-	int getItemID(void);
+	void setItemID(ITEM_TYPE newItemID);
+	ITEM_TYPE getItemID(void);
+
+	void setItemFloor(bool onFloor);
+	bool getItemFloor(void);
+
+	void itemLooted(void);
+
+private:
+	ITEM_TYPE itemID;
+	bool onFloor;
 };
 
 #endif
