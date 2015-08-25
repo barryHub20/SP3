@@ -110,13 +110,14 @@ bool Inventory::addItem(Item* item)
 
 	/* loop thru all slots */
 	int counter = 0;
-	for(int i = currentSlot; counter < MAX_SLOT;++i)
+	for(int i = currentSlot; counter < MAX_SLOT;)
 	{
 		returnVal = arrSize[i]->addItem(item);
 
 		if(returnVal)	//succsessfully added
 		{
 			currentSlot = i;
+			cout << arrSize[i]->getCurrentSize() << ' ' << currentSlot << endl;
 			return returnVal;
 		}
 		else	//not added
