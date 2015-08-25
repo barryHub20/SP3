@@ -416,6 +416,7 @@ bool Player::useItem(Item* item, bool* myKey)
 			health = 100;
 		}
 	}
+	return false;
 }
 
 Inventory* Player::getInventory()
