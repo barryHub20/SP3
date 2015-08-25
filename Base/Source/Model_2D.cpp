@@ -100,6 +100,12 @@ void Model_2D::spawnItems()
 {
 	item = new Item(Geometry::meshList[Geometry::GEO_KEY], Item::KEY, true, Vector3(300, 100, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
+
+	item = new Item(Geometry::meshList[Geometry::GEO_HPOTION], Item::H_POTION, true, Vector3(400, 100, 0), Vector3(35, 35, 1));
+	goList.push_back(item);
+
+	item = new Item(Geometry::meshList[Geometry::GEO_SPOTION], Item::S_POTION, true, Vector3(500, 100, 0), Vector3(35, 35, 1));
+	goList.push_back(item);
 }
 
 void Model_2D::InitMaps()
