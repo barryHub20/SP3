@@ -103,6 +103,9 @@ int Inventory::getCurrentSlot(void)
 
 bool Inventory::addItem(Item* item)
 {
+	if(!item->getActive())
+		return false;
+
 	bool returnVal = false;
 
 	/* loop thru all slots */

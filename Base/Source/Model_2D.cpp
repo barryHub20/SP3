@@ -102,11 +102,11 @@ void Model_2D::spawnItems()
 	goList.push_back(item);
 	itemList.push_back(item);
 
-	item = new Item(Geometry::meshList[Geometry::GEO_HPOTION], Item::H_POTION, true, Vector3(400, 100, 0), Vector3(35, 35, 1));
+	item = new Item(Geometry::meshList[Geometry::GEO_HPOTION], Item::H_POTION, true, Vector3(500, 100, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
 	itemList.push_back(item);
 
-	item = new Item(Geometry::meshList[Geometry::GEO_SPOTION], Item::S_POTION, true, Vector3(500, 100, 0), Vector3(35, 35, 1));
+	item = new Item(Geometry::meshList[Geometry::GEO_SPOTION], Item::S_POTION, true, Vector3(600, 100, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
 	itemList.push_back(item);
 }
@@ -194,20 +194,19 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		}
 	}
 
-	/* Test pick up items */
-	for(int i = 0; i < itemList.size(); ++i)
-	{
-		player->pickUp(itemList[i], myKeys);
-	}
-
 	player->dropItem(item, myKeys);
 
 	/* reset */
 	player->getCollideBound()->Reset();
 
-
 	/* Collision response */
 	player->CollisionResponse();	//translate to new pos if collides
+
+	/* Test pick up items */
+	for(int i = 0; i < itemList.size(); ++i)
+	{
+		player->pickUp(itemList[i], myKeys);
+	}
 
 	/* Update target */
 	camera.target = camera.position;
