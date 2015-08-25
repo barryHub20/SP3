@@ -136,7 +136,7 @@ bool Map::getWalkable(int x, int y)
 
 	if (mapType == Map::FLOORMAP)
 		return false;
-	if(theScreenMap[y/GetTileSize()][x/GetTileSize()].getTileType() == ( TileObject::NONE || TileObject::NONCOLLIDABLE))
+	if(theScreenMap[y/GetTileSize()][x/GetTileSize()].getTileType() == TileObject::NONE || theScreenMap[y/GetTileSize()][x/GetTileSize()].getTileType() == TileObject::NONCOLLIDABLE)
 	{
 		return true;
 	}

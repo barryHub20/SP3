@@ -23,17 +23,43 @@ Ogre::Ogre(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, boo
 	/* set boundbox */
 	collideBound.Set(Pos, scale, Collision::BOX);
 
+	/* set detection box */
+	DetectionBound.Set(Pos, scale * 5, Collision::BOX);
+
+	
+
 	/* Enemy Variables */
-	this->setState(ES_ALERT);
+	this->setState(ES_IDLE);
 	this->setType(GO_ENEMY);
 	info.setTimer(5);
 	this->setName("Ogre");
 	this->setHealth(100);
+	detectedPlayer = false;
+	collided = false;
 	this->setDestinationReached(false);
 	this->setDestination(Vector2(400, 400));
 }
 
-void Ogre::Update(float dt, MapManager *mapManager, vector<GameObject*> goList)
+void Ogre::StartCollisionCheck()
+{
+	GameObject::StartCollisionCheck();
+	DetectionBound.Start(position);
+}
+
+void Ogre::CollisionResponse()
+{
+	collideBound.Reset();
+	DetectionBound.Reset();
+
+	//response
+	if(detectedPlayer == true && getState() != ES_ALERT && getState() != ES_SCAN)
+	{
+		setState(ES_ALERT);
+		info.setTimer(2);
+	}
+}
+
+void Ogre::Update(float dt, MapManager *mapManager, vector<GameObject*>& goList)
 {
 
 
@@ -47,6 +73,21 @@ void Ogre::Update(float dt, MapManager *mapManager, vector<GameObject*> goList)
 		}
 	}
 
+	StartCollisionCheck();
+
+
+	//check
+	for(int i = 0; i < goList.size();++i)
+	{
+		if(goList[i]->getType() == GameObject::GO_PLAYER)
+		{
+			detectedPlayer = Collision::CheckCollision(this->DetectionBound, *(goList[i]->getCollideBound()));
+		}
+
+	}
+
+	//reset
+	CollisionResponse();
 }
 
 void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
@@ -129,13 +170,6 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 			this->setState(ES_WALK_UP);
 			info.setTimer(Timer);
 			break;
-			//cout<<"Scanning"<<endl;
-			//cout<<this->CollisionCheck(Player);
-			//if(info.getTimer() < 0 && this->CollisionCheck(Player) == true)
-			//{
-			//
-			//}
-			//break;
 		}
 		case 2:
 		{
@@ -165,21 +199,28 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 	}
 	case ES_SCAN:
 	{
-		//cout<<"Scanning"<<endl;
-		//cout<<this->CollisionCheck(Player);
-		if (info.getTimer() < 0 && this->CollisionCheck(Player) == true)
-		{
+		cout<<"Scanning"<<endl;
 
-		}
-		break;
-	}
+			if(info.getTimer() < 0 && detectedPlayer == true)
+			{
+				cout<<"hi,i see you!"<<endl;
+				break;
+			}
+			if(info.getTimer() < 0 && detectedPlayer == false)
+			{
+				cout<<"guess im imagining tings!"<<endl;
+				setState(ES_IDLE);
+				break;	
+			}
+			break;	
+	}	
 	case ES_ALERT:
 	{
-		//cout<<"I think i saw something!"<<endl;
+		cout<<"I think i saw something!"<<endl;
 		if (info.getTimer() < 0)
 		{
 			this->setState(ES_SCAN);
-			info.setTimer(5);
+			info.setTimer(3);
 		}
 		break;
 	}

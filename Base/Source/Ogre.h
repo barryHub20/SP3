@@ -6,13 +6,16 @@ class Ogre : public Enemy
 {
 private:
 	Collision DetectionBound;
-
+	bool detectedPlayer;
 public:
 
-	void setDetecionBound();
 	Collision getDetecionBound();
-
-	void Update(float dt,MapManager *mapManager,vector<GameObject*> goList);
+	
+	virtual void StartCollisionCheck();
+	
+	void setDetecionBound();
+	void CollisionResponse();
+	void Update(float dt,MapManager *mapManager,vector<GameObject*>& goList);
 	void UpdateStateResponse(MapManager *mapManager,GameObject* Player);
 
 	Ogre(void);
