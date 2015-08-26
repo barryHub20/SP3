@@ -374,7 +374,7 @@ bool Player::pickUp(Item* item, bool* myKey)
 {
 	if(myKey[KEY_E])
 	{
-		if(Collision::CheckCollision(collideBound, *item->getCollideBound()))	//if player collide with item
+		if(QuickAABBDetection(item))	//if player collide with item
 		{
 			if(inventory.addItem(item))
 			{

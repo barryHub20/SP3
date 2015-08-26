@@ -1,5 +1,6 @@
 #include "Inventory.h"
 
+/************************* Inventory slot *************************/
 InventorySlot::InventorySlot(void)
 {
 	currentSize = 0;
@@ -39,11 +40,10 @@ bool InventorySlot::addItem(Item* addItem)
 		return false;
 	}
 
-	SlotSize[currentSize] = addItem;
+	currentSize++;
+	SlotSize[currentSize - 1] = addItem;
 	addItem->itemLooted();
 	addItem->setActive(false);
-	currentSize++;
-
 	return true;
 }
 
@@ -55,10 +55,10 @@ Item* InventorySlot::deleteItem()
 	}
 	else
 	{
-		Item* ptr = SlotSize[currentSize];
+		Item* ptr = SlotSize[currentSize - 1];
 		ptr->setActive(true);
-		SlotSize[currentSize]->setItemFloor(true);
-		SlotSize[currentSize] = NULL;
+		SlotSize[currentSize - 1]->setItemFloor(true);
+		SlotSize[currentSize - 1] = NULL;
 		currentSize--;
 		return ptr;
 	}
@@ -72,7 +72,19 @@ Item* InventorySlot::getHighest()
 	}
 	else
 	{
-		return SlotSize[currentSize];
+		return SlotSize[currentSize - 1];
+	}
+}
+
+string InventorySlot::getCurrentItemTypeName()
+{
+	if(currentSize == 0)
+	{
+		return "None";
+	}
+	else
+	{
+		return SlotSize[currentSize - 1]->getTypeName();
 	}
 }
 
@@ -81,6 +93,20 @@ int InventorySlot::getCurrentSize()
 	return currentSize;
 }
 
+Mesh* InventorySlot::getCurrentItemMesh()
+{
+	if(currentSize == 0)
+	{
+		return NULL;
+	}
+	else
+	{
+		return SlotSize[currentSize - 1]->getMesh();
+	}
+}
+
+
+/************************* Inventory *************************/
 Inventory::Inventory(void)
 {
 	currentSlot = 0;
@@ -135,6 +161,21 @@ int Inventory::getCurrentSlot(void)
 	return currentSlot;
 }
 
+int Inventory::currentSize(int slot)
+{
+	return arrSize[slot]->getCurrentSize();
+}
+
+string Inventory::currentItemName(int slot)
+{
+	return arrSize[slot]->getCurrentItemTypeName();
+}
+
+Mesh* Inventory::currentItemMesh(int slot)
+{
+	return arrSize[slot]->getCurrentItemMesh();
+}
+
 bool Inventory::addItem(Item* item)
 {
 	if(!item->getActive())
@@ -151,7 +192,7 @@ bool Inventory::addItem(Item* item)
 		if(returnVal)	//succsessfully added
 		{
 			currentSlot = i;
-			cout << arrSize[i]->getCurrentSize() << ' ' << currentSlot << endl;
+			//cout << arrSize[i]->getCurrentSize() << ' ' << currentSlot << endl;
 			return returnVal;
 		}
 		else	//not added

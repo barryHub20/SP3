@@ -17,10 +17,11 @@ public:
 	Item* getHighest();
 
 	int getCurrentSize();
-
+	string getCurrentItemTypeName();	//returns none if no item
+	Mesh* getCurrentItemMesh();	//returns NULL if empty
 private:
 	Item* SlotSize[MAX_SIZE];
-	int currentSize;
+	int currentSize;	//total objects inside
 	Item::ITEM_TYPE currentType;
 };
 
@@ -51,6 +52,9 @@ public:
 	float getStartX();
 	Vector3 getSlotScale();
 	float getDistBtwSlot();
+	int currentSize(int slot);	//get size of certain slot
+	string currentItemName(int slot);
+	Mesh* currentItemMesh(int slot);
 private:
 	InventorySlot* arrSize[MAX_SLOT];	//array of slots
 	int currentSlot;	//current slot

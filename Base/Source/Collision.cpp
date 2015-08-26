@@ -30,6 +30,7 @@ void Collision::Start(const Vector3& objectPos)
 {
 	if(type == BOX)
 	{
+		previousPos = position;
 		position = objectPos;
 
 		/* update start and end */
@@ -194,10 +195,6 @@ bool Collision::BoxToBox(Collision* current, Collision* check)
 
 void Collision::Reset()
 {
-	if(type == BOX)
-	{
-		ResetAABB();
-	}
 }
 
 

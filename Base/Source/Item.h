@@ -37,7 +37,9 @@ public:
 
 	void itemLooted(void);
 
+	string getTypeName();
 private:
+	string typeName;	//have name so in view no need use switch to check itemID to find out name
 	ITEM_TYPE itemID;
 	bool onFloor;
 };

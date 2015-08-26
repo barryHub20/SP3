@@ -67,6 +67,7 @@ public:
 	Collision* getCollideBound();
 
 	/* utilities */
+	bool QuickAABBDetection(GameObject* checkMe);	//detection only, no response
 	void Translate(Vector3 pos);
 	void TranslateOffset(Vector3 offset);
 

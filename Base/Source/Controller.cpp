@@ -225,9 +225,6 @@ Vector3 Controller::GetMousePos()
 	Vector3 r(model->get2DViewWidth() * (mouse_current_x * (1.f / View::getConsoleWidth())), 
 		 (model->get2DViewHeight() *  ((View::getConsoleHeight() - mouse_current_y) * (1.f / View::getConsoleHeight()))),
 		0);
-
-	cout << r << endl;
-
 	return r;
 }
 

@@ -3,6 +3,8 @@
 #include "MeshList.h"
 #include "LoadTGA.h"
 int GameObject::objCount = 0;
+Vector3 startCheck, endCheck;	//checked object
+Vector3 startCurrent, endCurrent;	//current object
 
 /*********************************** constructor/destructor ***********************************/
 GameObject::GameObject(void)
@@ -172,6 +174,19 @@ void GameObject::processSpriteAnimation(int state, float time, int startCol, int
 	temp->init(time, startCol, startRow, endCol, endRow, repeatCount, oppDir);
 	animationList[state] = temp;
 }
+
+bool GameObject::QuickAABBDetection(GameObject* checkMe)
+{
+	startCurrent = position - scale * 0.5f;
+	endCurrent = position + scale * 0.5f;
+
+	startCheck = checkMe->position - checkMe->scale * 0.5f;
+	endCheck = checkMe->position + checkMe->scale * 0.5f;
+
+	return Collision::inZone(startCurrent.x, endCurrent.x, startCheck.x, endCheck.x) &&
+		Collision::inZone(startCurrent.y, endCurrent.y, startCheck.y, endCheck.y);
+}
+
 void GameObject::Translate(Vector3 pos)
 {
 	translate(pos);

@@ -23,6 +23,9 @@ GLFWwindow* View:: m_window_view;
 unsigned short View::m_console_width = 0;
 unsigned short View::m_console_height = 0;
 
+/** Utilities: for public use **/
+std::ostringstream ss;	//universal
+
 //Define an error callback
 static void error_callback_view(int error, const char* description)
 {
@@ -343,9 +346,7 @@ void View::RenderHUD()
 {
 	//On screen text
 	if(Geometry::meshList[Geometry::GEO_AR_CHRISTY] != NULL)
-	{
-		std::ostringstream ss;	//universal
-		
+	{	
 		/* FPS */
 		//ss.precision(5);
 		//ss << "FPS: " << fps;
@@ -370,8 +371,8 @@ void View::RenderHUD()
 
 		//fps
 		ss.str("");
-		ss << "MousePos_X: " << model->getFPS();
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 30, 15, 10);
+		ss << "FPS: " << model->getFPS();
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 5, 15, 5);
 	}
 }
 
@@ -395,31 +396,31 @@ void View::RenderMainMenu()
 	std::ostringstream ss;	//universal
 	ss.precision(5);
 	ss << "BREAK-IN!";
-	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 400, 670);
+	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 6, 80, 67);
 	ss.str("");
 
 	if (Controller::mouse_current_x < 618 && Controller::mouse_current_x > 243 && Controller::mouse_current_y < 631 && Controller::mouse_current_y > 600)
 	{
 		ss << "Click HERE to start!";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 300, 50);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 4, 80, 5);
 		ss.str("");
 	}
 	else
 	{
 		ss << "Click HERE to start!";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 40, 300, 50);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 4, 80, 5);
 		ss.str("");
 	}
 
 	if (Controller::mouse_current_x < 581 && Controller::mouse_current_x > 336 && Controller::mouse_current_y < 656 && Controller::mouse_current_y > 636)
 	{
 		ss << "( Instructions )";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 400, 30);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 3, 80, 3);
 	}
 	else
 	{
 		ss << "( Instructions )";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 30, 400, 30);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 3, 80, 3);
 	}
 }
 
@@ -583,7 +584,7 @@ void View::RenderTileMap()
 			continue;
 		}
 
-		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
+		else if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
 		{
 			z += 2.f;
 		}
@@ -616,12 +617,38 @@ void View::RenderTileMap()
 
 void View::RenderInventory()
 {
+	int size = 0;
+	string name = "";
 	float startX = model->player->getInventory()->getStartX();
 	Vector3 scale = model->player->getInventory()->getSlotScale();
+	Mesh* mesh = NULL;
 
 	for(int i = 0; i < model->player->getInventory()->MAX_SLOT; ++i)
 	{
+		/* render slots */
 		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_CUBE], false, scale.x, scale.y, 1,startX, 9, 1, 0);
+
+		/* render current size */
+		size = model->player->getInventory()->currentSize(i);
+		ss.str("");
+		ss << size;
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 3.5f, startX, -0.5f);
+
+		/* render name */
+		name = model->player->getInventory()->currentItemName(i);
+		ss.str("");
+		ss << name;
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 3.5f, startX, 11.5f);
+
+		/* render mesh */
+		mesh = model->player->getInventory()->currentItemMesh(i);
+
+		if(mesh != NULL)
+		{
+			RenderMeshIn2D(mesh, false, scale.x * 0.65f, scale.y * 0.65f, 1, startX, 9, 2, 1);
+		}
+
+		//set pos to next slot
 		startX += model->player->getInventory()->getDistBtwSlot();
 	}
 }
@@ -728,14 +755,16 @@ void View::RenderText(Mesh* mesh, std::string text, Color color)
 
 float lengthOffset = 0;
 float zOffset = 0;
+float textLength = 0;
+float textXLength = 0;
 void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
-	if(!mesh || mesh->textureID[0] <= 0)
+	if(!mesh || mesh->textureID[0] <= 0 || text.length() == 0)
 		return;
 
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, model->getViewWidth(), 0, model->getViewHeight(), -10, 10);
+	ortho.SetToOrtho(0, model->get2DViewWidth(), 0, model->get2DViewHeight(), -10, 10);
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
@@ -751,7 +780,17 @@ void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float s
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	for(unsigned i = 0; i < text.length(); ++i)
+
+	/* get total scale.x of string */
+	textLength = text.length();
+	textXLength = 0.f;
+	for(unsigned i = 0; i < textLength; ++i)
+	{
+		textXLength += FontData[text[i]];
+	}
+
+	lengthOffset = (textXLength * -(1.f / 2.f)) + FontData[text[0]];	//make sure is start from center
+	for(unsigned i = 0; i < textLength; ++i)
 	{
 		Mtx44 characterSpacing;
 
@@ -765,6 +804,8 @@ void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float s
 	}
 
 	lengthOffset = 0.f;	//reset length
+	textXLength = 0.f;
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 	projectionStack.PopMatrix();

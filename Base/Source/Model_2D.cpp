@@ -229,8 +229,6 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 
 	player->dropItem(item, myKeys);
 
-	/* reset */
-	player->getCollideBound()->Reset();
 
 	/* Collision response */
 	player->CollisionResponse();	//translate to new pos if collides
@@ -297,9 +295,6 @@ void Model_2D::UpdateEnemy(double dt)
 
 	/* check with all other objects */
 
-	/* reset */
-	E_Ogre->getCollideBound()->Reset();
-
 	//response
 	E_Ogre->CollisionResponse();
 }
@@ -310,17 +305,13 @@ void Model_2D::UpdateInstructions(double dt, bool* myKeys, double mouse_x, doubl
 	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
 
 	/* Check collide */
-	cursor.StartCollisionCheck();
-
-	if(cursor.CheckCollision(go_back) && myKeys[KEY_LMOUSE])	//go back to main menu
+	if(cursor.QuickAABBDetection(&go_back) && myKeys[KEY_LMOUSE])	//go back to main menu
 	{
 		go_back.SetActive(false);
 		start_Game.SetActive(true);
 		instruction.SetActive(true);
 		stateManager->ChangeState(stateManager->MAIN_MENU);
 	}
-
-	cursor.getCollideBound()->Reset();
 }
 
 void Model_2D::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
@@ -329,9 +320,7 @@ void Model_2D::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mo
 	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
 
 	/* Check collide */
-	cursor.StartCollisionCheck();
-
-	if(cursor.CheckCollision(start_Game) && myKeys[KEY_LMOUSE])	//pressed start game button
+	if(cursor.QuickAABBDetection(&start_Game) && myKeys[KEY_LMOUSE])	//pressed start game button
 	{
 		start_Game.SetActive(false);
 		instruction.SetActive(false);
@@ -345,8 +334,6 @@ void Model_2D::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mo
 		go_back.SetActive(true);
 		stateManager->ChangeState(stateManager->INSTRUCTION);
 	}
-
-	cursor.getCollideBound()->Reset();
 }
 
 void Model_2D::UpdateLight(double dt, bool* myKeys, Light* light)
