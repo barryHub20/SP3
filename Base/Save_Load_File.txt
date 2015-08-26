@@ -1,9 +1,14 @@
 //Player Info
-PLAYER: pos(500, 300, 0)  scale(30, 30, 1)
+PLAYER: pos(140, 100, 0)  scale(60, 60, 1)
 //Enemy Info
 ENEMY: pos(50, 50, 0)  scale(50, 50, 1)  
 ENEMY: pos(50, 50, 0)  scale(50, 50, 1) 
 ENEMY: pos(50, 50, 0)  scale(50, 50, 1) 
 //Furniture Info
-DOOR: pos(820, 660, 0)  scale(50, 110, 1)
+DOOR: pos(785, 690, 0)  scale(40, 95, 1)
 STAIRCASE: pos(890, 660, 0) scale(50, 50, 1)
+//Item Info
+HPOTION: pos(80, 350, 0) scale(35, 35, 1)
+HPOTION: pos(200, 350, 0) scale(35, 35, 1)
+SPOTION: pos(80, 250, 0) scale(35, 35, 1)
+SPOTION: pos(200, 250, 0) scale(35, 35, 1)

@@ -78,13 +78,21 @@ void Model_2D::InitObject()
 
 void Model_2D::InitTrigger()
 {
-	triggerObject = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::NOTTRIGGERED, Vector3(120, 100, 0), Vector3(50, 50, 1), 0, true, *sfx_man);
-	goList.push_back(triggerObject);
+	triggerObject[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::NOTTRIGGERED, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
+	goList.push_back(triggerObject[0]);
 
-	triggerObject = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(150, 100, 0), Vector3(30, 100, 1), 0, true, *sfx_man);
-	triggerObject->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
-	triggerObject->processSpriteAnimation(TriggerObject::FIRE, 1.f, 1, 0, 6, 0, 1, false);
-	goList.push_back(triggerObject);
+	triggerObject[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_ISTRIGGER], TriggerObject::ISTRIGGERED, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
+	goList.push_back(triggerObject[1]);
+
+	triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(550, 688, 0), Vector3(30, 158, 1), 0, true, *sfx_man, player);
+	triggerObject[2]->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
+	triggerObject[2]->processSpriteAnimation(TriggerObject::FIRE, 1.f, 1, 0, 6, 0, 1, false);
+	goList.push_back(triggerObject[2]);
+
+	triggerObject[3] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(680, 688, 0), Vector3(30, 158, 1), 0, true, *sfx_man, player);
+	triggerObject[3]->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
+	triggerObject[3]->processSpriteAnimation(TriggerObject::FIRE, 1.f, 1, 0, 6, 0, 1, false);
+	goList.push_back(triggerObject[3]);
 }
 
 void Model_2D::InitUI()
@@ -126,15 +134,7 @@ void Model_2D::InitSprites()
 
 void Model_2D::spawnItems()
 {
-	item = new Item(Geometry::meshList[Geometry::GEO_KEY], Item::KEY, true, Vector3(300, 100, 0), Vector3(35, 35, 1));
-	goList.push_back(item);
-	itemList.push_back(item);
-
-	item = new Item(Geometry::meshList[Geometry::GEO_HPOTION], Item::H_POTION, true, Vector3(500, 100, 0), Vector3(35, 35, 1));
-	goList.push_back(item);
-	itemList.push_back(item);
-
-	item = new Item(Geometry::meshList[Geometry::GEO_SPOTION], Item::S_POTION, true, Vector3(600, 100, 0), Vector3(35, 35, 1));
+	item = new Item(Geometry::meshList[Geometry::GEO_KEY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
 	itemList.push_back(item);
 }
@@ -190,7 +190,6 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 
 	/* Update player */
 	player->Update(dt, myKeys);
-	triggerObject->Update(dt, myKeys);
 
 	if(myKeys[KEY_K])
 	{
@@ -223,8 +222,13 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		}
 	}
 
-	/* check with trigger objects */
-	//player->CollisionCheck(triggerObject);
+
+	/* check with trigger objects fire */
+	for(int i = 0; i < 4; i++)
+	{
+		triggerObject[i]->Update(dt, myKeys);
+		player->QuickAABBDetection(triggerObject[i]);
+	}
 
 	if(door->getActive())
 	{
@@ -267,6 +271,22 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 
 	player->useItem(myKeys);
 
+	if(triggerObject[0]->getTriggered() == true)
+	{
+		triggerObject[0]->setActive(false);
+		triggerObject[1]->setActive(true);
+		triggerObject[2]->setActive(false);
+		triggerObject[3]->setActive(false);
+	}
+
+	else
+	{
+		triggerObject[0]->setActive(true);
+		triggerObject[1]->setActive(false);
+		triggerObject[2]->setActive(true);
+		triggerObject[3]->setActive(true);
+	}
+
 	/* Update target */
 	camera.target = camera.position;
 	camera.target.z -= 10;
@@ -276,10 +296,10 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	{
 		keyPressedTimer = 0.0;
 		//stateManager->ChangeState(stateManager->MAIN_MENU);
-		player->setHealth(player->getHealth() - 10);
+		player->setHealth(player->getHealth() - 1);
 	}
-	player->setHealth(player->getHealth() - dt);
-	player->setStamina(player->getStamina() - dt);
+	//player->setHealth(player->getHealth() - dt);
+	//player->setStamina(player->getStamina() - dt);
 	/* Load/change map */
 	//Key B to move to next map (RP)
 	static bool ButtonBState = false;
@@ -574,15 +594,26 @@ bool Model_2D::ReadFromFile(char* text)
 
 		if(object_word == "DOOR")
 		{
-			door = new TriggerObject(Geometry::meshList[Geometry::GEO_DOOR], TriggerObject::DOOR, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man);
+			door = new TriggerObject(Geometry::meshList[Geometry::GEO_DOOR], TriggerObject::DOOR, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
 			goList.push_back(door);
 		}
 		if (object_word == "STAIRCASE")
 		{
-			staircase = new TriggerObject(Geometry::meshList[Geometry::GEO_STAIRCASE], TriggerObject::TRIGGERWHENCOLLIDE, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man);
+			staircase = new TriggerObject(Geometry::meshList[Geometry::GEO_STAIRCASE], TriggerObject::TRIGGERWHENCOLLIDE, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
 			goList.push_back(staircase);
 		}
-
+		if(object_word == "HPOTION")
+		{
+			item = new Item(Geometry::meshList[Geometry::GEO_HPOTION], Item::H_POTION, true, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1));
+			goList.push_back(item);
+			itemList.push_back(item);
+		}
+		if(object_word == "SPOTION")
+		{
+			item = new Item(Geometry::meshList[Geometry::GEO_SPOTION], Item::S_POTION, true, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1));
+			goList.push_back(item);
+			itemList.push_back(item);
+		}
 	}
 	myFile.close();
 	return true;

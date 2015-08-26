@@ -18,8 +18,11 @@ public:
 	};
 
 	TriggerObject();
-	TriggerObject(Mesh* mesh, TRIGGEROBJECTS ObjectName, Vector3 Pos, Vector3 scale, float angle, bool active, SoundManager &sfx_mano);
+	TriggerObject(Mesh* mesh, TRIGGEROBJECTS ObjectName, Vector3 Pos, Vector3 scale, float angle, bool active, SoundManager &sfx_mano, Player* player);
 	~TriggerObject();
+
+	bool checkTriggered;
+	double triggerTimer;
 
 	void setState(TRIGGEROBJECTS state);
 	TriggerObject::TRIGGEROBJECTS getState();
@@ -28,13 +31,21 @@ public:
 
 	void setDetectionBound();
 	Collision getDetectionBound();
-
 	virtual void CollisionResponse();	//player specific collision response
+
+	void setTriggered(bool isTriggered);
+	bool getTriggered(void);
+	void FireTrap(double dt, bool* myKey);
 private:	
 	// Sound
 	SoundManager *my_sfx_man;
+
+	Player* player;
+
 	Collision DetectionBound;
 	TRIGGEROBJECTS type;
+
+	bool isTriggered;
 };
 
 #endif
