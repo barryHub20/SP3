@@ -82,6 +82,8 @@ void Model_2D::InitTrigger()
 	goList.push_back(triggerObject);
 
 	triggerObject = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(150, 100, 0), Vector3(30, 100, 1), 0, true, *sfx_man);
+	triggerObject->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
+	triggerObject->processSpriteAnimation(TriggerObject::FIRE, 1.f, 1, 0, 6, 0, 1, false);
 	goList.push_back(triggerObject);
 }
 
@@ -189,6 +191,7 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	/* Update player */
 	player->Update(dt, myKeys);
 	triggerObject->Update(dt, myKeys);
+
 	if(myKeys[KEY_K])
 	{
 		player->Translate(Vector3(659, 389, 0));

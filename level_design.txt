@@ -1,0 +1,18 @@
+Level 1
+Small map
+Teach basic elements such as moving, picking up items and unlocking doors.
+1 Trap, Fire trap
+No enemies
+(Remove trigger)
+
+Level 2
+Small map + increase by few tiles
+One enemy
+2 / few traps. Reuse fire trap. Introduce spikes
+Simple puzzle.
+
+Level 3 1.5x
+Large map
+
+
+

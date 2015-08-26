@@ -22,10 +22,34 @@ TriggerObject::TriggerObject(Mesh* mesh, TRIGGEROBJECTS objectName, Vector3 Pos,
 	collideBound.Set(Pos, scale, Collision::BOX);
 }
 
+void TriggerObject::setState(TRIGGEROBJECTS state)
+{
+	this->type = state;
+}
+
+TriggerObject::TRIGGEROBJECTS TriggerObject::getState()
+{
+	return type;
+}
+
 void TriggerObject::Update(double dt, bool* myKey)
 {
-	/*Item* item;
-	GameObject* Player;*/
+	setState(FIRE);
+	if (animationList[FIRE]->ended == true)
+	{
+		animationList[FIRE]->Reset();
+	}
+
+	switch(type)
+	{
+	case FIRE:
+		if(mesh != animationList[FIRE])
+		{
+			setMesh(animationList[FIRE]);
+		}
+		animationList[FIRE]->Update(dt);
+		break;
+	};
 }
 
 void TriggerObject::setDetectionBound()

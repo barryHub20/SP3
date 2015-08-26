@@ -21,6 +21,9 @@ public:
 	TriggerObject(Mesh* mesh, TRIGGEROBJECTS ObjectName, Vector3 Pos, Vector3 scale, float angle, bool active, SoundManager &sfx_mano);
 	~TriggerObject();
 
+	void setState(TRIGGEROBJECTS state);
+	TriggerObject::TRIGGEROBJECTS getState();
+
 	void Update(double dt, bool* myKey);
 
 	void setDetectionBound();
