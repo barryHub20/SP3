@@ -30,7 +30,6 @@ void Collision::Start(const Vector3& objectPos)
 {
 	if(type == BOX)
 	{
-		previousPos = position;
 		position = objectPos;
 
 		/* update start and end */
@@ -40,6 +39,18 @@ void Collision::Start(const Vector3& objectPos)
 		previousStart = previousPos - (this->scale * 0.5f);
 		previousEnd = previousPos + (this->scale * 0.5f);
 	}
+}
+
+bool Collision::QuickAABBDetection(Collision* checkMe)
+{
+	currentStart = position - scale * 0.5f;
+	currentEnd = position + scale * 0.5f;
+
+	checkStart = checkMe->position - checkMe->scale * 0.5f;
+	checkEnd = checkMe->position + checkMe->scale * 0.5f;
+
+	return Collision::inZone(currentStart.x, currentEnd.x, checkStart.x, checkEnd.x) &&
+		Collision::inZone(currentStart.y, currentEnd.y, checkStart.y, checkEnd.y);
 }
 
 Collision* a;
@@ -154,7 +165,7 @@ bool Collision::SphereToBox(Collision* current, Collision* check)
 /* Box (current) to Box (check) */
 bool Collision::BoxToBox(Collision* current, Collision* check)
 {
-	inZoneY = inZoneX = inZoneZ = false;
+	inZoneY = inZoneX = false;
 
 	/* chck box */
 	checkStart = check->position - (check->scale * 0.5f);
@@ -195,6 +206,10 @@ bool Collision::BoxToBox(Collision* current, Collision* check)
 
 void Collision::Reset()
 {
+	if(type == BOX)
+	{
+		ResetAABB();
+	}
 }
 
 

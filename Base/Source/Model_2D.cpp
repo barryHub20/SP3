@@ -229,6 +229,8 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 
 	player->dropItem(item, myKeys);
 
+	player->getCollideBound()->Reset();
+
 
 	/* Collision response */
 	player->CollisionResponse();	//translate to new pos if collides
@@ -294,6 +296,7 @@ void Model_2D::UpdateEnemy(double dt)
 	}
 
 	/* check with all other objects */
+	E_Ogre->getCollideBound()->Reset();
 
 	//response
 	E_Ogre->CollisionResponse();

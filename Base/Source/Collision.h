@@ -82,6 +82,7 @@ public:
 
 	/* Utilities: feel free to use */
 	static bool inZone(float& start, float& end, float& checkStart, float& checkEnd);
+	bool QuickAABBDetection(Collision* checkMe);
 
 	TYPE type;
 
@@ -92,7 +93,6 @@ public:
 	/* aabb variables */
 	Vector3 previousPos;
 	Movement_3d collideArea;
-
 private:
 
 	/** internal functions please ignore (DO NOT CALL FROM OUTSIDE CLASS) **/
