@@ -73,6 +73,7 @@ public:
 		GEO_DOOR,
 		GEO_ISTRIGGER,
 		GEO_NOTTRIGGER,
+		GEO_FIRE,
 
 		/* HUD */
 		GEO_HEALTHBARBG,

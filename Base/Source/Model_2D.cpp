@@ -51,6 +51,7 @@ void Model_2D::Init()
 	InitObject();
 	InitSprites();
 	spawnItems();
+	InitTrigger();
 
 	//UI
 	InitUI();
@@ -67,15 +68,21 @@ void Model_2D::InitObject()
 	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
 	goList.push_back(E_Ogre);
 
-	triggerObject = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::NOTTRIGGERED, Vector3(120, 100, 0), Vector3(50, 50, 1), 0, true, *sfx_man);
-	goList.push_back(triggerObject);
-
 	/** init **/
 	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
 	{
 		Object *go = (Object *)*it;
 		go->Init();
 	}
+}
+
+void Model_2D::InitTrigger()
+{
+	triggerObject = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::NOTTRIGGERED, Vector3(120, 100, 0), Vector3(50, 50, 1), 0, true, *sfx_man);
+	goList.push_back(triggerObject);
+
+	triggerObject = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(150, 100, 0), Vector3(30, 100, 1), 0, true, *sfx_man);
+	goList.push_back(triggerObject);
 }
 
 void Model_2D::InitUI()

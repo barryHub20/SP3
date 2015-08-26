@@ -12,6 +12,7 @@ public:
 		ISTRIGGERED = 0,
 		NOTTRIGGERED,
 		DOOR,
+		FIRE,
 		TOTAL_OBJECTS,
 	};
 
@@ -21,8 +22,8 @@ public:
 
 	void Update(double dt, bool* myKey);
 
-	void setDetecionBound();
-	Collision getDetecionBound();
+	void setDetectionBound();
+	Collision getDetectionBound();
 
 	virtual void CollisionResponse();	//player specific collision response
 private:	
@@ -30,7 +31,6 @@ private:
 	SoundManager *my_sfx_man;
 	Collision DetectionBound;
 	TRIGGEROBJECTS type;
-
 };
 
 #endif

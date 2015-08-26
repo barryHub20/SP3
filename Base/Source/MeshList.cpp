@@ -131,6 +131,9 @@ void Geometry::Init()
 	meshList[GEO_NOTTRIGGER] = MeshBuilder::GenerateQuad("not triggered", Color(1, 1, 1), 1.f);
 	meshList[GEO_NOTTRIGGER]->textureID[0] = LoadTGA("Image//notTriggered.tga");
 
+	meshList[GEO_FIRE] = MeshBuilder::GenerateQuad("fire", Color(1, 1, 1), 1.f);
+	meshList[GEO_FIRE]->textureID[0] = LoadTGA("Image//fire.tga");
+
 	/* Dungeon Stuffs */
 	meshList[GEO_KEY] = MeshBuilder::GenerateQuad("Key", Color(1, 1, 1), 1.f);
 	meshList[GEO_KEY]->textureID[0] = LoadTGA("Image//key.tga");

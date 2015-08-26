@@ -28,12 +28,12 @@ void TriggerObject::Update(double dt, bool* myKey)
 	GameObject* Player;
 }
 
-void TriggerObject::setDetecionBound()
+void TriggerObject::setDetectionBound()
 {
 	DetectionBound.Set(this->position, this->scale * 3, Collision::BOX);
 }
 
-Collision TriggerObject::getDetecionBound()
+Collision TriggerObject::getDetectionBound()
 {
 	return DetectionBound;
 }

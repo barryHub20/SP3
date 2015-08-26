@@ -15,6 +15,7 @@ public:
 /*********** core functions ***************/
 	//Initialize
 	virtual void Init();
+	void InitTrigger();
 	void InitUI();
 	void InitObject();
 	void InitSprites();
