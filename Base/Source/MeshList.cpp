@@ -118,12 +118,15 @@ void Geometry::Init()
 	meshList[GEO_JINFLOOR] = MeshBuilder::GenerateQuad("Jin", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_JINFLOOR]->textureID[0] = LoadTGA("Image//Map//jin.tga");
 
+	meshList[GEO_DOOR] = MeshBuilder::GenerateQuad("Door", Color(1, 1, 1), 1.f);
+	meshList[GEO_DOOR]->textureID[0] = LoadTGA("Image//door.tga");
+
+	meshList[GEO_STAIRCASE] = MeshBuilder::GenerateQuad("staircase", Color(1, 1, 1), 1.f);
+	meshList[GEO_STAIRCASE]->textureID[0] = LoadTGA("Image//Sprites//staircase.tga");
+
 	/* animation */
 	meshList[GEO_GUARD] = MeshBuilder::GenerateSpriteAnimation("guard", 21, 13, 1.f);
 	meshList[GEO_GUARD]->textureID[0] = LoadTGA("Image//Sprites//guard.tga");
-
-	meshList[GEO_DOOR] = MeshBuilder::GenerateQuad("Door", Color(1, 1, 1), 1.f);
-	meshList[GEO_DOOR]->textureID[0] = LoadTGA("Image//door.tga");
 
 	meshList[GEO_ISTRIGGER] = MeshBuilder::GenerateQuad("is triggered", Color(1, 1, 1), 1.f);
 	meshList[GEO_ISTRIGGER]->textureID[0] = LoadTGA("Image//isTriggered.tga");

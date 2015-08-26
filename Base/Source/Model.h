@@ -134,8 +134,9 @@ public:
 	/* door/checkpoint */
 	TriggerObject* door;
 	bool doorUnlocked;
+	TriggerObject* staircase;
 
-	/* player */
+	/* objects */
 	Ogre* E_Ogre;
 	Item* item;
 	/* array of static objects (non-moving) */

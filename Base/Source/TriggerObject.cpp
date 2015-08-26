@@ -24,8 +24,8 @@ TriggerObject::TriggerObject(Mesh* mesh, TRIGGEROBJECTS objectName, Vector3 Pos,
 
 void TriggerObject::Update(double dt, bool* myKey)
 {
-	Item* item;
-	GameObject* Player;
+	/*Item* item;
+	GameObject* Player;*/
 }
 
 void TriggerObject::setDetectionBound()

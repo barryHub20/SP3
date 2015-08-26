@@ -15,7 +15,7 @@
 /*********** constructor/destructor ***************/
 Model_2D::Model_2D()
 {
-	minimap = NULL;
+	
 }
 
 Model_2D::~Model_2D()
@@ -140,11 +140,11 @@ void Model_2D::spawnItems()
 void Model_2D::InitMaps()
 {
 	//mapManager->CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-	mapManager->CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
-	//mapManager->CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
+	//mapManager->CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	mapManager->CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
 	mapManager->AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
 	mapManager->AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
-	mapManager->AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
+	//mapManager->AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
 	mapManager->CreateMap(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
 	mapManager->CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
 }
@@ -220,8 +220,8 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		}
 	}
 
-	player->CollisionCheck(triggerObject);
-
+	/* check with trigger objects */
+	//player->CollisionCheck(triggerObject);
 
 	if(door->getActive())
 	{
@@ -232,6 +232,11 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 				door->setActive(false);
 			}
 		}
+	}
+
+	if (player->CollisionCheck(staircase))
+	{
+		mapManager->ChangeNextMap();
 	}
 
 	player->dropItem(item, myKeys);
@@ -569,6 +574,12 @@ bool Model_2D::ReadFromFile(char* text)
 			door = new TriggerObject(Geometry::meshList[Geometry::GEO_DOOR], TriggerObject::DOOR, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man);
 			goList.push_back(door);
 		}
+		if (object_word == "STAIRCASE")
+		{
+			staircase = new TriggerObject(Geometry::meshList[Geometry::GEO_STAIRCASE], TriggerObject::TRIGGERWHENCOLLIDE, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man);
+			goList.push_back(staircase);
+		}
+
 	}
 	myFile.close();
 	return true;
