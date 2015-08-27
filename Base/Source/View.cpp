@@ -461,7 +461,7 @@ void View::RenderGame()
 	RenderHUD();
 
 	/* Inventory */
-	RenderInventory();
+	RenderInventory(model->player->getInventory());
 }
 
 void View::RenderTransition()
@@ -647,41 +647,48 @@ void View::RenderTileMap()
 	}
 }
 
-void View::RenderInventory()
+void View::RenderInventory(Inventory* inventory)
 {
 	int size = 0;
 	string name = "";
-	float startX = model->player->getInventory()->getStartX();
-	Vector3 scale = model->player->getInventory()->getSlotScale();
+	float startX = inventory->getStartX();
+	float yPos = inventory->getYPos();
+	Vector3 scale = inventory->getSlotScale();
 	Mesh* mesh = NULL;
 
-	for(int i = 0; i < model->player->getInventory()->MAX_SLOT; ++i)
+	for(int i = 0; i < inventory->MAX_SLOT; ++i)
 	{
 		/* render slots */
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_CUBE], false, scale.x, scale.y, 1,startX, 9, 1, 0);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SLOT], false, scale.x, scale.y, 1,startX, yPos, 1, 0);
 
 		/* render current size */
-		size = model->player->getInventory()->currentSize(i);
+		size = inventory->currentSize(i);
 		ss.str("");
 		ss << size;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 3.5f, startX, -0.5f);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.25f, startX, yPos - scale.y * 0.37f);
 
 		/* render name */
-		name = model->player->getInventory()->currentItemName(i);
+		name = inventory->currentItemName(i);
 		ss.str("");
 		ss << name;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 3.5f, startX, 11.5f);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.25f, startX, yPos + scale.y * 0.62f);
 
 		/* render mesh */
-		mesh = model->player->getInventory()->currentItemMesh(i);
+		mesh = inventory->currentItemMesh(i);
 
 		if(mesh != NULL)
 		{
-			RenderMeshIn2D(mesh, false, scale.x * 0.65f, scale.y * 0.65f, 1, startX, 9, 2, 1);
+			RenderMeshIn2D(mesh, false, scale.x * 0.65f, scale.y * 0.65f, 1, startX, yPos, 2, 1);
+		}
+
+		/* render selector */
+		if(i == inventory->getCurrentSlot())
+		{
+			RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SELECTOR], false, scale.x * 1.05f, scale.y * 1.05f, 1,startX, yPos, 2, 0);
 		}
 
 		//set pos to next slot
-		startX += model->player->getInventory()->getDistBtwSlot();
+		startX += inventory->getDistBtwSlot();
 	}
 }
 

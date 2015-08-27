@@ -47,7 +47,7 @@ bool InventorySlot::addItem(Item* addItem)
 	return true;
 }
 
-Item* InventorySlot::deleteItem()
+Item* InventorySlot::deleteItem(Vector3 currentPos)
 {
 	if(currentSize == 0)
 	{
@@ -56,6 +56,7 @@ Item* InventorySlot::deleteItem()
 	else
 	{
 		Item* ptr = SlotSize[currentSize - 1];
+		ptr->translate(currentPos);
 		ptr->setActive(true);
 		SlotSize[currentSize - 1]->setItemFloor(true);
 		SlotSize[currentSize - 1] = NULL;
@@ -122,11 +123,8 @@ Inventory::~Inventory(void)
 
 }
 
-void Inventory::Set(float percent_widthOfScreen, float percent_gapPerSlot, float TWOD_Window_Width, float leftPercent)
+void Inventory::Set(float percent_widthOfScreen, float percent_gapPerSlot, float TWOD_Window_Width, float TWOD_Window_height, float leftPercent, float topPercent)
 {
-	this->percent_widthOfScreen = percent_widthOfScreen;
-	this->percent_gapPerSlot = percent_gapPerSlot;
-
 	//calculate
 	float inventory_width = percent_widthOfScreen * TWOD_Window_Width;	//width of inventory
 	float slot_Width = inventory_width / MAX_SLOT;	//width per slot
@@ -137,7 +135,9 @@ void Inventory::Set(float percent_widthOfScreen, float percent_gapPerSlot, float
 	startX = (scalePerSlot.x / 2.f) - (gap_width / 2);	//starting pos for the first slot
 
 	float distFromEdgeLeft = ((1.f - percent_widthOfScreen)) * TWOD_Window_Width;
-	startX += distFromEdgeLeft * leftPercent;	
+	startX += distFromEdgeLeft * leftPercent;
+
+	yPos = (TWOD_Window_height * topPercent) + scalePerSlot.y * 0.5f;
 }
 
 /* getter */
@@ -192,18 +192,41 @@ bool Inventory::addItem(Item* item)
 		if(returnVal)	//succsessfully added
 		{
 			currentSlot = i;
-			//cout << arrSize[i]->getCurrentSize() << ' ' << currentSlot << endl;
 			return returnVal;
 		}
 		else	//not added
 			++i;
 
-		if(i >= MAX_SLOT)	//if reach last slot, loop back to first slot
+		if(i >= MAX_SLOT && currentSlot > 0)	//if reach last slot, loop back to first slot
+		{
+			counter = 0;
 			i = 0;
+		}
 
 		++counter;
 	}
 	return false;
+}
+
+void Inventory::Update(double dt, bool* myKeys)
+{
+	if(myKeys[SCROLL_BOTTOM])
+	{
+		currentSlot++;
+
+		if(currentSlot >= MAX_SLOT)
+		{
+			currentSlot = 0;
+		}
+	}
+	else if(myKeys[SCROLL_TOP])
+	{
+		currentSlot--;
+		if(currentSlot < 0)
+		{
+			currentSlot = MAX_SLOT - 1;
+		}
+	}
 }
 
 Item* Inventory::useItem()
@@ -211,7 +234,12 @@ Item* Inventory::useItem()
 	return arrSize[currentSlot]->getHighest();
 }
 
-Item* Inventory::removeItem()
+float Inventory::getYPos()
+{
+	return yPos;
+}
+
+Item* Inventory::removeItem(Vector3 currentPos)
 {
 	if(arrSize[currentSlot]->getCurrentSize() == 0)
 	{
@@ -220,6 +248,6 @@ Item* Inventory::removeItem()
 
 	else
 	{
-		return arrSize[currentSlot]->deleteItem();
+		return arrSize[currentSlot]->deleteItem(currentPos);
 	}
 }

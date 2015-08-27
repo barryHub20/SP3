@@ -33,6 +33,8 @@ public:
 		/* UI */
 		GEO_AR_CHRISTY,	//font
 		GEO_CROSSHAIR,
+		GEO_SLOT,
+		GEO_SELECTOR,
 
 		/* terrain */
 		GEO_SKYPLANE,

@@ -51,6 +51,9 @@ public:
 	static void incrementYawAngle(float i);
 	static void setYawAngle(float y);
 	static void setPitchAngle(float p);
+	static void setScrollX(double p);
+	static void setScrollY(double p);
+	
 	Vector3 GetMousePos();
 	float getFPS();
 
@@ -80,6 +83,10 @@ private:
 	static double yawAngle, pitchAngle;
 	static int mouseRightButton;
 	static int mouseLeftButton;
+
+	//scroll
+	static double scrollxPos;
+	static double scrollyPos;
 
 	float fps;
 };

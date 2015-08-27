@@ -39,7 +39,10 @@ private:
 
 	//Inventory
 	Inventory inventory;
+	Inventory weaponInventory;
 
+	double dropRate;
+	double dropTimer;
 public:
 	Player();
 	Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano);
@@ -75,7 +78,7 @@ public:
 	//add item
 	bool pickUp(Item* item, bool* myKey);
 	//drop item
-	bool dropItem(Item* item, bool* myKey);
+	bool dropItem(double dt, Item* item, bool* myKey);
 
 	bool useItem(bool* myKey);
 

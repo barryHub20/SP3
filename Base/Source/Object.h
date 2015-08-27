@@ -37,6 +37,8 @@ enum KEYS
 	/* non-keyboard */
 	KEY_LMOUSE,
 	KEY_RMOUSE,
+	SCROLL_TOP,
+	SCROLL_BOTTOM,
 	TOTAL_KEY,
 };
 
@@ -96,7 +98,6 @@ public:
 	void setShadow(bool s);
 	bool getShadow();
 
-protected:
 	/*** utilities ***/
 	void transformWithParent();	//position recalculated after transformation
 	//void checkCollision(Object& checkObject);	//if collide, bounce back

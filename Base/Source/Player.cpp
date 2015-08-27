@@ -51,6 +51,10 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	UpOrDown = false;
 	checkLR = false;
 	checkUD = false;
+
+	/* drop rate */
+	dropRate = 0.1;
+	dropTimer = dropRate;
 }
 
 Player::~Player()
@@ -60,6 +64,9 @@ Player::~Player()
 void Player::Update(double dt, bool* myKey)
 {
 	Vector3 Pos;
+
+	/* update inventory */
+	inventory.Update(dt, myKey);
 
 	//cout << animationList[UP]->startRow << " " << animationList[DOWN]->startRow << endl;
 	//setState(IDLE);
@@ -391,18 +398,29 @@ bool Player::pickUp(Item* item, bool* myKey)
 	return false;
 }
 
-bool Player::dropItem(Item* item, bool* myKey)
+bool Player::dropItem(double dt, Item* item, bool* myKey)
 {
-	if(myKey[KEY_O])
+	if(dropTimer < dropRate)
 	{
-		if(inventory.removeItem())
-		{
-			cout << "DROP SUCCESSFUL" << endl;
-		}
+		dropTimer += dt;
+	}
+	else
+	{
+		dropTimer = 0.0;
 
-		else
+		if(myKey[KEY_O])
 		{
-			cout << "NONONONONO" << endl;
+			if(inventory.removeItem(this->position))
+			{
+				cout << "DROP SUCCESSFUL" << endl;
+				return true;
+			}
+
+			else
+			{
+				cout << "NONONONONO" << endl;
+				return false;
+			}
 		}
 	}
 	return false;

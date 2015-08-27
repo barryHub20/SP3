@@ -112,7 +112,7 @@ public:
 	void RenderLight();
 	void RenderObject();
 	void RenderCollideBox();
-	void RenderInventory();
+	void RenderInventory(Inventory* inventory);
 	void RenderHUD();
 	void RenderMainMenu();
 	void RenderInstruction();

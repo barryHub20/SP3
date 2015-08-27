@@ -15,10 +15,18 @@ Controller::mouse_current_x = 0.0, Controller::mouse_current_y = 0.0,
 Controller::mouse_diff_x = 0.0, Controller::mouse_diff_y = 0.0;
 int Controller::mouseRightButton = 0, Controller::mouseLeftButton = 0;
 double Controller::camera_yaw = 0.0, Controller::camera_pitch = 0.0;
+double Controller::scrollxPos = 0.0;
+double Controller::scrollyPos = 0.0;
 
 //yaw and pitch angle
 double Controller::yawAngle = 0.0;
 double Controller::pitchAngle = 0.0;
+
+void scroll(GLFWwindow* window,double x,double y)
+{
+	Controller::setScrollX(x);
+	Controller::setScrollY(y);
+}
 
 /********************* constructor / destructor *********************/
 Controller::Controller() : model(NULL), view(NULL)
@@ -71,6 +79,7 @@ void Controller::Init()
 	//mouse button
 	mouseLeftButton = glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT);
 	mouseRightButton = glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT);
+	scrollyPos = scrollxPos = 0.0;
 
 	//init view
 	view->Init();
@@ -168,8 +177,36 @@ bool Controller::getKeyboardUpdate()
 	if(mouseRightButton == GLFW_PRESS)
 		myKeys[KEY_RMOUSE] = true;
 
+	/** Scrolling **/
+	GLFWwindow* glfwGetCurrentContext(void);
+	glfwSetScrollCallback(glfwGetCurrentContext(), scroll);
+
+	if(scrollyPos > 0.0)
+	{
+		myKeys[SCROLL_TOP] = true;
+	}
+	else if(scrollyPos < 0.0)
+	{
+		myKeys[SCROLL_BOTTOM] = true;
+	}
+
+	if(scrollyPos != 0.0)
+	{
+		scrollyPos = 0.0;
+	}
+
 	/* mouse */
 	return true;
+}
+
+void Controller::setScrollX(double p)
+{
+	Controller::scrollxPos = p;
+}
+
+void Controller::setScrollY(double p)
+{
+	Controller::scrollyPos = p;
 }
 
 bool Controller::KeyPressed(KEYS key)

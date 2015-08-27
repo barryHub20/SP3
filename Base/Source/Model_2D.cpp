@@ -208,6 +208,8 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 			(*mapManager->GetCurrentMap())[i]->getWalkable(player->getPosition().x, player->getPosition().y);
 		}
 	}
+
+	player->dropItem(dt, item, myKeys);
 	
 	/* check collision with object */
 	//start: Set up collision bound before checking with the others
@@ -246,7 +248,7 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		mapManager->ChangeNextMap();
 	}
 
-	player->dropItem(item, myKeys);
+	player->dropItem(dt, item, myKeys);
 
 	player->getCollideBound()->Reset();
 
@@ -588,7 +590,7 @@ bool Model_2D::ReadFromFile(char* text)
 		if(object_word == "PLAYER")
 		{
 			player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
-			player->getInventory()->Set(0.6f, 0.2f, m_2D_view_width, 0.95f);
+			player->getInventory()->Set(0.43f, 0.1f, m_2D_view_width, m_2D_view_height, 0.97f, 0.02f);
 			goList.push_back(player);
 		}
 
