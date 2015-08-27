@@ -13,6 +13,7 @@ public:
 		NOTTRIGGERED,
 		DOOR,
 		FIRE,
+		ARROWTRAP,
 		TRIGGERWHENCOLLIDE,
 		TOTAL_OBJECTS,
 	};
@@ -37,7 +38,7 @@ public:
 
 	void setTriggered(bool isTriggered);
 	bool getTriggered(void);
-	void FireTrap(double dt, bool* myKey);
+	void updateTrigger(double dt, bool* myKey);
 private:	
 	// Sound
 	SoundManager *my_sfx_man;

@@ -42,8 +42,10 @@ TriggerObject::TRIGGEROBJECTS TriggerObject::getState()
 
 void TriggerObject::Update(double dt, bool* myKey)
 {
-	FireTrap(dt, myKey);
-	if(type == FIRE)
+	updateTrigger(dt, myKey);
+	switch (type)
+	{
+	case FIRE:
 	{
 		setState(FIRE);
 		if (animationList[FIRE]->ended == true)
@@ -51,23 +53,28 @@ void TriggerObject::Update(double dt, bool* myKey)
 			animationList[FIRE]->Reset();
 		}
 
-		switch(type)
+		if (mesh != animationList[FIRE])
 		{
-		case FIRE:
-			if(mesh != animationList[FIRE])
-			{
-				setMesh(animationList[FIRE]);
-			}
-			animationList[FIRE]->Update(dt);
-			break;
-		};
+			setMesh(animationList[FIRE]);
+		}
+		animationList[FIRE]->Update(dt);
+
+		break;
+	}
+	case ARROWTRAP:
+	{
+
+		break;
+	}
+	default:
+		break;
 	}
 }
 
-void TriggerObject::FireTrap(double dt, bool* myKey)
+void TriggerObject::updateTrigger(double dt, bool* myKey)
 {
-	triggerTimer += dt;
-	fireTimer += dt;
+	triggerTimer += dt; //timer for trigger
+
 	if(type == NOTTRIGGERED)
 	{
 		if(triggerTimer > 2)

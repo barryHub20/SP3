@@ -47,4 +47,8 @@ Puzzle::PUZZLETYPE Puzzle::getType()
 
 void Puzzle::cleanUp()
 {
+	if (puzzleMesh != NULL)
+	{
+		puzzleMesh = NULL;
+	}
 }

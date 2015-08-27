@@ -15,7 +15,8 @@ const float Model::DEFAULT_FOV = 45.f;
 /*********** constructor/destructor ***************/
 Model::Model() :
 	mapManager(NULL),
-	sfx_man(NULL)
+	sfx_man(NULL),
+	stateManager(NULL)
 {
 }
 
@@ -23,6 +24,7 @@ Model::~Model()
 {
 	delete mapManager;
 	delete stateManager;
+	delete puzzleManager;
 	delete sfx_man;
 }
 
@@ -85,6 +87,7 @@ void Model::UpdateOpenGL(double dt, bool* myKeys)
 void Model::Exit()
 {
 	mapManager->CleanUp();
+	puzzleManager->cleanUp();
 	Geometry::Exit();
 }
 

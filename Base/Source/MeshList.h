@@ -43,7 +43,6 @@ public:
 		/* animation */
 		GEO_GUARD,
 
-
 		/* world objects */
 		GEO_BUILDING,
 		GEO_OBJECT,
@@ -86,6 +85,10 @@ public:
 		GEO_ISTRIGGER,
 		GEO_NOTTRIGGER,
 		GEO_FIRE,
+		GEO_ARROWUP,
+		GEO_ARROWDOWN,
+		GEO_ARROWLEFT,
+		GEO_ARROWRIGHT,
 
 		/* HUD */
 		GEO_HEALTHBARBG,

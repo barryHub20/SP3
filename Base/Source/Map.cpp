@@ -196,6 +196,14 @@ void Map::CheckCollisionWith(GameObject* checkWithMe)
 void Map::CleanUp(void)
 {
 	theScreenMap.clear();
+	if (tileSet != NULL)
+	{
+		tileSet = NULL;
+	}
+	if (floorMesh != NULL)
+	{
+		floorMesh = NULL;
+	}
 }
 
 void Map::createFloor(Mesh * floorMesh)

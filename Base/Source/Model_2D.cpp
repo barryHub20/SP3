@@ -20,8 +20,6 @@ Model_2D::Model_2D()
 
 Model_2D::~Model_2D()
 {
-	delete mapManager;
-	delete puzzleManager;
 }
 
 /*********** core functions ***************/
@@ -95,6 +93,7 @@ void Model_2D::InitTrigger()
 	triggerObject[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_ISTRIGGER], TriggerObject::ISTRIGGERED, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
 	goList.push_back(triggerObject[1]);
 
+	//Fire
 	triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(550, 688, 0), Vector3(30, 158, 1), 0, true, *sfx_man, player);
 	triggerObject[2]->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
 	triggerObject[2]->processSpriteAnimation(TriggerObject::FIRE, 0.8f, 1, 0, 6, 0, 1, false);
@@ -104,6 +103,9 @@ void Model_2D::InitTrigger()
 	triggerObject[3]->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
 	triggerObject[3]->processSpriteAnimation(TriggerObject::FIRE, 1.f, 1, 0, 6, 0, 1, false);
 	goList.push_back(triggerObject[3]);
+
+	//Arrow trap
+	//triggerObject[4] = new TriggerObject(Geometry::meshList[Geometry:::])
 }
 
 void Model_2D::InitUI()
@@ -248,7 +250,7 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		{
 			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				(*mapManager->GetCurrentMap())[i]->getWalkable(player->getPosition().x, player->getPosition().y);
+				//(*mapManager->GetCurrentMap())[i]->getWalkable(player->getPosition().x, player->getPosition().y);
 			}
 		}
 
@@ -322,6 +324,21 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 			//stateManager->ChangeState(stateManager->MAIN_MENU);
 		}
 
+		/* Key Q to open puzzle */
+		static bool ButtonQState = false;
+		if (!ButtonQState && myKeys[KEY_Q])
+		{
+			ButtonQState = true;
+			std::cout << "QBUTTON DOWN" << std::endl;
+			puzzleOpen = true;
+		}
+		else if (ButtonQState && !(myKeys[KEY_Q]))
+		{
+			ButtonQState = false;
+			std::cout << "QBUTTON UP" << std::endl;
+			puzzleOpen = false;
+		}
+
 		/* Load/change map */
 		//Key B to move to next map (RP)
 		static bool ButtonBState = false;
@@ -330,7 +347,8 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 			ButtonBState = true;
 			std::cout << "BBUTTON DOWN" << std::endl;
 			//stateManager->ChangeState(StateManager::MAIN_MENU);
-			mapManager->ChangeNextMap();
+			//mapManager->ChangeNextMap();
+			puzzleManager->goToNextPart();
 		}
 		else if (ButtonBState && !(myKeys[KEY_B]))
 		{
@@ -352,51 +370,24 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 	for(int i = 0; i < 4; i++)
 	{
 		triggerObject[i]->Update(dt, myKeys);
-		player->QuickAABBDetection(triggerObject[i]);	
+		//player->QuickAABBDetection(triggerObject[i]);	
 	}
 
-	if(triggerObject[0]->getTriggered() == true)
+	if(triggerObject[0]->getTriggered() == true) //If lever is switched off
 	{
-		triggerObject[0]->setActive(false);
-		triggerObject[1]->setActive(true);
-		triggerObject[2]->setActive(false);
-		triggerObject[3]->setActive(false);
-		haveFire = false;
+		triggerObject[0]->setActive(false); //to change lever position
+		triggerObject[1]->setActive(true); 
+		triggerObject[2]->setActive(false); //fire
+		triggerObject[3]->setActive(false); //fire
+		haveFire = false; //do not render fire
 	}
-	else
+	else 
 	{
-		triggerObject[0]->setActive(true);
+		triggerObject[0]->setActive(true); 
 		triggerObject[1]->setActive(false);
-		triggerObject[2]->setActive(true);
-		triggerObject[3]->setActive(true);
+		triggerObject[2]->setActive(true); //fire on
+		triggerObject[3]->setActive(true); //fire on
 		haveFire = true;
-	}
-	
-	/* Key Q to open puzzle */
-	static bool ButtonQState = false;
-	if (!ButtonQState && myKeys[KEY_Q])
-	{
-		ButtonQState = true;
-		std::cout << "QBUTTON DOWN" << std::endl;
-		puzzleOpen = true;
-	}
-	else if (ButtonQState && !(myKeys[KEY_Q]))
-	{
-		ButtonQState = false;
-		std::cout << "QBUTTON UP" << std::endl;
-		puzzleOpen = false;
-	}
-
-	/* Load/change map */
-	//Key B to move to next map (RP)
-	static bool ButtonBState = false;
-	if (!ButtonBState && myKeys[KEY_B])
-	{
-		ButtonBState = true;
-		std::cout << "BBUTTON DOWN" << std::endl;
-		//stateManager->ChangeState(StateManager::MAIN_MENU);
-		//mapManager->ChangeNextMap();
-		puzzleManager->goToNextPart();
 	}
 
 	if(Timer >= 0.5)
@@ -405,7 +396,7 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 		{
 			player->setHealth(player->getHealth() - 15);
 			player->Translate(player->getPosition() - 45);
-			cout << player->getPosition() << endl;
+			//cout << player->getPosition() << endl;
 			Timer = 0;
 		}
 	}
@@ -716,7 +707,4 @@ bool Model_2D::ReadFromFile(char* text)
 void Model_2D::Exit()
 {
 	Model::Exit();
-
-	mapManager->CleanUp();
-	puzzleManager->cleanUp();
 }
