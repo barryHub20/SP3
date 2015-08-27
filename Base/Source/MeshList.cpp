@@ -134,8 +134,17 @@ void Geometry::Init()
 	meshList[GEO_DOORP] = MeshBuilder::GenerateQuad("Purple Door", Color(1, 1, 1), 1.f);
 	meshList[GEO_DOORP]->textureID[0] = LoadTGA("Image//doorP.tga");
 
-	meshList[GEO_STAIRCASE] = MeshBuilder::GenerateQuad("staircase", Color(1, 1, 1), 1.f);
-	meshList[GEO_STAIRCASE]->textureID[0] = LoadTGA("Image//Sprites//staircase.tga");
+	meshList[GEO_LSTAIRCASEDOWN] = MeshBuilder::GenerateQuad("staircase down left", Color(1, 1, 1), 1.f);
+	meshList[GEO_LSTAIRCASEDOWN]->textureID[0] = LoadTGA("Image//Sprites//staircaseDL.tga");
+
+	meshList[GEO_RSTAIRCASEUP] = MeshBuilder::GenerateQuad("staircase up right", Color(1, 1, 1), 1.f);
+	meshList[GEO_RSTAIRCASEUP]->textureID[0] = LoadTGA("Image//Sprites//staircaseUR.tga");
+
+	meshList[GEO_RSTAIRCASEDOWN] = MeshBuilder::GenerateQuad("staircase down right", Color(1, 1, 1), 1.f);
+	meshList[GEO_RSTAIRCASEDOWN]->textureID[0] = LoadTGA("Image//Sprites//staircaseDR.tga");
+
+	meshList[GEO_LSTAIRCASEUP] = MeshBuilder::GenerateQuad("staircase up left", Color(1, 1, 1), 1.f);
+	meshList[GEO_LSTAIRCASEUP]->textureID[0] = LoadTGA("Image//Sprites//staircaseUL.tga");
 
 	/* animation */
 	meshList[GEO_GUARD] = MeshBuilder::GenerateSpriteAnimation("guard", 21, 13, 1.f);

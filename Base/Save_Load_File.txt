@@ -6,7 +6,7 @@ ENEMY: pos(50, 50, 0)  scale(50, 50, 1)
 ENEMY: pos(50, 50, 0)  scale(50, 50, 1) 
 //Furniture Info
 DOOR: pos(785, 690, 0)  scale(40, 95, 1)
-STAIRCASE: pos(890, 660, 0) scale(50, 50, 1)
+RSTAIRCASEUP: pos(890, 670, 0) scale(50, 50, 1)
 //Item Info
 HPOTION: pos(80, 350, 0) scale(35, 35, 1)
 HPOTION: pos(200, 350, 0) scale(35, 35, 1)

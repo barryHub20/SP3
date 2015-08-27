@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include "Application.h"
 Player::Player()
 {
 	for(int i = 0; i < MAX_STATES; i++)

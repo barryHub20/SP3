@@ -369,6 +369,7 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 		triggerObject[1]->setActive(false);
 		triggerObject[2]->setActive(true);
 		triggerObject[3]->setActive(true);
+		haveFire = true;
 	}
 	
 	/* Key Q to open puzzle */
@@ -690,9 +691,9 @@ bool Model_2D::ReadFromFile(char* text)
 			door = new TriggerObject(Geometry::meshList[Geometry::GEO_DOORY], TriggerObject::DOOR, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
 			goList.push_back(door);
 		}
-		if (object_word == "STAIRCASE")
+		if (object_word == "RSTAIRCASEUP")
 		{
-			staircase = new TriggerObject(Geometry::meshList[Geometry::GEO_STAIRCASE], TriggerObject::TRIGGERWHENCOLLIDE, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
+			staircase = new TriggerObject(Geometry::meshList[Geometry::GEO_RSTAIRCASEUP], TriggerObject::TRIGGERWHENCOLLIDE, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
 			goList.push_back(staircase);
 		}
 		if(object_word == "HPOTION")
