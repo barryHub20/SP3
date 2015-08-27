@@ -15,7 +15,7 @@ Player::Player()
 Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano)
 {
 	score = 0;
-	health = 90;
+	health = 100;
 	stamina = 100;
 	damage = 10;
 

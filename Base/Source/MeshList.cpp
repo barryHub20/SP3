@@ -122,8 +122,17 @@ void Geometry::Init()
 	meshList[GEO_JINFLOOR] = MeshBuilder::GenerateQuad("Jin", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_JINFLOOR]->textureID[0] = LoadTGA("Image//Map//jin.tga");
 
-	meshList[GEO_DOOR] = MeshBuilder::GenerateQuad("Door", Color(1, 1, 1), 1.f);
-	meshList[GEO_DOOR]->textureID[0] = LoadTGA("Image//door.tga");
+	meshList[GEO_DOORY] = MeshBuilder::GenerateQuad("Yellow Door", Color(1, 1, 1), 1.f);
+	meshList[GEO_DOORY]->textureID[0] = LoadTGA("Image//doorY.tga");
+
+	meshList[GEO_DOORR] = MeshBuilder::GenerateQuad("Red Door", Color(1, 1, 1), 1.f);
+	meshList[GEO_DOORR]->textureID[0] = LoadTGA("Image//doorR.tga");
+
+	meshList[GEO_DOORG] = MeshBuilder::GenerateQuad("Green Door", Color(1, 1, 1), 1.f);
+	meshList[GEO_DOORG]->textureID[0] = LoadTGA("Image//doorG.tga");
+
+	meshList[GEO_DOORP] = MeshBuilder::GenerateQuad("Purple Door", Color(1, 1, 1), 1.f);
+	meshList[GEO_DOORP]->textureID[0] = LoadTGA("Image//doorP.tga");
 
 	meshList[GEO_STAIRCASE] = MeshBuilder::GenerateQuad("staircase", Color(1, 1, 1), 1.f);
 	meshList[GEO_STAIRCASE]->textureID[0] = LoadTGA("Image//Sprites//staircase.tga");
@@ -142,8 +151,17 @@ void Geometry::Init()
 	meshList[GEO_FIRE]->textureID[0] = LoadTGA("Image//Sprites//fire.tga");
 
 	/* Dungeon Stuffs */
-	meshList[GEO_KEY] = MeshBuilder::GenerateQuad("Key", Color(1, 1, 1), 1.f);
-	meshList[GEO_KEY]->textureID[0] = LoadTGA("Image//key.tga");
+	meshList[GEO_KEYY] = MeshBuilder::GenerateQuad("Yellow Key", Color(1, 1, 1), 1.f);
+	meshList[GEO_KEYY]->textureID[0] = LoadTGA("Image//keyY.tga");
+
+	meshList[GEO_KEYR] = MeshBuilder::GenerateQuad("Red Key", Color(1, 1, 1), 1.f);
+	meshList[GEO_KEYR]->textureID[0] = LoadTGA("Image//keyR.tga");
+
+	meshList[GEO_KEYG] = MeshBuilder::GenerateQuad("Green Key", Color(1, 1, 1), 1.f);
+	meshList[GEO_KEYG]->textureID[0] = LoadTGA("Image//keyG.tga");
+
+	meshList[GEO_KEYP] = MeshBuilder::GenerateQuad("Purple Key", Color(1, 1, 1), 1.f);
+	meshList[GEO_KEYP]->textureID[0] = LoadTGA("Image//keyP.tga");
 
 	meshList[GEO_HPOTION] = MeshBuilder::GenerateQuad("Health Potion", Color(1, 1, 1), 1.f);
 	meshList[GEO_HPOTION]->textureID[0] = LoadTGA("Image//hPotion.tga");

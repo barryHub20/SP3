@@ -133,7 +133,11 @@ public:
 
 	/* door/checkpoint */
 	TriggerObject* door;
+	bool stopGame;
 	bool doorUnlocked;
+	bool haveFire;
+	double Timer;
+	double mapTimer;
 	TriggerObject* staircase;
 
 	/* objects */

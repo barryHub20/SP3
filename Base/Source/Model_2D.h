@@ -28,6 +28,7 @@ public:
 	void UpdateGame(double dt, bool* myKeys);
 	void UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y);
 	void UpdateEnemy(double dt);
+	void UpdateTraps(double dt, bool* myKeys);
 
 	void UpdateLight(double dt, bool* myKeys, Light* light);	//get light from view
 

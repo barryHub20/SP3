@@ -25,7 +25,9 @@ TriggerObject::TriggerObject(Mesh* mesh, TRIGGEROBJECTS objectName, Vector3 Pos,
 
 	isTriggered = false;
 	checkTriggered = false;
+	gotFire = true;
 	triggerTimer = 0;
+	fireTimer = 0;
 }
 
 void TriggerObject::setState(TRIGGEROBJECTS state)
@@ -65,26 +67,28 @@ void TriggerObject::Update(double dt, bool* myKey)
 void TriggerObject::FireTrap(double dt, bool* myKey)
 {
 	triggerTimer += dt;
+	fireTimer += dt;
 	if(type == NOTTRIGGERED)
 	{
 		if(triggerTimer > 2)
 		{
-			if(player->QuickAABBDetection(this) && myKey[KEY_E] && checkTriggered == false)
+			if(player->QuickAABBDetection(this) && myKey[KEY_E] && checkTriggered == false) //Switch off fire trap
 			{
 				isTriggered = true;
 				checkTriggered = true;
+				gotFire = false;
 				triggerTimer = 0;
 			}
 
-			else if(player->QuickAABBDetection(this) && myKey[KEY_E] && checkTriggered == true)
+			else if(player->QuickAABBDetection(this) && myKey[KEY_E] && checkTriggered == true) //Switch on fire trap
 			{
 				isTriggered = false;
 				checkTriggered = false;
+				gotFire = true;
 				triggerTimer = 0;
 			}
 		}
 	}
-	cout << "TIMER: " << triggerTimer << endl << endl;
 }
 
 void TriggerObject::setDetectionBound()

@@ -22,7 +22,9 @@ public:
 	~TriggerObject();
 
 	bool checkTriggered;
+	bool gotFire;
 	double triggerTimer;
+	double fireTimer;
 
 	void setState(TRIGGEROBJECTS state);
 	TriggerObject::TRIGGEROBJECTS getState();

@@ -45,7 +45,11 @@ void Model_2D::Init()
 	delayTime = 0.3;
 	keyPressedTimer = delayTime;
 
+	stopGame = false;
 	doorUnlocked = false;
+	haveFire = true;
+	Timer = 0;
+	mapTimer = 0;
 
 	//object
 	InitObject();
@@ -86,7 +90,7 @@ void Model_2D::InitTrigger()
 
 	triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(550, 688, 0), Vector3(30, 158, 1), 0, true, *sfx_man, player);
 	triggerObject[2]->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
-	triggerObject[2]->processSpriteAnimation(TriggerObject::FIRE, 1.f, 1, 0, 6, 0, 1, false);
+	triggerObject[2]->processSpriteAnimation(TriggerObject::FIRE, 0.8f, 1, 0, 6, 0, 1, false);
 	goList.push_back(triggerObject[2]);
 
 	triggerObject[3] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(680, 688, 0), Vector3(30, 158, 1), 0, true, *sfx_man, player);
@@ -134,7 +138,7 @@ void Model_2D::InitSprites()
 
 void Model_2D::spawnItems()
 {
-	item = new Item(Geometry::meshList[Geometry::GEO_KEY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
+	item = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
 	itemList.push_back(item);
 }
@@ -182,30 +186,23 @@ void Model_2D::Update(double dt, bool* myKeys, Vector3 mousePos)
 
 void Model_2D::UpdateGame(double dt, bool* myKeys)
 {
+	if(stopGame == false)
+	{
 	// Sound - ambience
-	sfx_man->play_ambience();
-	
-	//Update enemy
-	UpdateEnemy(dt);
+		sfx_man->play_ambience();
 
-	/* Update player */
-	player->Update(dt, myKeys);
+		//Update enemy
+		UpdateEnemy(dt);
 
-	if(myKeys[KEY_K])
-	{
-		player->Translate(Vector3(659, 389, 0));
-	}
+		/* Update player */
+		player->Update(dt, myKeys);
 
-	//getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
-	//getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
+		//Update the traps
+		UpdateTraps(dt, myKeys);
 
-	//cout << player->getPosition() << endl;
-
-	for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
-	{
-		if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
+		if(myKeys[KEY_K])
 		{
-			(*mapManager->GetCurrentMap())[i]->getWalkable(player->getPosition().x, player->getPosition().y);
+			player->Translate(Vector3(659, 389, 0));
 		}
 	}
 
@@ -215,63 +212,121 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	//start: Set up collision bound before checking with the others
 	player->StartCollisionCheck();
 
-	/* check collision with map */
-	for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
-	{
-		if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
+		//getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
+		//getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
+
+		//cout << player->getPosition() << endl;
+
+		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
 		{
-			(*mapManager->GetCurrentMap())[i]->CheckCollisionWith(player);
+			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
+			{
+				(*mapManager->GetCurrentMap())[i]->getWalkable(player->getPosition().x, player->getPosition().y);
+			}
+		}
+
+		/* check collision with object */
+		//start: Set up collision bound before checking with the others
+		player->StartCollisionCheck();
+
+		/* check collision with map */
+		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
+		{
+			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
+			{
+				(*mapManager->GetCurrentMap())[i]->CheckCollisionWith(player);
+			}
+		}
+
+		if(door->getActive())
+		{
+			if(player->CollisionCheck(door))
+			{
+				if(doorUnlocked)
+				{
+					door->setActive(false);
+				}
+			}
+		}
+
+	player->dropItem(dt, item, myKeys);
+		mapTimer += dt;
+		if (player->CollisionCheck(staircase))
+		{
+			if(mapTimer > 5)
+			{
+				mapManager->ChangeNextMap();
+				mapTimer = 0;
+			}
+		}
+
+		//player->dropItem(dt, item, myKeys);
+
+		player->getCollideBound()->Reset();
+
+		/* Collision response */
+		player->CollisionResponse();	//translate to new pos if collides
+
+
+		/* Test pick up items */
+		for(int i = 0; i < itemList.size(); ++i)
+		{
+			if(player->pickUp(itemList[i], myKeys))	//if successfully pick up
+			{
+				//if item is key
+				//cout << itemList[i]->getItemID() << endl;
+				if(itemList[i]->getItemID() == Item::KEY)
+				{
+					doorUnlocked = true;
+				}
+			}
+		}
+
+		player->useItem(myKeys);
+
+		/* Update target */
+		camera.target = camera.position;
+		camera.target.z -= 10;
+
+		/* Press space to go back main menu */
+		if(myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
+		{
+			keyPressedTimer = 0.0;
+			//stateManager->ChangeState(stateManager->MAIN_MENU);
+		}
+
+		/* Load/change map */
+		//Key B to move to next map (RP)
+		static bool ButtonBState = false;
+		if (!ButtonBState && myKeys[KEY_B])
+		{
+			ButtonBState = true;
+			std::cout << "BBUTTON DOWN" << std::endl;
+			//stateManager->ChangeState(StateManager::MAIN_MENU);
+			mapManager->ChangeNextMap();
+		}
+		else if (ButtonBState && !(myKeys[KEY_B]))
+		{
+			ButtonBState = false;
+			std::cout << "BBUTTON UP" << std::endl;
+		}
+
+		if(player->getHealth() == 0)
+		{
+			stopGame = true;
 		}
 	}
+} 
 
-
+void Model_2D::UpdateTraps(double dt, bool* myKeys)
+{
+	Timer += dt;
 	/* check with trigger objects fire */
 	for(int i = 0; i < 4; i++)
 	{
 		triggerObject[i]->Update(dt, myKeys);
-		player->QuickAABBDetection(triggerObject[i]);
+		player->QuickAABBDetection(triggerObject[i]);	
 	}
-
-	if(door->getActive())
-	{
-		if(player->CollisionCheck(door))
-		{
-			if(doorUnlocked)
-			{
-				door->setActive(false);
-			}
-		}
-	}
-
-	if (player->CollisionCheck(staircase))
-	{
-		mapManager->ChangeNextMap();
-	}
-
-	player->dropItem(dt, item, myKeys);
-
-	player->getCollideBound()->Reset();
-
-
-	/* Collision response */
-	player->CollisionResponse();	//translate to new pos if collides
-
-
-	/* Test pick up items */
-	for(int i = 0; i < itemList.size(); ++i)
-	{
-		if(player->pickUp(itemList[i], myKeys))	//if successfully pick up
-		{
-			//if item is key
-			//cout << itemList[i]->getItemID() << endl;
-			if(itemList[i]->getItemID() == Item::KEY)
-			{
-				doorUnlocked = true;
-			}
-		}
-	}
-
-	player->useItem(myKeys);
 
 	if(triggerObject[0]->getTriggered() == true)
 	{
@@ -279,6 +334,7 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		triggerObject[1]->setActive(true);
 		triggerObject[2]->setActive(false);
 		triggerObject[3]->setActive(false);
+		haveFire = false;
 	}
 
 	else
@@ -289,35 +345,17 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		triggerObject[3]->setActive(true);
 	}
 
-	/* Update target */
-	camera.target = camera.position;
-	camera.target.z -= 10;
-
-	/* Press space to go back main menu */
-	if(myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
+	if(Timer >= 0.5)
 	{
-		keyPressedTimer = 0.0;
-		//stateManager->ChangeState(stateManager->MAIN_MENU);
-		player->setHealth(player->getHealth() - 1);
+		if(player->QuickAABBDetection(triggerObject[2]) && haveFire == true || player->QuickAABBDetection(triggerObject[3]) && haveFire == true)
+		{
+			player->setHealth(player->getHealth() - 15);
+			player->Translate(player->getPosition() - 45);
+			cout << player->getPosition() << endl;
+			Timer = 0;
+		}
 	}
-	//player->setHealth(player->getHealth() - dt);
-	//player->setStamina(player->getStamina() - dt);
-	/* Load/change map */
-	//Key B to move to next map (RP)
-	static bool ButtonBState = false;
-	if (!ButtonBState && myKeys[KEY_B])
-	{
-		ButtonBState = true;
-		std::cout << "BBUTTON DOWN" << std::endl;
-		//stateManager->ChangeState(StateManager::MAIN_MENU);
-		mapManager->ChangeNextMap();
-	}
-	else if (ButtonBState && !(myKeys[KEY_B]))
-	{
-		ButtonBState = false;
-		std::cout << "BBUTTON UP" << std::endl;
-	}
-} 
+}
 
 void Model_2D::UpdateEnemy(double dt)
 {
@@ -596,7 +634,7 @@ bool Model_2D::ReadFromFile(char* text)
 
 		if(object_word == "DOOR")
 		{
-			door = new TriggerObject(Geometry::meshList[Geometry::GEO_DOOR], TriggerObject::DOOR, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
+			door = new TriggerObject(Geometry::meshList[Geometry::GEO_DOORY], TriggerObject::DOOR, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
 			goList.push_back(door);
 		}
 		if (object_word == "STAIRCASE")
