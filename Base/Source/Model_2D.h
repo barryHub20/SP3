@@ -19,6 +19,7 @@ public:
 	void InitUI();
 	void InitObject();
 	void InitSprites();
+	void InitPuzzles();
 	void spawnItems();
 	void InitMaps(); //Initialize maps (RP)
 

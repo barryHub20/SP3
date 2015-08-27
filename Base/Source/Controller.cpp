@@ -59,6 +59,7 @@ void Controller::Init()
 	inputChar[KEY_A] = 'A';
 	inputChar[KEY_S] = 'S';
 	inputChar[KEY_D] = 'D';
+	inputChar[KEY_Q] = 'Q';
 	inputChar[KEY_C] = 'C';
 	inputChar[KEY_K] = 'K';
 	inputChar[KEY_L] = 'L';

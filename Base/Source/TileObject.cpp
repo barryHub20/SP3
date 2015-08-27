@@ -7,6 +7,7 @@ TileObject::TileObject()
 
 TileObject::~TileObject()
 {
+
 }
 
 /* Core */

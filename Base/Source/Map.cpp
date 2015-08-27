@@ -17,6 +17,14 @@ Map::Map(void)
 
 Map::~Map(void)
 {
+	if (tileSet != NULL)
+	{
+		delete tileSet;
+	}
+	if (floorMesh != NULL)
+	{
+		delete floorMesh;
+	}
 }
 
 void Map::Init(const int num_of_tile_Width, const int num_of_tile_Height, const int tileSize, Mesh* tileSet)

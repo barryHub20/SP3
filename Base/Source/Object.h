@@ -19,6 +19,7 @@ enum KEYS
 	KEY_A,
 	KEY_S,
 	KEY_D,
+	KEY_Q,
 	KEY_C,
 	KEY_T,
 	KEY_K,

@@ -22,6 +22,8 @@ Model::Model() :
 Model::~Model()
 {
 	delete mapManager;
+	delete stateManager;
+	delete sfx_man;
 }
 
 /*********** core functions ***************/
@@ -42,6 +44,8 @@ void Model::Init()
 	camera.Init(Vector3(0, 0, 0), Vector3(0, 0, -10), Vector3(0, 1, 0));
 
 	hero_Health = 0;
+
+	puzzleOpen = false;
 
 	bLightEnabled = true;
 }

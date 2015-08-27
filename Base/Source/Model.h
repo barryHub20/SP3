@@ -20,6 +20,7 @@
 #include "StateManager.h"
 #include "Inventory.h"
 #include "TriggerObject.h"
+#include "PuzzleManager.h"
 using namespace std;
 
 #include "SoundManager.h"
@@ -148,6 +149,10 @@ public:
 
 	// ================== Audio =================
 	SoundManager *sfx_man;
+
+	/* Puzzle */
+	PuzzleManager *puzzleManager;
+	bool puzzleOpen;
 };
 
 #endif

@@ -378,6 +378,22 @@ void View::RenderHUD()
 			cout << "below 50" << endl;
 		}
 		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 5, 15, 5);
+
+		//Puzzle
+		if (model->puzzleOpen == true)
+		{
+			Puzzle* tempPuzzle;
+			tempPuzzle = model->puzzleManager->getCurrentPuzzle();
+			if (tempPuzzle->getType() == Puzzle::WORD)
+			{
+				ss.str(tempPuzzle->getTextPuzzle());
+				RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 5, 50, 25);
+			}
+			else
+			{
+				RenderMeshIn2D(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false, 50, 50, 50, 500, 500, 1);
+			}
+		}
 	}
 }
 

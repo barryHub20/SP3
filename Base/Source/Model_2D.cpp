@@ -20,6 +20,8 @@ Model_2D::Model_2D()
 
 Model_2D::~Model_2D()
 {
+	delete mapManager;
+	delete puzzleManager;
 }
 
 /*********** core functions ***************/
@@ -62,6 +64,11 @@ void Model_2D::Init()
 
 	//Init sound
 	sfx_man->sfx_init();
+
+	//Init puzzle
+	puzzleManager = new PuzzleManager;
+	puzzleManager->Init(MapManager::MAX_MAP);
+	InitPuzzles();
 }
 
 void Model_2D::InitObject()
@@ -136,6 +143,27 @@ void Model_2D::InitSprites()
 	player->processSpriteAnimation(Player::ATTACKRIGHT, 0.5f, 0, 7, 7, 7, 1);
 }
 
+void Model_2D::InitPuzzles()
+{
+	puzzleManager->addTextPuzzle(MapManager::MAP1, "test1");
+	puzzleManager->addTextPuzzle(MapManager::MAP1, "test2");
+	puzzleManager->addPicturePuzzle(MapManager::MAP1, "Image//Sprites//guard.tga");
+	puzzleManager->addTextPuzzle(MapManager::MAP2, "test3");
+	puzzleManager->addTextPuzzle(MapManager::MAP3, "test4");
+
+	/*cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	puzzleManager->goToNextPart();
+	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	puzzleManager->goToNextPart();
+	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	puzzleManager->goToNextPart();
+	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	puzzleManager->goToNextPart();
+	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	puzzleManager->goToNextPart();
+	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;*/
+}
+
 void Model_2D::spawnItems()
 {
 	item = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
@@ -146,8 +174,8 @@ void Model_2D::spawnItems()
 void Model_2D::InitMaps()
 {
 	//mapManager->CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-	//mapManager->CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
-	mapManager->CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
+	mapManager->CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	//mapManager->CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
 	mapManager->AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
 	mapManager->AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
 	//mapManager->AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
@@ -335,13 +363,39 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 		triggerObject[3]->setActive(false);
 		haveFire = false;
 	}
-
 	else
 	{
 		triggerObject[0]->setActive(true);
 		triggerObject[1]->setActive(false);
 		triggerObject[2]->setActive(true);
 		triggerObject[3]->setActive(true);
+	}
+	
+	/* Key Q to open puzzle */
+	static bool ButtonQState = false;
+	if (!ButtonQState && myKeys[KEY_Q])
+	{
+		ButtonQState = true;
+		std::cout << "QBUTTON DOWN" << std::endl;
+		puzzleOpen = true;
+	}
+	else if (ButtonQState && !(myKeys[KEY_Q]))
+	{
+		ButtonQState = false;
+		std::cout << "QBUTTON UP" << std::endl;
+		puzzleOpen = false;
+	}
+
+	/* Load/change map */
+	//Key B to move to next map (RP)
+	static bool ButtonBState = false;
+	if (!ButtonBState && myKeys[KEY_B])
+	{
+		ButtonBState = true;
+		std::cout << "BBUTTON DOWN" << std::endl;
+		//stateManager->ChangeState(StateManager::MAIN_MENU);
+		//mapManager->ChangeNextMap();
+		puzzleManager->goToNextPart();
 	}
 
 	if(Timer >= 0.5)
@@ -622,7 +676,7 @@ bool Model_2D::ReadFromFile(char* text)
 				}
 			}
 		}
-
+		 
 		/************************** Create Relevant object **************************/
 		if(object_word == "PLAYER")
 		{
@@ -661,4 +715,7 @@ bool Model_2D::ReadFromFile(char* text)
 void Model_2D::Exit()
 {
 	Model::Exit();
+
+	mapManager->CleanUp();
+	puzzleManager->cleanUp();
 }
