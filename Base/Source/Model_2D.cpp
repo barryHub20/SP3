@@ -370,7 +370,6 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 	for(int i = 0; i < 4; i++)
 	{
 		triggerObject[i]->Update(dt, myKeys);
-		//player->QuickAABBDetection(triggerObject[i]);	
 	}
 
 	if(triggerObject[0]->getTriggered() == true) //If lever is switched off
@@ -396,7 +395,6 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 		{
 			player->setHealth(player->getHealth() - 15);
 			player->Translate(player->getPosition() - 45);
-			//cout << player->getPosition() << endl;
 			Timer = 0;
 		}
 	}
