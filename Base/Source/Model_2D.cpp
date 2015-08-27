@@ -204,7 +204,6 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		{
 			player->Translate(Vector3(659, 389, 0));
 		}
-	}
 
 	player->dropItem(dt, item, myKeys);
 	
