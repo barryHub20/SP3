@@ -98,7 +98,7 @@ void Player::Update(double dt, bool* myKey)
 		sf_walk = true;
 	}
 
-	if(myKey[KEY_S])
+	else if(myKey[KEY_S])
 	{
 		UpOrDown = true;
 		checkUD = true;
@@ -123,7 +123,7 @@ void Player::Update(double dt, bool* myKey)
 	}	
 
 
-	if(myKey[KEY_A])
+	else if(myKey[KEY_A])
 	{
 		LeftOrRight = true;
 		checkLR = true;
@@ -146,7 +146,7 @@ void Player::Update(double dt, bool* myKey)
 		sf_walk = true;
 	}
 
-	if(myKey[KEY_D])
+	else if(myKey[KEY_D])
 	{
 		LeftOrRight = false;
 		checkLR = false;
