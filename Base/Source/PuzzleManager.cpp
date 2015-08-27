@@ -4,7 +4,6 @@
 #include <fstream>
 #include "MeshBuilder.h"
 #include "LoadTGA.h"
-#include "SP3Utilities.h"
 
 using namespace std;
 

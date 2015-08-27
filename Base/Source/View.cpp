@@ -580,7 +580,7 @@ void View::RenderTileMap()
 	//Render main and other tile maps
 	//Number of maps
 
-	float z = -2.f;
+	float z = -4.f;
 	//Render first map, usually floor
 	for (int noMap = 0; noMap < model->mapManager->GetCurrentMap()->size(); noMap++)
 	{
@@ -612,7 +612,7 @@ void View::RenderTileMap()
 			else //Render floor quad
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32 * 0.5f, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32 * 0.5f, -4);
+				modelStack.Translate((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32 * 0.5f, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32 * 0.5f, z);
 				modelStack.Scale((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32, 1);
 				RenderMesh((*model->mapManager->GetCurrentMap())[noMap]->getFloorMesh(), false);
 				modelStack.PopMatrix();
