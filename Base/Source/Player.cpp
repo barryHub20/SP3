@@ -15,11 +15,9 @@ Player::Player()
 Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano)
 {
 	score = 0;
-	health = 10;
+	health = 100;
 	stamina = 100;
 	damage = 10;
-
-	cout << "Health: " << health << endl;
 
 	/* set object */
 	Set("sdfdf", mesh, NULL, false, false);
@@ -74,14 +72,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		UpOrDown = false;
 		checkUD = false;
-		if(vel.y < 3)
+		if(vel.y < 4)
 		{
 			vel.y += 1;
 			Pos.y = vel.y;
 		}
 		else
 		{
-			vel.y = 3;
+			vel.y = 4;
 			Pos.y = vel.y;
 		}
 
@@ -102,14 +100,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		UpOrDown = true;
 		checkUD = true;
-		if(vel.y > -3)
+		if(vel.y > -4)
 		{
 			vel.y -= 1;
 			Pos.y = vel.y;
 		}
 		else
 		{
-			vel.y = -3;
+			vel.y = -4;
 			Pos.y = vel.y;
 		}
 
@@ -127,14 +125,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		LeftOrRight = true;
 		checkLR = true;
-		if(vel.x > -3)
+		if(vel.x > -4)
 		{
 			vel.x -= 1;
 			Pos.x = vel.x;
 		}
 		else
 		{
-			vel.x = -3;
+			vel.x = -4;
 			Pos.x = vel.x;
 		}
 		
@@ -150,14 +148,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		LeftOrRight = false;
 		checkLR = false;
-		if(vel.x < 3)
+		if(vel.x < 4)
 		{
 			vel.x += 1;
 			Pos.x = vel.x;
 		}
 		else
 		{
-			vel.x = 3;
+			vel.x = 4;
 			Pos.x = vel.x;
 		}
 		
@@ -426,24 +424,38 @@ bool Player::dropItem(double dt, Item* item, bool* myKey)
 	return false;
 }
 
-bool Player::useItem(Item* item, bool* myKey)
+bool Player::useItem(bool* myKey)
 {	
-	if(inventory.useItem() == NULL)
+	Item* ptr = inventory.useItem();
+
+	if(ptr == NULL)
 	{
 		return false;
 	}
 	
-	if(myKey[KEY_L] && inventory.useItem() && health < 100)
+	if(myKey[KEY_L] && health < 100 && ptr->getItemID() == Item::H_POTION)
 	{
 		if(inventory.removeItem(this->position))
 		{
-			item->setActive(false);
+			ptr->setActive(false);
 		}
 		setHealth(getHealth() + 10);
 		if(getHealth() >= 100)
 		{
 			health = 100;
-			cout << "Health: " << health << endl;
+		}
+	}
+
+	else if(myKey[KEY_L] && stamina < 100 && ptr->getItemID() == Item::S_POTION)
+	{
+		if(inventory.removeItem(this->position))
+		{
+			ptr->setActive(false);
+		}
+		setStamina(getStamina() + 20);
+		if(getStamina() >= 100)
+		{
+			stamina = 100;
 		}
 	}
 	return false;

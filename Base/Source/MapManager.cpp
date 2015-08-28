@@ -1,7 +1,5 @@
 #include "MapManager.h"
 
-
-
 MapManager::MapManager()
 {
 	CurrentMap.clear();

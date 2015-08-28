@@ -84,7 +84,7 @@ public:
 	//drop item
 	bool dropItem(double dt, Item* item, bool* myKey);
 
-	bool useItem(Item* item, bool* myKey);
+	bool useItem(bool* myKey);
 
 	virtual void CollisionResponse();	//player specific collision response
 };

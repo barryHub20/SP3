@@ -13,7 +13,7 @@ public:
 	~InventorySlot();
 
 	bool addItem(Item*);
-	Item* deleteItem(Vector3 currentPos);
+	bool deleteItem(Vector3 currentPos);
 	Item* getHighest();
 
 	int getCurrentSize();
@@ -46,7 +46,7 @@ public:
 	void Update(double dt, bool* myKeys);
 	bool addItem(Item* item);
 	Item* useItem();
-	Item* removeItem(Vector3 currentPos);
+	bool removeItem(Vector3 currentPos);
 
 	/* getter */
 	float getStartX();

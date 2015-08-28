@@ -47,11 +47,11 @@ bool InventorySlot::addItem(Item* addItem)
 	return true;
 }
 
-Item* InventorySlot::deleteItem(Vector3 currentPos)
+bool InventorySlot::deleteItem(Vector3 currentPos)
 {
 	if(currentSize == 0)
 	{
-		return NULL;
+		return false;
 	}
 	else
 	{
@@ -61,8 +61,9 @@ Item* InventorySlot::deleteItem(Vector3 currentPos)
 		SlotSize[currentSize - 1]->setItemFloor(true);
 		SlotSize[currentSize - 1] = NULL;
 		currentSize--;
-		return ptr;
+		return true;
 	}
+	return false;
 }
 
 Item* InventorySlot::getHighest()
@@ -239,15 +240,23 @@ float Inventory::getYPos()
 	return yPos;
 }
 
-Item* Inventory::removeItem(Vector3 currentPos)
+//remove the current item (highest at current slot)
+bool Inventory::removeItem(Vector3 currentPos)
 {
 	if(arrSize[currentSlot]->getCurrentSize() == 0)
 	{
-		return NULL;
+		return false;
 	}
 
 	else
 	{
-		return arrSize[currentSlot]->deleteItem(currentPos);
+		if(arrSize[currentSlot]->deleteItem(currentPos))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

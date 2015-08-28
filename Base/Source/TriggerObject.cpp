@@ -97,7 +97,6 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			{
 				position.x = 940;
 			}
-			cout << this->position << endl;
 		}
 		else if (this->mesh->name == "arrow right")
 		{
@@ -106,7 +105,6 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			{
 				position.x = 940;
 			}
-			cout << this->position << endl;
 		}
 		else if (this->mesh->name == "arrow up")
 		{
@@ -115,7 +113,6 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			{
 				position.x = 940;
 			}
-			cout << this->position << endl;
 		}
 		else if (this->mesh->name == "arrow down")
 		{
@@ -124,7 +121,6 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			{
 				position.x = 940;
 			}
-			cout << this->position << endl;
 		}
 	}
 }

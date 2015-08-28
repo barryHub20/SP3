@@ -110,7 +110,7 @@ void Model_2D::InitUI()
 	/* UI Objects */
 	Controller::mouse_current_x;
 	Vector3 mousePos(Controller::mouse_current_x, Controller::mouse_current_y, 3);
-	cursor.Init(Geometry::meshList[Geometry::GEO_BACK], mousePos, Vector3(5, 5, 1), "", UI_Object::MOUSE_CURSOR, true);
+	cursor.Init(Geometry::meshList[Geometry::GEO_CURSOR], mousePos, Vector3(10, 10, 1), "", UI_Object::MOUSE_CURSOR, true);
 	UI_List.push_back(&cursor);
 
 	start_Game.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y + 11, 1.1), Vector3(40, 15, 1), "Start Game", UI_Object::BUTTON, true);
@@ -136,15 +136,14 @@ void Model_2D::InitSprites()
 
 void Model_2D::InitPuzzles()
 {
-	puzzleManager->addTextPuzzle(MapManager::MAP1, "test1");
-	puzzleManager->addTextPuzzle(MapManager::MAP1, "test2");
-	puzzleManager->addPicturePuzzle(MapManager::MAP1, "Image//Sprites//guard.tga");
-	puzzleManager->addTextPuzzle(MapManager::MAP2, "test3");
-	puzzleManager->addTextPuzzle(MapManager::MAP3, "test4");
+	puzzleManager->addTextPuzzle(MapManager::MAP1, "Go to the crate");
+	puzzleManager->addTextPuzzle(MapManager::MAP1, "Unlock door");
+	//puzzleManager->addTextPuzzle(MapManager::MAP2, "test3");
+	//puzzleManager->addTextPuzzle(MapManager::MAP3, "test4");
 
+	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	//puzzleManager->goToNextPart();
 	/*cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
 	puzzleManager->goToNextPart();
 	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
 	puzzleManager->goToNextPart();
