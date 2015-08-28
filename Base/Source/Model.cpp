@@ -14,10 +14,10 @@ Position Model::lightPos[TOTAL_LIGHTS];
 StateManager Model::stateManager;
 int Model::model_count = 0;
  int Model::current_model = 0;
+ SoundManager* Model::sfx_man;
 
 /*********** constructor/destructor ***************/
-Model::Model() :
-	sfx_man(NULL)
+Model::Model()
 {
 	model_count++;
 }
@@ -100,6 +100,11 @@ unsigned short Model::get2DViewWidth(){return m_2D_view_width;}
 unsigned short Model::get2DViewHeight(){return m_2D_view_height;}
 int Model::getModelCount(){return model_count;}
 int Model::getCurrentModel(){return current_model;}
+void Model::setCurrentModel(int i)
+{
+	if(i < model_count && i >= 0)
+		current_model = i;
+}
 
 Position Model::getLightPos(int index)
 {

@@ -1,13 +1,13 @@
-#ifndef MODEL2D_H
-#define MODEL2D_H
+#ifndef MODEL_LEVEL1_H
+#define MODEL_LEVEL1_H
 #include "Model_Level.h"
 
-class Model_2D : public Model_Level
+class Model_Level1 : public Model_Level
 {
 public:
 /*********** constructor/destructor ***************/
-	Model_2D();
-	~Model_2D();
+	Model_Level1();
+	~Model_Level1();
 
 /*********** core functions ***************/
 	//Initialize

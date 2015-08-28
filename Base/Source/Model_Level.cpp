@@ -11,6 +11,7 @@
 #include "StaticObject.h"
 //(tip) If create bullet, bullet class has a static TRS so that TRS update with current bullet pos
 MapManager Model_Level::mapManager;
+Player* Model_Level::player = NULL;
 // Player* Model_Level::player = NULL;
 bool Model_Level::init_Already = false;
 bool Model_Level::goNextLevel = false;
@@ -35,6 +36,7 @@ void Model_Level::Init()
 
 		/* game state setup */
 		mapManager.Init();
+		InitMaps();
 
 		goNextLevel = goPreviousLevel = false;
 		init_Already = true;
@@ -44,6 +46,24 @@ void Model_Level::Init()
 
 		stateManager.ChangeState(StateManager::MAIN_MENU);
 	}
+}
+
+void Model_Level::InitMaps()
+{
+	/** Create maps for all levels **/
+	//Model_Level::mapManager.CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	Model_Level::mapManager.CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	//Model_Level::mapManager.CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
+	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
+	//Model_Level::mapManager.AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
+	//Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
+	//Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
+	Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	//Model_Level::mapManager.CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
+	//Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	Model_Level::mapManager.AddRear(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
+	
 }
 
 void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos)
@@ -183,9 +203,11 @@ bool Model_Level::ReadFromFile(char* text)
 		/************************** Create Relevant object **************************/
 		if(object_word == "PLAYER")
 		{
-			player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
-			player->getInventory()->Set(0.43f, 0.1f, m_2D_view_width, m_2D_view_height, 0.97f, 0.02f);
-			goList.push_back(player);
+			if(player == NULL)
+			{
+				player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
+				player->getInventory()->Set(0.43f, 0.1f, m_2D_view_width, m_2D_view_height, 0.97f, 0.02f);
+			}
 		}
 
 		if(object_word == "DOOR")
@@ -224,15 +246,19 @@ void Model_Level::Exit()
 vector<GameObject*>* Model_Level::getObject(){return &goList;}
 vector<UI_Object*>* Model_Level::getUIList(){return &UI_List;}
 vector<Item*>* Model_Level::getItemList(){return &itemList;}
+//bool  Model_Level::goNextLevel(){
+//bool  Model_Level::goPreviousLevel()
+bool Model_Level::NextLevel(){return goNextLevel;}
+bool Model_Level::PreviousLevel(){return goPreviousLevel;}
 
-bool Model_Level::NextLevel()
+void Model_Level::setNextLevel(bool i)
 {
-	return goNextLevel;
+	goNextLevel = i;
 }
 
-bool Model_Level::previousLevel()
+void Model_Level::setPreviousLevel(bool i)
 {
-	return goPreviousLevel;
+	goNextLevel = i;
 }
 
 vector<Map*>* Model_Level::getLevelMap()

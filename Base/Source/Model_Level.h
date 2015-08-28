@@ -22,7 +22,7 @@ public:
 /************ Gmae Objects ************/ 
 
 	//player
-	Player* player;
+	static Player* player;
 	float hero_Health;
 
 	//Triggering Objects
@@ -53,7 +53,7 @@ public:
 	//puzzle
 	PuzzleManager *puzzleManager;
 	bool puzzleOpen;
-
+	
 	static bool goNextLevel;
 	static bool goPreviousLevel;
 
@@ -69,7 +69,7 @@ public:
 		//virtual void InitSprites();
 		//virtual void InitPuzzles();
 		//virtual void spawnItems();
-		//void InitMaps(); //Initialize maps (RP)
+		void InitMaps(); //Initialize maps (RP)
 
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
 		/*virtual void UpdateGame(double dt, bool* myKeys);
@@ -79,8 +79,10 @@ public:
 	virtual void Exit();
 
 	/*********** getter/setter ***************/
-	static bool NextLevel();
-	static bool previousLevel();
+	static bool NextLevel();	//whether can go to next level or not
+	static bool PreviousLevel();
+	static void setNextLevel(bool i);	//whether can go to next level or not
+	static void setPreviousLevel(bool i);
 
 	/********** Utilities *************/
 	bool ReadFromFile(char* text);

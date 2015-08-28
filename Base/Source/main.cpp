@@ -1,6 +1,7 @@
 #include "Controller.h"
 #include "View.h"
-#include "Model_2D.h"
+#include "Model_Level1.h"
+#include "Model_Level2.h"
 
 int main( void )
 {
@@ -8,21 +9,20 @@ int main( void )
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );	//call this if program does not exit at same place everytime
 
 	/* Create Model */
-	Model_2D* mptr;
+	Model_Level1* mptr;
+	Model_Level2* m2ptr;
 	vector<Model_Level*> myModel;
 	
 	/* Create level 1 */
-	mptr = new Model_2D;
+	mptr = new Model_Level1;
 	myModel.push_back(mptr);
 
 	/* Create level 2 */
-	mptr = new Model_2D;
-	myModel.push_back(mptr);
+	m2ptr = new Model_Level2;
+	myModel.push_back(m2ptr);
 
-	///* Create level 3 */
-	//mptr = new Model_2D;
-	//myModel.push_back(mptr);
-	//
+	/* Create level 3 */
+
 	/* Create View and pass in address of model you want, console dimemsions and Mode */
 	View myView(896, 700, View::TWO_D);
 

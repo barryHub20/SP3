@@ -580,24 +580,25 @@ void View::RenderTileMap()
 
 	//Render main and other tile maps
 	//Number of maps
+	vector<Map*>* level_map = model->getLevelMap();
 
 	float z = -4.f;
 	//Render first map, usually floor
-	for (int noMap = 0; noMap < Model_Level::mapManager.GetCurrentMap()->size(); noMap++)
+	for (int noMap = 0; noMap < level_map->size(); noMap++)
 	{
 		//Render floor
-		if ((*Model_Level::mapManager.GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP)
+		if ((*level_map)[noMap]->getMapType() == Map::FLOORMAP)
 		{
-			if ((*Model_Level::mapManager.GetCurrentMap())[noMap]->getFloorMesh() == NULL) //If no quad, render floor tile
+			if ((*level_map)[noMap]->getFloorMesh() == NULL) //If no quad, render floor tile
 			{
 				//Render tiles 
-				float tileSize = (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetTileSize(); //Get current tile size
+				float tileSize = (*level_map)[noMap]->GetTileSize(); //Get current tile size
 
-				for (int i = 0; i < (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
+				for (int i = 0; i < (*level_map)[noMap]->GetNumOfTiles_Height(); ++i)	//y
 				{
-					for (int k = 0; k < (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Width(); ++k)	//x
+					for (int k = 0; k < (*level_map)[noMap]->GetNumOfTiles_Width(); ++k)	//x
 					{
-						tileObject = (*Model_Level::mapManager.GetCurrentMap())[noMap]->getTileObject(k, i);
+						tileObject = (*level_map)[noMap]->getTileObject(k, i);
 
 						if (tileObject->getTileType() == TileObject::NONE)	//skip rendering floors
 							continue;
@@ -613,9 +614,9 @@ void View::RenderTileMap()
 			else //Render floor quad
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate((*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32 * 0.5f, (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32 * 0.5f, z);
-				modelStack.Scale((*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32, (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32, 1);
-				RenderMesh((*Model_Level::mapManager.GetCurrentMap())[noMap]->getFloorMesh(), false);
+				modelStack.Translate((*level_map)[noMap]->GetNumOfTiles_Width() * 32 * 0.5f, (*level_map)[noMap]->GetNumOfTiles_Height() * 32 * 0.5f, z);
+				modelStack.Scale((*level_map)[noMap]->GetNumOfTiles_Width() * 32, (*level_map)[noMap]->GetNumOfTiles_Height() * 32, 1);
+				RenderMesh((*level_map)[noMap]->getFloorMesh(), false);
 				modelStack.PopMatrix();
 			}
 			z += 0.01f;
@@ -627,23 +628,23 @@ void View::RenderTileMap()
 	RenderObject();
 
 	//Render rest of the map
-	for (int noMap = 0; noMap < Model_Level::mapManager.GetCurrentMap()->size(); noMap++) 
+	for (int noMap = 0; noMap < level_map->size(); noMap++) 
 	{
-		if ((*Model_Level::mapManager.GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP) //If map is a floor, do not render again
+		if ((*level_map)[noMap]->getMapType() == Map::FLOORMAP) //If map is a floor, do not render again
 		{
 			continue; 
 		}
 
-		else if ((*Model_Level::mapManager.GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
+		else if ((*level_map)[noMap]->getMapType() == Map::NOCOLLISIONMAP)
 		{
 			z += 2.f; //To create depth
 		}
 		
-		for (int i = 0; i < (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
+		for (int i = 0; i < (*level_map)[noMap]->GetNumOfTiles_Height(); ++i)	//y
 		{
-			for (int k = 0; k < (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Width(); ++k)	//x
+			for (int k = 0; k < (*level_map)[noMap]->GetNumOfTiles_Width(); ++k)	//x
 			{
-				tileObject = (*Model_Level::mapManager.GetCurrentMap())[noMap]->getTileObject(k, i);
+				tileObject = (*level_map)[noMap]->getTileObject(k, i);
 
 				if (tileObject->getTileType() == TileObject::NONE)	//skip rendering floors
 					continue;
@@ -656,7 +657,7 @@ void View::RenderTileMap()
 			}
 		}
 
-		if ((*Model_Level::mapManager.GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
+		if ((*level_map)[noMap]->getMapType() == Map::NOCOLLISIONMAP)
 		{
 			z -= 2.f;
 		}

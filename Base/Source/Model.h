@@ -36,7 +36,7 @@ enum MODEL
 class Model
 {
 protected:
-	static int model_count;
+	static int model_count;	//how many model
 	static int current_model;
 
 	/** key pressed check **/
@@ -85,15 +85,16 @@ public:
 	static unsigned short getViewHeight();
 	static unsigned short get2DViewWidth();
 	static unsigned short get2DViewHeight();
-	static int getModelCount();
-	static int getCurrentModel();
+	static int getModelCount();	//total model
+	static void setCurrentModel(int i);
+	static int getCurrentModel();	//current model
 
 	/************** General Utilities *****************/
 	bool getWordFromString(string& sentence, string& word, char min, char max, int& index);
 	float stringTofloat(string& number);
 
 	// ================== Audio =================
-	SoundManager *sfx_man;
+	static SoundManager *sfx_man;
 };
 
 #endif

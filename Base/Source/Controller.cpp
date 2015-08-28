@@ -123,7 +123,6 @@ void Controller::Run()
 			/** model update **/
 			modelTransitioning();
 			modelList[Model::getCurrentModel()]->Update(m_dElapsedTime, myKeys, GetMousePos());
-
 			m_dAccumulatedTime_thread1 = 0.0;
 		}
 		if(m_dAccumulatedTime_thread2 > 0.003)	//render: render fps is _dAccumulatedTime_thread1 > fps
@@ -165,6 +164,20 @@ bool Controller::IsKeyPressed(unsigned short key)
 /********************** model transitioning **********************/
 void Controller::modelTransitioning()
 {
+	if( Model_Level::NextLevel() )	//if go next level
+	{
+		//cout << Model_Level::getModelCount() << endl;
+
+		Model_Level::setCurrentModel(Model_Level::getCurrentModel() + 1);
+
+		//cout << Model_Level::getModelCount() << endl;
+		Model_Level::setNextLevel(false);
+	}
+	else if( Model_Level::PreviousLevel() )	//if go previous level
+	{
+		Model_Level::setCurrentModel(Model_Level::getCurrentModel() - 1);
+		Model_Level::setPreviousLevel(false);
+	}
 }
 
 bool Controller::getKeyboardUpdate()

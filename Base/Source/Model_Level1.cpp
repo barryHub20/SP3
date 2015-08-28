@@ -1,4 +1,4 @@
-#include "model_2D.h"
+#include "Model_Level1.h"
 #include "GL\glew.h"
 #include "shader.hpp"
 #include "MeshBuilder.h"
@@ -13,17 +13,17 @@
 //(tip) If create bullet, bullet class has a static TRS so that TRS update with current bullet pos
 
 /*********** constructor/destructor ***************/
-Model_2D::Model_2D()
+Model_Level1::Model_Level1()
 {
 	
 }
 
-Model_2D::~Model_2D()
+Model_Level1::~Model_Level1()
 {
 }
 
 /*********** core functions ***************/
-void Model_2D::Init()
+void Model_Level1::Init()
 {
 	Model_Level::Init();
 
@@ -37,12 +37,19 @@ void Model_2D::Init()
 	Timer = 0;
 	mapTimer = 0;
 
+
 	//object
 	InitObject();
+
+	//player
+	if(player != NULL)
+	{
+		goList.push_back(player);
+	}
+
 	InitSprites();
 	spawnItems();
 	InitTrigger();
-	InitMaps();
 
 	//Model_Level::mapManager.SetMap(0);	//set to map 0 first
 	/* set current level map to level 1 */
@@ -58,7 +65,7 @@ void Model_2D::Init()
 
 }
 
-void Model_2D::InitObject()
+void Model_Level1::InitObject()
 {	
 	/** Set up player **/
 	ReadFromFile("Save_Load_File.txt");
@@ -73,7 +80,7 @@ void Model_2D::InitObject()
 	}
 }
 
-void Model_2D::InitTrigger()
+void Model_Level1::InitTrigger()
 {
 	triggerObject[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::FIRETRIGGER, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
 	goList.push_back(triggerObject[0]);
@@ -97,7 +104,7 @@ void Model_2D::InitTrigger()
 	goList.push_back(triggerObject[4]);
 }
 
-void Model_2D::InitUI()
+void Model_Level1::InitUI()
 {
 	Vector3 winDimension(m_2D_view_width/2, m_2D_view_height/2, 1);
 
@@ -120,7 +127,7 @@ void Model_2D::InitUI()
 	UI_List.push_back(&instruction);
 }
 
-void Model_2D::InitSprites()
+void Model_Level1::InitSprites()
 {
 	//Player sprites
 	player->storeSpriteAnimation("black guard", 21, 13, "Image//Sprites//guard.tga");
@@ -134,7 +141,7 @@ void Model_2D::InitSprites()
 	player->processSpriteAnimation(Player::ATTACKRIGHT, 0.5f, 0, 7, 7, 7, 1);
 }
 
-void Model_2D::InitPuzzles()
+void Model_Level1::InitPuzzles()
 {
 	puzzleManager->addTextPuzzle(MapManager::MAP1, "test1");
 	puzzleManager->addTextPuzzle(MapManager::MAP1, "test2");
@@ -155,14 +162,14 @@ void Model_2D::InitPuzzles()
 	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;*/
 }
 
-void Model_2D::spawnItems()
+void Model_Level1::spawnItems()
 {
 	item = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
 	itemList.push_back(item);
 }
 
-////void Model_2D::InitMaps()
+////void Model_Level1::InitMaps()
 //{
 //	//mapManager->CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
 //	Model_Level::mapManager.CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
@@ -174,7 +181,7 @@ void Model_2D::spawnItems()
 //	Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
 //}
 
-void Model_2D::Update(double dt, bool* myKeys, Vector3 mousePos)
+void Model_Level1::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
 	/* parent class update */
 	Model::Update(dt, myKeys, mousePos);
@@ -203,7 +210,7 @@ void Model_2D::Update(double dt, bool* myKeys, Vector3 mousePos)
 	}
 }
 
-void Model_2D::UpdateGame(double dt, bool* myKeys)
+void Model_Level1::UpdateGame(double dt, bool* myKeys)
 {
 	if (stopGame == false)
 	{
@@ -363,7 +370,7 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 	}
 }
 
-void Model_2D::UpdateTraps(double dt, bool* myKeys)
+void Model_Level1::UpdateTraps(double dt, bool* myKeys)
 {
 	Timer += dt;
 	/* check with trigger objects fire */
@@ -409,7 +416,7 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 
 }
 
-void Model_2D::UpdateEnemy(double dt)
+void Model_Level1::UpdateEnemy(double dt)
 {
 	E_Ogre->Update(dt, &Model_Level::mapManager, goList);
 
@@ -429,7 +436,7 @@ void Model_2D::UpdateEnemy(double dt)
 	E_Ogre->CollisionResponse();
 }
 
-void Model_2D::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)
+void Model_Level1::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)
 {
 	/* Update cursor */
 	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
@@ -444,7 +451,7 @@ void Model_2D::UpdateInstructions(double dt, bool* myKeys, double mouse_x, doubl
 	}
 }
 
-void Model_2D::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
+void Model_Level1::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
 {
 	/* Update cursor */
 	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
@@ -466,7 +473,7 @@ void Model_2D::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mo
 	}
 }
 
-void Model_2D::Exit()
+void Model_Level1::Exit()
 {
 	Model::Exit();
 }

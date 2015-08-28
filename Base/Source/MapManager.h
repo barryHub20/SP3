@@ -30,6 +30,7 @@ public:
 	~MapManager();
 
 	void Init();
+	vector<Map*>* GetMap(int index);
 	void CreateMap(MapManager::MAPS map, Map::TYPE mapType, int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char * mapName, Mesh* tileSet, bool haveCollision = true); //Create map and add into maplist
 	void CreateMapFloor(MapManager::MAPS map, int numOfTileWidth, const int numOfTileHeight, const int tileSize, Mesh* floorMesh);
 	void AddRear(MapManager::MAPS map, Map::TYPE mapType, int numOfTileWidth, const int numOfTileHeight, const int tileSize, const char * mapName, Mesh* tileSet, bool haveCollision = true); //Add a rear map

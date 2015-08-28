@@ -75,6 +75,18 @@ vector<Map*>* MapManager::GetCurrentMap()
 	return &CurrentMap;
 }
 
+vector<Map*>* MapManager::GetMap(int index)
+{
+	if(index < MapList.size())
+	{
+		return &MapList[index];
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 void MapManager::ChangeNextMap()
 {
 	++MapNo;
