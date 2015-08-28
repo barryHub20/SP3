@@ -42,7 +42,7 @@ void Model_Level::Init()
 	
 		current_model = 0;
 
-		stateManager.ChangeState(StateManager::GAME);
+		stateManager.ChangeState(StateManager::MAIN_MENU);
 	}
 }
 

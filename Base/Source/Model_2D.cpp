@@ -177,17 +177,17 @@ void Model_2D::spawnItems()
 	itemList.push_back(item);
 }
 
-void Model_2D::InitMaps()
-{
-	//mapManager->CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-	mapManager->CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
-	//mapManager->CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
-	mapManager->AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-	mapManager->AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
-	//mapManager->AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
-	mapManager->CreateMap(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
-	mapManager->CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
-}
+////void Model_2D::InitMaps()
+//{
+//	//mapManager->CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+//	Model_Level::mapManager.CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+//	//mapManager->CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
+//	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+//	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
+//	//mapManager->AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
+//	Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
+//	Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
+//}
 
 void Model_2D::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
@@ -198,7 +198,7 @@ void Model_2D::Update(double dt, bool* myKeys, Vector3 mousePos)
 		keyPressedTimer += dt;
 	
 	/* Update based on states */
-	switch (stateManager->GetState())
+	switch (Model_Level::stateManager.GetState())
 	{
 	case StateManager::MAIN_MENU:
 			UpdateMainMenu(dt, myKeys, mousePos.x,  mousePos.y);
@@ -212,9 +212,9 @@ void Model_2D::Update(double dt, bool* myKeys, Vector3 mousePos)
 	}
 
 	/* If in transition */
-	if (stateManager->isTransition())
+	if (Model_Level::stateManager.isTransition())
 	{
-		stateManager->UpdateTransitionTime(dt);
+		Model_Level::stateManager.UpdateTransitionTime(dt);
 	}
 }
 
@@ -263,11 +263,20 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		player->StartCollisionCheck();
 
 		/* check collision with map */
-		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
+		for (int i = 0; i < Model_Level::mapManager.GetCurrentMap()->size(); i++)
 		{
-			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
+			if ((*Model_Level::mapManager.GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				(*mapManager->GetCurrentMap())[i]->CheckCollisionWith(player);
+				(*Model_Level::mapManager.GetCurrentMap())[i]->getWalkable(player->getPosition().x, player->getPosition().y);
+			}
+		}
+
+		/* check collision with map */
+		for (int i = 0; i < Model_Level::mapManager.GetCurrentMap()->size(); i++)
+		{
+			if ((*Model_Level::mapManager.GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
+			{
+				(*Model_Level::mapManager.GetCurrentMap())[i]->CheckCollisionWith(player);
 			}
 		}
 
@@ -289,7 +298,7 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 			if (mapTimer > 5)
 			{
 				goNextLevel = true;
-				mapManager->ChangeNextMap();
+				Model_Level::mapManager.ChangeNextMap();
 				mapTimer = 0;
 			}
 		}
@@ -415,7 +424,7 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 
 void Model_2D::UpdateEnemy(double dt)
 {
-	E_Ogre->Update(dt,mapManager, goList);
+	E_Ogre->Update(dt, &Model_Level::mapManager, goList);
 
 	/* start set up */
 	E_Ogre->StartCollisionCheck();
@@ -433,42 +442,42 @@ void Model_2D::UpdateEnemy(double dt)
 	E_Ogre->CollisionResponse();
 }
 
-//void Model_2D::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)
-//{
-//	/* Update cursor */
-//	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
-//
-//	/* Check collide */
-//	if(cursor.QuickAABBDetection(&go_back) && myKeys[KEY_LMOUSE])	//go back to main menu
-//	{
-//		go_back.SetActive(false);
-//		start_Game.SetActive(true);
-//		instruction.SetActive(true);
-//		stateManager->ChangeState(stateManager->MAIN_MENU);
-//	}
-//}
+void Model_2D::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)
+{
+	/* Update cursor */
+	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
 
-//void Model_2D::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
-//{
-//	/* Update cursor */
-//	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
-//
-//	/* Check collide */
-//	if(cursor.QuickAABBDetection(&start_Game) && myKeys[KEY_LMOUSE])	//pressed start game button
-//	{
-//		start_Game.SetActive(false);
-//		instruction.SetActive(false);
-//		go_back.SetActive(true);
-//		stateManager->ChangeState(stateManager->GAME);
-//	}
-//	else if(cursor.CheckCollision(instruction) && myKeys[KEY_LMOUSE])	//pressed instructions
-//	{
-//		start_Game.SetActive(false);
-//		instruction.SetActive(false);
-//		go_back.SetActive(true);
-//		stateManager->ChangeState(stateManager->INSTRUCTION);
-//	}
-//}
+	/* Check collide */
+	if(cursor.QuickAABBDetection(&go_back) && myKeys[KEY_LMOUSE])	//go back to main menu
+	{
+		go_back.SetActive(false);
+		start_Game.SetActive(true);
+		instruction.SetActive(true);
+		Model_Level::stateManager.ChangeState(Model_Level::stateManager.MAIN_MENU);
+	}
+}
+
+void Model_2D::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
+{
+	/* Update cursor */
+	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
+
+	/* Check collide */
+	if(cursor.QuickAABBDetection(&start_Game) && myKeys[KEY_LMOUSE])	//pressed start game button
+	{
+		start_Game.SetActive(false);
+		instruction.SetActive(false);
+		go_back.SetActive(true);
+		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
+	}
+	else if(cursor.QuickAABBDetection(&instruction) && myKeys[KEY_LMOUSE])	//pressed instructions
+	{
+		start_Game.SetActive(false);
+		instruction.SetActive(false);
+		go_back.SetActive(true);
+		Model_Level::stateManager.ChangeState(Model_Level::stateManager.INSTRUCTION);
+	}
+}
 
 void Model_2D::Exit()
 {
