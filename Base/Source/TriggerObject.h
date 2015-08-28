@@ -14,7 +14,7 @@ public:
 		ARROWTRIGGER, //arrow lever
 		DOOR,
 		FIRE, //fire trap
-		ARROWTRAP,
+		ARROWTRAP, //arrow trap
 		TRIGGERWHENCOLLIDE,
 		TOTAL_OBJECTS,
 	};
@@ -47,6 +47,7 @@ private:
 	TRIGGEROBJECTS type;
 
 	bool isTriggered;
+	Vector3 initialPos;
 };
 
 #endif

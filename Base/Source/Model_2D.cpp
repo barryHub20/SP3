@@ -73,8 +73,21 @@ void Model_2D::InitObject()
 	}
 }
 
+void Model_2D::InitMaps()
+{
+	//Model_Level::mapManager.CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	Model_Level::mapManager.CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	//Model_Level::mapManager.CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
+	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
+	//Model_Level::mapManager.AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
+	//Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
+	//Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
+}
+
 void Model_2D::InitTrigger()
 {
+	//Lever for fire
 	triggerObject[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::FIRETRIGGER, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
 	goList.push_back(triggerObject[0]);
 
@@ -82,19 +95,19 @@ void Model_2D::InitTrigger()
 	goList.push_back(triggerObject[1]);
 
 	//Fire
-	triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(550, 688, 0), Vector3(30, 158, 1), 0, true, *sfx_man, player);
+	triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(550, 688, -1), Vector3(30, 158, 1), 0, true, *sfx_man, player);
 	triggerObject[2]->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
 	triggerObject[2]->processSpriteAnimation(TriggerObject::FIRE, 0.8f, 1, 0, 6, 0, 1, false);
 	goList.push_back(triggerObject[2]);
 
-	triggerObject[3] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(680, 688, 0), Vector3(30, 158, 1), 0, true, *sfx_man, player);
+	triggerObject[3] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(680, 688, -1), Vector3(30, 158, 1), 0, true, *sfx_man, player);
 	triggerObject[3]->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
 	triggerObject[3]->processSpriteAnimation(TriggerObject::FIRE, 1.f, 1, 0, 6, 0, 1, false);
 	goList.push_back(triggerObject[3]);
 
 	//Arrow trap
-	triggerObject[4] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWLEFT], TriggerObject::ARROWTRAP, Vector3(940, 100, 0), Vector3(30, 30, 1), false, true, *sfx_man, player);
-	goList.push_back(triggerObject[4]);
+	triggerObject[4] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWLEFT], TriggerObject::ARROWTRAP, Vector3(940, 100, -1), Vector3(30, 30, 1), false, true, *sfx_man, player);
+	 goList.push_back(triggerObject[4]);
 }
 
 void Model_2D::InitUI()
@@ -161,24 +174,12 @@ void Model_2D::spawnItems()
 	itemList.push_back(item);
 }
 
-////void Model_2D::InitMaps()
-//{
-//	//mapManager->CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-//	Model_Level::mapManager.CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
-//	//mapManager->CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
-//	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-//	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
-//	//mapManager->AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
-//	Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
-//	Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
-//}
-
 void Model_2D::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
 	/* parent class update */
 	Model::Update(dt, myKeys, mousePos);
 
-	if(keyPressedTimer < delayTime)
+	if(keyPressedTimer < delayTime) 
 		keyPressedTimer += dt;
 	
 	/* Update based on states */
@@ -376,8 +377,8 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 	{
 		triggerObject[0]->setActive(false); //to change lever position
 		triggerObject[1]->setActive(true); 
-		triggerObject[2]->setActive(false); //fire
-		triggerObject[3]->setActive(false); //fire
+		triggerObject[2]->setActive(false); //fire off
+		triggerObject[3]->setActive(false); //fire off
 		haveFire = false; //do not render fire
 	}
 	else 
@@ -392,12 +393,14 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 	//Timer for lever and damage, health
 	if(Timer >= 0.5)
 	{
+		//Fire
 		if(player->QuickAABBDetection(triggerObject[2]) && haveFire == true || player->QuickAABBDetection(triggerObject[3]) && haveFire == true)
 		{
 			player->setHealth(player->getHealth() - 15);
 			player->Translate(player->getPosition() - 45);
 			Timer = 0;
 		}
+		//Arrow
 		if (player->QuickAABBDetection(triggerObject[4]))
 		{
 			player->setHealth(player->getHealth() - 15);
@@ -405,7 +408,6 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 			Timer = 0;
 		}
 	}
-
 }
 
 void Model_2D::UpdateEnemy(double dt)

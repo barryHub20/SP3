@@ -31,6 +31,8 @@ enum MODEL
 	LEVEL_1,
 	LEVEL_2,
 	LEVEL_3,
+	LEVEL4,
+	LEVEL5,
 	TOTAL_MODEL,
 };
 

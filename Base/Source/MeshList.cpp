@@ -205,6 +205,10 @@ void Geometry::Init()
 
 	meshList[GEO_ATKPOTION] = MeshBuilder::GenerateQuad("Attack Potion", Color(1, 1, 1), 1.f);
 	meshList[GEO_ATKPOTION]->textureID[0] = LoadTGA("Image//atkPotion.tga");
+
+	meshList[GEO_SCROLL] = MeshBuilder::GenerateQuad("Scroll", Color(1, 1, 1));
+	meshList[GEO_SCROLL]->textureID[0] = LoadTGA("Image//Sprites//scroll.tga");
+
 }
 
 void Geometry::Exit()

@@ -28,6 +28,7 @@ TriggerObject::TriggerObject(Mesh* mesh, TRIGGEROBJECTS objectName, Vector3 Pos,
 
 	isTriggered = true; //trigger
 	triggerTimer = 0;
+	initialPos = Pos;
 }
 
 void TriggerObject::setState(TRIGGEROBJECTS state)
@@ -79,7 +80,6 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 				isTriggered = false;
 				triggerTimer = 0;
 			}
-
 			else if(player->QuickAABBDetection(this) && myKey[KEY_E] && isTriggered == false) //Switch on fire trap
 			{
 				isTriggered = true;
@@ -87,7 +87,6 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			}
 		}
 	}
-
 	else if (type == ARROWTRAP)
 	{
 		if (this->mesh->name == "arrow left")
@@ -95,7 +94,7 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			translateObject(Vector3(-ARROW_SPEED, 0, 0));
 			if (position.x < 0)
 			{
-				position.x = 940;
+				Object::translate(initialPos.x, initialPos.y, initialPos.z);
 			}
 		}
 		else if (this->mesh->name == "arrow right")
@@ -103,7 +102,7 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			translateObject(Vector3(ARROW_SPEED, 0, 0));
 			if (position.x < 0)
 			{
-				position.x = 940;
+				Object::translate(initialPos.x, initialPos.y, initialPos.z);
 			}
 		}
 		else if (this->mesh->name == "arrow up")
@@ -111,7 +110,7 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			translateObject(Vector3(0, ARROW_SPEED, 0));
 			if (position.x < 0)
 			{
-				position.x = 940;
+				Object::translate(initialPos.x, initialPos.y, initialPos.z);
 			}
 		}
 		else if (this->mesh->name == "arrow down")
@@ -119,7 +118,7 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			translateObject(Vector3(0, -ARROW_SPEED, 0));
 			if (position.x < 0)
 			{
-				position.x = 940;
+				Object::translate(initialPos.x, initialPos.y, initialPos.z);
 			}
 		}
 	}
