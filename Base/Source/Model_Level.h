@@ -26,7 +26,7 @@ public:
 	float hero_Health;
 
 	//Triggering Objects
-	TriggerObject* triggerObject[4];
+	vector<TriggerObject*> triggerObject;
 
 	// UI 
 	UI_Object cursor;

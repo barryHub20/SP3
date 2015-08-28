@@ -1,4 +1,4 @@
-#include "Model_Level1.h"
+#include "Model_Level3.h"
 #include "GL\glew.h"
 #include "shader.hpp"
 #include "MeshBuilder.h"
@@ -13,17 +13,17 @@
 //(tip) If create bullet, bullet class has a static TRS so that TRS update with current bullet pos
 
 /*********** constructor/destructor ***************/
-Model_Level1::Model_Level1()
+Model_Level3::Model_Level3()
 {
 	
 }
 
-Model_Level1::~Model_Level1()
+Model_Level3::~Model_Level3()
 {
 }
 
 /*********** core functions ***************/
-void Model_Level1::Init()
+void Model_Level3::Init()
 {
 	Model_Level::Init();
 
@@ -37,28 +37,26 @@ void Model_Level1::Init()
 	Timer = 0;
 	mapTimer = 0;
 
-
-	//object
-	InitObject();
-
 	//player
 	if(player != NULL)
 	{
 		goList.push_back(player);
 	}
 
+	/* !! Remember to set player pos to where ever you want */
+	player->translate(100, 100, 1);
+
+	//object
+	InitObject();
 	spawnItems();
 	InitTrigger();
-
-	//Model_Level::mapManager.SetMap(0);	//set to map 0 first
-	/* set current level map to level 1 */
-	level_map = Model_Level::mapManager.GetMap(LEVEL_1);
 
 	//UI
 	InitUI();
 
-	//sprite (Only level one call once)
-	InitSprite();
+	//Model_Level::mapManager.SetMap(0);	//set to map 0 first
+	/* set current level map to level 1 */
+	level_map = Model_Level::mapManager.GetMap(LEVEL_3);
 
 	//Init puzzle
 	puzzleManager = new PuzzleManager;
@@ -67,24 +65,18 @@ void Model_Level1::Init()
 
 }
 
-void Model_Level1::InitSprite()
+void Model_Level3::InitUI()
 {
-	//Player sprites
-	player->storeSpriteAnimation("black guard", 21, 13, "Image//Sprites//guard.tga");
-	player->processSpriteAnimation(Player::UP, 0.5f, 0, 8, 8, 8, 1);
-	player->processSpriteAnimation(Player::DOWN, 0.5f, 0, 10, 8, 10, 1);
-	player->processSpriteAnimation(Player::LEFT, 0.5f, 0, 9, 8, 9, 1);
-	player->processSpriteAnimation(Player::RIGHT, 0.5f, 0, 11, 8, 11, 1);
-	player->processSpriteAnimation(Player::ATTACKUP, 0.5f, 0, 4, 7, 4, 1);
-	player->processSpriteAnimation(Player::ATTACKDOWN, 0.5f, 0, 6, 7, 6, 1);
-	player->processSpriteAnimation(Player::ATTACKLEFT, 0.5f, 0, 5, 7, 5, 1);
-	player->processSpriteAnimation(Player::ATTACKRIGHT, 0.5f, 0, 7, 7, 7, 1);
+	Vector3 winDimension(m_2D_view_width/2, m_2D_view_height/2, 1);
 }
 
-void Model_Level1::InitObject()
+
+void Model_Level3::InitObject()
 {	
 	/** Set up player **/
-	ReadFromFile("Save_Load_File_lvl1.txt");
+	ReadFromFile("Save_Load_File_lvl3.txt");
+
+	/** Set up enemy **/
 	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
 	goList.push_back(E_Ogre);
 
@@ -96,55 +88,22 @@ void Model_Level1::InitObject()
 	}
 }
 
-void Model_Level1::InitTrigger()
+void Model_Level3::InitTrigger()
 {
-	triggerObject.resize(5);
+	triggerObject.resize(3);
+
 	triggerObject[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::FIRETRIGGER, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
 	goList.push_back(triggerObject[0]);
 
 	triggerObject[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_ISTRIGGER], TriggerObject::FIRETRIGGER, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
 	goList.push_back(triggerObject[1]);
 
-	//Fire
-	triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(550, 688, 0), Vector3(30, 158, 1), 0, true, *sfx_man, player);
-	triggerObject[2]->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
-	triggerObject[2]->processSpriteAnimation(TriggerObject::FIRE, 0.8f, 1, 0, 6, 0, 1, false);
-	goList.push_back(triggerObject[2]);
-
-	triggerObject[3] = new TriggerObject(Geometry::meshList[Geometry::GEO_FIRE], TriggerObject::FIRE, Vector3(680, 688, 0), Vector3(30, 158, 1), 0, true, *sfx_man, player);
-	triggerObject[3]->storeSpriteAnimation("fire trap", 1, 7, "Image//Sprites//fire.tga");
-	triggerObject[3]->processSpriteAnimation(TriggerObject::FIRE, 1.f, 1, 0, 6, 0, 1, false);
-	goList.push_back(triggerObject[3]);
-
 	//Arrow trap
-	triggerObject[4] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWLEFT], TriggerObject::ARROWTRAP, Vector3(940, 100, 0), Vector3(30, 30, 1), false, true, *sfx_man, player);
-	goList.push_back(triggerObject[4]);
+	triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWLEFT], TriggerObject::ARROWTRAP, Vector3(940, 100, 0), Vector3(30, 30, 1), false, true, *sfx_man, player);
+	goList.push_back(triggerObject[2]);
 }
 
-void Model_Level1::InitUI()
-{
-	Vector3 winDimension(m_2D_view_width/2, m_2D_view_height/2, 1);
-
-	/* background main menu */
-	UI_Object* obj;
-	obj = new UI_Object;
-	obj->Init(Geometry::meshList[Geometry::GEO_BOTTOM], winDimension, Vector3(m_2D_view_width, m_2D_view_height, 1), "", UI_Object::MAIN_MENU_BACKGROUND, true);
-	UI_List.push_back(obj);
-
-	/* UI Objects */
-	Controller::mouse_current_x;
-	Vector3 mousePos(Controller::mouse_current_x, Controller::mouse_current_y, 3);
-	cursor.Init(Geometry::meshList[Geometry::GEO_BACK], mousePos, Vector3(5, 5, 1), "", UI_Object::MOUSE_CURSOR, true);
-	UI_List.push_back(&cursor);
-
-	start_Game.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y + 11, 1.1), Vector3(40, 15, 1), "Start Game", UI_Object::BUTTON, true);
-	UI_List.push_back(&start_Game);	
-
-	instruction.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y - 11, 1.1), Vector3(40, 15, 1), "Instructions", UI_Object::BUTTON, true);
-	UI_List.push_back(&instruction);
-}
-
-void Model_Level1::InitPuzzles()
+void Model_Level3::InitPuzzles()
 {
 	puzzleManager->addTextPuzzle(MapManager::MAP1, "test1");
 	puzzleManager->addTextPuzzle(MapManager::MAP1, "test2");
@@ -165,14 +124,14 @@ void Model_Level1::InitPuzzles()
 	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;*/
 }
 
-void Model_Level1::spawnItems()
+void Model_Level3::spawnItems()
 {
 	item = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
 	itemList.push_back(item);
 }
 
-void Model_Level1::Update(double dt, bool* myKeys, Vector3 mousePos)
+void Model_Level3::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
 	/* parent class update */
 	Model::Update(dt, myKeys, mousePos);
@@ -180,28 +139,11 @@ void Model_Level1::Update(double dt, bool* myKeys, Vector3 mousePos)
 	if(keyPressedTimer < delayTime)
 		keyPressedTimer += dt;
 	
-	/* Update based on states */
-	switch (Model_Level::stateManager.GetState())
-	{
-	case StateManager::MAIN_MENU:
-			UpdateMainMenu(dt, myKeys, mousePos.x,  mousePos.y);
-			break;
-	case StateManager::GAME:
-			UpdateGame(dt, myKeys);
-			break;
-	case StateManager::INSTRUCTION:
-			UpdateInstructions(dt, myKeys, mousePos.x, mousePos.y);
-			break;
-	}
-
-	/* If in transition */
-	if (Model_Level::stateManager.isTransition())
-	{
-		Model_Level::stateManager.UpdateTransitionTime(dt);
-	}
+	/* Update game */
+	UpdateGame(dt, myKeys);
 }
 
-void Model_Level1::UpdateGame(double dt, bool* myKeys)
+void Model_Level3::UpdateGame(double dt, bool* myKeys)
 {
 	if (stopGame == false)
 	{
@@ -337,12 +279,13 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 			puzzleOpen = false;
 		}
 
-		/* Load/change map */
+		/* GO TO NEXT LEVEL (PRESS B FOR NOW) */
 		//Key B to move to next map (RP)
 		static bool ButtonBState = false;
 		if (!ButtonBState && myKeys[KEY_B])
 		{
 			ButtonBState = true;
+			goNextLevel = true;	//go to next level
 			std::cout << "BBUTTON DOWN" << std::endl;
 			//stateManager->ChangeState(StateManager::MAIN_MENU);
 			//mapManager->ChangeNextMap();
@@ -361,11 +304,11 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 	}
 }
 
-void Model_Level1::UpdateTraps(double dt, bool* myKeys)
+void Model_Level3::UpdateTraps(double dt, bool* myKeys)
 {
 	Timer += dt;
 	/* check with trigger objects fire */
-	for(int i = 0; i < 5; i++)
+	for(int i = 0; i < 3; i++)
 	{
 		triggerObject[i]->Update(dt, myKeys); //animation and actual update
 	}
@@ -376,7 +319,6 @@ void Model_Level1::UpdateTraps(double dt, bool* myKeys)
 		triggerObject[0]->setActive(false); //to change lever position
 		triggerObject[1]->setActive(true); 
 		triggerObject[2]->setActive(false); //fire
-		triggerObject[3]->setActive(false); //fire
 		haveFire = false; //do not render fire
 	}
 	else 
@@ -384,30 +326,11 @@ void Model_Level1::UpdateTraps(double dt, bool* myKeys)
 		triggerObject[0]->setActive(true); 
 		triggerObject[1]->setActive(false);
 		triggerObject[2]->setActive(true); //fire on
-		triggerObject[3]->setActive(true); //fire on
 		haveFire = true;
 	}
-
-	//Timer for lever and damage, health
-	if(Timer >= 0.5)
-	{
-		if(player->QuickAABBDetection(triggerObject[2]) && haveFire == true || player->QuickAABBDetection(triggerObject[3]) && haveFire == true)
-		{
-			player->setHealth(player->getHealth() - 15);
-			player->Translate(player->getPosition() - 45);
-			Timer = 0;
-		}
-		if (player->QuickAABBDetection(triggerObject[4]))
-		{
-			player->setHealth(player->getHealth() - 15);
-			player->Translate(player->getPosition() - 45);
-			Timer = 0;
-		}
-	}
-
 }
 
-void Model_Level1::UpdateEnemy(double dt)
+void Model_Level3::UpdateEnemy(double dt)
 {
 	E_Ogre->Update(dt, &Model_Level::mapManager, goList);
 
@@ -417,7 +340,7 @@ void Model_Level1::UpdateEnemy(double dt)
 	/* check with wall */
 	for (int i = 0; i < (*level_map).size(); i++)
 	{
-		(*level_map)[i]->CheckCollisionWith(player);
+		(*level_map)[i]->CheckCollisionWith(E_Ogre);
 	}
 
 	/* check with all other objects */
@@ -427,44 +350,7 @@ void Model_Level1::UpdateEnemy(double dt)
 	E_Ogre->CollisionResponse();
 }
 
-void Model_Level1::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)
-{
-	/* Update cursor */
-	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
-
-	/* Check collide */
-	if(cursor.QuickAABBDetection(&go_back) && myKeys[KEY_LMOUSE])	//go back to main menu
-	{
-		go_back.SetActive(false);
-		start_Game.SetActive(true);
-		instruction.SetActive(true);
-		Model_Level::stateManager.ChangeState(Model_Level::stateManager.MAIN_MENU);
-	}
-}
-
-void Model_Level1::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
-{
-	/* Update cursor */
-	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
-
-	/* Check collide */
-	if(cursor.QuickAABBDetection(&start_Game) && myKeys[KEY_LMOUSE])	//pressed start game button
-	{
-		start_Game.SetActive(false);
-		instruction.SetActive(false);
-		go_back.SetActive(true);
-		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
-	}
-	else if(cursor.QuickAABBDetection(&instruction) && myKeys[KEY_LMOUSE])	//pressed instructions
-	{
-		start_Game.SetActive(false);
-		instruction.SetActive(false);
-		go_back.SetActive(true);
-		Model_Level::stateManager.ChangeState(Model_Level::stateManager.INSTRUCTION);
-	}
-}
-
-void Model_Level1::Exit()
+void Model_Level3::Exit()
 {
 	Model::Exit();
 }

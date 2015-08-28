@@ -15,15 +15,12 @@ public:
 	void InitTrigger();
 	void InitUI();
 	void InitObject();
-	void InitSprites();
 	void InitPuzzles();
 	void spawnItems();
 
 	//Update
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
-		void UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y);	//updating main menu
 		void UpdateGame(double dt, bool* myKeys);
-		void UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y);
 		void UpdateEnemy(double dt);
 		void UpdateTraps(double dt, bool* myKeys);
 
