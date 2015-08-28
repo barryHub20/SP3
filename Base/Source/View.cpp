@@ -45,12 +45,11 @@ void resize_callback_view(GLFWwindow* window, int w, int h)
 	glViewport(0, 0, w, h);
 }
 
-View::View() : model(NULL)
+View::View()
 {
 }
 
-View::View(Model* model, unsigned short console_width, unsigned short console_height, MODE mode) : model(model) 
-	,mode(mode)
+View::View(unsigned short console_width, unsigned short console_height, MODE mode) : mode(mode)
 {
 	m_console_width = console_width;
 	m_console_height = console_height;
@@ -277,8 +276,10 @@ void View::InitLight()
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 }
 
-void View::Render(const float fps)
+void View::Render(const float fps, Model_Level* model)
 {
+	this->model = model;
+
 	this->fps = fps;
 	/* initialize render */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -286,11 +287,11 @@ void View::Render(const float fps)
 
 	/** 3D **/
 	if(mode == THREE_D)
-		perspective.SetToPerspective(model->getFOV(), m_console_width * (1.f / m_console_height), 0.1f, 14000.0f);
+		perspective.SetToPerspective(45, m_console_width * (1.f / m_console_height), 0.1f, 14000.0f);
 	
 	/** 2D **/
 	else
-		perspective.SetToOrtho(0, model->getViewWidth(), 0, model->getViewHeight(), (float)-model->getWorldDimension().z * 0.5f, (float)model->getWorldDimension().z * 0.5f);
+		perspective.SetToOrtho(0, model->getViewWidth(), 0, model->getViewHeight(), -10.f, 10.f);
 
 	projectionStack.LoadMatrix(perspective);
 
@@ -304,7 +305,7 @@ void View::Render(const float fps)
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
 
-	switch (model->stateManager->GetState())
+	switch (model->stateManager.GetState())
 	{
 		case StateManager::GAME:
 		{
@@ -333,7 +334,7 @@ void View::RenderCollideBox()
 {
 	Vector3 pos, scale;
 
-	if (model->stateManager->GetState() == model->stateManager->GAME)	// If GAME is current state
+	if (model->stateManager.GetState() == model->stateManager.GAME)	// If GAME is current state
 	{
 		for(vector<GameObject*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
 		{
@@ -546,7 +547,7 @@ void View::RenderLight()
 void View::RenderObject()
 {
 	/* Renders all objects */
-	if (model->stateManager->GetState() == model->stateManager->GAME)
+	if (Model_Level::stateManager.GetState() == Model_Level::stateManager.GAME)
 	{
 		for(vector<GameObject*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
 		{
@@ -567,7 +568,7 @@ void View::RenderObject()
 		}
 	}
 
-	if (model->stateManager->GetState() == model->stateManager->MAIN_MENU || model->stateManager->GetState() == model->stateManager->INSTRUCTION || model->stateManager->GetState() == model->stateManager->TRANSITION)
+	if (Model_Level::stateManager.GetState() == Model_Level::stateManager.MAIN_MENU || Model_Level::stateManager.GetState() == Model_Level::stateManager.INSTRUCTION || Model_Level::stateManager.GetState() == Model_Level::stateManager.TRANSITION)
 	{
 		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_JINFLOOR],false,160,1,1,0,0);
 	}
@@ -582,21 +583,21 @@ void View::RenderTileMap()
 
 	float z = -4.f;
 	//Render first map, usually floor
-	for (int noMap = 0; noMap < model->mapManager->GetCurrentMap()->size(); noMap++)
+	for (int noMap = 0; noMap < Model_Level::mapManager.GetCurrentMap()->size(); noMap++)
 	{
 		//Render floor
-		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP)
+		if ((*Model_Level::mapManager.GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP)
 		{
-			if ((*model->mapManager->GetCurrentMap())[noMap]->getFloorMesh() == NULL) //If no quad, render floor tile
+			if ((*Model_Level::mapManager.GetCurrentMap())[noMap]->getFloorMesh() == NULL) //If no quad, render floor tile
 			{
 				//Render tiles 
-				float tileSize = (*model->mapManager->GetCurrentMap())[noMap]->GetTileSize(); //Get current tile size
+				float tileSize = (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetTileSize(); //Get current tile size
 
-				for (int i = 0; i < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
+				for (int i = 0; i < (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
 				{
-					for (int k = 0; k < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width(); ++k)	//x
+					for (int k = 0; k < (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Width(); ++k)	//x
 					{
-						tileObject = (*model->mapManager->GetCurrentMap())[noMap]->getTileObject(k, i);
+						tileObject = (*Model_Level::mapManager.GetCurrentMap())[noMap]->getTileObject(k, i);
 
 						if (tileObject->getTileType() == TileObject::NONE)	//skip rendering floors
 							continue;
@@ -612,9 +613,9 @@ void View::RenderTileMap()
 			else //Render floor quad
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32 * 0.5f, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32 * 0.5f, z);
-				modelStack.Scale((*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32, (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32, 1);
-				RenderMesh((*model->mapManager->GetCurrentMap())[noMap]->getFloorMesh(), false);
+				modelStack.Translate((*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32 * 0.5f, (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32 * 0.5f, z);
+				modelStack.Scale((*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Width() * 32, (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Height() * 32, 1);
+				RenderMesh((*Model_Level::mapManager.GetCurrentMap())[noMap]->getFloorMesh(), false);
 				modelStack.PopMatrix();
 			}
 			z += 0.01f;
@@ -626,23 +627,23 @@ void View::RenderTileMap()
 	RenderObject();
 
 	//Render rest of the map
-	for (int noMap = 0; noMap < model->mapManager->GetCurrentMap()->size(); noMap++) 
+	for (int noMap = 0; noMap < Model_Level::mapManager.GetCurrentMap()->size(); noMap++) 
 	{
-		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP) //If map is a floor, do not render again
+		if ((*Model_Level::mapManager.GetCurrentMap())[noMap]->getMapType() == Map::FLOORMAP) //If map is a floor, do not render again
 		{
 			continue; 
 		}
 
-		else if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
+		else if ((*Model_Level::mapManager.GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
 		{
 			z += 2.f; //To create depth
 		}
 		
-		for (int i = 0; i < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
+		for (int i = 0; i < (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Height(); ++i)	//y
 		{
-			for (int k = 0; k < (*model->mapManager->GetCurrentMap())[noMap]->GetNumOfTiles_Width(); ++k)	//x
+			for (int k = 0; k < (*Model_Level::mapManager.GetCurrentMap())[noMap]->GetNumOfTiles_Width(); ++k)	//x
 			{
-				tileObject = (*model->mapManager->GetCurrentMap())[noMap]->getTileObject(k, i);
+				tileObject = (*Model_Level::mapManager.GetCurrentMap())[noMap]->getTileObject(k, i);
 
 				if (tileObject->getTileType() == TileObject::NONE)	//skip rendering floors
 					continue;
@@ -655,7 +656,7 @@ void View::RenderTileMap()
 			}
 		}
 
-		if ((*model->mapManager->GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
+		if ((*Model_Level::mapManager.GetCurrentMap())[noMap]->getMapType() == Map::NOCOLLISIONMAP)
 		{
 			z -= 2.f;
 		}
@@ -671,7 +672,7 @@ void View::RenderInventory(Inventory* inventory)
 	float yPos = inventory->getYPos();
 	Vector3 scale = inventory->getSlotScale();
 	Mesh* mesh = NULL;
-
+	
 	for(int i = 0; i < inventory->MAX_SLOT; ++i)
 	{
 		/* render slots */
@@ -702,7 +703,7 @@ void View::RenderInventory(Inventory* inventory)
 		{
 			RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SELECTOR], false, scale.x * 1.05f, scale.y * 1.05f, 1,startX, yPos, 2, 0);
 		}
-
+		
 		//set pos to next slot
 		startX += inventory->getDistBtwSlot();
 	}
@@ -1003,7 +1004,17 @@ void View::Render2DTile(Mesh *mesh, bool enableLight, float size, float x, float
 	projectionStack.PopMatrix();
 }
 
-Model* View::getModel()
-{
-	return model;
-}
+//Model_Level* View::getModel(int index)
+//{
+//	return modelList[index];
+//}
+//
+//int View::modelListSize()
+//{
+//	return modelList.size();
+//}
+//
+//void View::SetNewModel(int index)
+//{
+//	this->model = modelList[index];
+//}

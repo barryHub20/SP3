@@ -1,6 +1,6 @@
 #ifndef VIEW_H
 #define VIEW_H
-#include "Model.h"
+#include "Model_Level.h"
 
 //Include GLEW
 #include <GL/glew.h>
@@ -17,8 +17,8 @@ private:
 /********************** openGL *********************************/
 	static GLFWwindow* m_window_view;
 
-/********************** model and view ptr **********************/
-	Model* model;
+/********************** model ptr **********************/
+	Model_Level* model; //the current model
 
 /********************** Window screen size *****************************/
 	//dimension on computer screen
@@ -97,7 +97,7 @@ public:
 
 /********************** constructor/destructor *****************************/
 	View();
-	View(Model* model, unsigned short console_width, unsigned short console_height, MODE mode);
+	View(unsigned short console_width, unsigned short console_height, MODE mode);
 	~View();
 
 /********************** Core functions *****************************/
@@ -105,8 +105,10 @@ public:
 	void InitLight();
 	void InitFontData();
 	void InitProjection();
-	void Render(const float fps);
+	void Render(const float fps, Model_Level* model);
 	void Exit();
+
+	void SetNewModel(int index);	//if your model is an array
 
 /**************** render ****************/
 	void RenderLight();
@@ -138,8 +140,6 @@ public:
 /********************** openGL *********************************/
 	static GLFWwindow* getWindow();
 
-/********************** openGL *********************************/
-	Model* getModel();
 private:
 /************* mode *****************/
 	MODE mode;

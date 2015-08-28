@@ -29,17 +29,21 @@ void scroll(GLFWwindow* window,double x,double y)
 }
 
 /********************* constructor / destructor *********************/
-Controller::Controller() : model(NULL), view(NULL)
+Controller::Controller() : view(NULL)
 {
 }
 
-Controller::Controller(View* view) : view(view)
+Controller::Controller(vector<Model_Level*>& modelList, View* view) : view(view)
 {
+	this->modelList.resize(modelList.size());
+	for(int i = 0; i < modelList.size(); ++i)
+	{
+		this->modelList[i] = modelList[i];
+	}
 }
 
 Controller::~Controller()
 {
-	model = NULL;
 	view = NULL;
 }
 
@@ -85,14 +89,13 @@ void Controller::Init()
 	//init view
 	view->Init();
 
-	//set model
-	model = view->getModel();
-
 	//hide the cursor
 	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-
-	model->Init();
+	for(int i = 0; i < modelList.size(); ++i)
+	{
+		modelList[i]->Init();
+	}
 }
 
 void Controller::Run()
@@ -109,7 +112,7 @@ void Controller::Run()
 
 		/* fps */
 		fps = (float)(1.f / m_dElapsedTime);
-
+		
 		/* twin threaded approach */
 		if(m_dAccumulatedTime_thread1 > 0.01)	//update: update fps is _dAccumulatedTime_thread1 > fps
 		{
@@ -118,14 +121,15 @@ void Controller::Run()
 			getKeyboardUpdate();
 
 			/** model update **/
-			model->Update(m_dElapsedTime, myKeys, GetMousePos());
+			modelTransitioning();
+			modelList[Model::getCurrentModel()]->Update(m_dElapsedTime, myKeys, GetMousePos());
 
 			m_dAccumulatedTime_thread1 = 0.0;
 		}
 		if(m_dAccumulatedTime_thread2 > 0.003)	//render: render fps is _dAccumulatedTime_thread1 > fps
 		{
 			/** View update(rendering) **/
-			view->Render(fps);	//or switch to pause screen
+			view->Render(fps, modelList[Model::getCurrentModel()]);	//or switch to pause screen
 
 			m_dAccumulatedTime_thread2 = 0.0;
 		}
@@ -142,7 +146,10 @@ void Controller::Run()
 	} //Check if the ESC key had been pressed or if the window had been closed
 	
 	view->Exit();
-	model->Exit();
+	for(int i = 0; i < Model::getModelCount(); ++i)
+	{
+		//model[i].Exit();
+	}
 }
 
 void Controller::Exit()
@@ -153,6 +160,11 @@ void Controller::Exit()
 bool Controller::IsKeyPressed(unsigned short key)
 {
 	return ((GetAsyncKeyState(key) & 0x8001) != 0);
+}
+
+/********************** model transitioning **********************/
+void Controller::modelTransitioning()
+{
 }
 
 bool Controller::getKeyboardUpdate()
@@ -260,8 +272,8 @@ double Controller::getCameraPitch()
 
 Vector3 Controller::GetMousePos()
 {
-	Vector3 r(model->get2DViewWidth() * (mouse_current_x * (1.f / View::getConsoleWidth())), 
-		 (model->get2DViewHeight() *  ((View::getConsoleHeight() - mouse_current_y) * (1.f / View::getConsoleHeight()))),
+	Vector3 r(modelList[Model::getCurrentModel()]->get2DViewWidth() * (mouse_current_x * (1.f / View::getConsoleWidth())), 
+		 (modelList[Model::getCurrentModel()]->get2DViewHeight() *  ((View::getConsoleHeight() - mouse_current_y) * (1.f / View::getConsoleHeight()))),
 		0);
 	return r;
 }

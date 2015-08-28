@@ -25,57 +25,45 @@ using namespace std;
 
 #include "SoundManager.h"
 
+enum MODEL
+{
+	LEVEL_1,
+	LEVEL_2,
+	LEVEL_3,
+	TOTAL_MODEL,
+};
+
 class Model
 {
-public:
-/*********** State ***************/
-	enum GAME_STATE
-	{
-		/* Levels */
-		LEVEL_1 = 0,
-		LEVEL_2,
-
-		/* Other states */
-		WIN,
-
-		TOTAL_STATE,
-	};
-
-/************* misc *****************/
-	const static float MIN_FOV;
-	const static float	MAX_FOV;
-	const static float DEFAULT_FOV;
-	float storeFov;	//store the last used fov( >= 45 deg.) if zoom activated, once zoom deactivated switch back to storeFov
-	float FovRate;	//how much to increase/decrease
-
 protected:
+	static int model_count;
+	static int current_model;
+
+	/** key pressed check **/
+	double keyPressedTimer;
+	double delayTime;	//everytime press a button, delay before register button press again
 /********************** View size *****************************/
-	unsigned short m_view_width;	//camera view size X
-	unsigned short m_view_height;	//camera view size Y
+	static unsigned short m_view_width;	//camera view size X
+	static unsigned short m_view_height;	//camera view size Y
 
-	unsigned short m_2D_view_width;
-	unsigned short m_2D_view_height;
+	static unsigned short m_2D_view_width;
+	static unsigned short m_2D_view_height;
 
-	Vector3 worldDimension;	//max dimemsion for in-game world (eg. 1000 by 1000 by 1000 world space)
+/************* Camera *****************/
+	static Camera3 camera;
 
-	/************* Camera *****************/
-	Camera3 camera;
-	float fovAngle;	//this angle is used for fov
+/************* fps *****************/
+	static bool bLightEnabled;
+	static float fps;
 
-	/************* Light *****************/
-	bool bLightEnabled;
-	float fps;
-
-	/************ lights ************/
+/************ lights ************/
 	const static unsigned TOTAL_LIGHTS = 2;
-	Position lightPos[TOTAL_LIGHTS];
+	static Position lightPos[TOTAL_LIGHTS];
 
-	/************ Game objects ************/ 
-	vector<GameObject*> goList;	//render all in-game objects
-	vector<Collision*> collisionList;	//render all collision boxes (debug purpose only pls remove)
-	vector<Item*> itemList;	//all items
-	vector<UI_Object*> UI_List;	//all ui stuff
 public:
+/******************** Game state (Only one for all levels) ************************/
+	static StateManager stateManager;
+
 	/*********** constructor/destructor ***************/
 	Model();
 	virtual ~Model();
@@ -86,73 +74,26 @@ public:
 
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
 	void UpdateOpenGL(double dt, bool* myKeys);
-	void UpdateFOV(double dt, bool* myKeys);
-
 	virtual void Exit();
 
-
 	/*********** getter / setters ***************/
-	bool getbLightEnabled();
-	float getFOV();
-	Camera3* getCamera();
-	float getFPS();
-	Position getLightPos(int index);
-	vector<GameObject*>* getObject();
-	vector<UI_Object*>* getUIList();
-	Object* getObject(int index);
-	unsigned short getViewWidth();
-	unsigned short getViewHeight();
-	unsigned short get2DViewWidth();
-	unsigned short get2DViewHeight();
-	Vector3 getWorldDimension();
+	static bool getbLightEnabled();
+	static Camera3* getCamera();
+	static float getFPS();
+	static Position getLightPos(int index);
+	static unsigned short getViewWidth();
+	static unsigned short getViewHeight();
+	static unsigned short get2DViewWidth();
+	static unsigned short get2DViewHeight();
+	static int getModelCount();
+	static int getCurrentModel();
 
-	/************* Minimap *****************/
-	MiniMap* minimap;
-
-	//!! 2D Map Stuff should not be in Model (parent class), should be in child classes
-	/************* TileMap *****************/
-	MapManager *mapManager;
-	Map* m_backgroundMap;
-	Map* MapList[LEVEL_2 + 1];	//store the maps for each level
-
-	/******************** Game state ************************/
-	GAME_STATE game_state;
-	StateManager *stateManager;
-
-	//player
-	Player* player;
-	float hero_Health;
-
-	//Triggering Objects
-	TriggerObject* triggerObject[5];
-
-	/* UI */
-	UI_Object cursor;
-	UI_Object start_Game;
-	UI_Object instruction;
-	UI_Object go_back;
-
-	/* door/checkpoint */
-	TriggerObject* door;
-	bool stopGame;
-	bool doorUnlocked;
-	bool haveFire;
-	double Timer;
-	double mapTimer;
-	TriggerObject* staircase;
-
-	/* objects */
-	Ogre* E_Ogre;
-	Item* item;
-	/* array of static objects (non-moving) */
-	StaticObject* obj_arr[10];
+	/************** General Utilities *****************/
+	bool getWordFromString(string& sentence, string& word, char min, char max, int& index);
+	float stringTofloat(string& number);
 
 	// ================== Audio =================
 	SoundManager *sfx_man;
-
-	/* Puzzle */
-	PuzzleManager *puzzleManager;
-	bool puzzleOpen;
 };
 
 #endif

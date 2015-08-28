@@ -10,7 +10,7 @@
 
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-#include "Model.h"
+#include "Model_2D.h"
 #include "View.h"
 #include "View.h"
 #include "timer.h"
@@ -34,6 +34,9 @@ public:
 	static bool IsKeyPressed(unsigned short key);
 	static bool KeyPressed(KEYS key);
 	static bool getKeyboardUpdate();
+
+	/********************** model transitioning **********************/
+	void modelTransitioning();	//if go next model etc.
 
 	/********************** mouse **********************/
 	static double mouse_last_x, mouse_last_y, mouse_current_x, mouse_current_y, mouse_diff_x, mouse_diff_y;
@@ -59,7 +62,7 @@ public:
 
 	/********************* constructor / destructor *********************/
 	Controller();
-	Controller(View* view);
+	Controller(vector<Model_Level*>& modelList, View* view);
 	~Controller();
 private:
 	/********************** Input **********************/
@@ -68,7 +71,8 @@ private:
 	static bool myKeys[TOTAL_KEY];
 
 	/********************** model and view ptr **********************/
-	Model* model; 
+	//Model_Level** model; //array
+	vector<Model_Level*> modelList;
 	View* view;
 
 	/********************** Declare a window object **********************/

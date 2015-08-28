@@ -1,6 +1,5 @@
 #include "Controller.h"
 #include "View.h"
-#include "Model_3D.h"
 #include "Model_2D.h"
 
 int main( void )
@@ -8,16 +7,27 @@ int main( void )
 	/* Memory leak checker */
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );	//call this if program does not exit at same place everytime
 
-
 	/* Create Model */
-	Model_2D* myModel;
-	myModel = new Model_2D;
+	Model_2D* mptr;
+	vector<Model_Level*> myModel;
 	
+	/* Create level 1 */
+	mptr = new Model_2D;
+	myModel.push_back(mptr);
+
+	/* Create level 2 */
+	mptr = new Model_2D;
+	myModel.push_back(mptr);
+
+	///* Create level 3 */
+	//mptr = new Model_2D;
+	//myModel.push_back(mptr);
+	//
 	/* Create View and pass in address of model you want, console dimemsions and Mode */
-	View myView(myModel, 896, 700, View::TWO_D);
+	View myView(896, 700, View::TWO_D);
 
 	/* Pass in View into Controller and set mode (2D/3D) */
-	Controller myController(&myView);
+	Controller myController(myModel, &myView);
 
 	/* Init, Run and Exit */
 	myController.Init();
