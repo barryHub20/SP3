@@ -8,7 +8,7 @@ Player::Player()
 	}
 
 	health = 0;
-	stamina = 0;
+	stamina = 0;	
 	damage = 0;
 }
 

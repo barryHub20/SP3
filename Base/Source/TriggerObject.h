@@ -9,10 +9,11 @@ class TriggerObject : public GameObject
 public:
 	enum TRIGGEROBJECTS
 	{
-		ISTRIGGERED = 0,
-		NOTTRIGGERED,
+		NONE = 0,
+		FIRETRIGGER, //fire lever
+		ARROWTRIGGER, //arrow lever
 		DOOR,
-		FIRE,
+		FIRE, //fire trap
 		ARROWTRAP,
 		TRIGGERWHENCOLLIDE,
 		TOTAL_OBJECTS,
@@ -22,10 +23,7 @@ public:
 	TriggerObject(Mesh* mesh, TRIGGEROBJECTS ObjectName, Vector3 Pos, Vector3 scale, float angle, bool active, SoundManager &sfx_mano, Player* player);
 	~TriggerObject();
 
-	bool checkTriggered;
-	bool gotFire;
 	double triggerTimer;
-	double fireTimer;
 
 	void setState(TRIGGEROBJECTS state);
 	TriggerObject::TRIGGEROBJECTS getState();

@@ -159,7 +159,17 @@ void Geometry::Init()
 	meshList[GEO_FIRE] = MeshBuilder::GenerateSpriteAnimation("fire", 1, 7, 1.f);
 	meshList[GEO_FIRE]->textureID[0] = LoadTGA("Image//Sprites//fire.tga");
 
-	//meshList[GEO_ARROWUP] = MeshBuilder::GenerateQuad("")
+	meshList[GEO_ARROWUP] = MeshBuilder::GenerateQuad("arrow up", Color(1, 1, 1));
+	meshList[GEO_ARROWUP]->textureID[0] = LoadTGA("Image//Sprites//arrowup.tga");
+
+	meshList[GEO_ARROWDOWN] = MeshBuilder::GenerateQuad("arrow down", Color(1, 1, 1));
+	meshList[GEO_ARROWDOWN]->textureID[0] = LoadTGA("Image//Sprites//arrowdown.tga");
+
+	meshList[GEO_ARROWLEFT] = MeshBuilder::GenerateQuad("arrow left", Color(1, 1, 1));
+	meshList[GEO_ARROWLEFT]->textureID[0] = LoadTGA("Image//Sprites//arrowleft.tga");
+
+	meshList[GEO_ARROWRIGHT] = MeshBuilder::GenerateQuad("arrow right", Color(1, 1, 1));
+	meshList[GEO_ARROWRIGHT]->textureID[0] = LoadTGA("Image//Sprites//arrowright.tga");
 
 	/* Dungeon Stuffs */
 	meshList[GEO_KEYY] = MeshBuilder::GenerateQuad("Yellow Key", Color(1, 1, 1), 1.f);

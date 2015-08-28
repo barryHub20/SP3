@@ -375,7 +375,7 @@ void View::RenderHUD()
 		ss << "FPS: " << model->getFPS();
 		if (model->getFPS() < 50)
 		{
-			cout << "below 50" << endl;
+			//cout << "below 50" << endl;
 		}
 		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 5, 15, 5);
 

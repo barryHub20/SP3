@@ -87,10 +87,10 @@ void Model_2D::InitObject()
 
 void Model_2D::InitTrigger()
 {
-	triggerObject[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::NOTTRIGGERED, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
+	triggerObject[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::FIRETRIGGER, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
 	goList.push_back(triggerObject[0]);
 
-	triggerObject[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_ISTRIGGER], TriggerObject::ISTRIGGERED, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
+	triggerObject[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_ISTRIGGER], TriggerObject::FIRETRIGGER, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
 	goList.push_back(triggerObject[1]);
 
 	//Fire
@@ -105,7 +105,8 @@ void Model_2D::InitTrigger()
 	goList.push_back(triggerObject[3]);
 
 	//Arrow trap
-	//triggerObject[4] = new TriggerObject(Geometry::meshList[Geometry:::])
+	triggerObject[4] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWLEFT], TriggerObject::ARROWTRAP, Vector3(940, 100, 0), Vector3(30, 30, 1), false, true, *sfx_man, player);
+	goList.push_back(triggerObject[4]);
 }
 
 void Model_2D::InitUI()
@@ -216,9 +217,9 @@ void Model_2D::Update(double dt, bool* myKeys, Vector3 mousePos)
 
 void Model_2D::UpdateGame(double dt, bool* myKeys)
 {
-	if(stopGame == false)
+	if (stopGame == false)
 	{
-	// Sound - ambience
+		// Sound - ambience
 		sfx_man->play_ambience();
 
 		//Update enemy
@@ -230,29 +231,19 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		//Update the traps
 		UpdateTraps(dt, myKeys);
 
-		if(myKeys[KEY_K])
+		if (myKeys[KEY_K])
 		{
 			player->Translate(Vector3(659, 389, 0));
 		}
 
-	player->dropItem(dt, item, myKeys);
-	
-	/* check collision with object */
-	//start: Set up collision bound before checking with the others
-	player->StartCollisionCheck();
+		player->dropItem(dt, item, myKeys);
+
+		/* check collision with object */
+		//start: Set up collision bound before checking with the others
+		player->StartCollisionCheck();
 
 		//getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
 		//getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
-
-		//cout << player->getPosition() << endl;
-
-		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
-		{
-			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
-			{
-				//(*mapManager->GetCurrentMap())[i]->getWalkable(player->getPosition().x, player->getPosition().y);
-			}
-		}
 
 		/* check collision with object */
 		//start: Set up collision bound before checking with the others
@@ -267,22 +258,22 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 			}
 		}
 
-		if(door->getActive())
+		if (door->getActive())
 		{
-			if(player->CollisionCheck(door))
+			if (player->CollisionCheck(door))
 			{
-				if(doorUnlocked)
+				if (doorUnlocked)
 				{
 					door->setActive(false);
 				}
 			}
 		}
 
-	player->dropItem(dt, item, myKeys);
+		player->dropItem(dt, item, myKeys);
 		mapTimer += dt;
 		if (player->CollisionCheck(staircase))
 		{
-			if(mapTimer > 5)
+			if (mapTimer > 5)
 			{
 				mapManager->ChangeNextMap();
 				mapTimer = 0;
@@ -296,15 +287,14 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		/* Collision response */
 		player->CollisionResponse();	//translate to new pos if collides
 
-
 		/* Test pick up items */
-		for(int i = 0; i < itemList.size(); ++i)
+		for (int i = 0; i < itemList.size(); ++i)
 		{
-			if(player->pickUp(itemList[i], myKeys))	//if successfully pick up
+			if (player->pickUp(itemList[i], myKeys))	//if successfully pick up
 			{
 				//if item is key
 				//cout << itemList[i]->getItemID() << endl;
-				if(itemList[i]->getItemID() == Item::KEY)
+				if (itemList[i]->getItemID() == Item::KEY)
 				{
 					doorUnlocked = true;
 				}
@@ -318,7 +308,7 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 		camera.target.z -= 10;
 
 		/* Press space to go back main menu */
-		if(myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
+		if (myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
 		{
 			keyPressedTimer = 0.0;
 			//stateManager->ChangeState(stateManager->MAIN_MENU);
@@ -356,23 +346,24 @@ void Model_2D::UpdateGame(double dt, bool* myKeys)
 			std::cout << "BBUTTON UP" << std::endl;
 		}
 
-		if(player->getHealth() == 0)
+		if (player->getHealth() == 0)
 		{
 			stopGame = true;
 		}
 	}
-} 
+}
 
 void Model_2D::UpdateTraps(double dt, bool* myKeys)
 {
 	Timer += dt;
 	/* check with trigger objects fire */
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < 5; i++)
 	{
-		triggerObject[i]->Update(dt, myKeys);
+		triggerObject[i]->Update(dt, myKeys); //animation and actual update
 	}
 
-	if(triggerObject[0]->getTriggered() == true) //If lever is switched off
+	//Render
+	if(triggerObject[0]->getTriggered() == false) //If lever is switched off
 	{
 		triggerObject[0]->setActive(false); //to change lever position
 		triggerObject[1]->setActive(true); 
@@ -389,6 +380,7 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 		haveFire = true;
 	}
 
+	//Timer for lever and damage, health
 	if(Timer >= 0.5)
 	{
 		if(player->QuickAABBDetection(triggerObject[2]) && haveFire == true || player->QuickAABBDetection(triggerObject[3]) && haveFire == true)
@@ -397,7 +389,14 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 			player->Translate(player->getPosition() - 45);
 			Timer = 0;
 		}
+		if (player->QuickAABBDetection(triggerObject[4]))
+		{
+			player->setHealth(player->getHealth() - 15);
+			player->Translate(player->getPosition() - 45);
+			Timer = 0;
+		}
 	}
+
 }
 
 void Model_2D::UpdateEnemy(double dt)

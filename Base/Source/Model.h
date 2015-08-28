@@ -124,7 +124,7 @@ public:
 	float hero_Health;
 
 	//Triggering Objects
-	TriggerObject* triggerObject[4];
+	TriggerObject* triggerObject[5];
 
 	/* UI */
 	UI_Object cursor;
