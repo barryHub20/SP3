@@ -34,6 +34,8 @@ private:
 	STATES state;
 	bool sf_walk;
 
+	Physics info;
+
 	// Sound
 	SoundManager *my_sfx_man;
 
@@ -75,12 +77,14 @@ public:
 	void setState(STATES state);
 	Player::STATES getState();
 
+	void setPosition(Physics info);
+
 	//add item
 	bool pickUp(Item* item, bool* myKey);
 	//drop item
 	bool dropItem(double dt, Item* item, bool* myKey);
 
-	bool useItem(bool* myKey);
+	bool useItem(Item* item, bool* myKey);
 
 	virtual void CollisionResponse();	//player specific collision response
 };

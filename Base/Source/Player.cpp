@@ -15,7 +15,7 @@ Player::Player()
 Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano)
 {
 	score = 0;
-	health = 100;
+	health = 10;
 	stamina = 100;
 	damage = 10;
 
@@ -74,14 +74,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		UpOrDown = false;
 		checkUD = false;
-		if(vel.y < 5)
+		if(vel.y < 3)
 		{
 			vel.y += 1;
 			Pos.y = vel.y;
 		}
 		else
 		{
-			vel.y = 5;
+			vel.y = 3;
 			Pos.y = vel.y;
 		}
 
@@ -102,14 +102,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		UpOrDown = true;
 		checkUD = true;
-		if(vel.y > -5)
+		if(vel.y > -3)
 		{
 			vel.y -= 1;
 			Pos.y = vel.y;
 		}
 		else
 		{
-			vel.y = -5;
+			vel.y = -3;
 			Pos.y = vel.y;
 		}
 
@@ -127,14 +127,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		LeftOrRight = true;
 		checkLR = true;
-		if(vel.x > -5)
+		if(vel.x > -3)
 		{
 			vel.x -= 1;
 			Pos.x = vel.x;
 		}
 		else
 		{
-			vel.x = -5;
+			vel.x = -3;
 			Pos.x = vel.x;
 		}
 		
@@ -150,14 +150,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		LeftOrRight = false;
 		checkLR = false;
-		if(vel.x < 5)
+		if(vel.x < 3)
 		{
 			vel.x += 1;
 			Pos.x = vel.x;
 		}
 		else
 		{
-			vel.x = 5;
+			vel.x = 3;
 			Pos.x = vel.x;
 		}
 		
@@ -426,17 +426,19 @@ bool Player::dropItem(double dt, Item* item, bool* myKey)
 	return false;
 }
 
-bool Player::useItem(bool* myKey)
-{
-	Item* item = inventory.useItem();
-
-	if(item == NULL)
+bool Player::useItem(Item* item, bool* myKey)
+{	
+	if(inventory.useItem() == NULL)
 	{
 		return false;
 	}
 	
-	if(item->getType() == item->H_POTION && health < 100)
+	if(myKey[KEY_L] && inventory.useItem() && health < 100)
 	{
+		if(inventory.removeItem(this->position))
+		{
+			item->setActive(false);
+		}
 		setHealth(getHealth() + 10);
 		if(getHealth() >= 100)
 		{
