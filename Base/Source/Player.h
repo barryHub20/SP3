@@ -27,8 +27,6 @@ private:
 	double stamina;
 	double damage;
 
-	bool PlayerInAir;
-	bool PlayerOnGround;
 	double jumpSpeed;
 	double jumpTimer;
 	STATES state;
@@ -45,6 +43,8 @@ private:
 
 	double dropRate;
 	double dropTimer;
+
+	double PLAYER_SPEED;
 public:
 	Player();
 	Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano);

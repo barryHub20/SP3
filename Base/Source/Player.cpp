@@ -14,6 +14,7 @@ Player::Player()
 
 Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano)
 {
+	PLAYER_SPEED = 4;
 	score = 0;
 	health = 100;
 	stamina = 100;
@@ -35,16 +36,13 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	collideBound.Set(Pos, scale, Collision::BOX);
 
 	jumpSpeed = 0;
-	PlayerOnGround = true;
-	PlayerInAir = false;
 
 	setType(GO_PLAYER);
 	// Sound setup
 	my_sfx_man = &sfx_mano;
 
-	deceleration = 10;
-	vel.x = 0;
-	vel.y = 0;
+	deceleration = 15;
+	vel = 0;
 	LeftOrRight = false;
 	UpOrDown = false;
 	checkLR = false;
@@ -72,14 +70,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		UpOrDown = false;
 		checkUD = false;
-		if(vel.y < 4)
+		if(vel.y < PLAYER_SPEED)
 		{
-			vel.y += 1;
+			vel.y += 0.5;
 			Pos.y = vel.y;
 		}
 		else
 		{
-			vel.y = 4;
+			vel.y = PLAYER_SPEED;
 			Pos.y = vel.y;
 		}
 
@@ -100,14 +98,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		UpOrDown = true;
 		checkUD = true;
-		if(vel.y > -4)
+		if(vel.y > -PLAYER_SPEED)
 		{
-			vel.y -= 1;
+			vel.y -= 0.5;
 			Pos.y = vel.y;
 		}
 		else
 		{
-			vel.y = -4;
+			vel.y = -PLAYER_SPEED;
 			Pos.y = vel.y;
 		}
 
@@ -125,14 +123,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		LeftOrRight = true;
 		checkLR = true;
-		if(vel.x > -4)
+		if(vel.x >= -PLAYER_SPEED)
 		{
-			vel.x -= 1;
+			vel.x -= 0.5;
 			Pos.x = vel.x;
 		}
 		else
 		{
-			vel.x = -4;
+			vel.x = -PLAYER_SPEED;
 			Pos.x = vel.x;
 		}
 		
@@ -148,14 +146,14 @@ void Player::Update(double dt, bool* myKey)
 	{
 		LeftOrRight = false;
 		checkLR = false;
-		if(vel.x < 4)
+		if(vel.x <= PLAYER_SPEED)
 		{
-			vel.x += 1;
+			vel.x += 0.5;
 			Pos.x = vel.x;
 		}
 		else
 		{
-			vel.x = 4;
+			vel.x = PLAYER_SPEED;
 			Pos.x = vel.x;
 		}
 		
@@ -216,21 +214,6 @@ void Player::Update(double dt, bool* myKey)
 	if(!myKey[KEY_W] && !myKey[KEY_A] && !myKey[KEY_S] && !myKey[KEY_D])
 	{
 		sf_walk = false;
-	}
-
-	if(myKey[KEY_SPACE])
-	{
-		PlayerInAir = true;
-		PlayerOnGround = false;
-	}
-
-	if(PlayerInAir == true && PlayerOnGround == false)
-	{
-		jumpSpeed += dt;
-		if(jumpSpeed >= 10)
-		{
-			jumpSpeed = 10;
-		}
 	}
 
 	switch(state)
