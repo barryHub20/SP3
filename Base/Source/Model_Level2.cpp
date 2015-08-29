@@ -153,7 +153,7 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 	if (stopGame == false)
 	{
 		// Sound - ambience
-		sfx_man->play_ambience();
+		//sfx_man->play_ambience();
 
 		//Update enemy
 		UpdateEnemy(dt);
