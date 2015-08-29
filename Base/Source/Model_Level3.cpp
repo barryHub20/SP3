@@ -141,6 +141,12 @@ void Model_Level3::Update(double dt, bool* myKeys, Vector3 mousePos)
 	
 	/* Update game */
 	UpdateGame(dt, myKeys);
+
+	/* If in transition */
+	if (Model_Level::stateManager.isTransition())
+	{
+		Model_Level::stateManager.UpdateTransitionTime(dt);
+	}
 }
 
 void Model_Level3::UpdateGame(double dt, bool* myKeys)

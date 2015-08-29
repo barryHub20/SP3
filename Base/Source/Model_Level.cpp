@@ -44,9 +44,10 @@ void Model_Level::Init()
 		init_Already = true;
 
 	
-		current_model = 0;
+		/** Change starting level to ur own level: current_model = ur level num - 1 **/
+		current_model = 1;
 
-		stateManager.ChangeState(StateManager::MAIN_MENU);
+		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
 	}
 }
 
@@ -254,8 +255,6 @@ void Model_Level::Exit()
 vector<GameObject*>* Model_Level::getObject(){return &goList;}
 vector<UI_Object*>* Model_Level::getUIList(){return &UI_List;}
 vector<Item*>* Model_Level::getItemList(){return &itemList;}
-//bool  Model_Level::goNextLevel(){
-//bool  Model_Level::goPreviousLevel()
 bool Model_Level::NextLevel(){return goNextLevel;}
 bool Model_Level::PreviousLevel(){return goPreviousLevel;}
 
@@ -266,7 +265,7 @@ void Model_Level::setNextLevel(bool i)
 
 void Model_Level::setPreviousLevel(bool i)
 {
-	goNextLevel = i;
+	goPreviousLevel = i;
 }
 
 vector<Map*>* Model_Level::getLevelMap()

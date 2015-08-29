@@ -62,7 +62,6 @@ void Model_Level2::Init()
 	puzzleManager = new PuzzleManager;
 	puzzleManager->Init(MapManager::MAX_MAP);
 	InitPuzzles();
-
 }
 
 void Model_Level2::InitUI()
@@ -141,6 +140,12 @@ void Model_Level2::Update(double dt, bool* myKeys, Vector3 mousePos)
 	
 	/* Update game */
 	UpdateGame(dt, myKeys);
+
+	/* If in transition */
+	if (Model_Level::stateManager.isTransition())
+	{
+		Model_Level::stateManager.UpdateTransitionTime(dt);
+	}
 }
 
 void Model_Level2::UpdateGame(double dt, bool* myKeys)
