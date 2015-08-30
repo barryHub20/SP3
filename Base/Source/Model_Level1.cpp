@@ -45,6 +45,7 @@ void Model_Level1::Init()
 	if(player != NULL)
 	{
 		goList.push_back(player);
+
 	}
 
 	spawnItems();
@@ -53,6 +54,17 @@ void Model_Level1::Init()
 	//Model_Level::mapManager.SetMap(0);	//set to map 0 first
 	/* set current level map to level 1 */
 	level_map = Model_Level::mapManager.GetMap(LEVEL_1);
+
+	/* Set map scale: for camera */
+	//go model_level::Init_map() to see how big ur world is,
+	//based on floor layer (or any other layer that is the biggest)
+	//width: num_ofTileWidth * tileSize
+	//height: num_ofTileHeight * tileSize
+	mapSize.Set(16 * 64, 13 * 64, 1);
+
+	camera.Init(Vector3(0, 0, 0), Vector3(0, 0, -10), Vector3(0, 1, 0), m_view_width * 0.2f,  m_view_height * 0.2f
+		, m_view_width, m_view_height);
+	camera.SetBound(mapSize.x, mapSize.y);
 
 	//UI
 	InitUI();
@@ -175,7 +187,7 @@ void Model_Level1::spawnItems()
 void Model_Level1::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
 	/* parent class update */
-	Model::Update(dt, myKeys, mousePos);
+	Model_Level::Update(dt, myKeys, mousePos);
 
 	if(keyPressedTimer < delayTime)
 		keyPressedTimer += dt;

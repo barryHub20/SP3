@@ -117,11 +117,19 @@ public:
 	virtual void Exit();
 
 /**************** render ****************/
+
+	/* Text */
 	void RenderText(Mesh* mesh, std::string text, Color color);
-	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+
+	//render text with cutoff: if string longer than cutoff, go to next line
+	void RenderTextOnScreenCutOff(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z = 1.f, int cutOff = 32);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z = 1.f);
+
+	/* Render mesh */
 	void RenderMesh(Mesh *mesh, bool enableLight);
+
+	/* 2D */
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizex=1.0f, float sizey = 1.0f, float sizez = 1.0f, float x=0.0f, float y=0.0f, float z = 0.f, float angle = 0.f);
-	void RenderMeshInLines(Mesh* mesh, const Vector3& position, const Vector3& scale);
 	void Render2DTile(Mesh *mesh, bool enableLight, float size, float x, float y, int tileType);
 
 /********************** Console screen size *****************************/

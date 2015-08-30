@@ -98,6 +98,7 @@ public:
 		GEO_STAMINABARMARKER,
 		GEO_CURSOR,
 		GEO_BACKGROUND,
+		GEO_MAIN_BAR,	//main UI bar
 
 		NUM_GEOMETRY,
 	};

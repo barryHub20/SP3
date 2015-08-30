@@ -9,13 +9,30 @@
 #include "SpriteAnimation.h"
 #include <sstream>
 #include "StaticObject.h"
+
 //(tip) If create bullet, bullet class has a static TRS so that TRS update with current bullet pos
 MapManager Model_Level::mapManager;
 Player* Model_Level::player = NULL;
-// Player* Model_Level::player = NULL;
 bool Model_Level::init_Already = false;
 bool Model_Level::goNextLevel = false;
 bool Model_Level::goPreviousLevel = false;
+float Model_Level::hero_Health = 0;
+
+// UI 
+UI_Object Model_Level::cursor;
+UI_Object Model_Level::start_Game;
+UI_Object Model_Level::instruction;
+UI_Object Model_Level::go_back;
+UI_Object Model_Level::main_UI_bar;	//main UI in game
+
+// door/checkpoint 
+TriggerObject* Model_Level::door = NULL;
+TriggerObject* Model_Level::staircase = NULL;
+bool Model_Level::stopGame = false;
+bool Model_Level::doorUnlocked = false;
+bool Model_Level::haveFire = false;
+double Model_Level::Timer = 0.0;
+double Model_Level::mapTimer = 0.0;
 
 /*********** constructor/destructor ***************/
 Model_Level::Model_Level()
@@ -42,13 +59,20 @@ void Model_Level::Init()
 
 		goNextLevel = goPreviousLevel = false;
 		init_Already = true;
-
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
 		current_model = 1;
 
 		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
+
+		/* 1) Init static stuff: create object here */
+		main_UI_bar.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
+			Vector3(m_2D_view_width * 0.5f, m_2D_view_height * 0.065f, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
+			"", UI_Object::MAIN_MENU_BACKGROUND, true);
 	}
+
+	/* 2) push back any static object to their respective vectors */
+	UI_List.push_back(&main_UI_bar);
 }
 
 void Model_Level::InitMaps()
@@ -77,6 +101,11 @@ void Model_Level::InitMaps()
 
 void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
+	Model::Update(dt, myKeys, mousePos);
+
+	/* update camera */
+	camera.Update(dt, player->getPosition(), player->getScale());
+
 }
 
 bool Model_Level::ReadFromFile(char* text)
@@ -215,7 +244,7 @@ bool Model_Level::ReadFromFile(char* text)
 			if(player == NULL)
 			{
 				player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
-				player->getInventory()->Set(0.43f, 0.1f, m_2D_view_width, m_2D_view_height, 0.97f, 0.02f);
+				player->getInventory()->Set(0.45f, 0.1f, m_2D_view_width, m_2D_view_height, 0.97f, 0.01f);
 			}
 		}
 

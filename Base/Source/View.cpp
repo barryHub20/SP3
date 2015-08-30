@@ -373,7 +373,7 @@ float lengthOffset = 0;
 float zOffset = 0;
 float textLength = 0;
 float textXLength = 0;
-void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z)
 {
 	if(!mesh || mesh->textureID[0] <= 0 || text.length() == 0)
 		return;
@@ -387,7 +387,7 @@ void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float s
 	viewStack.LoadIdentity();
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
-	modelStack.Translate(x, y, 0);
+	modelStack.Translate(x, y, z);
 	modelStack.Scale(size, size, size);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
 	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
@@ -405,12 +405,70 @@ void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float s
 		textXLength += FontData[text[i]];
 	}
 
-	lengthOffset = (textXLength * -(1.f / 2.f)) + FontData[text[0]];	//make sure is start from center
+	lengthOffset = (textXLength * -0.5f) + (FontData[text[0]] * 0.5f);	//make sure is start from center
 	for(unsigned i = 0; i < textLength; ++i)
 	{
 		Mtx44 characterSpacing;
 
-		characterSpacing.SetToTranslation(lengthOffset, 1.f, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(lengthOffset, 0.f, 0); //1.0f is the spacing of each character, you may change this value
+		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		lengthOffset += FontData[text[i]];
+
+		mesh->Render((unsigned)text[i] * 6, 6);
+	}
+
+	lengthOffset = 0.f;	//reset length
+	textXLength = 0.f;
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glEnable(GL_DEPTH_TEST);
+}
+
+void View::RenderTextOnScreenCutOff(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z, int cutOff)
+{
+	if(!mesh || mesh->textureID[0] <= 0 || text.length() == 0)
+		return;
+	
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, model->get2DViewWidth(), 0, model->get2DViewHeight(), -10, 10);
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, z);
+	modelStack.Scale(size, size, size);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+
+	/* start counting */
+	textLength = text.length();
+	lengthOffset = 0.f;
+	float yp = 0.f;
+	for(unsigned i = 0; i < textLength; ++i)
+	{
+		if(i >= cutOff)	//if exceedd cutoff, go to next line
+		{
+			cutOff *= 2;
+			yp -= 1.f;
+			lengthOffset = 0.f;
+		}
+
+		Mtx44 characterSpacing;
+		characterSpacing.SetToTranslation(lengthOffset, yp, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 

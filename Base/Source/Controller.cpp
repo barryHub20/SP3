@@ -85,17 +85,21 @@ void Controller::Init()
 	mouseLeftButton = glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT);
 	mouseRightButton = glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT);
 	scrollyPos = scrollxPos = 0.0;
-
+	
 	//init view
 	view->Init();
-
-	//hide the cursor
-	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	for(int i = 0; i < modelList.size(); ++i)
 	{
 		modelList[i]->Init();
 	}
+
+	/* set current model */
+	view->SetModel(modelList[Model::getCurrentModel()]);
+
+	//hide the cursor
+	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
 }
 
 void Controller::Run()
@@ -103,6 +107,7 @@ void Controller::Run()
 	//Main Loop
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 
+	
 	while (!glfwWindowShouldClose(view->getWindow()) && !IsKeyPressed(VK_ESCAPE))
 	{
 		//get the elapsed time
@@ -128,7 +133,7 @@ void Controller::Run()
 		if(m_dAccumulatedTime_thread2 > 0.003)	//render: render fps is _dAccumulatedTime_thread1 > fps
 		{
 			/** View update(rendering) **/
-			view->Render(fps, modelList[Model::getCurrentModel()]);	//or switch to pause screen
+			view->Render(fps);	//or switch to pause screen
 
 			m_dAccumulatedTime_thread2 = 0.0;
 		}
@@ -166,16 +171,14 @@ void Controller::modelTransitioning()
 {
 	if( Model_Level::NextLevel() )	//if go next level
 	{
-		//cout << Model_Level::getModelCount() << endl;
-
 		Model_Level::setCurrentModel(Model_Level::getCurrentModel() + 1);
-
-		//cout << Model_Level::getModelCount() << endl;
+		view->SetModel(modelList[Model::getCurrentModel()]);
 		Model_Level::setNextLevel(false);
 	}
 	else if( Model_Level::PreviousLevel() )	//if go previous level
 	{
 		Model_Level::setCurrentModel(Model_Level::getCurrentModel() - 1);
+		view->SetModel(modelList[Model::getCurrentModel()]);
 		Model_Level::setPreviousLevel(false);
 	}
 }

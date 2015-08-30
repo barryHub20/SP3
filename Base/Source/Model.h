@@ -11,6 +11,7 @@
 #include "MatrixStack.h"
 #include "Mtx44.h"
 #include "Camera3.h"
+#include "Camera_2D.h"
 #include "Mesh.h"
 #include "Light.h"
 #include "MiniMap.h"
@@ -50,7 +51,7 @@ protected:
 	static unsigned short m_2D_view_height;
 
 /************* Camera *****************/
-	static Camera3 camera;
+	Camera2D camera;
 
 /************* fps *****************/
 	static bool bLightEnabled;
@@ -78,7 +79,7 @@ public:
 
 	/*********** getter / setters ***************/
 	static bool getbLightEnabled();
-	static Camera3* getCamera();
+	Camera2D* getCamera();
 	static float getFPS();
 	static Position getLightPos(int index);
 	static unsigned short getViewWidth();

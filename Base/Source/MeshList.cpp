@@ -109,6 +109,9 @@ void Geometry::Init()
 	meshList[GEO_CURSOR] = MeshBuilder::GenerateQuad("cursor", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_CURSOR]->textureID[0] = LoadTGA("Image//HUD//sword_cursor.tga");
 
+	meshList[GEO_MAIN_BAR] = MeshBuilder::GenerateQuad("main UI bar", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_MAIN_BAR]->textureID[0] = LoadTGA("Image//HUD//player-bar.tga");
+	
 	/* Tile */
 	meshList[GEO_TILEMAP] = MeshBuilder::GenerateTileMap("Tile Map", Color(1, 1, 1), 1.f, 1.f, 8, 8);	//set the width/heignt as 1 (can scale later)
 	meshList[GEO_TILEMAP]->textureID[0] = LoadTGA("Image//tile2_ground.tga");

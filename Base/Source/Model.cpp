@@ -7,7 +7,6 @@ unsigned short Model::m_view_width;	//camera view size X
 unsigned short Model::m_view_height;	//camera view size Y
 unsigned short Model::m_2D_view_width;
 unsigned short Model::m_2D_view_height;
-Camera3 Model::camera;
 bool Model::bLightEnabled;
 float Model::fps;
 Position Model::lightPos[TOTAL_LIGHTS];
@@ -34,10 +33,6 @@ void Model::Init()
 
 	/* Must Init */
 	InitMesh();
-
-	//if mode is 3D
-	camera.Init(Vector3(0, 0, 0), Vector3(0, 0, -10), Vector3(0, 1, 0));
-
 
 	bLightEnabled = true;
 
@@ -71,6 +66,9 @@ void Model::Update(double dt, bool* myKeys, Vector3 mousePos)
 	}
 
 	fps = (float)(1.f / dt);
+
+	if(fps < 58)
+		cout << "FPS dropped to: " << fps << endl;
 }
 
 void Model::UpdateOpenGL(double dt, bool* myKeys)
@@ -93,7 +91,7 @@ void Model::Exit()
 /*********** getter / setters ***************/
 bool Model::getbLightEnabled(){return bLightEnabled;}
 float Model::getFPS(){return fps;}
-Camera3* Model::getCamera(){return &camera;}
+Camera2D* Model::getCamera(){return &camera;}
 unsigned short Model::getViewWidth(){return m_view_width;}
 unsigned short Model::getViewHeight(){return m_view_height;}
 unsigned short Model::get2DViewWidth(){return m_2D_view_width;}

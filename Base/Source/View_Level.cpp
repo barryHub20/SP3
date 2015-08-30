@@ -101,19 +101,24 @@ void View_Level::RenderCollideBox()
 
 void View_Level::RenderHUD()
 {
+	//render UI
+	/* UI List */
+	for(vector<UI_Object*>::iterator it = model_level->getUIList()->begin(); it != model_level->getUIList()->end(); ++it)
+	{
+		UI_Object* o = (UI_Object*)*it;
+
+		if(o->getActive())
+		{
+			modelStack.PushMatrix();
+			modelStack.LoadMatrix( *(o->getTRS()) );
+			RenderMeshIn2D(o->getMesh(), o->getLight(), o->getScale().x, o->getScale().y, o->getScale().z, o->getPosition().x, o->getPosition().y, o->getPosition().z, 0);
+			modelStack.PopMatrix();
+		}
+	}
+
 	//On screen text
 	if(Geometry::meshList[Geometry::GEO_AR_CHRISTY] != NULL)
 	{	
-		/* FPS */
-		//ss.precision(5);
-		//ss << "FPS: " << fps;
-		//RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0, 1, 0), 30, 15, 730);
-		//ss.str("");
-
-		///* Pos */
-		//ss << "Pos: " << model_level->getCamera()->position;
-		//RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 15, 760);
-
 		int playerHealth;
 		playerHealth = model_level->player->getHealth();
 		int playerStamina;
@@ -430,42 +435,47 @@ void View_Level::RenderInventory(Inventory* inventory)
 	float yPos = inventory->getYPos();
 	Vector3 scale = inventory->getSlotScale();
 	Mesh* mesh = NULL;
+	ostringstream ss;
 	
 	for(int i = 0; i < inventory->MAX_SLOT; ++i)
 	{
 		/* render slots */
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SLOT], false, scale.x, scale.y, 1,startX, yPos, 1, 0);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SLOT], false, scale.x, scale.y, 1,startX, yPos, 2.f, 0);
 
 		/* render current size */
-		ostringstream ss;
 		size = inventory->currentSize(i);
 		ss.str("");
 		ss << size;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.25f, startX, yPos - scale.y * 0.37f);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.25f, startX, yPos - scale.y * 0.57f, 2.1f);
 
 		/* render name */
 		name = inventory->currentItemName(i);
 		ss.str("");
 		ss << name;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.25f, startX, yPos + scale.y * 0.62f);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.25f, startX, yPos + scale.y * 0.43f, 2.1f);
 
 		/* render mesh */
 		mesh = inventory->currentItemMesh(i);
 
 		if(mesh != NULL)
 		{
-			RenderMeshIn2D(mesh, false, scale.x * 0.65f, scale.y * 0.65f, 1, startX, yPos, 2, 1);
+			RenderMeshIn2D(mesh, false, scale.x * 0.65f, scale.y * 0.65f, 1, startX, yPos, 2.1f, 1);
 		}
 
 		/* render selector */
 		if(i == inventory->getCurrentSlot())
 		{
-			RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SELECTOR], false, scale.x * 1.05f, scale.y * 1.05f, 1,startX, yPos, 2, 0);
+			RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SELECTOR], false, scale.x * 1.05f, scale.y * 1.05f, 1,startX, yPos, 2.1f, 0);
 		}
 		
 		//set pos to next slot
 		startX += inventory->getDistBtwSlot();
 	}
+
+	//test
+	ss.str("");
+	ss << "Hey I just met yyou and this is crazy so heres my number so call me maybe";
+	RenderTextOnScreenCutOff(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), 5, 50, 50, 3.1f, 32);
 }
 
 void View_Level::RenderRearMap()

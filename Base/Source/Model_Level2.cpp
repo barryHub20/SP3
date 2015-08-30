@@ -58,6 +58,17 @@ void Model_Level2::Init()
 	/* set current level map to level 1 */
 	level_map = Model_Level::mapManager.GetMap(LEVEL_2);
 
+	/* Set map scale: for camera */
+	//go model_level::Init_map() to see how big ur world is,
+	//based on floor layer (or any other layer that is the biggest)
+	//width: num_ofTileWidth * tileSize
+	//height: num_ofTileHeight * tileSize
+	mapSize.Set(16 * 64, 13 * 64, 1);
+
+	camera.Init(Vector3(0, -130, 0), Vector3(0, 0, -10), Vector3(0, 1, 0), m_view_width * 0.2f,  m_view_height * 0.2f
+		, m_view_width, m_view_height);
+	camera.SetBound(mapSize.x, mapSize.y);
+
 	//Init puzzle
 	puzzleManager = new PuzzleManager;
 	puzzleManager->Init(MapManager::MAX_MAP);
@@ -133,7 +144,7 @@ void Model_Level2::spawnItems()
 void Model_Level2::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
 	/* parent class update */
-	Model::Update(dt, myKeys, mousePos);
+	Model_Level::Update(dt, myKeys, mousePos);
 
 	if(keyPressedTimer < delayTime)
 		keyPressedTimer += dt;

@@ -7,10 +7,22 @@ class Model_Level : public Model
 {
 protected:
 /************ All Game object vectors ************/ 
-	vector<GameObject*> goList;	//render all general(not a specific object) game objects
-	vector<Collision*> collisionList; //render all collision boxes (debug purpose only pls remove)
-	vector<Item*> itemList;	//all item objects
-	vector<UI_Object*> UI_List;	//all ui objects
+
+	/* render all general(not a specific object) game objects */
+	vector<GameObject*> goList;	
+	
+	/* render all collision boxes (debug purpose only pls remove) */
+	vector<Collision*> collisionList; 
+	
+	/* all item objects */
+	vector<Item*> itemList;	
+	
+	/* all ui objects */
+	vector<UI_Object*> UI_List;	
+	
+	/* Triggering Objects */
+	vector<TriggerObject*> triggerObject;
+
 	static bool init_Already;
 public:
 /************ current level map ************/ 
@@ -19,36 +31,35 @@ public:
 /************* Map manager (Only one for all levels) *****************/
 	static MapManager mapManager;
 
-/************ Gmae Objects ************/ 
+	Vector3 mapSize;	
 
+/************ Game Objects  ************/ 
+
+	/* Universal game objects */
 	//player
 	static Player* player;
-	float hero_Health;
-
-	//Triggering Objects
-	vector<TriggerObject*> triggerObject;
+	static float hero_Health;
 
 	// UI 
-	UI_Object cursor;
-	UI_Object start_Game;
-	UI_Object instruction;
-	UI_Object go_back;
+	static UI_Object cursor;
+	static UI_Object start_Game;
+	static UI_Object instruction;
+	static UI_Object go_back;
+	static UI_Object main_UI_bar;	//main UI in game
 
 	// door/checkpoint 
-	TriggerObject* door;
-	bool stopGame;
-	bool doorUnlocked;
-	bool haveFire;
-	double Timer;
-	double mapTimer;
-	TriggerObject* staircase;
+	static TriggerObject* door;
+	static TriggerObject* staircase;
+	static bool stopGame;
+	static bool doorUnlocked;
+	static bool haveFire;
+	static double Timer;
+	static double mapTimer;
 
+	/* Common game objects */
 	//objects
 	Ogre* E_Ogre;
 	Item* item;
-
-	// array of static objects (non-moving)
-	StaticObject* obj_arr[10];
 
 	//puzzle
 	PuzzleManager *puzzleManager;
@@ -63,18 +74,9 @@ public:
 
 	/*********** core functions ***************/
 	virtual void Init();
-		//virtual void InitTrigger();
-		//virtual void InitUI();
-		//virtual void InitObject();
-		//virtual void InitSprites();
-		//virtual void InitPuzzles();
-		//virtual void spawnItems();
 		void InitMaps(); //Initialize maps (RP)
 
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
-		/*virtual void UpdateGame(double dt, bool* myKeys);
-		virtual void UpdateEnemy(double dt);
-		virtual void UpdateTraps(double dt, bool* myKeys);*/
 
 	virtual void Exit();
 
