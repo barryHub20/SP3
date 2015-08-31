@@ -15,7 +15,6 @@ public:
 	void InitTrigger();
 	void InitUI();
 	void InitObject();
-	void InitSprite();
 	void InitPuzzles();
 	void spawnItems();
 

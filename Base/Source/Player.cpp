@@ -51,6 +51,21 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	/* drop rate */
 	dropRate = 0.1;
 	dropTimer = dropRate;
+
+	/* Store all non-invisibility sprites */
+	//Player sprites
+	storeSpriteAnimation("black guard", 21, 13, "Image//Sprites//guard.tga");
+	processSpriteAnimation(Player::UP, 0.5f, 0, 8, 8, 8, 1);
+	processSpriteAnimation(Player::DOWN, 0.5f, 0, 10, 8, 10, 1);
+	processSpriteAnimation(Player::LEFT, 0.5f, 0, 9, 8, 9, 1);
+	processSpriteAnimation(Player::RIGHT, 0.5f, 0, 11, 8, 11, 1);
+	processSpriteAnimation(Player::ATTACKUP, 0.5f, 0, 4, 7, 4, 1);
+	processSpriteAnimation(Player::ATTACKDOWN, 0.5f, 0, 6, 7, 6, 1);
+	processSpriteAnimation(Player::ATTACKLEFT, 0.5f, 0, 5, 7, 5, 1);
+	processSpriteAnimation(Player::ATTACKRIGHT, 0.5f, 0, 7, 7, 7, 1);
+
+	//invisbility
+	Sprite_invisibility_texture_file_path = "Image//Sprites//guard_invisibility.tga";
 }
 
 Player::~Player()
@@ -359,6 +374,16 @@ void Player::setState(STATES state)
 Player::STATES Player::getState()
 {
 	return state;
+}
+
+bool Player::getInvisible()
+{
+	return invisible;
+}
+
+void Player::setInvisible(bool b)
+{
+	invisible = b;
 }
 
 bool Player::pickUp(Item* item, bool* myKey)

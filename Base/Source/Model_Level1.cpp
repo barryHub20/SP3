@@ -51,6 +51,8 @@ void Model_Level1::Init()
 		{
 			goList.push_back(player);
 
+			/* Init static sprite (Player) */
+			InitStaticSprite();
 		}
 
 		spawnItems();
@@ -84,20 +86,6 @@ void Model_Level1::Init()
 
 	/* set bounds so camera spawns at correct place each time reenter this level */
 	camera.SetBound(player->getPosition());
-}
-
-void Model_Level1::InitSprite()
-{
-	//Player sprites
-	player->storeSpriteAnimation("black guard", 21, 13, "Image//Sprites//guard.tga");
-	player->processSpriteAnimation(Player::UP, 0.5f, 0, 8, 8, 8, 1);
-	player->processSpriteAnimation(Player::DOWN, 0.5f, 0, 10, 8, 10, 1);
-	player->processSpriteAnimation(Player::LEFT, 0.5f, 0, 9, 8, 9, 1);
-	player->processSpriteAnimation(Player::RIGHT, 0.5f, 0, 11, 8, 11, 1);
-	player->processSpriteAnimation(Player::ATTACKUP, 0.5f, 0, 4, 7, 4, 1);
-	player->processSpriteAnimation(Player::ATTACKDOWN, 0.5f, 0, 6, 7, 6, 1);
-	player->processSpriteAnimation(Player::ATTACKLEFT, 0.5f, 0, 5, 7, 5, 1);
-	player->processSpriteAnimation(Player::ATTACKRIGHT, 0.5f, 0, 7, 7, 7, 1);
 }
 
 void Model_Level1::InitObject()

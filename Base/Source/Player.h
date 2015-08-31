@@ -37,9 +37,16 @@ private:
 	// Sound
 	SoundManager *my_sfx_man;
 
+	//invisible?
+	bool invisible;
+
 	//Inventory
 	Inventory inventory;
 	Inventory weaponInventory;
+
+	//invisibility
+	const char * Sprite_invisibility_texture_file_path;
+
 
 	double dropRate;
 	double dropTimer;
@@ -85,6 +92,9 @@ public:
 	bool dropItem(double dt, Item* item, bool* myKey);
 
 	bool useItem(bool* myKey);
+
+	bool getInvisible();
+	void setInvisible(bool b);
 
 	virtual void CollisionResponse();	//player specific collision response
 };
