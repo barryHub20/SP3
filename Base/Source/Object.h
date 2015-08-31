@@ -1,6 +1,6 @@
 #ifndef OBJECT_H
 #define OBJECT_H
-
+#include "Collision.h"
 #include "Mesh.h"
 #include "Mtx44.h"
 #include <vector>
@@ -98,6 +98,9 @@ public:
 	bool getActive();
 	void setShadow(bool s);
 	bool getShadow();
+
+	/* Utilities */
+	bool QuickAABBDetection(Object* checkMe);	//detection only, no response
 
 	/*** utilities ***/
 	void transformWithParent();	//position recalculated after transformation

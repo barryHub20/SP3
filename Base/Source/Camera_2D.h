@@ -13,8 +13,8 @@ class Camera2D : public Camera
 public:	
 	Camera2D();
 	~Camera2D();
-	void Init(const Vector3& pos, const Vector3& target, const Vector3& up, float DeadZone_Width, float DeadZone_Height, float viewWidth, float viewHeight);
-	void SetBound(float xMapScale, float yMapScale);
+	void Init(const Vector3& pos, const Vector3& target, const Vector3& up, float DeadZone_Width, float DeadZone_Height, float viewWidth, float viewHeight, float xMapScale, float yMapScale);
+	void SetBound(const Vector3& currentPos);
 	void Update(double dt, const Vector3& currentPos, const Vector3& scale);
 	virtual void Reset();
 };

@@ -25,61 +25,56 @@ Model_Level2::~Model_Level2()
 /*********** core functions ***************/
 void Model_Level2::Init()
 {
-	Model_Level::Init();
-
-	/* timer and delay time */
-	delayTime = 0.3;
-	keyPressedTimer = delayTime;
-
-	stopGame = false;
-	doorUnlocked = false;
-	haveFire = true;
-	Timer = 0;
-	mapTimer = 0;
-
-	//player
-	if(player != NULL)
+	if(!initBasicsAlready)
 	{
-		goList.push_back(player);
+		initBasicsAlready = true;
+		Model_Level::Init();
+
+		/* timer and delay time for puzzle */
+		delayTime = 0.3;
+		keyPressedTimer = delayTime;
+
+		stopGame = false;
+		doorUnlocked = false;
+		haveFire = true;
+		Timer = 0;
+		mapTimer = 0;
+
+		//player
+		if(player != NULL)
+		{
+			goList.push_back(player);
+		}
+
+		/* !! Remember to set player pos to where ever you want */
+		player->translate(100, 100, 1);
+
+		//object
+		InitObject();
+		spawnItems();
+		InitTrigger();
+
+		//Model_Level::mapManager.SetMap(0);	//set to map 0 first
+		/* set current level map to level 1 */
+		level_map = Model_Level::mapManager.GetMap(LEVEL_2);
+
+		/* Set map scale: for camera */
+		mapSize.Set(16 * 64, 13 * 64, 1);
+
+		camera.Init(Vector3(0, -120, 0), Vector3(0, 0, -10), Vector3(0, 1, 0), m_view_width * 0.2f,  m_view_height * 0.2f
+			, m_view_width, m_view_height, mapSize.x, mapSize.y);
+
+		//Init puzzle
+		puzzleManager = new PuzzleManager;
+		puzzleManager->Init(MapManager::MAX_MAP);
+		InitPuzzles();
+
+		level_state = STAGE_1;
 	}
 
-	/* !! Remember to set player pos to where ever you want */
-	player->translate(100, 100, 1);
-
-	//object
-	InitObject();
-	spawnItems();
-	InitTrigger();
-
-	//UI
-	InitUI();
-
-	//Model_Level::mapManager.SetMap(0);	//set to map 0 first
-	/* set current level map to level 1 */
-	level_map = Model_Level::mapManager.GetMap(LEVEL_2);
-
-	/* Set map scale: for camera */
-	//go model_level::Init_map() to see how big ur world is,
-	//based on floor layer (or any other layer that is the biggest)
-	//width: num_ofTileWidth * tileSize
-	//height: num_ofTileHeight * tileSize
-	mapSize.Set(16 * 64, 13 * 64, 1);
-
-	camera.Init(Vector3(0, -130, 0), Vector3(0, 0, -10), Vector3(0, 1, 0), m_view_width * 0.2f,  m_view_height * 0.2f
-		, m_view_width, m_view_height);
-	camera.SetBound(mapSize.x, mapSize.y);
-
-	//Init puzzle
-	puzzleManager = new PuzzleManager;
-	puzzleManager->Init(MapManager::MAX_MAP);
-	InitPuzzles();
+	/* set bounds so camera spawns at correct place each time reenter this level */
+	camera.SetBound(player->getPosition());
 }
-
-void Model_Level2::InitUI()
-{
-	Vector3 winDimension(m_2D_view_width/2, m_2D_view_height/2, 1);
-}
-
 
 void Model_Level2::InitObject()
 {	
@@ -100,51 +95,94 @@ void Model_Level2::InitObject()
 
 void Model_Level2::InitTrigger()
 {
-	triggerObject.resize(3);
-
-	triggerObject[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::FIRETRIGGER, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
-	goList.push_back(triggerObject[0]);
-
-	triggerObject[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_ISTRIGGER], TriggerObject::FIRETRIGGER, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
-	goList.push_back(triggerObject[1]);
-
-	//Arrow trap
-	triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWLEFT], TriggerObject::ARROWTRAP, Vector3(940, 100, 0), Vector3(30, 30, 1), false, true, *sfx_man, player);
-	goList.push_back(triggerObject[2]);
+	//TriggerArea puzzleActivateArea[TOTAL_PUZZLE];	//there are 3 puzzles
 }
 
 void Model_Level2::InitPuzzles()
 {
-	puzzleManager->addTextPuzzle(MapManager::MAP1, "test1");
-	puzzleManager->addTextPuzzle(MapManager::MAP1, "test2");
-	puzzleManager->addPicturePuzzle(MapManager::MAP1, "Image//Sprites//guard.tga");
-	puzzleManager->addTextPuzzle(MapManager::MAP2, "test3");
-	puzzleManager->addTextPuzzle(MapManager::MAP3, "test4");
+	//puzzleManager->addTextPuzzle(MapManager::MAP1, "test1");
+	//puzzleManager->addTextPuzzle(MapManager::MAP1, "test2");
+	//puzzleManager->addPicturePuzzle(MapManager::MAP1, "Image//Sprites//guard.tga");
+	//puzzleManager->addTextPuzzle(MapManager::MAP2, "test3");
+	//puzzleManager->addTextPuzzle(MapManager::MAP3, "test4");
 
-	/*cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;*/
+	///*cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	//puzzleManager->goToNextPart();
+	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	//puzzleManager->goToNextPart();
+	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	//puzzleManager->goToNextPart();
+	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	//puzzleManager->goToNextPart();
+	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	//puzzleManager->goToNextPart();
+	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;*/
+
+	Vector3 winDimension(m_2D_view_width/2, m_2D_view_height/2, 1);
+
+	/* State 1 */
+	//note
+	puzzleNotes[0] = new Item(Geometry::meshList[Geometry::GEO_CUBE], Item::NOTE, true, Vector3(300, 80, 1), Vector3(35, 35, 1));
+	itemList.push_back(puzzleNotes[0]);
+	goList.push_back(puzzleNotes[0]);
+
+	/* State 2 */
+	puzzleActivateArea.Set(Vector3(827, 90, 1), Vector3(20, 20, 1), 5);	//press 5 times
+	GameObject* obj = new GameObject;
+	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
+	obj->translateObject(puzzleActivateArea.position);
+	obj->scaleObject(puzzleActivateArea.scale.x, puzzleActivateArea.scale.y, 1);
+	goList.push_back(obj);
+
+	//key: to unlock door 0
+	puzzleKeys[0] = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
+	puzzleKeys[0]->setActive(false);
+	pickedUpKeys[0] = false;
+	goList.push_back(puzzleKeys[0]);
+	itemList.push_back(puzzleKeys[0]);
+
+	//note
+	puzzleNotes[1] = new Item(Geometry::meshList[Geometry::GEO_CUBE], Item::NOTE, true, Vector3(300, 80, 1), Vector3(35, 35, 1));
+	itemList.push_back(puzzleNotes[1]);
+	puzzleNotes[1]->setActive(false);
+	goList.push_back(puzzleNotes[1]);
+
+	/* State 3 */
+	//lever to remove traps
+	leverClose = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::FIRETRIGGER, Vector3(60, 654, 1), Vector3(45, 45, 1), 0, true, *sfx_man, player);
+	goList.push_back(leverClose);
+
+	leverOpen = new TriggerObject(Geometry::meshList[Geometry::GEO_ISTRIGGER], TriggerObject::FIRETRIGGER, Vector3(60, 654, 1), Vector3(45, 45, 1), 0, true, *sfx_man, player);
+	leverOpen->setActive(false);
+	goList.push_back(leverOpen);
+
+	/* State 4 */
+	spikeTrap = new GameObject(Geometry::meshList[Geometry::GEO_CUBE], Vector3(80, 403, 1), Vector3(100, 100, 1), true);
+	goList.push_back(spikeTrap);
+
+	//doors
+	doors[0] = new GameObject(Geometry::meshList[Geometry::GEO_DOORY], Vector3(150, 654, 1), Vector3(50, 90, 1), true);
+	goList.push_back(doors[0]);
+
+	doors[1] = new GameObject(Geometry::meshList[Geometry::GEO_DOORY], Vector3(579, 598, 1), Vector3(50, 90, 1), true);
+	goList.push_back(doors[1]);
+
+	//key: to unlock door 1
+	puzzleKeys[1] = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(80, 483, 0), Vector3(35, 35, 1));
+	goList.push_back(puzzleKeys[1]);
+	pickedUpKeys[1] = false;
+	itemList.push_back(puzzleKeys[1]);
 }
 
 void Model_Level2::spawnItems()
 {
-	item = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
-	goList.push_back(item);
-	itemList.push_back(item);
 }
 
 void Model_Level2::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
 	/* parent class update */
 	Model_Level::Update(dt, myKeys, mousePos);
+	//cout << player->getPosition() << endl;
 
 	if(keyPressedTimer < delayTime)
 		keyPressedTimer += dt;
@@ -172,24 +210,16 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 		/* Update player */
 		player->Update(dt, myKeys);
 
-		//Update the traps
-		UpdateTraps(dt, myKeys);
-
 		if(myKeys[KEY_K])
 		{
 			player->Translate(Vector3(659, 389, 0));
 		}
 
-	player->dropItem(dt, item, myKeys);
+		player->dropItem(dt, item, myKeys);
 	
-	/* check collision with object */
-	//start: Set up collision bound before checking with the others
-	player->StartCollisionCheck();
-
-		//getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
-		//getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
-
-		//cout << player->getPosition() << endl;
+		/* check collision with object */
+		//start: Set up collision bound before checking with the others
+		player->StartCollisionCheck();
 
 		for (int i = 0; i < level_map->size(); i++)
 		{
@@ -203,14 +233,6 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 		//start: Set up collision bound before checking with the others
 		player->StartCollisionCheck();
 
-		/* check collision with map */
-		for (int i = 0; i < level_map->size(); i++)
-		{
-			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
-			{
-				(*level_map)[i]->getWalkable(player->getPosition().x, player->getPosition().y);
-			}
-		}
 
 		/* check collision with map */
 		for (int i = 0; i < level_map->size(); i++)
@@ -221,17 +243,16 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 			}
 		}
 
-		if (door->getActive())
-		{
-			if (player->CollisionCheck(door))
-			{
-				if (doorUnlocked)
-				{
-					door->setActive(false);
-				}
-			}
-		}
+		/* Update puzzle (put above check collision with door since we need response for door) */
+		UpdatePuzzle(dt, myKeys);
 
+		/** Check collision with doors */
+		for(int i = 0; i < 2; ++i)
+		{
+			if(doors[i]->getActive())	//only check collide if active
+				player->CollisionCheck(doors[i]);
+		}
+		
 		player->dropItem(dt, item, myKeys);
 
 		/*** Change to next level ***/
@@ -241,78 +262,17 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 			if (mapTimer > 5)
 			{
 				goNextLevel = true;
-				//Model_Level::mapManager.ChangeNextMap();
 				mapTimer = 0;
 			}
 		}
 
-		//player->dropItem(dt, item, myKeys);
-
+		/** Reset collision **/
 		player->getCollideBound()->Reset();
 
-		/* Collision response */
+		/** Collision response (if any) **/
 		player->CollisionResponse();	//translate to new pos if collides
 
-		/* Test pick up items */
-		for (int i = 0; i < itemList.size(); ++i)
-		{
-			if (player->pickUp(itemList[i], myKeys))	//if successfully pick up
-			{
-				//if item is key
-				//cout << itemList[i]->getItemID() << endl;
-				if (itemList[i]->getItemID() == Item::KEY)
-				{
-					doorUnlocked = true;
-				}
-			}
-		}
-
-		player->useItem(myKeys);
-
-		/* Update target */
-		camera.target = camera.position;
-		camera.target.z -= 10;
-
-		/* Press space to go back main menu */
-		if (myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
-		{
-			keyPressedTimer = 0.0;
-			//stateManager->ChangeState(stateManager->MAIN_MENU);
-		}
-
-		/* Key Q to open puzzle */
-		static bool ButtonQState = false;
-		if (!ButtonQState && myKeys[KEY_Q])
-		{
-			ButtonQState = true;
-			std::cout << "QBUTTON DOWN" << std::endl;
-			puzzleOpen = true;
-		}
-		else if (ButtonQState && !(myKeys[KEY_Q]))
-		{
-			ButtonQState = false;
-			std::cout << "QBUTTON UP" << std::endl;
-			puzzleOpen = false;
-		}
-
-		/* GO TO NEXT LEVEL (PRESS B FOR NOW) */
-		//Key B to move to next map (RP)
-		static bool ButtonBState = false;
-		if (!ButtonBState && myKeys[KEY_B])
-		{
-			ButtonBState = true;
-			goNextLevel = true;	//go to next level
-			std::cout << "BBUTTON DOWN" << std::endl;
-			//stateManager->ChangeState(StateManager::MAIN_MENU);
-			//mapManager->ChangeNextMap();
-			puzzleManager->goToNextPart();
-		}
-		else if (ButtonBState && !(myKeys[KEY_B]))
-		{
-			ButtonBState = false;
-			std::cout << "BBUTTON UP" << std::endl;
-		}
-
+		/** If stop game **/
 		if (player->getHealth() == 0)
 		{
 			stopGame = true;
@@ -320,29 +280,97 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 	}
 }
 
-void Model_Level2::UpdateTraps(double dt, bool* myKeys)
+void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 {
-	Timer += dt;
-	/* check with trigger objects fire */
-	for(int i = 0; i < 3; i++)
+	switch (level_state)
 	{
-		triggerObject[i]->Update(dt, myKeys); //animation and actual update
-	}
+	case STAGE_1:
+		{
+			/* Check if collide with note 1 */
+			if(player->pickUp(puzzleNotes[0], myKeys))
+			{
+				level_state = STAGE_2;
+			}
 
-	//Render
-	if(triggerObject[0]->getTriggered() == false) //If lever is switched off
-	{
-		triggerObject[0]->setActive(false); //to change lever position
-		triggerObject[1]->setActive(true); 
-		triggerObject[2]->setActive(false); //fire
-		haveFire = false; //do not render fire
-	}
-	else 
-	{
-		triggerObject[0]->setActive(true); 
-		triggerObject[1]->setActive(false);
-		triggerObject[2]->setActive(true); //fire on
-		haveFire = true;
+			break;
+		}
+	case STAGE_2:
+		{
+			/* see if click at trigger area to get hidden key and message */
+			if(keyPressedTimer >= delayTime)
+			{
+				if(myKeys[KEY_E])
+				{
+					keyPressedTimer = 0.0;
+					puzzleActivateArea.QuickAABBDetection(player->getCollideBound(), true);
+				}
+			}
+
+			/* if activated: get key and puzzle */
+			if(puzzleActivateArea.getActivated())
+			{
+				puzzleNotes[1]->setActive(true);	//must be active before can add
+				player->getInventory()->addItem(puzzleNotes[1]);	//note 2
+				puzzleKeys[0]->setActive(true);	//must be active before can add
+				player->getInventory()->addItem(puzzleKeys[0]);	//key 1
+				pickedUpKeys[0] = true;
+				level_state = STAGE_3;
+			}
+
+			break;
+		}
+	case STAGE_3:
+		{
+
+			/* check if can open door */
+			if(player->QuickAABBDetection(doors[0]) && pickedUpKeys[0])	//picked up key 0?
+			{
+				doors[0]->setActive(false);
+			}
+
+			/* if lever pulled: go stage 4 */
+			if(keyPressedTimer >= delayTime)
+			{
+				if(myKeys[KEY_E])
+				{
+					/* if collide with lever and pressed E: activated lever */
+					if(player->QuickAABBDetection(leverClose))
+					{
+						keyPressedTimer = 0.0;
+						leverClose->setActive(false);
+						leverOpen->setActive(true);
+
+						spikeTrap->setActive(false);
+						level_state = STAGE_4;
+					}
+				}
+			}
+
+			break;
+		}
+	case STAGE_4:
+		{
+			/* see if pick up key 1 */
+			if(keyPressedTimer >= delayTime)
+			{
+				if(myKeys[KEY_E])
+				{
+					if(player->pickUp(puzzleKeys[1], myKeys))
+					{
+						keyPressedTimer = 0.0;
+						pickedUpKeys[1] = true;
+					}
+				}
+			}
+
+			/* if got key: can unlock door */
+			if(player->QuickAABBDetection(doors[1]) && pickedUpKeys[1])	//picked up key 0?
+			{
+				doors[1]->setActive(false);
+			}
+
+			break;
+		}
 	}
 }
 

@@ -64,6 +64,9 @@ void Player::Update(double dt, bool* myKey)
 	/* update inventory */
 	inventory.Update(dt, myKey);
 
+	/* Use item */
+	useItem(myKey);
+
 	//cout << animationList[UP]->startRow << " " << animationList[DOWN]->startRow << endl;
 	//setState(IDLE);
 	if(myKey[KEY_W])

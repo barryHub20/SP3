@@ -34,6 +34,8 @@ public:
 		GEO_AR_CHRISTY,	//font
 		GEO_CROSSHAIR,
 		GEO_SLOT,
+		GEO_SLOT_SELECTED,
+		GEO_SLOT_UNSELECTED,
 		GEO_SELECTOR,
 
 		/* terrain */

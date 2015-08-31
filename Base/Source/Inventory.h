@@ -40,7 +40,7 @@ public:
 	//param TWOD_Window_Width: pass in 2D window width
 	//param leftPercent: offset to left: 0.5 is equal dist from left and right, 0 is to extreme left, 1 is to extreme right
 
-	void Set(float percent_widthOfScreen, float percent_gapPerSlot, float TWOD_Window_Width, float TWOD_Window_height, float leftPercent, float topPercent);
+	void Set(float percent_widthOfScreen, float percent_gapPerSlot, float TWOD_Window_Width, float TWOD_Window_height, float leftPercent, float topPercent, float yToXPercentage = 1.15f);
 
 	/* utilities */
 	void Update(double dt, bool* myKeys);

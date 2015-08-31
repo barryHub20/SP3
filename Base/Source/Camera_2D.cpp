@@ -9,7 +9,7 @@ Camera2D::~Camera2D()
 {
 }
 
-void Camera2D::Init(const Vector3& pos, const Vector3& target, const Vector3& up, float DeadZone_Width, float DeadZone_Height, float viewWidth, float viewHeight)
+void Camera2D::Init(const Vector3& pos, const Vector3& target, const Vector3& up, float DeadZone_Width, float DeadZone_Height, float viewWidth, float viewHeight, float xMapScale, float yMapScale)
 {
 	this->position = pos;
 	this->target = target;
@@ -22,15 +22,13 @@ void Camera2D::Init(const Vector3& pos, const Vector3& target, const Vector3& up
 
 	this->viewWidth = viewWidth * 0.5f;
 	this->viewHeight = viewHeight * 0.5f;
-}
 
-float startX, endX, startY, endY;
-void Camera2D::SetBound(float xMapScale, float yMapScale)
-{
 	Vector3 middlePos(xMapScale * 0.5f, yMapScale * 0.5f);
 
 	/* position is offset: in case not start at 0,0 */
 	middlePos += position * 0.5f;
+
+	cout << middlePos << endl;
 
 	if(position.y != 0)
 		yMapScale -= position.y;
@@ -43,6 +41,15 @@ void Camera2D::SetBound(float xMapScale, float yMapScale)
 
 	boundStart.y = middlePos.y - yMapScale * 0.5f;
 	boundEnd.y = middlePos.y + yMapScale * 0.5f;
+}
+
+float startX, endX, startY, endY;
+void Camera2D::SetBound(const Vector3& currentPos)
+{
+	//670 832
+	position = currentPos;
+	position.x -= viewWidth;
+	position.y -= viewHeight;
 
 	if(position.x <= boundStart.x)
 	{
@@ -104,8 +111,14 @@ void Camera2D::Update(double dt, const Vector3& currentPos, const Vector3& scale
 		if(position.y + (viewHeight * 2.f) < boundEnd.y)
 			position.y += (currentPos.y + scale.y * 0.5f) - endY;
 		else
+		{
 			position.y = boundEnd.y - (viewHeight * 2.f);
+		}
 	}
+
+	//target
+	target = position;
+	target.z -= 10;
 }
 
 void Camera2D::Reset()

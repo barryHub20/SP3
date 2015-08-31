@@ -2,7 +2,7 @@
 #define UI_OBJECT_H
 #include "GameObject.h"
 
-class UI_Object : public GameObject
+class UI_Object : public Object
 {
 public:
 	enum UI_TYPE
@@ -12,6 +12,7 @@ public:
 		INVENTORY_SLOT,
 		HP_BAR,
 		MAIN_MENU_BACKGROUND,
+		POP_UP,
 		TOTAL_TYPE,
 	};
 
@@ -29,6 +30,7 @@ public:
 	void SetActive(bool active);
 
 private:
+	Collision collideBound;
 	UI_TYPE type;
 	string message;
 };

@@ -1,6 +1,7 @@
 #ifndef MODEL_LEVEL_H
 #define MODEL_LEVEL_H
 #include "Model.h"
+#include "TriggerArea.h"
 
 //model for level class
 class Model_Level : public Model
@@ -11,19 +12,20 @@ protected:
 	/* render all general(not a specific object) game objects */
 	vector<GameObject*> goList;	
 	
-	/* render all collision boxes (debug purpose only pls remove) */
+	/* render all collision boxes (debug purpose only pls REMOVE) */
 	vector<Collision*> collisionList; 
 	
-	/* all item objects */
+	/* all item objects: not needed can use goList */
 	vector<Item*> itemList;	
 	
-	/* all ui objects */
+	/* all ui objects: Render in 2D screen */
 	vector<UI_Object*> UI_List;	
 	
-	/* Triggering Objects */
+	/* Triggering Objects: not needed can use goList */
 	vector<TriggerObject*> triggerObject;
 
-	static bool init_Already;
+	static bool init_Already;	//init all parent class stuff already?
+	bool initBasicsAlready;	//init child class basics already?
 public:
 /************ current level map ************/ 
 	vector<Map*>* level_map;
@@ -46,6 +48,8 @@ public:
 	static UI_Object instruction;
 	static UI_Object go_back;
 	static UI_Object main_UI_bar;	//main UI in game
+	static UI_Object puzzleMessage;	//UI for puzzle message	(Use this to customise, take
+	static UI_Object tutorialUI;	//UI for showing tutorial (Lvl 1 and 2 only)
 
 	// door/checkpoint 
 	static TriggerObject* door;

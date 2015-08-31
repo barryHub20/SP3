@@ -173,12 +173,14 @@ void Controller::modelTransitioning()
 	{
 		Model_Level::setCurrentModel(Model_Level::getCurrentModel() + 1);
 		view->SetModel(modelList[Model::getCurrentModel()]);
+		modelList[Model::getCurrentModel()]->Init();
 		Model_Level::setNextLevel(false);
 	}
 	else if( Model_Level::PreviousLevel() )	//if go previous level
 	{
 		Model_Level::setCurrentModel(Model_Level::getCurrentModel() - 1);
 		view->SetModel(modelList[Model::getCurrentModel()]);
+		modelList[Model::getCurrentModel()]->Init();
 		Model_Level::setPreviousLevel(false);
 	}
 }

@@ -46,6 +46,10 @@ void Geometry::Init()
 	meshList[GEO_SLOT]->textureID[0] = LoadTGA("Image//HUD//slot.tga");
 	meshList[GEO_SELECTOR] = MeshBuilder::GenerateQuad("staminabar marker", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_SELECTOR]->textureID[0] = LoadTGA("Image//HUD//selector.tga");
+	meshList[GEO_SLOT_SELECTED] = MeshBuilder::GenerateQuad("staminabar marker", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_SLOT_SELECTED]->textureID[0] = LoadTGA("Image//HUD//slot_selected.tga");
+	meshList[GEO_SLOT_UNSELECTED] = MeshBuilder::GenerateQuad("staminabar marker", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_SLOT_UNSELECTED]->textureID[0] = LoadTGA("Image//HUD//slot_unselected.tga");
 
 	/** skybox **/
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);

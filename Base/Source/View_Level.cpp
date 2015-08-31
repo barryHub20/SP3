@@ -143,6 +143,11 @@ void View_Level::RenderHUD()
 		}
 		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 5, 15, 5);
 
+		ss.str("");
+		ss.precision(3);
+		ss << "Pos: " << model_level->player->getPosition();
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0, 0), 5, 25, 10);
+
 		//Puzzle
 		if (model_level->puzzleOpen == true)
 		{
@@ -439,20 +444,27 @@ void View_Level::RenderInventory(Inventory* inventory)
 	
 	for(int i = 0; i < inventory->MAX_SLOT; ++i)
 	{
-		/* render slots */
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SLOT], false, scale.x, scale.y, 1,startX, yPos, 2.f, 0);
+		/* render slot */
+		if(i == inventory->getCurrentSlot())
+		{
+			RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SLOT_SELECTED], false, scale.x, scale.y, 1,startX, yPos, 2.f, 0);
+		}
+		else
+		{
+			RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SLOT_UNSELECTED], false, scale.x, scale.y, 1,startX, yPos, 2.f, 0);
+		}
 
 		/* render current size */
 		size = inventory->currentSize(i);
 		ss.str("");
 		ss << size;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.25f, startX, yPos - scale.y * 0.57f, 2.1f);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.2f, startX, yPos - scale.y * 0.35f, 2.1f);
 
 		/* render name */
 		name = inventory->currentItemName(i);
 		ss.str("");
 		ss << name;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.25f, startX, yPos + scale.y * 0.43f, 2.1f);
+		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(166.f / 255.f, 23.f / 255.f, 23.f / 255.f), scale.x * 0.2f, startX, yPos + scale.y * 0.36f, 2.1f);
 
 		/* render mesh */
 		mesh = inventory->currentItemMesh(i);
@@ -461,21 +473,15 @@ void View_Level::RenderInventory(Inventory* inventory)
 		{
 			RenderMeshIn2D(mesh, false, scale.x * 0.65f, scale.y * 0.65f, 1, startX, yPos, 2.1f, 1);
 		}
-
-		/* render selector */
-		if(i == inventory->getCurrentSlot())
-		{
-			RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SELECTOR], false, scale.x * 1.05f, scale.y * 1.05f, 1,startX, yPos, 2.1f, 0);
-		}
 		
 		//set pos to next slot
 		startX += inventory->getDistBtwSlot();
 	}
 
-	//test
-	ss.str("");
-	ss << "Hey I just met yyou and this is crazy so heres my number so call me maybe";
-	RenderTextOnScreenCutOff(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), 5, 50, 50, 3.1f, 32);
+	////test
+	//ss.str("");
+	//ss << "Hey I just met yyou and this is crazy so heres my number so call me maybe";
+	//RenderTextOnScreenCutOff(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), 5, 50, 50, 3.1f, 32);
 }
 
 void View_Level::RenderRearMap()

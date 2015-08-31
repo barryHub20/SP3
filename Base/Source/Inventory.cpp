@@ -124,14 +124,14 @@ Inventory::~Inventory(void)
 
 }
 
-void Inventory::Set(float percent_widthOfScreen, float percent_gapPerSlot, float TWOD_Window_Width, float TWOD_Window_height, float leftPercent, float topPercent)
+void Inventory::Set(float percent_widthOfScreen, float percent_gapPerSlot, float TWOD_Window_Width, float TWOD_Window_height, float leftPercent, float topPercent, float yToXPercentage)
 {
 	//calculate
 	float inventory_width = percent_widthOfScreen * TWOD_Window_Width;	//width of inventory
 	float slot_Width = inventory_width / MAX_SLOT;	//width per slot
 	float gap_width = slot_Width * percent_gapPerSlot;	//width per gap
 
-	scalePerSlot.Set(slot_Width - gap_width, slot_Width - gap_width, 1.f);	//scale
+	scalePerSlot.Set(slot_Width - gap_width, (slot_Width - gap_width) * yToXPercentage, 1.f);	//scale
 	distBtwSlot = slot_Width;	//dist from one slot to the other
 	startX = (scalePerSlot.x / 2.f) - (gap_width / 2);	//starting pos for the first slot
 

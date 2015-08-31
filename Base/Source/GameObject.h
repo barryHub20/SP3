@@ -2,7 +2,6 @@
 #define GAME_OBJECT_H
 #include "Object.h"
 #include "Physics.h"
-#include "Collision.h"
 #include "MeshList.h"
 #include "SpriteAnimation.h"
 #include <map>
@@ -33,7 +32,7 @@ public:
 	};
 	/* constructor/destructor */
 	GameObject(void);
-	GameObject(Vector3 Pos, Vector3 scale, Vector3 Dir, float Speed, bool active);	//set everything in general
+	GameObject(Mesh* mesh, Vector3 Pos, Vector3 scale, bool active);	//set everything in general
 	virtual ~GameObject(void);
 
 	/* Core */
@@ -67,7 +66,6 @@ public:
 	Collision* getCollideBound();
 
 	/* utilities */
-	bool QuickAABBDetection(GameObject* checkMe);	//detection only, no response
 	void Translate(Vector3 pos);
 	void TranslateOffset(Vector3 offset);
 

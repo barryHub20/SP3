@@ -25,58 +25,63 @@ Model_Level1::~Model_Level1()
 /*********** core functions ***************/
 void Model_Level1::Init()
 {
-	Model_Level::Init();
-
-	/* timer and delay time */
-	delayTime = 0.3;
-	keyPressedTimer = delayTime;
-
-	stopGame = false;
-	doorUnlocked = false;
-	haveFire = true;
-	Timer = 0;
-	mapTimer = 0;
-
-
-	//object
-	InitObject();
-
-	//player
-	if(player != NULL)
+	if(!initBasicsAlready)
 	{
-		goList.push_back(player);
+		initBasicsAlready = true;
+		Model_Level::Init();
 
+		/* timer and delay time */
+		delayTime = 0.3;
+		keyPressedTimer = delayTime;
+
+		stopGame = false;
+		doorUnlocked = false;
+		haveFire = true;
+		Timer = 0;
+		mapTimer = 0;
+
+
+		//object
+		InitObject();
+
+		//player
+		if(player != NULL)
+		{
+			goList.push_back(player);
+
+		}
+
+		spawnItems();
+		InitTrigger();
+
+		//Model_Level::mapManager.SetMap(0);	//set to map 0 first
+		/* set current level map to level 1 */
+		level_map = Model_Level::mapManager.GetMap(LEVEL_1);
+
+		/* Set map scale: for camera */
+		//go model_level::Init_map() to see how big ur world is,
+		//based on floor layer (or any other layer that is the biggest)
+		//width: num_ofTileWidth * tileSize
+		//height: num_ofTileHeight * tileSize
+		mapSize.Set(16 * 64, 13 * 64, 1);
+
+		camera.Init(Vector3(0, -130, 0), Vector3(0, 0, -10), Vector3(0, 1, 0), m_view_width * 0.2f,  m_view_height * 0.2f
+			, m_view_width, m_view_height, mapSize.x, mapSize.y);
+
+		//UI
+		InitUI();
+
+		//sprite (Only level one call once)
+		InitSprite();
+
+		//Init puzzle
+		puzzleManager = new PuzzleManager;
+		puzzleManager->Init(MapManager::MAX_MAP);
+		InitPuzzles();
 	}
 
-	spawnItems();
-	InitTrigger();
-
-	//Model_Level::mapManager.SetMap(0);	//set to map 0 first
-	/* set current level map to level 1 */
-	level_map = Model_Level::mapManager.GetMap(LEVEL_1);
-
-	/* Set map scale: for camera */
-	//go model_level::Init_map() to see how big ur world is,
-	//based on floor layer (or any other layer that is the biggest)
-	//width: num_ofTileWidth * tileSize
-	//height: num_ofTileHeight * tileSize
-	mapSize.Set(16 * 64, 13 * 64, 1);
-
-	camera.Init(Vector3(0, 0, 0), Vector3(0, 0, -10), Vector3(0, 1, 0), m_view_width * 0.2f,  m_view_height * 0.2f
-		, m_view_width, m_view_height);
-	camera.SetBound(mapSize.x, mapSize.y);
-
-	//UI
-	InitUI();
-
-	//sprite (Only level one call once)
-	InitSprite();
-
-	//Init puzzle
-	puzzleManager = new PuzzleManager;
-	puzzleManager->Init(MapManager::MAX_MAP);
-	InitPuzzles();
-
+	/* set bounds so camera spawns at correct place each time reenter this level */
+	camera.SetBound(player->getPosition());
 }
 
 void Model_Level1::InitSprite()
@@ -135,25 +140,25 @@ void Model_Level1::InitTrigger()
 
 void Model_Level1::InitUI()
 {
-	Vector3 winDimension(m_2D_view_width/2, m_2D_view_height/2, 1);
+	//Vector3 winDimension(m_2D_view_width/2, m_2D_view_height/2, 1);
 
-	/* background main menu */
-	UI_Object* obj;
-	obj = new UI_Object;
-	obj->Init(Geometry::meshList[Geometry::GEO_BOTTOM], winDimension, Vector3(m_2D_view_width, m_2D_view_height, 1), "", UI_Object::MAIN_MENU_BACKGROUND, true);
-	UI_List.push_back(obj);
+	///* background main menu */
+	//UI_Object* obj;
+	//obj = new UI_Object;
+	//obj->Init(Geometry::meshList[Geometry::GEO_BOTTOM], winDimension, Vector3(m_2D_view_width, m_2D_view_height, 1), "", UI_Object::MAIN_MENU_BACKGROUND, true);
+	//UI_List.push_back(obj);
 
-	/* UI Objects */
-	Controller::mouse_current_x;
-	Vector3 mousePos(Controller::mouse_current_x, Controller::mouse_current_y, 3);
-	cursor.Init(Geometry::meshList[Geometry::GEO_BACK], mousePos, Vector3(5, 5, 1), "", UI_Object::MOUSE_CURSOR, true);
-	UI_List.push_back(&cursor);
+	///* UI Objects */
+	//Controller::mouse_current_x;
+	//Vector3 mousePos(Controller::mouse_current_x, Controller::mouse_current_y, 3);
+	//cursor.Init(Geometry::meshList[Geometry::GEO_BACK], mousePos, Vector3(5, 5, 1), "", UI_Object::MOUSE_CURSOR, true);
+	//UI_List.push_back(&cursor);
 
-	start_Game.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y + 11, 1.1), Vector3(40, 15, 1), "Start Game", UI_Object::BUTTON, true);
-	UI_List.push_back(&start_Game);	
+	//start_Game.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y + 11, 1.1), Vector3(40, 15, 1), "Start Game", UI_Object::BUTTON, true);
+	//UI_List.push_back(&start_Game);	
 
-	instruction.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y - 11, 1.1), Vector3(40, 15, 1), "Instructions", UI_Object::BUTTON, true);
-	UI_List.push_back(&instruction);
+	//instruction.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y - 11, 1.1), Vector3(40, 15, 1), "Instructions", UI_Object::BUTTON, true);
+	//UI_List.push_back(&instruction);
 }
 
 void Model_Level1::InitPuzzles()
