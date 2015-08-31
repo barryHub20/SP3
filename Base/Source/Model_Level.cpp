@@ -65,7 +65,7 @@ void Model_Level::Init()
 		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-		current_model = 0;
+		current_model = 3;
 
 		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
 
@@ -101,6 +101,11 @@ void Model_Level::InitMaps()
 	
 	/** Level 3 set to MapManager::MAP3 **/
 	Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+
+	/** Level 4 set to MapManager::MAP4 **/
+	Model_Level::mapManager.CreateMap(MapManager::MAP4, Map::FLOORMAP, 16, 13, 64, "Image//Map//level4_floor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_ULTIMATESPRITE]);
 }
 
 void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos)

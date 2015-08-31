@@ -37,6 +37,8 @@ public:
 	void setTriggered(bool isTriggered);
 	bool getTriggered(void);
 	void updateTrigger(double dt, bool* myKey);
+
+	void resetPosition();
 private:	
 	// Sound
 	SoundManager *my_sfx_man;

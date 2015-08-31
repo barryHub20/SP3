@@ -1,6 +1,6 @@
 #include "TriggerObject.h"
 
-float ARROW_SPEED = 10.f;
+float ARROW_SPEED = 5.f;
 
 TriggerObject::TriggerObject()
 {
@@ -89,7 +89,7 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 	}
 	else if (type == ARROWTRAP)
 	{
-		if (this->mesh->name == "arrow left")
+		if (this->mesh->name == "arrow left" && this->isTriggered == true)
 		{
 			translateObject(Vector3(-ARROW_SPEED, 0, 0));
 			if (position.x < 0)
@@ -97,7 +97,7 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 				Object::translate(initialPos.x, initialPos.y, initialPos.z);
 			}
 		}
-		else if (this->mesh->name == "arrow right")
+		else if (this->mesh->name == "arrow right" && this->isTriggered == true)
 		{
 			translateObject(Vector3(ARROW_SPEED, 0, 0));
 			if (position.x < 0)
@@ -105,7 +105,7 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 				Object::translate(initialPos.x, initialPos.y, initialPos.z);
 			}
 		}
-		else if (this->mesh->name == "arrow up")
+		else if (this->mesh->name == "arrow up" && this->isTriggered == true)
 		{
 			translateObject(Vector3(0, ARROW_SPEED, 0));
 			if (position.x < 0)
@@ -113,7 +113,7 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 				Object::translate(initialPos.x, initialPos.y, initialPos.z);
 			}
 		}
-		else if (this->mesh->name == "arrow down")
+		else if (this->mesh->name == "arrow down" && this->isTriggered == true)
 		{
 			translateObject(Vector3(0, -ARROW_SPEED, 0));
 			if (position.x < 0)
@@ -122,6 +122,18 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			}
 		}
 	}
+	else if (type == ARROWTRIGGER)
+	{
+		if (player->QuickAABBDetection(this) && isTriggered == false) //Switch on arrow trap
+		{
+			isTriggered = true;
+		}
+	}
+}
+
+void TriggerObject::resetPosition()
+{
+	Object::translate(initialPos.x, initialPos.y, initialPos.z);
 }
 
 void TriggerObject::setDetectionBound()
