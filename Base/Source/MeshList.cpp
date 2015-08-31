@@ -43,7 +43,7 @@ void Geometry::Init()
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateQuad("GEO_CROSSHAIR", Color(1, 1, 1), 1.f);
 	meshList[GEO_CROSSHAIR]->textureID[0] = LoadTGA("Image//crosshair.tga");
 	meshList[GEO_SLOT] = MeshBuilder::GenerateQuad("staminabar color", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_SLOT]->textureID[0] = LoadTGA("Image//HUD//slot.tga");
+	meshList[GEO_SLOT]->textureID[0] = LoadTGA("Image//HUD//backpack.tga");
 	meshList[GEO_SELECTOR] = MeshBuilder::GenerateQuad("staminabar marker", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_SELECTOR]->textureID[0] = LoadTGA("Image//HUD//selector.tga");
 

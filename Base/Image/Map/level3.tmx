@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="25" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="dungeonwall" tilewidth="32" tileheight="32" tilecount="16">
+  <image source="Tile textures/dungeonwall.jpg" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="17" name="ultimatesprite" tilewidth="32" tileheight="32" tilecount="1024">
+  <image source="ultimatesprite.png" width="1024" height="1024"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="32" height="25">
+  <data encoding="base64" compression="zlib">
+   eJztltsKgCAMhn8K7HBRvf/TVoRg4v4M56422I3b+GQnDQDGgk7CuabOly4oi3SuKYvzRc6Kp0apxJpZ8C3ywvgsxvl6/NhntXoo8y3mzPnOr+UPkN9KCz7zTUXjni38Vj8rfsA7P9Z8Fvdn/+Z7V6p/7vfF7z1/zue2DX3/+Dux3b1yArOtBBs=
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="32" height="25">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwShABfbMEDzQbhip9jswQ/AooC5wZBpY+xMHyH5FJghuHGD/wwAA4vYC/g==
+  </data>
+ </layer>
+</map>

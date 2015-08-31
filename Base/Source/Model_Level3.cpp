@@ -33,6 +33,9 @@ void Model_Level3::Init()
 
 	stopGame = false;
 	doorUnlocked = false;
+	doorRUnlocked = false;
+	doorPUnlocked = false;
+	doorGUnlocked = false;
 	haveFire = true;
 	Timer = 0;
 	mapTimer = 0;
@@ -44,7 +47,7 @@ void Model_Level3::Init()
 	}
 
 	/* !! Remember to set player pos to where ever you want */
-	player->translate(100, 100, 1);
+	player->translate(80, 70, 1);
 
 	//object
 	InitObject();
@@ -77,7 +80,15 @@ void Model_Level3::InitObject()
 	ReadFromFile("Save_Load_File_lvl3.txt");
 
 	/** Set up enemy **/
-	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
+	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(925, 700, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(E_Ogre);
+
+		// Post for bottom middle key
+	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(540, 210, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(E_Ogre);
+
+		// Post for bottom left key
+	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(230, 400, 0), Vector3(50, 50, 1), 0, 10, true);
 	goList.push_back(E_Ogre);
 
 	/** init **/
@@ -92,14 +103,14 @@ void Model_Level3::InitTrigger()
 {
 	triggerObject.resize(3);
 
-	triggerObject[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::FIRETRIGGER, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
+	triggerObject[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::FIRETRIGGER, Vector3(-10, -10, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
 	goList.push_back(triggerObject[0]);
 
-	triggerObject[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_ISTRIGGER], TriggerObject::FIRETRIGGER, Vector3(750, 560, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
+	triggerObject[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_ISTRIGGER], TriggerObject::FIRETRIGGER, Vector3(-10, -10, -3), Vector3(45, 45, 1), 0, true, *sfx_man, player);
 	goList.push_back(triggerObject[1]);
 
 	//Arrow trap
-	triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWLEFT], TriggerObject::ARROWTRAP, Vector3(940, 100, 0), Vector3(30, 30, 1), false, true, *sfx_man, player);
+	triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWLEFT], TriggerObject::ARROWTRAP, Vector3(0, 0, 0), Vector3(30, 30, 1), false, true, *sfx_man, player);
 	goList.push_back(triggerObject[2]);
 }
 
@@ -126,7 +137,18 @@ void Model_Level3::InitPuzzles()
 
 void Model_Level3::spawnItems()
 {
-	item = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
+	// Top left key
+	item = new Item(Geometry::meshList[Geometry::GEO_KEYP], Item::KEYP, true, Vector3(120, 680, 0), Vector3(35, 35, 1));
+	goList.push_back(item);
+	itemList.push_back(item);
+
+	// Bottom left key
+	item = new Item(Geometry::meshList[Geometry::GEO_KEYR], Item::KEYR, true, Vector3(250, 230, 0), Vector3(35, 35, 1));
+	goList.push_back(item);
+	itemList.push_back(item);
+
+	// Bottom middle key
+	item = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(590, 210, 0), Vector3(35, 35, 1));
 	goList.push_back(item);
 	itemList.push_back(item);
 }
@@ -222,6 +244,39 @@ void Model_Level3::UpdateGame(double dt, bool* myKeys)
 			}
 		}
 
+		if (door_R->getActive())
+		{
+			if (player->CollisionCheck(door_R))
+			{
+				if (doorRUnlocked)
+				{
+					door_R->setActive(false);
+				}
+			}
+		}
+
+		if (door_P->getActive())
+		{
+			if (player->CollisionCheck(door_P))
+			{
+				if (doorPUnlocked)
+				{
+					door_P->setActive(false);
+				}
+			}
+		}
+
+/*		if (door_G->getActive())
+		{
+			if (player->CollisionCheck(door_G))
+			{
+				if (doorGUnlocked)
+				{
+					door_G->setActive(false);
+				}
+			}
+		} */
+
 		player->dropItem(dt, item, myKeys);
 
 		/*** Change to next level ***/
@@ -253,6 +308,18 @@ void Model_Level3::UpdateGame(double dt, bool* myKeys)
 				if (itemList[i]->getItemID() == Item::KEY)
 				{
 					doorUnlocked = true;
+				}
+				if (itemList[i]->getItemID() == Item::KEYR)
+				{
+					doorRUnlocked = true;
+				}
+				if (itemList[i]->getItemID() == Item::KEYP)
+				{
+					doorPUnlocked = true;
+				}
+				if (itemList[i]->getItemID() == Item::KEYG)
+				{
+					doorGUnlocked = true;
 				}
 			}
 		}
