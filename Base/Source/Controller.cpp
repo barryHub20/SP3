@@ -45,6 +45,10 @@ Controller::Controller(vector<Model_Level*>& modelList, View* view) : view(view)
 Controller::~Controller()
 {
 	view = NULL;
+	/*for (int i = 0; i < modelList.size(); ++i)
+	{
+		delete this->modelList[i];
+	}*/
 }
 
 /******************** core functions **********************/

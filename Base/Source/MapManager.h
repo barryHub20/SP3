@@ -19,6 +19,8 @@ public:
 		MAP1,
 		MAP2,
 		MAP3,
+		MAP4,
+		MAP5,
 		MAX_MAP,
 	};
 private:

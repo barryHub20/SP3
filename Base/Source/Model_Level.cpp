@@ -28,10 +28,10 @@ UI_Object Model_Level::puzzleMessage;	//UI for puzzle message
 UI_Object Model_Level::tutorialUI;	//UI for showing tutorial
 
 // door/checkpoint 
-TriggerObject* Model_Level::door = NULL;
-TriggerObject* Model_Level::staircase = NULL;
+//TriggerObject* Model_Level::door = NULL;
+//TriggerObject* Model_Level::staircase = NULL;
 bool Model_Level::stopGame = false;
-bool Model_Level::doorUnlocked = false;
+//bool Model_Level::doorUnlocked = false;
 bool Model_Level::haveFire = false;
 double Model_Level::Timer = 0.0;
 double Model_Level::mapTimer = 0.0;
@@ -103,6 +103,11 @@ void Model_Level::InitMaps()
 	Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
 	Model_Level::mapManager.AddRear(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level3_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
 	Model_Level::mapManager.AddRear(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level3_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
+
+	/** Level 4 set to MapManager::MAP4 **/
+	Model_Level::mapManager.CreateMap(MapManager::MAP4, Map::FLOORMAP, 16, 13, 64, "Image//Map//level4_floor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_ULTIMATESPRITE]);
 }
 
 void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos)

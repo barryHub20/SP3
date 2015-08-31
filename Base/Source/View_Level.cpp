@@ -156,7 +156,8 @@ void View_Level::RenderHUD()
 			if (tempPuzzle->getType() == Puzzle::WORD)
 			{
 				ss.str(tempPuzzle->getTextPuzzle());
-				RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 5, 50, 25);
+				RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SCROLL], false, 80, 80, 1.f, model->get2DViewWidth() * 0.5f, model->get2DViewHeight() * 0.5f, 1.f, 0.f);
+				RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 5, model->get2DViewWidth() * 0.5f, model->get2DViewHeight() * 0.5f);
 			}
 			else
 			{

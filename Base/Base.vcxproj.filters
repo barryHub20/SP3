@@ -131,6 +131,9 @@
     <ClCompile Include="Source\UI_Object.cpp" />
     <ClCompile Include="Source\TriggerArea.cpp" />
     <ClCompile Include="Source\Puzzle.cpp" />
+    <ClCompile Include="Source\Model_Level4.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\MiniMap.h" />
@@ -271,6 +274,9 @@
     <ClInclude Include="Source\UI_Object.h" />
     <ClInclude Include="Source\TriggerArea.h" />
     <ClInclude Include="Source\Puzzle.h" />
+    <ClInclude Include="Source\Model_Level4.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Objects">

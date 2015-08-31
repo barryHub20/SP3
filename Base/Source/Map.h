@@ -46,7 +46,8 @@ public:
 
 	//Yie cher
 	TileObject* getTileObject(int x, int y);	//get tile based on x and y
-	void CheckCollisionWith(GameObject* checkWithMe);	//Utility function: pass in to check collision with this map
+	bool CheckCollisionWith(GameObject* checkWithMe);	//Utility function: pass in to check collision with this map RETURN WRONG
+	bool QuickAABBCheckMap(GameObject* checkWithMe);
 	bool getWalkable(int x, int y);
 private:
 	int theScreen_Height;

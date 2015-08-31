@@ -52,14 +52,14 @@ public:
 	static UI_Object tutorialUI;	//UI for showing tutorial (Lvl 1 and 2 only)
 
 	// door/checkpoint 
-	static TriggerObject* door;
+	TriggerObject* door;
 	TriggerObject* door_R;
 	TriggerObject* door_P;
 	TriggerObject* door_G;
 
-	static TriggerObject* staircase;
+	TriggerObject* staircase;
 	static bool stopGame;
-	static bool doorUnlocked;
+	bool doorUnlocked;
 	bool doorRUnlocked;
 	bool doorPUnlocked;
 	bool doorGUnlocked;

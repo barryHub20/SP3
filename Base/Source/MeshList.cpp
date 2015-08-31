@@ -129,6 +129,9 @@ void Geometry::Init()
 	meshList[GEO_TILESET1] = MeshBuilder::GenerateTileMap("Tile set 1", Color(1, 1, 1), 1.f, 1.f, 16, 16);
 	meshList[GEO_TILESET1]->textureID[0] = LoadTGA("Image//Sprites//tileset1.tga");
 
+	meshList[GEO_ULTIMATESPRITE] = MeshBuilder::GenerateTileMap("all sprites", Color(1, 1, 1), 1.f, 1.f, 32, 32);
+	meshList[GEO_ULTIMATESPRITE]->textureID[0] = LoadTGA("Image//Sprites//ultimatesprite.tga");
+
 	meshList[GEO_TEMPFLOOR] = MeshBuilder::GenerateTileMap("Temp floor", Color(1, 1, 1), 1.f, 1.f, 16, 16);
 	meshList[GEO_TEMPFLOOR]->textureID[0] = LoadTGA("Image//Sprites//floor.tga");
 
@@ -205,6 +208,10 @@ void Geometry::Init()
 
 	meshList[GEO_ATKPOTION] = MeshBuilder::GenerateQuad("Attack Potion", Color(1, 1, 1), 1.f);
 	meshList[GEO_ATKPOTION]->textureID[0] = LoadTGA("Image//atkPotion.tga");
+
+	meshList[GEO_SCROLL] = MeshBuilder::GenerateQuad("Scroll", Color(1, 1, 1));
+	meshList[GEO_SCROLL]->textureID[0] = LoadTGA("Image//Sprites//scroll.tga");
+
 }
 
 void Geometry::Exit()

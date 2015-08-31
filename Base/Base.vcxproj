@@ -41,6 +41,7 @@
     <ClCompile Include="Source\Model_Level1.cpp" />
     <ClCompile Include="Source\Model_Level2.cpp" />
     <ClCompile Include="Source\Model_Level3.cpp" />
+    <ClCompile Include="Source\Model_Level4.cpp" />
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\Ogre.cpp" />
     <ClCompile Include="Source\PathFinding.cpp" />
@@ -94,6 +95,7 @@
     <ClInclude Include="Source\Model_Level1.h" />
     <ClInclude Include="Source\Model_Level2.h" />
     <ClInclude Include="Source\Model_Level3.h" />
+    <ClInclude Include="Source\Model_Level4.h" />
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Ogre.h" />
     <ClInclude Include="Source\PathFinding.h" />

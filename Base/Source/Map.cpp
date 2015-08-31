@@ -187,7 +187,7 @@ TileObject* Map::getTileObject(int x, int y)
 	return &theScreenMap[y][x];
 }
 
-void Map::CheckCollisionWith(GameObject* checkWithMe)
+bool Map::CheckCollisionWith(GameObject* checkWithMe)
 {
 	TileObject* tileObj = NULL;
 	for (int i = 0; i < GetNumOfTiles_Height(); i++)
@@ -197,10 +197,40 @@ void Map::CheckCollisionWith(GameObject* checkWithMe)
 			/* Check collide with individual tile */
 			tileObj = getTileObject(k, i);
 
-			if(tileObj != NULL && tileObj->getTileNum() != 0 && tileObj->getTileType() == TileObject::COLLIDABLE)
-				checkWithMe->CollisionCheck( tileObj );
+			if (tileObj != NULL && tileObj->getTileNum() != 0 && tileObj->getTileType() == TileObject::COLLIDABLE)
+			{
+				if (checkWithMe->CollisionCheck(tileObj))
+				{
+					return false;
+				}
+
+			}
 		}
 	}
+}
+
+bool Map::QuickAABBCheckMap(GameObject * checkWithMe)
+{
+
+	TileObject* tileObj = NULL;
+	for (int i = 0; i < GetNumOfTiles_Height(); i++)
+	{
+		for (int k = 0; k < GetNumOfTiles_Width(); k++)
+		{
+			/* Check collide with individual tile */
+			tileObj = getTileObject(k, i);
+
+			if (tileObj != NULL && tileObj->getTileNum() != 0 && tileObj->getTileType() == TileObject::COLLIDABLE)
+			{
+				if (checkWithMe->QuickAABBDetection(checkWithMe))
+				{
+					return true;
+				}
+
+			}
+		}
+	}
+	return false;
 }
 
 void Map::CleanUp(void)

@@ -17,7 +17,8 @@ public:
 		DOOR_P,
 		DOOR_G,
 		FIRE, //fire trap
-		ARROWTRAP,
+		ARROWTRAP, //arrow trap
+		SPIKEREAPPEAR,
 		TRIGGERWHENCOLLIDE,
 		TOTAL_OBJECTS,
 	};
@@ -27,6 +28,11 @@ public:
 	~TriggerObject();
 
 	double triggerTimer;
+
+	float duration; //for spike
+
+	float speed; //for arrow
+	float arrowCooldown; //for arrow
 
 	void setState(TRIGGEROBJECTS state);
 	TriggerObject::TRIGGEROBJECTS getState();
@@ -40,6 +46,8 @@ public:
 	void setTriggered(bool isTriggered);
 	bool getTriggered(void);
 	void updateTrigger(double dt, bool* myKey);
+
+	void resetPosition();
 private:	
 	// Sound
 	SoundManager *my_sfx_man;
@@ -50,6 +58,7 @@ private:
 	TRIGGEROBJECTS type;
 
 	bool isTriggered;
+	Vector3 initialPos;
 };
 
 #endif
