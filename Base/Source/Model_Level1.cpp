@@ -15,7 +15,7 @@
 /*********** constructor/destructor ***************/
 Model_Level1::Model_Level1()
 {
-	
+
 }
 
 Model_Level1::~Model_Level1()
@@ -25,46 +25,65 @@ Model_Level1::~Model_Level1()
 /*********** core functions ***************/
 void Model_Level1::Init()
 {
-	Model_Level::Init();
+	if(!initBasicsAlready)
+	{
+		initBasicsAlready = true;
+		Model_Level::Init();
 
-	/* timer and delay time */
-	delayTime = 0.3;
-	keyPressedTimer = delayTime;
+		/* timer and delay time */
+		delayTime = 0.3;
+		keyPressedTimer = delayTime;
 
 	stopGame = false;
 	doorUnlocked = false;
 	haveFire = true;
 	Timer = 0;
 	mapTimer = 0;
+	openTutorial = false;
+	pauseGame = true;
+	pressTimer = 0;
 
+		//object
+		InitObject();
 
-	//object
-	InitObject();
+		//player
+		if(player != NULL)
+		{
+			goList.push_back(player);
 
-	//player
-	if(player != NULL)
-	{
-		goList.push_back(player);
+		}
+
+		spawnItems();
+		InitTrigger();
+
+		//Model_Level::mapManager.SetMap(0);	//set to map 0 first
+		/* set current level map to level 1 */
+		level_map = Model_Level::mapManager.GetMap(LEVEL_1);
+
+		/* Set map scale: for camera */
+		//go model_level::Init_map() to see how big ur world is,
+		//based on floor layer (or any other layer that is the biggest)
+		//width: num_ofTileWidth * tileSize
+		//height: num_ofTileHeight * tileSize
+		mapSize.Set(16 * 64, 13 * 64, 1);
+
+		camera.Init(Vector3(0, -130, 0), Vector3(0, 0, -10), Vector3(0, 1, 0), m_view_width * 0.2f,  m_view_height * 0.2f
+			, m_view_width, m_view_height, mapSize.x, mapSize.y);
+
+		//UI
+		InitUI();
+
+		//sprite (Only level one call once)
+		InitSprite();
+
+		//Init puzzle
+		puzzleManager = new PuzzleManager;
+		puzzleManager->Init(MapManager::MAX_MAP);
+		InitPuzzles();
 	}
 
-	spawnItems();
-	InitTrigger();
-
-	//Model_Level::mapManager.SetMap(0);	//set to map 0 first
-	/* set current level map to level 1 */
-	level_map = Model_Level::mapManager.GetMap(LEVEL_1);
-
-	//UI
-	InitUI();
-
-	//sprite (Only level one call once)
-	InitSprite();
-
-	//Init puzzle
-	puzzleManager = new PuzzleManager;
-	puzzleManager->Init(MapManager::MAX_MAP);
-	InitPuzzles();
-
+	/* set bounds so camera spawns at correct place each time reenter this level */
+	camera.SetBound(player->getPosition());
 }
 
 void Model_Level1::InitSprite()
@@ -85,15 +104,6 @@ void Model_Level1::InitObject()
 {	
 	/** Set up player **/
 	ReadFromFile("Save_Load_File_lvl1.txt");
-	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
-	goList.push_back(E_Ogre);
-
-	/** init **/
-	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
-	{
-		Object *go = (Object *)*it;
-		go->Init();
-	}
 }
 
 void Model_Level1::InitTrigger()
@@ -123,25 +133,9 @@ void Model_Level1::InitTrigger()
 
 void Model_Level1::InitUI()
 {
-	Vector3 winDimension(m_2D_view_width/2, m_2D_view_height/2, 1);
-
-	/* background main menu */
-	UI_Object* obj;
-	obj = new UI_Object;
-	obj->Init(Geometry::meshList[Geometry::GEO_BOTTOM], winDimension, Vector3(m_2D_view_width, m_2D_view_height, 1), "", UI_Object::MAIN_MENU_BACKGROUND, true);
-	UI_List.push_back(obj);
-
-	/* UI Objects */
-	Controller::mouse_current_x;
-	Vector3 mousePos(Controller::mouse_current_x, Controller::mouse_current_y, 3);
-	cursor.Init(Geometry::meshList[Geometry::GEO_BACK], mousePos, Vector3(5, 5, 1), "", UI_Object::MOUSE_CURSOR, true);
-	UI_List.push_back(&cursor);
-
-	start_Game.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y + 11, 1.1), Vector3(40, 15, 1), "Start Game", UI_Object::BUTTON, true);
-	UI_List.push_back(&start_Game);	
-
-	instruction.Init(Geometry::meshList[Geometry::GEO_CUBE], Vector3(winDimension.x, winDimension.y - 11, 1.1), Vector3(40, 15, 1), "Instructions", UI_Object::BUTTON, true);
-	UI_List.push_back(&instruction);
+	wordBox = new UI_Object;
+	wordBox->Init(Geometry::meshList[Geometry::GEO_WORDBOX], Vector3(80, 60, 1), Vector3(85, 80, 1), "Tutorial_Box", UI_Object::TUTORIAL_BIG, true);
+	UI_List.push_back(wordBox);
 }
 
 void Model_Level1::InitPuzzles()
@@ -175,23 +169,22 @@ void Model_Level1::spawnItems()
 void Model_Level1::Update(double dt, bool* myKeys, Vector3 mousePos)
 {
 	/* parent class update */
-	Model::Update(dt, myKeys, mousePos);
+	Model_Level::Update(dt, myKeys, mousePos);
 
 	if(keyPressedTimer < delayTime)
 		keyPressedTimer += dt;
-	
 	/* Update based on states */
 	switch (Model_Level::stateManager.GetState())
 	{
 	case StateManager::MAIN_MENU:
-			UpdateMainMenu(dt, myKeys, mousePos.x,  mousePos.y);
-			break;
+		UpdateMainMenu(dt, myKeys, mousePos.x,  mousePos.y);
+		break;
 	case StateManager::GAME:
-			UpdateGame(dt, myKeys);
-			break;
+		UpdateGame(dt, myKeys);
+		break;
 	case StateManager::INSTRUCTION:
-			UpdateInstructions(dt, myKeys, mousePos.x, mousePos.y);
-			break;
+		UpdateInstructions(dt, myKeys, mousePos.x, mousePos.y);
+		break;
 	}
 
 	/* If in transition */
@@ -203,13 +196,11 @@ void Model_Level1::Update(double dt, bool* myKeys, Vector3 mousePos)
 
 void Model_Level1::UpdateGame(double dt, bool* myKeys)
 {
-	if (stopGame == false)
+	UpdateTutorial(dt, myKeys);
+	if (pauseGame == false)
 	{
 		// Sound - ambience
 		sfx_man->play_ambience();
-
-		//Update enemy
-		UpdateEnemy(dt);
 
 		/* Update player */
 		player->Update(dt, myKeys);
@@ -222,11 +213,11 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 			player->Translate(Vector3(659, 389, 0));
 		}
 
-	player->dropItem(dt, item, myKeys);
-	
-	/* check collision with object */
-	//start: Set up collision bound before checking with the others
-	player->StartCollisionCheck();
+		player->dropItem(dt, item, myKeys);
+
+		/* check collision with object */
+		//start: Set up collision bound before checking with the others
+		player->StartCollisionCheck();
 
 		//getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
 		//getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
@@ -361,11 +352,23 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 	}
 }
 
+void Model_Level1::UpdateTutorial(double dt, bool* myKeys)
+{
+	openTutorial = true;
+	if(myKeys[KEY_W] || myKeys[KEY_S] || myKeys[KEY_A] || myKeys[KEY_D])
+	{
+		openTutorial = false;
+		pauseGame = false;
+		//wasdFinish = true;
+		wordBox->setActive(false);
+	}
+}
+
 void Model_Level1::UpdateTraps(double dt, bool* myKeys)
 {
 	Timer += dt;
 	/* check with trigger objects fire */
-	for(int i = 0; i < 5; i++)
+	for(int i = 0; i < 4; i++)
 	{
 		triggerObject[i]->Update(dt, myKeys); //animation and actual update
 	}
@@ -405,26 +408,6 @@ void Model_Level1::UpdateTraps(double dt, bool* myKeys)
 		}
 	}
 
-}
-
-void Model_Level1::UpdateEnemy(double dt)
-{
-	E_Ogre->Update(dt, &Model_Level::mapManager, goList);
-
-	/* start set up */
-	E_Ogre->StartCollisionCheck();
-
-	/* check with wall */
-	for (int i = 0; i < (*level_map).size(); i++)
-	{
-		(*level_map)[i]->CheckCollisionWith(player);
-	}
-
-	/* check with all other objects */
-	E_Ogre->getCollideBound()->Reset();
-
-	//response
-	E_Ogre->CollisionResponse();
 }
 
 void Model_Level1::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)

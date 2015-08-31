@@ -13,17 +13,17 @@
  **/
 class View
 {
-private:
+protected:
 /********************** openGL *********************************/
 	static GLFWwindow* m_window_view;
-
-/********************** model ptr **********************/
-	Model_Level* model; //the current model
+	Model* model;	//point to model_level/model_menu..etc of child classes
 
 /********************** Window screen size *****************************/
 	//dimension on computer screen
 	static unsigned short m_console_width;
 	static unsigned short m_console_height;
+
+	static bool initAlready;
 
 public:
 /********************** Light *****************************/
@@ -95,43 +95,42 @@ public:
 		THREE_D,
 	};
 
+	enum RENDER_TYPE
+	{
+		MENU,	//rendering game menu, instruction screens etc...
+		GAME,	//rendering of in-game scene, levels....
+	};
+
 /********************** constructor/destructor *****************************/
 	View();
 	View(unsigned short console_width, unsigned short console_height, MODE mode);
-	~View();
+	virtual ~View();
 
 /********************** Core functions *****************************/
-	void Init();
+	virtual void SetModel(Model_Level* model_level) = 0;	//if not model_Level, set to NULL
+	virtual void Init();
 	void InitLight();
 	void InitFontData();
 	void InitProjection();
-	void Render(const float fps, Model_Level* model);
-	void Exit();
 
-	void SetNewModel(int index);	//if your model is an array
+	virtual void Render(const float fps);
+	virtual void Exit();
 
 /**************** render ****************/
-	void RenderLight();
-	void RenderObject();
-	void RenderCollideBox();
-	void RenderInventory(Inventory* inventory);
-	void RenderHUD();
-	void RenderMainMenu();
-	void RenderInstruction();
-	void RenderGame();
-	void RenderTransition();
 
-	/* If theres TileMap */
-	void RenderTileMap();
-	void RenderRearMap();
-
+	/* Text */
 	void RenderText(Mesh* mesh, std::string text, Color color);
-	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+
+	//render text with cutoff: if string longer than cutoff, go to next line
+	void RenderTextOnScreenCutOff(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z = 1.f, int cutOff = 32);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z = 1.f);
+
+	/* Render mesh */
 	void RenderMesh(Mesh *mesh, bool enableLight);
+
+	/* 2D */
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizex=1.0f, float sizey = 1.0f, float sizez = 1.0f, float x=0.0f, float y=0.0f, float z = 0.f, float angle = 0.f);
-	void RenderMeshInLines(Mesh* mesh, const Vector3& position, const Vector3& scale);
 	void Render2DTile(Mesh *mesh, bool enableLight, float size, float x, float y, int tileType);
-	void RenderTile(Mesh* mesh, bool enableLight, int tileNum);
 
 /********************** Console screen size *****************************/
 	static unsigned short getConsoleHeight();
@@ -139,27 +138,29 @@ public:
 
 /********************** openGL *********************************/
 	static GLFWwindow* getWindow();
+	RENDER_TYPE getRenderType();
 
-private:
+protected:
 /************* mode *****************/
 	MODE mode;
+	RENDER_TYPE render_type;
 
 /************* matrix *****************/
-	MS modelStack;
-	MS viewStack;
-	MS projectionStack;
+	static MS modelStack;
+	static MS viewStack;
+	static MS projectionStack;
 
 /************* lights *****************/
-	Light lights[m_total_lights];	//for model, use the lights provided in view
+	static Light lights[m_total_lights];	//for model, use the lights provided in view
 
 /********************** openGL *********************************/
-	unsigned m_vertexArrayID;
-	unsigned m_programID;
-	unsigned m_parameters[U_TOTAL];
-	float fps;
+	static unsigned m_vertexArrayID;
+	static unsigned m_programID;
+	static unsigned m_parameters[U_TOTAL];
+	static float fps;
 
 /********************** text **********************/
-	float FontData[256];
+	static float FontData[256];
 };
 
 #endif

@@ -36,7 +36,7 @@ string Enemy::getName()
 	return Name;
 }
 
-void Enemy::Update(float dt, MapManager *mapManager, vector<GameObject*> goList)
+void Enemy::Update(float dt, vector<Map*>* level_map, vector<GameObject*> goList)
 {
 
 	info.setTimer(info.getTimer()-dt);
@@ -51,7 +51,7 @@ void Enemy::Update(float dt, MapManager *mapManager, vector<GameObject*> goList)
 				}
 			}
 
-	UpdateStateResponse(mapManager,Player);
+	UpdateStateResponse(level_map,Player);
 }
 
 void Enemy::setDestinationReached(bool DestinationReached)
@@ -64,7 +64,7 @@ bool Enemy::getDestinationReached()
 	return DestinationReached;
 }
 
-void Enemy::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
+void Enemy::UpdateStateResponse(vector<Map*>* level_map, GameObject* Player)
 {
  	
 }

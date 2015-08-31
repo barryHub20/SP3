@@ -1,5 +1,5 @@
 #include "Controller.h"
-#include "View.h"
+#include "View_Level.h"
 #include "Model_Level1.h"
 #include "Model_Level2.h"
 #include "Model_Level3.h"
@@ -7,7 +7,7 @@
 int main( void )
 {
 	/* Memory leak checker */
-	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );	//call this if program does not exit at same place everytime
+	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );	//c all this if program does not exit at same place everytime
 
 	/* Create Model */
 	Model_Level1* mptr;
@@ -28,7 +28,7 @@ int main( void )
 	myModel.push_back(m3ptr);
 
 	/* Create View and pass in address of model you want, console dimemsions and Mode */
-	View myView(896, 700, View::TWO_D);
+	View_Level myView(896, 700, View::TWO_D);
 
 	/* Pass in View into Controller and set mode (2D/3D) */
 	Controller myController(myModel, &myView);

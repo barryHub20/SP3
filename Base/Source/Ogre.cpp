@@ -26,7 +26,13 @@ Ogre::Ogre(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, boo
 	/* set detection box */
 	DetectionBound.Set(Pos, scale * 5, Collision::BOX);
 
-	
+	/*PathFind Variable*/
+	RouteToTake = 0;
+	Route = Vector3(0,0,0);
+
+	bool isDestReached = true;
+	bool isChasing = false;
+
 
 	/* Enemy Variables */
 	this->setState(ES_IDLE);
@@ -52,16 +58,16 @@ void Ogre::CollisionResponse()
 	DetectionBound.Reset();
 
 	//response
-	if(detectedPlayer == true && getState() != ES_ALERT && getState() != ES_SCAN)
+	if(detectedPlayer == true && getState() != ES_ALERT && getState() != ES_SCAN && getState() != ES_CHASE && getState() != ES_ATTACK)
 	{
 		setState(ES_ALERT);
 		info.setTimer(2);
 	}
 }
 
-void Ogre::Update(float dt, MapManager *mapManager, vector<GameObject*>& goList)
+void Ogre::Update(float dt, vector<Map*>* level_map, vector<GameObject*>& goList)
 {
-
+	//cout<<Route;
 
 	info.setTimer(info.getTimer() - dt);
 
@@ -69,7 +75,7 @@ void Ogre::Update(float dt, MapManager *mapManager, vector<GameObject*>& goList)
 	{
 		if (goList[i]->getType() == GameObject::GO_PLAYER)
 		{
-			UpdateStateResponse(mapManager, goList[i]);
+			UpdateStateResponse(level_map, goList[i]);
 		}
 	}
 
@@ -90,17 +96,18 @@ void Ogre::Update(float dt, MapManager *mapManager, vector<GameObject*>& goList)
 	CollisionResponse();
 }
 
-void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
+void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 {
+	
 	switch (this->getState())
 	{
 	case ES_WALK_DOWN:
 	{
-		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
+		for (int i = 0; i < level_map->size(); i++)
 		{
-			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
+			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x, getPosition().y - 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 25, getPosition().y - 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 25, getPosition().y - 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 25, getPosition().y - 50) == false)
+				if (info.getTimer() < 0 || (*level_map)[i]->getWalkable(getPosition().x, getPosition().y - 50) == false || (*level_map)[i]->getWalkable(getPosition().x - 25, getPosition().y - 50) == false || (*level_map)[i]->getWalkable(getPosition().x + 25, getPosition().y - 50) == false || (*level_map)[i]->getWalkable(getPosition().x - 25, getPosition().y - 50) == false)
 				{
 					this->setState(ES_IDLE);
 				}
@@ -112,11 +119,11 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 	}
 	case ES_WALK_UP:
 	{
-		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
+		for (int i = 0; i < level_map->size(); i++)
 		{
-			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
+			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x, getPosition().y + 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 25, getPosition().y + 50) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 25, getPosition().y + 50) == false)
+				if (info.getTimer() < 0 || (*level_map)[i]->getWalkable(getPosition().x, getPosition().y + 50) == false || (*level_map)[i]->getWalkable(getPosition().x + 25, getPosition().y + 50) == false || (*level_map)[i]->getWalkable(getPosition().x - 25, getPosition().y + 50) == false)
 				{
 					this->setState(ES_IDLE);
 				}
@@ -128,11 +135,11 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 	}
 	case ES_WALK_RIGHT:
 	{
-		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
+		for (int i = 0; i < level_map->size(); i++)
 		{
-			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
+			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 50, getPosition().y) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 50, getPosition().y + 25) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x + 50, getPosition().y - 25) == false)
+				if (info.getTimer() < 0 || (*level_map)[i]->getWalkable(getPosition().x + 50, getPosition().y) == false || (*level_map)[i]->getWalkable(getPosition().x + 50, getPosition().y + 25) == false || (*level_map)[i]->getWalkable(getPosition().x + 50, getPosition().y - 25) == false)
 				{
 					this->setState(ES_IDLE);
 				}
@@ -144,11 +151,11 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 	}
 	case ES_WALK_LEFT:
 	{
-		for (int i = 0; i < mapManager->GetCurrentMap()->size(); i++)
+		for (int i = 0; i < level_map->size(); i++)
 		{
-			if ((*mapManager->GetCurrentMap())[i]->getMapType() == Map::COLLISIONMAP)
+			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				if (info.getTimer() < 0 || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 50, getPosition().y) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 50, getPosition().y + 25) == false || (*mapManager->GetCurrentMap())[i]->getWalkable(getPosition().x - 50, getPosition().y - 25) == false)
+				if (info.getTimer() < 0 || (*level_map)[i]->getWalkable(getPosition().x - 50, getPosition().y) == false || (*level_map)[i]->getWalkable(getPosition().x - 50, getPosition().y + 25) == false || (*level_map)[i]->getWalkable(getPosition().x - 50, getPosition().y - 25) == false)
 				{
 					this->setState(ES_IDLE);
 				}
@@ -197,6 +204,68 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 		}
 		break;
 	}
+	case ES_CHASE:
+		{
+			cout<<"Chasing"<<endl;
+
+			Cell* EnemyPos = new Cell(this->getPosition().x ,this->getPosition().y);
+			Cell* PlayerPos = new Cell(player->getPosition().x,player->getPosition().y);
+
+			RouteList = this->PathFinder.FindPath(EnemyPos, PlayerPos, level_map); // returns a vector of Cell
+			Route = Vector3(RouteList[RouteToTake]->getTileX()*32,RouteList[RouteToTake]->getTileY()*32); // Route is a vector3 
+
+			if(((this->getPosition() - player->getPosition()).Length() / 32) > 10)
+			{
+				setState(ES_IDLE);
+				info.setTimer(1);
+				cout << "GOING TO IDLE NOW" << endl;
+			}
+			cout<<static_cast<int>((this->getPosition() - player->getPosition()).Length() / 32)<<endl;
+			if(static_cast<int>((this->getPosition() - player->getPosition()).Length() / 32) < 2)
+			{
+				setState(ES_ATTACK);
+			}
+
+			info.setTimer(1); 
+			
+			isDestReached = false;
+		}
+
+		if(this->getPosition() != Route)
+		{
+			if(this->getPosition().x == Route.x)
+			{
+				if(this->getPosition().y > Route.y )
+				{
+					translateObject(0, -1, 0);
+				}
+				if(this->getPosition().y < Route.y )
+				{
+					translateObject(0, 1, 0);
+				}
+			}
+			else
+			{
+				if(this->getPosition().x > Route.x )
+				{
+					translateObject(-1, 0, 0);
+				}
+				if(this->getPosition().x < Route.x )
+				{
+					translateObject(1, 0, 0);
+				}
+
+			}
+		}
+		else
+		{
+			RouteToTake +=1;
+			if(RouteToTake == RouteList.size())
+			{
+				isDestReached = true;
+			}
+			break;
+		}
 	case ES_SCAN:
 	{
 		cout<<"Scanning"<<endl;
@@ -204,6 +273,9 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 			if(info.getTimer() < 0 && detectedPlayer == true)
 			{
 				cout<<"hi,i see you!"<<endl;
+			
+				setState(ES_CHASE);
+				//info.setTimer(1);
 				break;
 			}
 			if(info.getTimer() < 0 && detectedPlayer == false)
@@ -214,13 +286,26 @@ void Ogre::UpdateStateResponse(MapManager *mapManager, GameObject* Player)
 			}
 			break;	
 	}	
+
+	case ES_ATTACK:
+		{
+			cout << "IM GONNA ATTACK NOW" << endl;
+			if(((this->getPosition() - player->getPosition()).Length() / 32) > 5)
+			{
+				cout << "CHASE" << endl;
+				setState(ES_CHASE);
+				break;
+			}
+			break;
+		}
+
 	case ES_ALERT:
 	{
 		cout<<"I think i saw something!"<<endl;
 		if (info.getTimer() < 0)
 		{
 			this->setState(ES_SCAN);
-			info.setTimer(3);
+			info.setTimer(1);
 		}
 		break;
 	}

@@ -12,6 +12,8 @@ Mtx44 tmp_rotation;
 Mtx44 tmp_scale;
 Vector3 tmp_vec(0, 0, 0);
 vector<Object*>::iterator it;
+Vector3 startCheck, endCheck;	//checked object
+Vector3 startCurrent, endCurrent;	//current object
 
 /***** constructor / destructor *****/
 Object::Object()
@@ -175,14 +177,17 @@ void Object::translate(float x, float y, float z)
 	position = tmp_vec;
 }
 
-//void Object::checkCollision(Object& checkObject)
-//{
-//	/* if theres collision */
-//	if( bbox.Collide(checkObject.getBbox()) )
-//	{
-//		bbox.Response(checkObject.getBbox());
-//	}
-//}	
+bool Object::QuickAABBDetection(Object* checkMe)
+{
+	startCurrent = position - scale * 0.5f;
+	endCurrent = position + scale * 0.5f;
+
+	startCheck = checkMe->position - checkMe->scale * 0.5f;
+	endCheck = checkMe->position + checkMe->scale * 0.5f;
+
+	return Collision::inZone(startCurrent.x, endCurrent.x, startCheck.x, endCheck.x) &&
+		Collision::inZone(startCurrent.y, endCurrent.y, startCheck.y, endCheck.y);
+}
 
 /*** getters ***/
 Mesh* Object::getMesh(){return mesh;}

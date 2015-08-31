@@ -33,6 +33,10 @@ public:
 	bool LoadMap(const string mapName);	//load from csv to double vector
 	bool SetUp(bool haveCollision = true);	//setup each tile ( bounding box )
 
+	//Ray
+	vector<vector<TileObject>>* getScreenMap();
+	TileObject* getTile(int y, int x);	//put y first
+
 	//RP
 	void CleanUp(void); //reset tile object list list
 	void createFloor(Mesh* floorMesh);

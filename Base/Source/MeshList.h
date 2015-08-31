@@ -34,6 +34,8 @@ public:
 		GEO_AR_CHRISTY,	//font
 		GEO_CROSSHAIR,
 		GEO_SLOT,
+		GEO_SLOT_SELECTED,
+		GEO_SLOT_UNSELECTED,
 		GEO_SELECTOR,
 
 		/* terrain */
@@ -98,6 +100,8 @@ public:
 		GEO_STAMINABARMARKER,
 		GEO_CURSOR,
 		GEO_BACKGROUND,
+		GEO_MAIN_BAR,	//main UI bar
+		GEO_WORDBOX,
 
 		NUM_GEOMETRY,
 	};

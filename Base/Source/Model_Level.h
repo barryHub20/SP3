@@ -1,17 +1,31 @@
 #ifndef MODEL_LEVEL_H
 #define MODEL_LEVEL_H
 #include "Model.h"
+#include "TriggerArea.h"
 
 //model for level class
 class Model_Level : public Model
 {
 protected:
 /************ All Game object vectors ************/ 
-	vector<GameObject*> goList;	//render all general(not a specific object) game objects
-	vector<Collision*> collisionList; //render all collision boxes (debug purpose only pls remove)
-	vector<Item*> itemList;	//all item objects
-	vector<UI_Object*> UI_List;	//all ui objects
-	static bool init_Already;
+
+	/* render all general(not a specific object) game objects */
+	vector<GameObject*> goList;	
+	
+	/* render all collision boxes (debug purpose only pls REMOVE) */
+	vector<Collision*> collisionList; 
+	
+	/* all item objects: not needed can use goList */
+	vector<Item*> itemList;	
+	
+	/* all ui objects: Render in 2D screen */
+	vector<UI_Object*> UI_List;	
+	
+	/* Triggering Objects: not needed can use goList */
+	vector<TriggerObject*> triggerObject;
+
+	static bool init_Already;	//init all parent class stuff already?
+	bool initBasicsAlready;	//init child class basics already?
 public:
 /************ current level map ************/ 
 	vector<Map*>* level_map;
@@ -19,22 +33,26 @@ public:
 /************* Map manager (Only one for all levels) *****************/
 	static MapManager mapManager;
 
-/************ Gmae Objects ************/ 
+	Vector3 mapSize;	
 
+/************ Game Objects  ************/ 
+
+	/* Universal game objects */
 	//player
 	static Player* player;
-	float hero_Health;
+	static float hero_Health;
 
-	//Triggering Objects
-	vector<TriggerObject*> triggerObject;
-
-	// UI 
-	UI_Object cursor;
-	UI_Object start_Game;
-	UI_Object instruction;
-	UI_Object go_back;
+	// UI
+	static UI_Object cursor;
+	static UI_Object start_Game;
+	static UI_Object instruction;
+	static UI_Object go_back;
+	static UI_Object main_UI_bar;	//main UI in game
+	static UI_Object puzzleMessage;	//UI for puzzle message	(Use this to customise, take
+	static UI_Object tutorialUI;	//UI for showing tutorial (Lvl 1 and 2 only)
 
 	// door/checkpoint 
+<<<<<<< HEAD
 	TriggerObject* door;
 	TriggerObject* door_R;
 	TriggerObject* door_P;
@@ -51,16 +69,25 @@ public:
 	double mapTimer;
 	TriggerObject* staircase;
 
+=======
+	static TriggerObject* door;
+	static TriggerObject* staircase;
+	static bool stopGame;
+	static bool doorUnlocked;
+	static bool haveFire;
+	static double Timer;
+	static double mapTimer;
+
+	/* Common game objects */
+>>>>>>> master
 	//objects
 	Ogre* E_Ogre;
 	Item* item;
 
-	// array of static objects (non-moving)
-	StaticObject* obj_arr[10];
-
 	//puzzle
 	PuzzleManager *puzzleManager;
 	bool puzzleOpen;
+	bool openTutorial;
 	
 	static bool goNextLevel;
 	static bool goPreviousLevel;
@@ -71,18 +98,9 @@ public:
 
 	/*********** core functions ***************/
 	virtual void Init();
-		//virtual void InitTrigger();
-		//virtual void InitUI();
-		//virtual void InitObject();
-		//virtual void InitSprites();
-		//virtual void InitPuzzles();
-		//virtual void spawnItems();
 		void InitMaps(); //Initialize maps (RP)
 
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
-		/*virtual void UpdateGame(double dt, bool* myKeys);
-		virtual void UpdateEnemy(double dt);
-		virtual void UpdateTraps(double dt, bool* myKeys);*/
 
 	virtual void Exit();
 

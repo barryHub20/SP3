@@ -40,7 +40,6 @@ Item::Item(Mesh* mesh, ITEM_TYPE itemID, bool onFloor, Vector3 Pos, Vector3 scal
 		break;
 	}
 
-
 	/* set boundbox */
 	collideBound.Set(Pos, scale, Collision::BOX);
 }

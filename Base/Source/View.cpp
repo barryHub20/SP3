@@ -22,6 +22,23 @@
 GLFWwindow* View:: m_window_view;
 unsigned short View::m_console_width = 0;
 unsigned short View::m_console_height = 0;
+/************* matrix *****************/
+MS View::modelStack;
+MS View::viewStack;
+MS View::projectionStack;
+
+/************* lights *****************/
+Light View::lights[m_total_lights];	//for model, use the lights provided in view
+
+/********************** openGL *********************************/
+unsigned View::m_vertexArrayID;
+unsigned View::m_programID;
+unsigned View::m_parameters[U_TOTAL];
+float View::fps;
+
+/********************** text **********************/
+float View::FontData[256];
+bool View::initAlready = false;
 
 /** Utilities: for public use **/
 std::ostringstream ss;	//universal
@@ -66,6 +83,9 @@ unsigned short View::getConsoleWidth(){return m_console_width;}
 /********************** Core functions *****************************/
 void View::Init()
 {
+
+	initAlready = true;
+
 	//Set the error callback
 	glfwSetErrorCallback(error_callback_view);
 
@@ -276,10 +296,8 @@ void View::InitLight()
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 }
 
-void View::Render(const float fps, Model_Level* model)
+void View::Render(const float fps)
 {
-	this->model = model;
-
 	this->fps = fps;
 	/* initialize render */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -304,465 +322,6 @@ void View::Render(const float fps, Model_Level* model)
 
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
-
-	switch (model->stateManager.GetState())
-	{
-		case StateManager::GAME:
-		{
-			RenderGame();
-			break;
-		}
-		case StateManager::MAIN_MENU:
-		{
-			RenderMainMenu();
-			break;
-		}
-		case StateManager::INSTRUCTION:
-		{
-			RenderInstruction();
-			break;
-		}
-		case StateManager::TRANSITION:
-		{
-			RenderTransition();
-			break;
-		}
-	}
-}
-
-void View::RenderCollideBox()
-{
-	Vector3 pos, scale;
-
-	if (model->stateManager.GetState() == model->stateManager.GAME)	// If GAME is current state
-	{
-		for(vector<GameObject*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
-		{
-			
-		}
-	}
-}
-
-void View::RenderHUD()
-{
-	//On screen text
-	if(Geometry::meshList[Geometry::GEO_AR_CHRISTY] != NULL)
-	{	
-		/* FPS */
-		//ss.precision(5);
-		//ss << "FPS: " << fps;
-		//RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0, 1, 0), 30, 15, 730);
-		//ss.str("");
-
-		///* Pos */
-		//ss << "Pos: " << model->getCamera()->position;
-		//RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 30, 15, 760);
-
-		int playerHealth;
-		playerHealth = model->player->getHealth();
-		int playerStamina;
-		playerStamina = model->player->getStamina();
-		
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARBG], false, 50.f, 5.f, 1.f, 5.f, 114.f, 0.f, 0.f);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARCOLOR], false, 47.f * 0.01f * playerHealth, 1.5f, 1.f, 4.5f, 116.25f, 1.f, 0.f);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARMARKER], false, 1.f, 4.f, 2.f,  47.f * 0.01f * playerHealth + 3.75f, 115.f, 2.f, 0.f);
-		
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARCOLOR], false, 47.f * 0.01f * playerStamina, 3.f, 1.f, 4.5f, 110.25f, 1.f, 0.f);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARMARKER], false, 8.f, 8.f, 2.f, 47.f * 0.01f * playerStamina - 1.f, 109.f, 2.f, 0.f);
-
-		//fps
-		ss.str("");
-		ss.precision(3);
-		ss << "FPS: " << model->getFPS();
-		if (model->getFPS() < 50)
-		{
-			//cout << "below 50" << endl;
-		}
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 5, 15, 5);
-
-		//Puzzle
-		if (model->puzzleOpen == true)
-		{
-			Puzzle* tempPuzzle;
-			tempPuzzle = model->puzzleManager->getCurrentPuzzle();
-			if (tempPuzzle->getType() == Puzzle::WORD)
-			{
-				ss.str(tempPuzzle->getTextPuzzle());
-				RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(0.25f, 0.25f, 0.25f), 5, 50, 25);
-			}
-			else
-			{
-				RenderMeshIn2D(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false, 50, 50, 50, 500, 500, 1);
-			}
-		}
-	}
-}
-
-void View::RenderMainMenu()
-{
-	//render UI
-	/* UI List */
-	for(vector<UI_Object*>::iterator it = model->getUIList()->begin(); it != model->getUIList()->end(); ++it)
-	{
-		UI_Object* o = (UI_Object*)*it;
-
-		if(o->getActive())
-		{
-			modelStack.PushMatrix();
-			modelStack.LoadMatrix( *(o->getTRS()) );
-			RenderMeshIn2D(o->getMesh(), o->getLight(), o->getScale().x, o->getScale().y, o->getScale().z, o->getPosition().x, o->getPosition().y, o->getPosition().z, 0);
-			modelStack.PopMatrix();
-		}
-	}
-
-	std::ostringstream ss;	//universal
-	ss.precision(5);
-	ss << "BREAK-IN!";
-	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 6, 80, 67);
-	ss.str("");
-
-	if (Controller::mouse_current_x < 618 && Controller::mouse_current_x > 243 && Controller::mouse_current_y < 631 && Controller::mouse_current_y > 600)
-	{
-		ss << "Click HERE to start!";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 4, 80, 5);
-		ss.str("");
-	}
-	else
-	{
-		ss << "Click HERE to start!";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 4, 80, 5);
-		ss.str("");
-	}
-
-	if (Controller::mouse_current_x < 581 && Controller::mouse_current_x > 336 && Controller::mouse_current_y < 656 && Controller::mouse_current_y > 636)
-	{
-		ss << "( Instructions )";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 3, 80, 3);
-	}
-	else
-	{
-		ss << "( Instructions )";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 3, 80, 3);
-	}
-}
-
-void View::RenderInstruction()
-{
-	std::ostringstream ss;	//universal
-	ss.precision(5);
-	ss << "WASD - Movement";
-	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 100, 600);
-	ss.str("");
-
-	if (Controller::mouse_current_x < 280 && Controller::mouse_current_x > 60 && Controller::mouse_current_y < 540 && Controller::mouse_current_y > 520)
-	{
-		ss << "<--- Back";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 90, 150);
-	}
-	else
-	{
-		ss << "<--- Back";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 40, 90, 150);
-	}
-}
-
-void View::RenderGame()
-{
-	/* tile map */
-	RenderTileMap();
-
-	/* collide box */
-	RenderCollideBox();
-
-	/* HUD */
-	RenderHUD();
-
-	/* Inventory */
-	RenderInventory(model->player->getInventory());
-}
-
-void View::RenderTransition()
-{
-	std::ostringstream ss;	//universal
-	ss.precision(5);
-	ss << "----- LOADING -----";
-	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 240, 300);
-	ss.str("");
-}
-
-void View::RenderLight()
-{
-	if(lights[0].type == Light::LIGHT_DIRECTIONAL)
-	{
-		Vector3 lightDir(model->getLightPos(0).x, model->getLightPos(0).y, model->getLightPos(0).z);
-		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
-		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
-	}
-	else if(lights[0].type == Light::LIGHT_SPOT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * model->getLightPos(0);
-		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-		Vector3 spotDirection_cameraspace = viewStack.Top() * lights[0].spotDirection;
-		glUniform3fv(m_parameters[U_LIGHT0_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	}
-	else
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * model->getLightPos(0);
-		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
-	}
-
-	if(lights[1].type == Light::LIGHT_DIRECTIONAL)
-	{
-		Vector3 lightDir(model->getLightPos(1).x, model->getLightPos(1).y, model->getLightPos(1).z);
-		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
-		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightDirection_cameraspace.x);
-	}
-	else if(lights[1].type == Light::LIGHT_SPOT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * model->getLightPos(1);
-		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
-		Vector3 spotDirection_cameraspace = viewStack.Top() * lights[1].spotDirection;
-		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	}
-	else
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * model->getLightPos(1);
-		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
-	}
-
-	/** get position of lightball from model **/
-	modelStack.PushMatrix();
-	modelStack.Translate(model->getLightPos(0).x, model->getLightPos(0).y, model->getLightPos(0).z);
-	modelStack.Scale(9, 9, 9);
-	RenderMesh(Geometry::meshList[Geometry::GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(model->getLightPos(1).x, model->getLightPos(1).y, model->getLightPos(1).z);
-	modelStack.Scale(9, 9, 9);
-	RenderMesh(Geometry::meshList[Geometry::GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
-}
-
-void View::RenderObject()
-{
-	/* Renders all objects */
-	if (Model_Level::stateManager.GetState() == Model_Level::stateManager.GAME)
-	{
-		for(vector<GameObject*>::iterator it = model->getObject()->begin(); it != model->getObject()->end(); ++it)
-		{
-			Object* o = (Object*)*it;
-
-			if(o->getActive())
-			{
-				modelStack.PushMatrix();
-				modelStack.LoadMatrix(*(o->getTRS()));
-				RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.LoadMatrix( *(o->getTRS()) );
-				RenderMesh(o->getMesh(), o->getLight());
-				modelStack.PopMatrix();
-			}
-		}
-	}
-
-	if (Model_Level::stateManager.GetState() == Model_Level::stateManager.MAIN_MENU || Model_Level::stateManager.GetState() == Model_Level::stateManager.INSTRUCTION || Model_Level::stateManager.GetState() == Model_Level::stateManager.TRANSITION)
-	{
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_JINFLOOR],false,160,1,1,0,0);
-	}
-}
-
-void View::RenderTileMap()
-{
-	TileObject* tileObject = NULL;
-
-	//Render main and other tile maps
-	//Number of maps
-	vector<Map*>* level_map = model->getLevelMap();
-
-	float z = -4.f;
-	//Render first map, usually floor
-	for (int noMap = 0; noMap < level_map->size(); noMap++)
-	{
-		//Render floor
-		if ((*level_map)[noMap]->getMapType() == Map::FLOORMAP)
-		{
-			if ((*level_map)[noMap]->getFloorMesh() == NULL) //If no quad, render floor tile
-			{
-				//Render tiles 
-				float tileSize = (*level_map)[noMap]->GetTileSize(); //Get current tile size
-
-				for (int i = 0; i < (*level_map)[noMap]->GetNumOfTiles_Height(); ++i)	//y
-				{
-					for (int k = 0; k < (*level_map)[noMap]->GetNumOfTiles_Width(); ++k)	//x
-					{
-						tileObject = (*level_map)[noMap]->getTileObject(k, i);
-
-						if (tileObject->getTileType() == TileObject::NONE)	//skip rendering floors
-							continue;
-
-						modelStack.PushMatrix();
-						modelStack.Translate(tileObject->getPosition().x, tileObject->getPosition().y, z);
-						modelStack.Scale(tileObject->getScale().x, tileObject->getScale().y, 1);
-						RenderTile(tileObject->getMesh(), false, tileObject->getTileNum());
-						modelStack.PopMatrix();
-					}
-				}
-			}
-			else //Render floor quad
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate((*level_map)[noMap]->GetNumOfTiles_Width() * 32 * 0.5f, (*level_map)[noMap]->GetNumOfTiles_Height() * 32 * 0.5f, z);
-				modelStack.Scale((*level_map)[noMap]->GetNumOfTiles_Width() * 32, (*level_map)[noMap]->GetNumOfTiles_Height() * 32, 1);
-				RenderMesh((*level_map)[noMap]->getFloorMesh(), false);
-				modelStack.PopMatrix();
-			}
-			z += 0.01f;
-			continue;
-		}
-	}
-
-	//Render game objects
-	RenderObject();
-
-	//Render rest of the map
-	for (int noMap = 0; noMap < level_map->size(); noMap++) 
-	{
-		if ((*level_map)[noMap]->getMapType() == Map::FLOORMAP) //If map is a floor, do not render again
-		{
-			continue; 
-		}
-
-		else if ((*level_map)[noMap]->getMapType() == Map::NOCOLLISIONMAP)
-		{
-			z += 2.f; //To create depth
-		}
-		
-		for (int i = 0; i < (*level_map)[noMap]->GetNumOfTiles_Height(); ++i)	//y
-		{
-			for (int k = 0; k < (*level_map)[noMap]->GetNumOfTiles_Width(); ++k)	//x
-			{
-				tileObject = (*level_map)[noMap]->getTileObject(k, i);
-
-				if (tileObject->getTileType() == TileObject::NONE)	//skip rendering floors
-					continue;
-
-				modelStack.PushMatrix();
-				modelStack.Translate(tileObject->getPosition().x, tileObject->getPosition().y, z);
-				modelStack.Scale(tileObject->getScale().x, tileObject->getScale().y, 1);
-				RenderTile(tileObject->getMesh(), false, tileObject->getTileNum());
-				modelStack.PopMatrix();
-			}
-		}
-
-		if ((*level_map)[noMap]->getMapType() == Map::NOCOLLISIONMAP)
-		{
-			z -= 2.f;
-		}
-		z += 0.01f;
-	}
-}
-
-void View::RenderInventory(Inventory* inventory)
-{
-	int size = 0;
-	string name = "";
-	float startX = inventory->getStartX();
-	float yPos = inventory->getYPos();
-	Vector3 scale = inventory->getSlotScale();
-	Mesh* mesh = NULL;
-	
-	for(int i = 0; i < inventory->MAX_SLOT; ++i)
-	{
-		/* render slots */
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SLOT], false, scale.x, scale.y, 1,startX, yPos, 1, 0);
-
-		/* render current size */
-		size = inventory->currentSize(i);
-		ss.str("");
-		ss << size;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.25f, startX, yPos - scale.y * 0.37f);
-
-		/* render name */
-		name = inventory->currentItemName(i);
-		ss.str("");
-		ss << name;
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), scale.x * 0.25f, startX, yPos + scale.y * 0.62f);
-
-		/* render mesh */
-		mesh = inventory->currentItemMesh(i);
-
-		if(mesh != NULL)
-		{
-			RenderMeshIn2D(mesh, false, scale.x * 0.65f, scale.y * 0.65f, 1, startX, yPos, 2, 1);
-		}
-
-		/* render selector */
-		if(i == inventory->getCurrentSlot())
-		{
-			RenderMeshIn2D(Geometry::meshList[Geometry::GEO_SELECTOR], false, scale.x * 1.05f, scale.y * 1.05f, 1,startX, yPos, 2, 0);
-		}
-		
-		//set pos to next slot
-		startX += inventory->getDistBtwSlot();
-	}
-}
-
-void View::RenderRearMap()
-{
-	
-}
-
-void View::RenderTile(Mesh* mesh, bool enableLight, int tileNum)
-{
-	Mtx44 MVP, modelView, modelView_inverse_transpose;
-
-	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-
-	/* week 6 fog */
-	modelView = viewStack.Top() * modelStack.Top();
-	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
-
-	if(enableLight && model->getbLightEnabled())
-	{
-		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
-
-		modelView = viewStack.Top() * modelStack.Top();
-		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
-		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
-		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
-
-		//load material
-		glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
-		glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
-		glUniform3fv(m_parameters[U_MATERIAL_SPECULAR], 1, &mesh->material.kSpecular.r);
-		glUniform1f(m_parameters[U_MATERIAL_SHININESS], mesh->material.kShininess);
-	}
-	else
-	{	
-		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-	}
-
-
-	for(int i = 0; i < 2; ++i)
-	{
-		if(mesh->textureID[i] > 0)
-		{
-			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 1);
-			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, mesh->textureID[i]);
-			glUniform1i(m_parameters[U_COLOR_TEXTURE + i], i);
-		}
-		else
-			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 0);
-	}
-
-	mesh->Render((tileNum - 1) * 6, 6);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void View::Exit()
@@ -814,7 +373,7 @@ float lengthOffset = 0;
 float zOffset = 0;
 float textLength = 0;
 float textXLength = 0;
-void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z)
 {
 	if(!mesh || mesh->textureID[0] <= 0 || text.length() == 0)
 		return;
@@ -828,7 +387,7 @@ void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float s
 	viewStack.LoadIdentity();
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
-	modelStack.Translate(x, y, 0);
+	modelStack.Translate(x, y, z);
 	modelStack.Scale(size, size, size);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
 	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
@@ -846,12 +405,70 @@ void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float s
 		textXLength += FontData[text[i]];
 	}
 
-	lengthOffset = (textXLength * -(1.f / 2.f)) + FontData[text[0]];	//make sure is start from center
+	lengthOffset = (textXLength * -0.5f) + (FontData[text[0]] * 0.5f);	//make sure is start from center
 	for(unsigned i = 0; i < textLength; ++i)
 	{
 		Mtx44 characterSpacing;
 
-		characterSpacing.SetToTranslation(lengthOffset, 1.f, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(lengthOffset, 0.f, 0); //1.0f is the spacing of each character, you may change this value
+		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		lengthOffset += FontData[text[i]];
+
+		mesh->Render((unsigned)text[i] * 6, 6);
+	}
+
+	lengthOffset = 0.f;	//reset length
+	textXLength = 0.f;
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glEnable(GL_DEPTH_TEST);
+}
+
+void View::RenderTextOnScreenCutOff(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z, int cutOff)
+{
+	if(!mesh || mesh->textureID[0] <= 0 || text.length() == 0)
+		return;
+	
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, model->get2DViewWidth(), 0, model->get2DViewHeight(), -10, 10);
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, z);
+	modelStack.Scale(size, size, size);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+
+	/* start counting */
+	textLength = text.length();
+	lengthOffset = 0.f;
+	float yp = 0.f;
+	for(unsigned i = 0; i < textLength; ++i)
+	{
+		if(i >= cutOff)	//if exceedd cutoff, go to next line
+		{
+			cutOff *= 2;
+			yp -= 1.f;
+			lengthOffset = 0.f;
+		}
+
+		Mtx44 characterSpacing;
+		characterSpacing.SetToTranslation(lengthOffset, yp, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -1003,6 +620,11 @@ void View::Render2DTile(Mesh *mesh, bool enableLight, float size, float x, float
 			modelStack.PopMatrix();
 		viewStack.PopMatrix();
 	projectionStack.PopMatrix();
+}
+
+View::RENDER_TYPE View::getRenderType()
+{
+	return render_type;
 }
 
 //Model_Level* View::getModel(int index)

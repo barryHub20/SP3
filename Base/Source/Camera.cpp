@@ -17,6 +17,9 @@ void Camera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	this->up = up;
 }
 
+void Camera::Update(double dt, bool* myKeys){}
+void Camera::UpdateStatus(const unsigned char key){}
+
 void Camera::Reset()
 {
 	position.Set(1, 0, 0);

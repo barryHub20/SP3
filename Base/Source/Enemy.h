@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "MapManager.h"
+#include "PathFinding.h"
 
 class Enemy : public GameObject
 {
@@ -18,8 +19,8 @@ public:
 		ES_RETURN,
 		ES_ALERT,
 		ES_SCAN,
-		ES_KNIFESTAB,
-		ES_GUNSHOT,
+		ES_CHASE,
+		ES_ATTACK,
 		ES_TOTAL
 	};
 
@@ -38,14 +39,17 @@ public:
 	void setDestinationReached(bool DestinationReached);
 	bool getDestinationReached();
 
-	virtual void Update(float dt,MapManager *mapManager,vector<GameObject*> goList);
+	virtual void Update(float dt,vector<Map*>* level_map,vector<GameObject*> goList);
 
-	virtual void UpdateStateResponse(MapManager *mapManager, GameObject* Player) = 0;
+	virtual void UpdateStateResponse(vector<Map*>* level_map, GameObject* Player) = 0;
 
 	Enemy(void);
 	~Enemy(void);
+protected:
+	PathFinding PathFinder;
 
 private:
+
 	Collision Detection;
 	bool DestinationReached;
 	Vector2 Destination;

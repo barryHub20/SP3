@@ -46,6 +46,10 @@ void Geometry::Init()
 	meshList[GEO_SLOT]->textureID[0] = LoadTGA("Image//HUD//backpack.tga");
 	meshList[GEO_SELECTOR] = MeshBuilder::GenerateQuad("staminabar marker", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_SELECTOR]->textureID[0] = LoadTGA("Image//HUD//selector.tga");
+	meshList[GEO_SLOT_SELECTED] = MeshBuilder::GenerateQuad("staminabar marker", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_SLOT_SELECTED]->textureID[0] = LoadTGA("Image//HUD//slot_selected.tga");
+	meshList[GEO_SLOT_UNSELECTED] = MeshBuilder::GenerateQuad("staminabar marker", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_SLOT_UNSELECTED]->textureID[0] = LoadTGA("Image//HUD//slot_unselected.tga");
 
 	/** skybox **/
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
@@ -108,6 +112,12 @@ void Geometry::Init()
 
 	meshList[GEO_CURSOR] = MeshBuilder::GenerateQuad("cursor", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_CURSOR]->textureID[0] = LoadTGA("Image//HUD//sword_cursor.tga");
+
+	meshList[GEO_MAIN_BAR] = MeshBuilder::GenerateQuad("main UI bar", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_MAIN_BAR]->textureID[0] = LoadTGA("Image//HUD//player-bar.tga");
+
+	meshList[GEO_WORDBOX] = MeshBuilder::GenerateQuad("wordBox", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_WORDBOX]->textureID[0] = LoadTGA("Image//HUD//wordBox.tga");
 
 	/* Tile */
 	meshList[GEO_TILEMAP] = MeshBuilder::GenerateTileMap("Tile Map", Color(1, 1, 1), 1.f, 1.f, 8, 8);	//set the width/heignt as 1 (can scale later)

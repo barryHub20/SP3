@@ -41,7 +41,7 @@ void UI_Object::Follow(float x, float y)
 
 bool UI_Object::CheckCollision(UI_Object& check)
 {
-	return CollisionCheck(&check);
+	return collideBound.QuickAABBDetection(&check.collideBound);
 }
 
 void UI_Object::CollisionResponse()
