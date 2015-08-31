@@ -17,6 +17,9 @@ public:
 	{
 		UNDEFINED = 0,
 		KEY,
+		KEYR,
+		KEYP,
+		KEYG,
 		NOTE,
 		H_POTION,
 		S_POTION,

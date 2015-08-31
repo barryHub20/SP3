@@ -65,7 +65,7 @@ void Model_Level::Init()
 		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-		current_model = 0;
+		current_model = 2;
 
 		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
 
@@ -101,6 +101,8 @@ void Model_Level::InitMaps()
 	
 	/** Level 3 set to MapManager::MAP3 **/
 	Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	Model_Level::mapManager.AddRear(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level3_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	Model_Level::mapManager.AddRear(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level3_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
 }
 
 void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos)
@@ -256,6 +258,21 @@ bool Model_Level::ReadFromFile(char* text)
 		{
 			door = new TriggerObject(Geometry::meshList[Geometry::GEO_DOORY], TriggerObject::DOOR, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
 			goList.push_back(door);
+		}
+		if(object_word == "RED")
+		{
+			door_R = new TriggerObject(Geometry::meshList[Geometry::GEO_DOORR], TriggerObject::DOOR_R, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
+			goList.push_back(door_R);
+		}
+		if(object_word == "PURPLE")
+		{
+			door_P = new TriggerObject(Geometry::meshList[Geometry::GEO_DOORP], TriggerObject::DOOR_P, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
+			goList.push_back(door_P);
+		}
+		if(object_word == "GREEN")
+		{
+			door_G = new TriggerObject(Geometry::meshList[Geometry::GEO_DOORG], TriggerObject::DOOR_G, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
+			goList.push_back(door_G);
 		}
 		if (object_word == "RSTAIRCASEUP")
 		{

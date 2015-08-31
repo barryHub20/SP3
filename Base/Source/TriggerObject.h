@@ -13,6 +13,9 @@ public:
 		FIRETRIGGER, //fire lever
 		ARROWTRIGGER, //arrow lever
 		DOOR,
+		DOOR_R,
+		DOOR_P,
+		DOOR_G,
 		FIRE, //fire trap
 		ARROWTRAP,
 		TRIGGERWHENCOLLIDE,

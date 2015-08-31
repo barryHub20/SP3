@@ -15,6 +15,7 @@
     <ClCompile Include="Source\BoundBox_3D.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
+    <ClCompile Include="Source\Camera_2D.cpp" />
     <ClCompile Include="Source\CollideBox.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
@@ -36,20 +37,30 @@
     <ClCompile Include="Source\MiniMap.cpp" />
     <ClCompile Include="Source\Model.cpp" />
     <ClCompile Include="Source\Model_2D.cpp" />
-    <ClCompile Include="Source\Model_3D.cpp" />
+    <ClCompile Include="Source\Model_Level.cpp" />
+    <ClCompile Include="Source\Model_Level1.cpp" />
+    <ClCompile Include="Source\Model_Level2.cpp" />
+    <ClCompile Include="Source\Model_Level3.cpp" />
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\Ogre.cpp" />
+    <ClCompile Include="Source\PathFinding.cpp" />
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\Puzzle.cpp" />
+    <ClCompile Include="Source\PuzzleManager.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SoundManager.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\StateManager.cpp" />
     <ClCompile Include="Source\StaticObject.cpp" />
     <ClCompile Include="Source\TileObject.cpp" />
+    <ClCompile Include="Source\TriggerArea.cpp" />
+    <ClCompile Include="Source\TriggerObject.cpp" />
+    <ClCompile Include="Source\UI_Object.cpp" />
     <ClCompile Include="Source\utilities.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
     <ClCompile Include="Source\View.cpp" />
+    <ClCompile Include="Source\View_Level.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\GDT%2714\SP3\Base\Source\Inventory.h" />
@@ -59,6 +70,7 @@
     <ClInclude Include="Source\BoundBox_3D.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
+    <ClInclude Include="Source\Camera_2D.h" />
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\Controller.h" />
     <ClInclude Include="Source\DepthFBO.h" />
@@ -78,21 +90,31 @@
     <ClInclude Include="Source\MiniMap.h" />
     <ClInclude Include="Source\Model.h" />
     <ClInclude Include="Source\Model_2D.h" />
-    <ClInclude Include="Source\model_3D.h" />
+    <ClInclude Include="Source\Model_Level.h" />
+    <ClInclude Include="Source\Model_Level1.h" />
+    <ClInclude Include="Source\Model_Level2.h" />
+    <ClInclude Include="Source\Model_Level3.h" />
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Ogre.h" />
+    <ClInclude Include="Source\PathFinding.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\Puzzle.h" />
+    <ClInclude Include="Source\PuzzleManager.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\SoundManager.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\StateManager.h" />
     <ClInclude Include="Source\StaticObject.h" />
     <ClInclude Include="Source\TileObject.h" />
+    <ClInclude Include="Source\TriggerArea.h" />
+    <ClInclude Include="Source\TriggerObject.h" />
+    <ClInclude Include="Source\UI_Object.h" />
     <ClInclude Include="Source\utilities.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
     <ClInclude Include="Source\View.h" />
+    <ClInclude Include="Source\View_Level.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B172635-4E2B-46F1-A403-08F4194D00F5}</ProjectGuid>

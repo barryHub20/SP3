@@ -410,7 +410,7 @@ void Model_2D::UpdateTraps(double dt, bool* myKeys)
 
 void Model_2D::UpdateEnemy(double dt)
 {
-	E_Ogre->Update(dt, &Model_Level::mapManager, goList);
+//	E_Ogre->Update(dt, &Model_Level::mapManager, goList);
 
 	/* start set up */
 	E_Ogre->StartCollisionCheck();

@@ -53,9 +53,16 @@ public:
 
 	// door/checkpoint 
 	static TriggerObject* door;
+	TriggerObject* door_R;
+	TriggerObject* door_P;
+	TriggerObject* door_G;
+
 	static TriggerObject* staircase;
 	static bool stopGame;
 	static bool doorUnlocked;
+	bool doorRUnlocked;
+	bool doorPUnlocked;
+	bool doorGUnlocked;
 	static bool haveFire;
 	static double Timer;
 	static double mapTimer;
