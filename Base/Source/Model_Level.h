@@ -51,6 +51,10 @@ public:
 	static UI_Object puzzleMessage;	//UI for puzzle message	(Use this to customise, take
 	static UI_Object tutorialUI;	//UI for showing tutorial (Lvl 1 and 2 only)
 
+	/* Rate of pressing the see puzzle msg */
+	double puzzleMsgTimer;	
+	double puzzleMsgTime;
+
 	// door/checkpoint 
 	TriggerObject* door;
 	TriggerObject* door_R;

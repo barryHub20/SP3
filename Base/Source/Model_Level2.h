@@ -31,10 +31,12 @@ private:
 
 	//trigger for hidden puzzles and clues
 	TriggerArea puzzleActivateArea;	//activate to get hidden key and clue in stage 2
-
+	Collision stage2Area;	//stage 2 area
+	Collision stage3Area;	//stage 3 area
 
 	//keys
 	bool pickedUpKeys[2];
+	bool pickedUpNotes[2];
 	Item* puzzleNotes[2];
 	Item* puzzleKeys[2];
 

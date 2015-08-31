@@ -122,6 +122,7 @@ void Model_Level2::InitPuzzles()
 
 	/* State 1 */
 	//note
+	pickedUpNotes[0] = false;
 	puzzleNotes[0] = new Item(Geometry::meshList[Geometry::GEO_CUBE], Item::NOTE, true, Vector3(300, 80, 1), Vector3(35, 35, 1));
 	itemList.push_back(puzzleNotes[0]);
 	goList.push_back(puzzleNotes[0]);
@@ -142,12 +143,28 @@ void Model_Level2::InitPuzzles()
 	itemList.push_back(puzzleKeys[0]);
 
 	//note
+	pickedUpNotes[1] = false;
 	puzzleNotes[1] = new Item(Geometry::meshList[Geometry::GEO_CUBE], Item::NOTE, true, Vector3(300, 80, 1), Vector3(35, 35, 1));
 	itemList.push_back(puzzleNotes[1]);
 	puzzleNotes[1]->setActive(false);
 	goList.push_back(puzzleNotes[1]);
 
+	//player 2 zone
+	stage2Area.Set(Vector3(827, 90, 1), Vector3(120, 120, 1), Collision::BOX);	
+	obj = new GameObject;
+	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
+	obj->translateObject(stage2Area.position);
+	obj->scaleObject(stage2Area.scale.x, stage2Area.scale.y, 1);
+	goList.push_back(obj);
+
 	/* State 3 */
+	stage3Area.Set(Vector3(827, 190, 1), Vector3(120, 120, 1), Collision::BOX);	
+	obj = new GameObject;
+	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
+	obj->translateObject(stage3Area.position);
+	obj->scaleObject(stage3Area.scale.x, stage3Area.scale.y, 1);
+	goList.push_back(obj);
+
 	//lever to remove traps
 	leverClose = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::FIRETRIGGER, Vector3(60, 654, 1), Vector3(45, 45, 1), 0, true, *sfx_man, player);
 	goList.push_back(leverClose);
@@ -172,6 +189,11 @@ void Model_Level2::InitPuzzles()
 	goList.push_back(puzzleKeys[1]);
 	pickedUpKeys[1] = false;
 	itemList.push_back(puzzleKeys[1]);
+
+	/***************** TUTORIAL *************************/
+	/* Teach noobs how to pick up note */
+	tutorialUI.SetActive(true);
+	tutorialUI.SetMessage("Pick up the clue left on the floor. Press B to view it");
 }
 
 void Model_Level2::spawnItems()
@@ -282,6 +304,38 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 
 void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 {
+	/* See puzzle message */
+	if(puzzleMsgTimer < puzzleMsgTime)
+	{
+		puzzleMsgTimer += dt;
+	}
+	else
+	{
+		puzzleMsgTimer = 0.0;
+		if(myKeys[KEY_B])
+		{
+			if(puzzleMessage.getActive())
+			{
+				puzzleMessage.SetActive(false);
+			}
+			else
+			{
+				/* if note that we pick up is note 0 */
+				if(pickedUpNotes[0])
+				{
+					puzzleMessage.SetMessage("NIKKI MANAJ");
+					puzzleMessage.SetActive(true);
+				}
+				/* if note that we pick up is note 0 */
+				else if(pickedUpNotes[1])
+				{
+					puzzleMessage.SetMessage("I CAME IN LIKE A WRECKING BALL LALALALALALA");
+					puzzleMessage.SetActive(true);
+				}
+			}
+		}
+	}
+
 	switch (level_state)
 	{
 	case STAGE_1:
@@ -290,12 +344,21 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 			if(player->pickUp(puzzleNotes[0], myKeys))
 			{
 				level_state = STAGE_2;
+				pickedUpNotes[0] = true;
+				tutorialUI.SetActive(false);	//pick up then can disable tutorial
 			}
 
 			break;
 		}
 	case STAGE_2:
 		{
+			/* If in stage 2 zone: show tutorial to spam to pick up */
+			if(stage2Area.QuickAABBDetection(player->getCollideBound()))
+			{
+				tutorialUI.SetActive(true);
+				tutorialUI.SetMessage("Congrats on finding the area! Press E multiple times to shake the box and get the contents");
+			}
+
 			/* see if click at trigger area to get hidden key and message */
 			if(keyPressedTimer >= delayTime)
 			{
@@ -309,7 +372,12 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 			/* if activated: get key and puzzle */
 			if(puzzleActivateArea.getActivated())
 			{
+				//disable tutorial
+				tutorialUI.SetActive(false);
+
 				puzzleNotes[1]->setActive(true);	//must be active before can add
+				pickedUpNotes[1] = true;
+				pickedUpNotes[0] = false;
 				player->getInventory()->addItem(puzzleNotes[1]);	//note 2
 				puzzleKeys[0]->setActive(true);	//must be active before can add
 				player->getInventory()->addItem(puzzleKeys[0]);	//key 1
@@ -321,6 +389,14 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 		}
 	case STAGE_3:
 		{
+			/* If in stage 2 zone: show tutorial to spam to pick up */
+			if(stage3Area.QuickAABBDetection(player->getCollideBound()))
+			{
+				tutorialUI.SetActive(true);
+				tutorialUI.SetMessage("Unlock the door with the key");
+			}
+			else
+				tutorialUI.SetActive(false);
 
 			/* check if can open door */
 			if(player->QuickAABBDetection(doors[0]) && pickedUpKeys[0])	//picked up key 0?

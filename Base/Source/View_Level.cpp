@@ -101,6 +101,7 @@ void View_Level::RenderCollideBox()
 
 void View_Level::RenderHUD()
 {
+	ostringstream ss;
 	//render UI
 	/* UI List */
 	for(vector<UI_Object*>::iterator it = model_level->getUIList()->begin(); it != model_level->getUIList()->end(); ++it)
@@ -109,11 +110,21 @@ void View_Level::RenderHUD()
 
 		if(o->getActive())
 		{
+			/* Render Mesh */
 			modelStack.PushMatrix();
 			modelStack.LoadMatrix( *(o->getTRS()) );
 			RenderMeshIn2D(o->getMesh(), o->getLight(), o->getScale().x, o->getScale().y, o->getScale().z, o->getPosition().x, o->getPosition().y, o->getPosition().z, 0);
 			modelStack.PopMatrix();
+
+			/* Render message: if theres a message */
+			if(o->GetMessageString().length() > 0)
+			{
+				ss.str("");
+				ss << o->GetMessageString();
+				RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0, 0), 5, o->getPosition().x, o->getPosition().y);
+			}
 		}
+
 	}
 
 	//On screen text
@@ -132,8 +143,6 @@ void View_Level::RenderHUD()
 		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARMARKER], false, 8.f, 8.f, 2.f, 47.f * 0.01f * playerStamina - 1.f, 109.f, 2.f, 0.f);
 
 		//fps
-		ostringstream ss;
-
 		ss.str("");
 		ss.precision(3);
 		ss << "FPS: " << model_level->getFPS();

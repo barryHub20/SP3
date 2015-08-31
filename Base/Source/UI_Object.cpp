@@ -34,6 +34,16 @@ void UI_Object::SetActive(bool active)
 	this->active = active;
 }
 
+void UI_Object::SetMessage(string msg)
+{
+	message = msg;
+}
+
+string UI_Object::GetMessageString()
+{
+	return message;
+}
+
 void UI_Object::Follow(float x, float y)
 {
 	Object::translate(x, y, position.z);

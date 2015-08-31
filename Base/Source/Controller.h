@@ -10,7 +10,6 @@
 
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-#include "Model_2D.h"
 #include "View.h"
 #include "View.h"
 #include "timer.h"

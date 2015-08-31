@@ -65,7 +65,7 @@ void Model_Level::Init()
 		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-		current_model = 2;
+		current_model = 1;
 
 		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
 
@@ -73,10 +73,28 @@ void Model_Level::Init()
 		main_UI_bar.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
 			Vector3(m_2D_view_width * 0.5f, 0, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
 			"", UI_Object::MAIN_MENU_BACKGROUND, true);
+
+		/* puzzle message: the pop up box when u press a key (B) */
+		puzzleMessage.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
+			Vector3(m_2D_view_width * 0.5f, m_2D_view_width * 0.5f, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
+			"dszfse", UI_Object::POP_UP, true);
+		puzzleMessage.SetActive(false);	//only show when prompted
+
+		/* tutorial message: the pop up box when teaching you to do something */
+		tutorialUI.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
+			Vector3(m_2D_view_width * 0.5f, m_2D_view_width * 0.5f, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
+			"dszfse", UI_Object::POP_UP, true);
+		tutorialUI.SetActive(false);	//only show when prompted
 	}
 
 	/* 2) push back any static object to their respective vectors */
 	UI_List.push_back(&main_UI_bar);
+	UI_List.push_back(&puzzleMessage);
+	UI_List.push_back(&tutorialUI);
+
+	/* Puzzle msg timer */
+		puzzleMsgTime = 0.2f;
+		puzzleMsgTimer = puzzleMsgTime;
 }
 
 void Model_Level::InitMaps()

@@ -30,11 +30,12 @@ public:
 	bool CheckCollision(UI_Object& check);
 	virtual void CollisionResponse();
 	void SetActive(bool active);
-
+	void SetMessage(string msg);
+	string GetMessageString();
 private:
 	Collision collideBound;
 	UI_TYPE type;
-	string message;
+	string message;	//if theres message, it will print out message on top  of the mesh
 };
 
 
