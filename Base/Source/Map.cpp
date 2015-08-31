@@ -45,6 +45,16 @@ void Map::Init(const int num_of_tile_Width, const int num_of_tile_Height, const 
 	this->tileSet = tileSet;
 }
 
+vector<vector<TileObject>>* Map::getScreenMap()
+{
+	return &theScreenMap;
+}
+
+TileObject* Map::getTile(int y, int x)
+{
+	return &theScreenMap[y][x];
+}
+
 bool Map::LoadMap(const string mapName)
 {
 	if (LoadFile(mapName) == true)

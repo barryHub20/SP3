@@ -13,6 +13,8 @@ public:
 		HP_BAR,
 		MAIN_MENU_BACKGROUND,
 		POP_UP,
+		TUTORIAL,
+		TUTORIAL_BIG,
 		TOTAL_TYPE,
 	};
 

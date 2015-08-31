@@ -115,7 +115,10 @@ void Geometry::Init()
 
 	meshList[GEO_MAIN_BAR] = MeshBuilder::GenerateQuad("main UI bar", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_MAIN_BAR]->textureID[0] = LoadTGA("Image//HUD//player-bar.tga");
-	
+
+	meshList[GEO_WORDBOX] = MeshBuilder::GenerateQuad("wordBox", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_WORDBOX]->textureID[0] = LoadTGA("Image//HUD//wordBox.tga");
+
 	/* Tile */
 	meshList[GEO_TILEMAP] = MeshBuilder::GenerateTileMap("Tile Map", Color(1, 1, 1), 1.f, 1.f, 8, 8);	//set the width/heignt as 1 (can scale later)
 	meshList[GEO_TILEMAP]->textureID[0] = LoadTGA("Image//tile2_ground.tga");

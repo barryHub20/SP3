@@ -42,7 +42,7 @@ public:
 	static Player* player;
 	static float hero_Health;
 
-	// UI 
+	// UI
 	static UI_Object cursor;
 	static UI_Object start_Game;
 	static UI_Object instruction;
@@ -68,6 +68,7 @@ public:
 	//puzzle
 	PuzzleManager *puzzleManager;
 	bool puzzleOpen;
+	bool openTutorial;
 	
 	static bool goNextLevel;
 	static bool goPreviousLevel;

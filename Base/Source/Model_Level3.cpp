@@ -354,7 +354,7 @@ void Model_Level3::UpdateTraps(double dt, bool* myKeys)
 
 void Model_Level3::UpdateEnemy(double dt)
 {
-	E_Ogre->Update(dt, &Model_Level::mapManager, goList);
+	E_Ogre->Update(dt, level_map, goList);
 
 	/* start set up */
 	E_Ogre->StartCollisionCheck();

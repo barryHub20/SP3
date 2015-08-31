@@ -322,7 +322,7 @@ void View::Render(const float fps)
 
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
-}
+
 
 void View::Exit()
 {

@@ -62,9 +62,10 @@ void Model_Level::Init()
 
 		goNextLevel = goPreviousLevel = false;
 		init_Already = true;
+		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-		current_model = 1;
+		current_model = 0;
 
 		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
 

@@ -101,6 +101,7 @@ public:
 		GEO_CURSOR,
 		GEO_BACKGROUND,
 		GEO_MAIN_BAR,	//main UI bar
+		GEO_WORDBOX,
 
 		NUM_GEOMETRY,
 	};
