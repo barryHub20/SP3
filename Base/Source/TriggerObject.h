@@ -15,6 +15,7 @@ public:
 		DOOR,
 		FIRE, //fire trap
 		ARROWTRAP, //arrow trap
+		SPIKEREAPPEAR,
 		TRIGGERWHENCOLLIDE,
 		TOTAL_OBJECTS,
 	};
@@ -24,6 +25,11 @@ public:
 	~TriggerObject();
 
 	double triggerTimer;
+
+	float duration; //for spike
+
+	float speed; //for arrow
+	float arrowCooldown; //for arrow
 
 	void setState(TRIGGEROBJECTS state);
 	TriggerObject::TRIGGEROBJECTS getState();

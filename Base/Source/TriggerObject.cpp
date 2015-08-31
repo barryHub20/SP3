@@ -1,7 +1,5 @@
 #include "TriggerObject.h"
 
-float ARROW_SPEED = 5.f;
-
 TriggerObject::TriggerObject()
 {
 
@@ -29,6 +27,8 @@ TriggerObject::TriggerObject(Mesh* mesh, TRIGGEROBJECTS objectName, Vector3 Pos,
 	isTriggered = true; //trigger
 	triggerTimer = 0;
 	initialPos = Pos;
+	speed = 10.f;
+	arrowCooldown = 1.f;
 }
 
 void TriggerObject::setState(TRIGGEROBJECTS state)
@@ -70,6 +70,7 @@ void TriggerObject::Update(double dt, bool* myKey)
 void TriggerObject::updateTrigger(double dt, bool* myKey)
 {
 	triggerTimer += dt; //timer for trigger
+	arrowCooldown += dt;
 
 	if(type == FIRETRIGGER)
 	{
@@ -91,35 +92,19 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 	{
 		if (this->mesh->name == "arrow left" && this->isTriggered == true)
 		{
-			translateObject(Vector3(-ARROW_SPEED, 0, 0));
-			if (position.x < 0)
-			{
-				Object::translate(initialPos.x, initialPos.y, initialPos.z);
-			}
+			translateObject(Vector3(-speed, 0, 0));
 		}
 		else if (this->mesh->name == "arrow right" && this->isTriggered == true)
 		{
-			translateObject(Vector3(ARROW_SPEED, 0, 0));
-			if (position.x < 0)
-			{
-				Object::translate(initialPos.x, initialPos.y, initialPos.z);
-			}
+			translateObject(Vector3(speed, 0, 0));
 		}
 		else if (this->mesh->name == "arrow up" && this->isTriggered == true)
 		{
-			translateObject(Vector3(0, ARROW_SPEED, 0));
-			if (position.x < 0)
-			{
-				Object::translate(initialPos.x, initialPos.y, initialPos.z);
-			}
+			translateObject(Vector3(0, speed, 0));
 		}
 		else if (this->mesh->name == "arrow down" && this->isTriggered == true)
 		{
-			translateObject(Vector3(0, -ARROW_SPEED, 0));
-			if (position.x < 0)
-			{
-				Object::translate(initialPos.x, initialPos.y, initialPos.z);
-			}
+			translateObject(Vector3(0, -speed, 0));
 		}
 	}
 	else if (type == ARROWTRIGGER)
@@ -127,6 +112,24 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 		if (player->QuickAABBDetection(this) && isTriggered == false) //Switch on arrow trap
 		{
 			isTriggered = true;
+		}
+	}
+	else if (type == SPIKEREAPPEAR)
+	{
+		if (triggerTimer > duration)
+		{
+			if (active == true)
+			{
+				active = false;
+				isTriggered = false;
+				triggerTimer = 0.f;
+			}
+			else if (active == false)
+			{
+				active = true;
+				isTriggered = true;
+				triggerTimer = 0.f;
+			}
 		}
 	}
 }

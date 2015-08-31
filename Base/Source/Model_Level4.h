@@ -10,6 +10,11 @@ private:
 	Item *keys[2];
 	Item *puzzleNotes[2];
 	bool pickedUpKeys[2];
+
+	TriggerObject *spikeTraps[3];
+
+	float invulerabilityFrame;
+	float damageTimer;
 public:
 	/*********** constructor/destructor ***************/
 	Model_Level4();

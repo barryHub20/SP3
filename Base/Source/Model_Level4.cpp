@@ -25,55 +25,62 @@ Model_Level4::~Model_Level4()
 /*********** core functions ***************/
 void Model_Level4::Init()
 {
-	Model_Level::Init();
-
-	/* timer and delay time */
-	delayTime = 0.3;
-	keyPressedTimer = delayTime;
-
-	stopGame = false;
-	doorUnlocked = false;
-	haveFire = true;
-	Timer = 0;
-	mapTimer = 0;
-
-	//player
-	if (player != NULL)
+	if (!initBasicsAlready)
 	{
-		goList.push_back(player);
+		initBasicsAlready = true;
+
+		Model_Level::Init();
+
+		/* timer and delay time */
+		delayTime = 0.3;
+		keyPressedTimer = delayTime;
+
+		stopGame = false;
+		doorUnlocked = false;
+		haveFire = true;
+		Timer = 0;
+		mapTimer = 0;
+
+		invulerabilityFrame = 1.0f;
+		damageTimer = 0.f;
+
+		//player
+		if (player != NULL)
+		{
+			goList.push_back(player);
+		}
+
+		/* !! Remember to set player pos to where ever you want */
+		player->translate(100, 100, 1);
+
+		//object
+		InitObject();
+		spawnItems();
+		InitTrigger();
+
+		//UI
+		InitUI();
+
+		//Init puzzle
+		puzzleManager = new PuzzleManager;
+		puzzleManager->Init(MapManager::MAX_MAP);
+		InitPuzzles();
+
+		/* set current level map to level 4 */
+		level_map = Model_Level::mapManager.GetMap(LEVEL_4);
+
+		/* Set map scale: for camera */
+		//go model_level::Init_map() to see how big ur world is,
+		//based on floor layer (or any other layer that is the biggest)
+		//width: num_ofTileWidth * tileSize
+		//height: num_ofTileHeight * tileSize
+		mapSize.Set(48 * 32, 37 * 32, 1);
+
+		camera.Init(Vector3(0, -120, 0), Vector3(0, 0, -10), Vector3(0, 1, 0), m_view_width * 0.2f, m_view_height * 0.2f
+			, m_view_width, m_view_height, mapSize.x, mapSize.y);
 	}
-
-	/* !! Remember to set player pos to where ever you want */
-	player->translate(100, 100, 1);
-
-	//object
-	InitObject();
-	spawnItems();
-	InitTrigger();
-
-	//UI
-	InitUI();
-
-	//Model_Level::mapManager.SetMap(0);	//set to map 0 first
-	/* set current level map to level 1 */
-	level_map = Model_Level::mapManager.GetMap(LEVEL_4);
-
-	/* Set map scale: for camera */
-	//go model_level::Init_map() to see how big ur world is,
-	//based on floor layer (or any other layer that is the biggest)
-	//width: num_ofTileWidth * tileSize
-	//height: num_ofTileHeight * tileSize
-	mapSize.Set(16 * 64, 13 * 64, 1);
-
-	camera.Init(Vector3(0, 0, 0), Vector3(0, 0, -10), Vector3(0, 1, 0), m_view_width * 0.2f, m_view_height * 0.2f
-		, m_view_width, m_view_height);
-	camera.SetBound(mapSize.x, mapSize.y + 100);
-
-	//Init puzzle
-	puzzleManager = new PuzzleManager;
-	puzzleManager->Init(MapManager::MAX_MAP);
-	InitPuzzles();
-
+	
+	camera.SetBound(player->getPosition());
 }
 
 void Model_Level4::InitUI()
@@ -98,12 +105,12 @@ void Model_Level4::InitObject()
 	}
 
 	//door 1
-	//doors[0] = new GameObject(Vector3(720, 80, 0), Vector3(40, 95, 1), Vector3(0, 0, 0), 0.f, true);
-	//goList.push_back(doors[0]);
+	doors[0] = new GameObject(Geometry::meshList[Geometry::GEO_DOORY], Vector3(720, 80, 0), Vector3(40, 95, 1), true);
+	goList.push_back(doors[0]);
 
 	//door 2
-	//doors[1] = new GameObject(Vector3(1360, 680, 0), Vector3(40, 95, 1), Vector3(0, 0, 0), 0.f, true);
-	//goList.push_back(doors[1]);
+	doors[1] = new GameObject(Geometry::meshList[Geometry::GEO_DOORY], Vector3(1360, 680, 0), Vector3(40, 95, 1), true);
+	goList.push_back(doors[1]);
 }
 
 int Model_Level4::triggerObjectSize = 12;
@@ -143,7 +150,7 @@ void Model_Level4::InitTrigger()
 	triggerObject[6]->setTriggered(false);
 	goList.push_back(triggerObject[6]);
 
-	triggerObject[7] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWRIGHT], TriggerObject::ARROWTRAP, Vector3(45, 700, 0), Vector3(30, 30, 1), 0, false, *sfx_man, player);
+	triggerObject[7] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWRIGHT], TriggerObject::ARROWTRAP, Vector3(65, 700, 0), Vector3(30, 30, 1), 0, false, *sfx_man, player);
 	triggerObject[7]->setTriggered(false);
 	goList.push_back(triggerObject[7]);
 
@@ -163,7 +170,24 @@ void Model_Level4::InitTrigger()
 
 	triggerObject[11] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWRIGHT], TriggerObject::ARROWTRAP, Vector3(560, 480, 0), Vector3(30, 30, 1), 0, false, *sfx_man, player);
 	triggerObject[11]->setTriggered(false);
+	triggerObject[11]->speed = 15.f;
 	goList.push_back(triggerObject[11]);
+
+	//Spike traps
+	spikeTraps[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], TriggerObject::SPIKEREAPPEAR, Vector3(800, 480, 1), Vector3(50, 180, 1), 0.f, true, *sfx_man, player);
+	spikeTraps[0]->duration = 1.f;
+		//GameObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], Vector3(800, 480, 1), Vector3(50, 180, 1), true);
+	goList.push_back(spikeTraps[0]);
+
+	spikeTraps[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], TriggerObject::SPIKEREAPPEAR, Vector3(1000, 480, 1), Vector3(50, 180, 1), 0.f, true, *sfx_man, player );
+	spikeTraps[1]->duration = 1.5f;
+		//GameObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], Vector3(1000, 480, 1), Vector3(50, 180, 1), true);
+	goList.push_back(spikeTraps[1]);
+
+	spikeTraps[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], TriggerObject::SPIKEREAPPEAR, Vector3(1200, 480, 1), Vector3(50, 180, 1), 0.f, true, *sfx_man, player);
+	spikeTraps[2]->duration = 1.f;
+		//GameObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], Vector3(1200, 480, 1), Vector3(50, 180, 1), true);
+	goList.push_back(spikeTraps[2]);
 
 	//Arrow trap
 	//triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWLEFT], TriggerObject::ARROWTRAP, Vector3(940, 100, 0), Vector3(30, 30, 1), false, true, *sfx_man, player);
@@ -174,7 +198,7 @@ void Model_Level4::InitPuzzles()
 {
 	puzzleManager->addTextPuzzle(MapManager::MAP1, "blue crate");
 	puzzleManager->addTextPuzzle(MapManager::MAP1, "closed pot");
-
+	puzzleManager->addTextPuzzle(MapManager::MAP1, "next floor");
 	/*cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
 	puzzleManager->goToNextPart();
 	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
@@ -253,7 +277,10 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 		{
 			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				(*level_map)[i]->CheckCollisionWith(player);
+				if ((*level_map)[i]->CheckCollisionWith(player)) //check collision with player
+				{
+					
+				}
 			}
 		}
 
@@ -302,6 +329,7 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 				if (itemList[i]->getItemID() == Item::KEY)
 				{
 					pickedUpKeys[i] = true;
+					puzzleManager->goToNextPart();
 				}
 			}
 		}
@@ -361,14 +389,20 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 
 void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 {
-	Timer += dt;
+	damageTimer += dt;
 	/* check with trigger objects fire */
 	for (int i = 0; i < triggerObjectSize; i++)
 	{
 		triggerObject[i]->Update(dt, myKeys); //animation and actual update
 	}
 
+	for (int i = 0; i < 3; i++)
+	{
+		spikeTraps[i]->Update(dt, myKeys);
+	}
+
 	//Render
+	//Fire lever
 	if (triggerObject[0]->getTriggered() == false) //If lever is switched off
 	{
 		triggerObject[0]->setActive(false); //to change lever position
@@ -395,8 +429,19 @@ void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 		triggerObject[5]->setActive(true); //fire on
 	}
 
-	//First arrow trap
-	if (triggerObject[7]->getTriggered() == false)
+	//Fire response
+	if (damageTimer > invulerabilityFrame)
+	{
+		if (triggerObject[2]->QuickAABBDetection(player) || triggerObject[5]->QuickAABBDetection(player))
+		{
+			player->setHealth(player->getHealth() - 20);
+			player->translateObject(Vector3(-50, 0, 0));
+			damageTimer = 0.f;
+		}
+	}
+
+	//First arrow trap, activate/reactivate arrow trap
+	if (triggerObject[7]->getTriggered() == false && triggerObject[7]->getActive() == false && triggerObject[7]->arrowCooldown > 1.f)
 	{
 		if (triggerObject[6]->getTriggered() == true)
 		{
@@ -404,9 +449,26 @@ void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 			triggerObject[7]->setActive(true);
 		}
 	}
+	//Arrow response
+	if (triggerObject[7]->QuickAABBDetection(player) && triggerObject[7]->getTriggered() == true)
+	{
+		triggerObject[7]->resetPosition();
+		triggerObject[7]->setTriggered(false);
+		triggerObject[7]->setActive(false);
+		triggerObject[7]->arrowCooldown = 0.f;
+		player->setHealth(player->getHealth() - 20);
+		player->translateObject(Vector3(10, 0, 0));
+	}
+	else if (triggerObject[7]->getPosition().x > 500)
+	{
+		triggerObject[7]->resetPosition();
+		triggerObject[7]->setTriggered(false);
+		triggerObject[7]->setActive(false);
+		triggerObject[7]->arrowCooldown = 0.f;
+	}
 
 	//Second arrow trap
-	if (triggerObject[9]->getTriggered() == false)
+	if (triggerObject[9]->getTriggered() == false && triggerObject[9]->getActive() == false && triggerObject[9]->arrowCooldown > 1.f)
 	{
 		if (triggerObject[8]->getTriggered() == true)
 		{
@@ -415,8 +477,25 @@ void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 		}
 	}
 
+	if (triggerObject[9]->QuickAABBDetection(player) && triggerObject[9]->getTriggered() == true)
+	{
+		triggerObject[9]->resetPosition();
+		triggerObject[9]->setTriggered(false);
+		triggerObject[9]->setActive(false);
+		triggerObject[9]->arrowCooldown = 0.f;
+		player->setHealth(player->getHealth() - 20);
+		player->translateObject(Vector3(10, 0, 0));
+	}
+	else if (triggerObject[9]->getPosition().x > 500)
+	{
+		triggerObject[9]->resetPosition();
+		triggerObject[9]->setTriggered(false);
+		triggerObject[9]->setActive(false);
+		triggerObject[9]->arrowCooldown = 0.f;
+	}
+
 	//Third arrow trap
-	if (triggerObject[11]->getTriggered() == false)
+	if (triggerObject[11]->getTriggered() == false && triggerObject[11]->getActive() == false && triggerObject[11]->arrowCooldown > 1.f)
 	{
 		if (triggerObject[10]->getTriggered() == true)
 		{
@@ -424,6 +503,38 @@ void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 			triggerObject[11]->setActive(true);
 		}
 	}
+
+	if (triggerObject[11]->QuickAABBDetection(player) && triggerObject[11]->getTriggered() == true)
+	{
+		triggerObject[11]->resetPosition();
+		triggerObject[11]->setTriggered(false);
+		triggerObject[11]->setActive(false);
+		triggerObject[11]->arrowCooldown = 0.f;
+		player->setHealth(player->getHealth() - 20);
+		player->translateObject(Vector3(10, 0, 0));
+	}
+	else if (triggerObject[11]->getPosition().x > 1470)
+	{
+		triggerObject[11]->resetPosition();
+		triggerObject[11]->setTriggered(false);
+		triggerObject[11]->setActive(false);
+		triggerObject[11]->arrowCooldown = 0.f;
+	}
+
+	//Spikes
+	if (damageTimer > invulerabilityFrame)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			if (spikeTraps[i]->QuickAABBDetection(player) && spikeTraps[i]->getActive() == true)
+			{
+				player->setHealth(player->getHealth() - 90);
+				player->translateObject(Vector3(50, 0, 0));
+				damageTimer = 0.f;
+			}
+		}
+	}
+	
 	//for (int i = 0; i < level_map->size(); i++)
 	//{
 	//	if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
