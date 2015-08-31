@@ -102,9 +102,6 @@
     <ClCompile Include="Source\Model.cpp">
       <Filter>Logic\MVC\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Model_2D.cpp">
-      <Filter>Logic\MVC\Model</Filter>
-    </ClCompile>
     <ClCompile Include="Source\View.cpp">
       <Filter>Logic\MVC\View</Filter>
     </ClCompile>
@@ -243,9 +240,6 @@
       <Filter>Black_Box</Filter>
     </ClInclude>
     <ClInclude Include="Source\Model.h">
-      <Filter>Logic\MVC\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Model_2D.h">
       <Filter>Logic\MVC\Model</Filter>
     </ClInclude>
     <ClInclude Include="Source\View.h">

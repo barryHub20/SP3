@@ -408,6 +408,7 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 			if(player->QuickAABBDetection(doors[0]) && pickedUpKeys[0])	//picked up key 0?
 			{
 				doors[0]->setActive(false);
+				sfx_man->play_unlock();
 			}
 
 			/* if lever pulled: go stage 4 */
@@ -449,6 +450,7 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 			if(player->QuickAABBDetection(doors[1]) && pickedUpKeys[1])	//picked up key 0?
 			{
 				doors[1]->setActive(false);
+				sfx_man->play_unlock();
 			}
 
 			break;

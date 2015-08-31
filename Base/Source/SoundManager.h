@@ -29,6 +29,9 @@ public:
 
 	void play_ambience(void);
 	void play_plyr_steps(void);
+	void play_pickup(void);
+	void play_drop(void);
+	void play_unlock(void);
 
 	// =================================================================================
 };

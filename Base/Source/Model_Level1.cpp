@@ -249,6 +249,7 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 				if (doorUnlocked)
 				{
 					door->setActive(false);
+					sfx_man->play_unlock();
 				}
 			}
 		}

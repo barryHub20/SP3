@@ -430,6 +430,7 @@ bool Player::pickUp(Item* item, bool* myKey)
 			if(inventory.addItem(item))
 			{
 				cout << "SUCCESSFUL" << endl;
+				my_sfx_man->play_pickup();
 				return true;
 			}
 			else
@@ -457,6 +458,7 @@ bool Player::dropItem(double dt, Item* item, bool* myKey)
 			if(inventory.removeItem(this->position))
 			{
 				cout << "DROP SUCCESSFUL" << endl;
+				my_sfx_man->play_drop();
 				return true;
 			}
 

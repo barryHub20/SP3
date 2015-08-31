@@ -293,6 +293,7 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 					if (pickedUpKeys[i] == true)
 					{
 						doors[i]->setActive(false);
+						sfx_man->play_unlock();
 					}
 				}
 			}

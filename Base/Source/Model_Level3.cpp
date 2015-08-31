@@ -256,6 +256,7 @@ void Model_Level3::UpdateGame(double dt, bool* myKeys)
 				if (doorUnlocked)
 				{
 					door->setActive(false);
+					sfx_man->play_unlock();
 				}
 			}
 		}
@@ -267,6 +268,7 @@ void Model_Level3::UpdateGame(double dt, bool* myKeys)
 				if (doorRUnlocked)
 				{
 					door_R->setActive(false);
+					sfx_man->play_unlock();
 				}
 			}
 		}
@@ -278,6 +280,7 @@ void Model_Level3::UpdateGame(double dt, bool* myKeys)
 				if (doorPUnlocked)
 				{
 					door_P->setActive(false);
+					sfx_man->play_unlock();
 				}
 			}
 		}
@@ -290,6 +293,7 @@ void Model_Level3::UpdateGame(double dt, bool* myKeys)
 				if (doorGUnlocked)
 				{
 					door_G->setActive(false);
+					sfx_man->play_unlock();
 				}
 			}
 		} */

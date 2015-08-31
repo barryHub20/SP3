@@ -36,7 +36,6 @@
     <ClCompile Include="Source\MeshList.cpp" />
     <ClCompile Include="Source\MiniMap.cpp" />
     <ClCompile Include="Source\Model.cpp" />
-    <ClCompile Include="Source\Model_2D.cpp" />
     <ClCompile Include="Source\Model_Level.cpp" />
     <ClCompile Include="Source\Model_Level1.cpp" />
     <ClCompile Include="Source\Model_Level2.cpp" />
@@ -90,7 +89,6 @@
     <ClInclude Include="Source\MeshList.h" />
     <ClInclude Include="Source\MiniMap.h" />
     <ClInclude Include="Source\Model.h" />
-    <ClInclude Include="Source\Model_2D.h" />
     <ClInclude Include="Source\Model_Level.h" />
     <ClInclude Include="Source\Model_Level1.h" />
     <ClInclude Include="Source\Model_Level2.h" />
