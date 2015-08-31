@@ -97,6 +97,8 @@ public:
 	void setInvisible(bool b);
 
 	virtual void CollisionResponse();	//player specific collision response
+
+	void switchInvisibleState();	//is invisible or not
 };
 
 #endif

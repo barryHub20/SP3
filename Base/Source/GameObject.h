@@ -9,7 +9,7 @@
 
 class GameObject : public Object
 {
-private:
+protected:
 	std::string SpriteName;
 	unsigned int SpriteCol;
 	unsigned int SpriteRow;
@@ -93,7 +93,7 @@ protected:
 	
 	std::map<int, SpriteAnimation*> animationList;
 
-	virtual SpriteAnimation* generateSpriteMesh(); //Creates a sprite animation from the stored values
+	virtual SpriteAnimation* generateSpriteMesh();
 };
 
 #endif 

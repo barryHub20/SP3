@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "Application.h"
+#include "LoadTGA.h"
+
 Player::Player()
 {
 	for(int i = 0; i < MAX_STATES; i++)
@@ -34,6 +36,7 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 
 	/* set boundbox */
 	collideBound.Set(Pos, scale, Collision::BOX);
+	invisible = false;
 
 	jumpSpeed = 0;
 
@@ -66,6 +69,38 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 
 	//invisbility
 	Sprite_invisibility_texture_file_path = "Image//Sprites//guard_invisibility.tga";
+	animationList[UP]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
+	animationList[DOWN]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
+	animationList[LEFT]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
+	animationList[RIGHT]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
+	animationList[ATTACKUP]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
+	animationList[ATTACKDOWN]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
+	animationList[ATTACKLEFT]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
+	animationList[ATTACKRIGHT]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
+}
+
+void Player::switchInvisibleState()
+{
+	const char* txt;
+	if(invisible)
+	{
+		invisible = false;
+		txt = Sprite_invisibility_texture_file_path;
+	}
+	else
+	{
+		invisible = true;
+		txt = Sprite_texture_file_path;
+	}
+
+	animationList[UP]->textureID[0] = LoadTGA(txt);
+	animationList[DOWN]->textureID[0] = LoadTGA(txt);
+	animationList[LEFT]->textureID[0] = LoadTGA(txt);
+	animationList[RIGHT]->textureID[0] = LoadTGA(txt);
+	animationList[ATTACKUP]->textureID[0] = LoadTGA(txt);
+	animationList[ATTACKDOWN]->textureID[0] = LoadTGA(txt);
+	animationList[ATTACKLEFT]->textureID[0] = LoadTGA(txt);
+	animationList[ATTACKRIGHT]->textureID[0] = LoadTGA(txt);
 }
 
 Player::~Player()

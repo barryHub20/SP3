@@ -304,6 +304,12 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 
 void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 {
+	/* go invisible */
+	if(myKeys[KEY_C])
+	{
+		player->switchInvisibleState();
+	}
+
 	/* See puzzle message */
 	if(puzzleMsgTimer < puzzleMsgTime)
 	{

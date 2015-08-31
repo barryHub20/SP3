@@ -88,13 +88,19 @@ void Model_Level::Init()
 	}
 
 	/* 2) push back any static object to their respective vectors */
-	UI_List.push_back(&main_UI_bar);
-	UI_List.push_back(&puzzleMessage);
-	UI_List.push_back(&tutorialUI);
+	if(current_model < 2)
+	{
+		UI_List.push_back(&main_UI_bar);
+		UI_List.push_back(&puzzleMessage);
+		UI_List.push_back(&tutorialUI);
+	}
 
 	/* Puzzle msg timer */
 		puzzleMsgTime = 0.2f;
 		puzzleMsgTimer = puzzleMsgTime;
+
+	/* Init sprite */
+	InitSprite();
 }
 
 void Model_Level::InitMaps()
@@ -126,6 +132,15 @@ void Model_Level::InitMaps()
 	Model_Level::mapManager.CreateMap(MapManager::MAP4, Map::FLOORMAP, 16, 13, 64, "Image//Map//level4_floor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
 	Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
 	Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_ULTIMATESPRITE]);
+}
+
+void Model_Level::InitSprite()
+{
+	//enemy sprites
+}
+
+void Model_Level::InitStaticSprite()
+{
 }
 
 void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos)
@@ -272,7 +287,7 @@ bool Model_Level::ReadFromFile(char* text)
 		{
 			if(player == NULL)
 			{
-				player = new Player(Geometry::meshList[Geometry::GEO_CUBE], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
+				player = new Player(Geometry::meshList[Geometry::GEO_GUARD], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
 				player->getInventory()->Set(0.48f, 0.05f, m_2D_view_width, m_2D_view_height, 0.97f, 0.0f);
 			}
 		}
