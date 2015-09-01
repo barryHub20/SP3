@@ -28,10 +28,13 @@ public:
 	// ================================ Sound effects ==================================
 
 	void play_ambience(void);
-	void play_plyr_steps(void);
-	void play_pickup(void);
-	void play_drop(void);
-	void play_unlock(void);
+	void play_plyr_steps(void);	// step(max).ogg
+	void play_pickup(void);		// pickup.wav
+	void play_drop(void);		// drop.ogg
+	void play_unlock(void);		// access.ogg
+	void play_fire(void);		// fire.wav
+	void play_yummy(void);		// yummy.ogg
+
 
 	// =================================================================================
 };

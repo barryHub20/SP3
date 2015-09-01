@@ -492,6 +492,7 @@ bool Player::useItem(bool* myKey)
 		{
 			health = 100;
 		}
+		my_sfx_man->play_yummy();
 	}
 
 	else if(myKey[KEY_L] && stamina < 100 && ptr->getItemID() == Item::S_POTION)
@@ -505,6 +506,7 @@ bool Player::useItem(bool* myKey)
 		{
 			stamina = 100;
 		}
+		my_sfx_man->play_yummy();
 	}
 	return false;
 }

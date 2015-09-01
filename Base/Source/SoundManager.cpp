@@ -59,3 +59,19 @@ void SoundManager::play_unlock(void)
 		sfx_plyr_step = sfxengine->play2D("soundfiles/access.ogg");
 	}
 }
+
+void SoundManager::play_fire(void)
+{
+	if (!sfxengine->isCurrentlyPlaying("soundfiles/fire.wav"))
+	{
+		sfx_plyr_step = sfxengine->play2D("soundfiles/fire.wav");
+	}
+}
+
+void SoundManager::play_yummy(void)
+{
+	if (!sfxengine->isCurrentlyPlaying("soundfiles/yummy.ogg"))
+	{
+		sfx_plyr_step = sfxengine->play2D("soundfiles/yummy.ogg");
+	}
+}
