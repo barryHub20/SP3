@@ -567,6 +567,10 @@ void Model_Level1::UpdateEnemy(double dt)
 	if(player->QuickAABBDetection(E_Ogre))
 	{
 		player->setHealth(player->getHealth() - 1);
+		if(player->getHealth() == 0)
+		{
+			player->setHealth(0);
+		}
 	}
 
 	/* check with all other objects */

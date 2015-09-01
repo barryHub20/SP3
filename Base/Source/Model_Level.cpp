@@ -99,9 +99,6 @@ void Model_Level::Init()
 	/* Puzzle msg timer */
 		puzzleMsgTime = 0.2f;
 		puzzleMsgTimer = puzzleMsgTime;
-
-	/* Init sprite */
-	InitSprite();
 }
 
 void Model_Level::InitMaps()
