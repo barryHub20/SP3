@@ -69,6 +69,17 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	processSpriteAnimation(Player::ATTACKDOWN, 0.5f, 0, 6, 7, 6, 1);
 	processSpriteAnimation(Player::ATTACKLEFT, 0.5f, 0, 5, 7, 5, 1);
 	processSpriteAnimation(Player::ATTACKRIGHT, 0.5f, 0, 7, 7, 7, 1);
+
+	/* Set coin list */
+	for(int i = 0; i < 20; ++i)
+	{
+		Coin* coin;
+		coin = new Coin(Geometry::meshList[Geometry::GEO_CUBE], false);
+		coinList.push_back(coin);
+	}
+
+	throwTime = 0.5f;
+	throwTimer = throwTime;
 }
 
 void Player::switchInvisibleState()
@@ -97,6 +108,37 @@ void Player::switchInvisibleState()
 
 Player::~Player()
 {
+}
+
+void Player::throwCoin(double dt, bool throwKey)
+{
+	/* Set coin list */
+	if(throwTimer < throwTime)
+		throwTimer += dt;
+	else
+	{
+		if(throwKey)
+		{
+			throwTimer = 0.0;
+	
+			for(int i = 0; i < 20; ++i)
+			{
+				/* If not active, activate */
+				if(!coinList[i]->getActive())
+				{
+					if(state == UP || state == IDLE)
+						coinList[i]->Activate(position, 0, 1);
+					else if(state == LEFT)
+						coinList[i]->Activate(position, -1, 0);
+					else if(state == RIGHT)
+						coinList[i]->Activate(position, 1, 0);
+					else if(state == DOWN)
+						coinList[i]->Activate(position, 0, -1);
+					break;
+				}
+			}
+		}
+	}
 }
 
 void Player::Update(double dt, bool* myKey)

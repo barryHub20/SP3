@@ -52,7 +52,6 @@ void Model_Level2::Init()
 		player->translate(100, 100, 1);
 
 		//object
-		InitObject();
 		spawnItems();
 		InitTrigger();
 
@@ -69,7 +68,17 @@ void Model_Level2::Init()
 		//Init puzzle
 		puzzleManager = new PuzzleManager;
 		puzzleManager->Init(MapManager::MAX_MAP);
+
+
+		//object
+		InitObject();
 		InitPuzzles();
+		cout << goList.size() << endl;
+		///* Coin list */
+		//for(int i = 0; i < player->coinList.size(); ++i)
+		//{
+		//	goList.push_back(player->coinList[i]);
+		//}
 
 		level_state = STAGE_1;
 	}
@@ -82,7 +91,7 @@ void Model_Level2::InitObject()
 {	
 	/** Set up player **/
 	ReadFromFile("Save_Load_File_lvl2.txt");
-
+	cout << goList.size() << endl;
 	/** Set up enemy **/
 	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
 	goList.push_back(E_Ogre);

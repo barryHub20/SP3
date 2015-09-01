@@ -4,6 +4,7 @@
 #include "Model_Level2.h"
 #include "Model_Level3.h"
 #include "Model_Level4.h"
+#include "Model_Level5.h"
 #include "Model_Screen.h"
 
 int main( void )
@@ -17,6 +18,7 @@ int main( void )
 	Model_Level2* m2ptr;
 	Model_Level3* m3ptr;
 	Model_Level4* m4ptr;
+	Model_Level5* m5ptr;
 	vector<Model_Level*> myModel;
 	
 	/* Create screens*/
@@ -34,9 +36,13 @@ int main( void )
 	m3ptr = new Model_Level3;
 	myModel.push_back(m3ptr);
 
-	/* Create level 3 */
+	/* Create level 4 */
 	m4ptr = new Model_Level4;
 	myModel.push_back(m4ptr);
+
+	/* Create level 5 */
+	m5ptr = new Model_Level5;
+	myModel.push_back(m5ptr);
 
 	/* Create View and pass in address of model you want, console dimemsions and Mode */
 	View_Level myView(896, 700, View::TWO_D);

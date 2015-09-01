@@ -33,7 +33,8 @@ void Model_Level5::Init()
 		delayTime = 0.3;
 		keyPressedTimer = delayTime;
 
-		
+		/* State */
+		state = StateManager::GAME;
 
 		//player
 		if(player != NULL)
@@ -222,10 +223,10 @@ void Model_Level5::spawnItems()
 	itemList.push_back(keyList[2]);
 }
 
-void Model_Level5::Update(double dt, bool* myKeys, Vector3 mousePos)
+void Model_Level5::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState)
 {
 	/* parent class update */
-	Model_Level::Update(dt, myKeys, mousePos);
+	Model_Level::Update(dt, myKeys, mousePos, currentState);
 	//cout << player->getPosition() << endl;
 
 	if(keyPressedTimer < delayTime)
@@ -234,11 +235,11 @@ void Model_Level5::Update(double dt, bool* myKeys, Vector3 mousePos)
 	/* Update game */
 	UpdateGame(dt, myKeys);
 
-	/* If in transition */
-	if (Model_Level::stateManager.isTransition())
-	{
-		Model_Level::stateManager.UpdateTransitionTime(dt);
-	}
+	///* If in transition */
+	//if (Model_Level::stateManager.isTransition())
+	//{
+	//	Model_Level::stateManager.UpdateTransitionTime(dt);
+	//}
 }
 
 void Model_Level5::UpdateGame(double dt, bool* myKeys)

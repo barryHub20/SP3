@@ -52,7 +52,14 @@ private:
 	double dropTimer;
 
 	double PLAYER_SPEED;
+
+	double throwTimer;
+	double throwTime;
+
 public:
+	/* vector of coins */
+	vector<Coin*> coinList;
+
 	Player();
 	Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, bool active, SoundManager &sfx_mano);
 	~Player();
@@ -99,6 +106,8 @@ public:
 	virtual void CollisionResponse();	//player specific collision response
 
 	void switchInvisibleState();	//is invisible or not
+
+	void throwCoin(double dt, bool throwKey);
 };
 
 #endif

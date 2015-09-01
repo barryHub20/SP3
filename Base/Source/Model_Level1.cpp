@@ -46,12 +46,6 @@ void Model_Level1::Init()
 		//object
 		InitObject();
 
-		//player
-		if(player != NULL)
-		{
-			goList.push_back(player);
-		}
-
 		spawnItems();
 		InitTrigger();
 

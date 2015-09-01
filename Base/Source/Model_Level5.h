@@ -60,7 +60,7 @@ public:
 	void spawnItems();
 
 	//Update
-	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
+	virtual void Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState);
 		void UpdateGame(double dt, bool* myKeys);
 		void UpdatePuzzle(double dt, bool* myKeys);
 		void UpdateEnemy(double dt);
