@@ -29,6 +29,8 @@ TriggerObject::TriggerObject(Mesh* mesh, TRIGGEROBJECTS objectName, Vector3 Pos,
 	initialPos = Pos;
 	speed = 10.f;
 	arrowCooldown = 1.f;
+
+	my_sfx_man = &sfx_mano;
 }
 
 void TriggerObject::setState(TRIGGEROBJECTS state)
@@ -54,6 +56,10 @@ void TriggerObject::Update(double dt, bool* myKey)
 		if (animationList[FIRE]->ended == true)
 		{
 			animationList[FIRE]->Reset();
+			if(this->getActive() == true)
+			{
+				my_sfx_man->play_fire();
+			}
 		}
 
 		if (mesh != animationList[FIRE])
@@ -80,6 +86,7 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 			{
 				isTriggered = false;
 				triggerTimer = 0;
+				my_sfx_man->stop_fire();
 			}
 			else if(player->QuickAABBDetection(this) && myKey[KEY_E] && isTriggered == false) //Switch on fire trap
 			{
@@ -112,6 +119,7 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 		if (player->QuickAABBDetection(this) && isTriggered == false) //Switch on arrow trap
 		{
 			isTriggered = true;
+			my_sfx_man->play_stone_move();
 		}
 	}
 	else if (type == SPIKEREAPPEAR)
@@ -123,12 +131,14 @@ void TriggerObject::updateTrigger(double dt, bool* myKey)
 				active = false;
 				isTriggered = false;
 				triggerTimer = 0.f;
+				my_sfx_man->play_spike();
 			}
 			else if (active == false)
 			{
 				active = true;
 				isTriggered = true;
 				triggerTimer = 0.f;
+				my_sfx_man->play_spike();
 			}
 		}
 	}

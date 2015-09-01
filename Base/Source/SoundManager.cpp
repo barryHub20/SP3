@@ -64,7 +64,17 @@ void SoundManager::play_fire(void)
 {
 	if (!sfxengine->isCurrentlyPlaying("soundfiles/fire.wav"))
 	{
-		sfx_plyr_step = sfxengine->play2D("soundfiles/fire.wav");
+		sfx_fire = sfxengine->play2D("soundfiles/fire.wav");
+	}
+}
+
+void SoundManager::stop_fire(void)
+{
+	if (sfx_fire)
+	{
+		sfx_fire->stop();
+		sfx_fire->drop();
+		sfx_fire = 0;
 	}
 }
 
@@ -73,5 +83,21 @@ void SoundManager::play_yummy(void)
 	if (!sfxengine->isCurrentlyPlaying("soundfiles/yummy.ogg"))
 	{
 		sfx_plyr_step = sfxengine->play2D("soundfiles/yummy.ogg");
+	}
+}
+
+void SoundManager::play_stone_move(void)
+{
+	if (!sfxengine->isCurrentlyPlaying("soundfiles/stone_move.ogg"))
+	{
+		sfx_plyr_step = sfxengine->play2D("soundfiles/stone_move.ogg");
+	}
+}
+
+void SoundManager::play_spike(void)
+{
+	if (!sfxengine->isCurrentlyPlaying("soundfiles/spike.wav"))
+	{
+		sfx_plyr_step = sfxengine->play2D("soundfiles/spike.wav");
 	}
 }

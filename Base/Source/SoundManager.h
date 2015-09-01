@@ -17,6 +17,7 @@ public:
 	
 	ISoundEngine* sfxengine;
 	ISound *sfx_plyr_step;
+	ISound *sfx_fire;
 	ISound *sfx_ambience;
 
 	SoundManager();
@@ -32,8 +33,11 @@ public:
 	void play_pickup(void);		// pickup.wav
 	void play_drop(void);		// drop.ogg
 	void play_unlock(void);		// access.ogg
-	void play_fire(void);		// fire.wav
 	void play_yummy(void);		// yummy.ogg
+	void play_stone_move(void);	// stone_move.ogg
+
+	void play_fire(void);	void stop_fire(void);		// fire.wav
+	void play_spike(void);		// spike.wav
 
 
 	// =================================================================================
