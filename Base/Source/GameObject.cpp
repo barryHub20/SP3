@@ -180,7 +180,6 @@ void GameObject::processSpriteAnimation(int state, float time, int startCol, int
 	temp->init(time, startCol, startRow, endCol, endRow, repeatCount, oppDir);
 	animationList[state] = temp;
 }
-
 void GameObject::Translate(Vector3 pos)
 {
 	translate(pos);

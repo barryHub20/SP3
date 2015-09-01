@@ -3,6 +3,9 @@ ENEMY: pos(50, 50, 0)  scale(50, 50, 1)
 ENEMY: pos(50, 50, 0)  scale(50, 50, 1) 
 ENEMY: pos(50, 50, 0)  scale(50, 50, 1) 
 //Furniture Info
-DOOR: pos(785, 690, 0)  scale(40, 95, 1)
 RSTAIRCASEUP: pos(890, 670, 0) scale(50, 50, 1)
-
+RED: pos(305, 720, 0)  scale(40, 95, 1)
+GREEN: pos(745, 590, 0)  scale(40, 95, 1)
+DOOR: pos(755, 370, 0)  scale(40, 95, 1)
+SPOTION: pos(130, 120, 0) scale(35, 35, 1)
+SPOTION: pos(200, 120, 0) scale(35, 35, 1)

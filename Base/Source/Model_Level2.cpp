@@ -122,8 +122,8 @@ void Model_Level2::InitPuzzles()
 
 	/* State 1 */
 	//note
-	pickedUpNotes[0] = false;
-	puzzleNotes[0] = new Item(Geometry::meshList[Geometry::GEO_CUBE], Item::NOTE, true, Vector3(300, 80, 1), Vector3(35, 35, 1));
+	//pickedUpNotes[0] = false;
+	puzzleNotes[0] = new Item(Geometry::meshList[Geometry::GEO_SCROLL_SEALED], Item::NOTE, true, Vector3(300, 80, 1), Vector3(35, 35, 1));
 	itemList.push_back(puzzleNotes[0]);
 	goList.push_back(puzzleNotes[0]);
 
@@ -138,13 +138,13 @@ void Model_Level2::InitPuzzles()
 	//key: to unlock door 0
 	puzzleKeys[0] = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
 	puzzleKeys[0]->setActive(false);
-	pickedUpKeys[0] = false;
+	//pickedUpKeys[0] = false;
 	goList.push_back(puzzleKeys[0]);
 	itemList.push_back(puzzleKeys[0]);
 
 	//note
-	pickedUpNotes[1] = false;
-	puzzleNotes[1] = new Item(Geometry::meshList[Geometry::GEO_CUBE], Item::NOTE, true, Vector3(300, 80, 1), Vector3(35, 35, 1));
+	//pickedUpNotes[1] = false;
+	puzzleNotes[1] = new Item(Geometry::meshList[Geometry::GEO_SCROLL_SEALED], Item::NOTE, true, Vector3(300, 80, 1), Vector3(35, 35, 1));
 	itemList.push_back(puzzleNotes[1]);
 	puzzleNotes[1]->setActive(false);
 	goList.push_back(puzzleNotes[1]);
@@ -158,7 +158,7 @@ void Model_Level2::InitPuzzles()
 	goList.push_back(obj);
 
 	/* State 3 */
-	stage3Area.Set(Vector3(827, 190, 1), Vector3(120, 120, 1), Collision::BOX);	
+	stage3Area.Set(Vector3(877, 190, 1), Vector3(120, 120, 1), Collision::BOX);	
 	obj = new GameObject;
 	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
 	obj->translateObject(stage3Area.position);
@@ -187,7 +187,7 @@ void Model_Level2::InitPuzzles()
 	//key: to unlock door 1
 	puzzleKeys[1] = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(80, 483, 0), Vector3(35, 35, 1));
 	goList.push_back(puzzleKeys[1]);
-	pickedUpKeys[1] = false;
+	//pickedUpKeys[1] = false;
 	itemList.push_back(puzzleKeys[1]);
 
 	/***************** TUTORIAL *************************/
@@ -227,10 +227,13 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 		//sfx_man->play_ambience();
 
 		//Update enemy
-		UpdateEnemy(dt);
+		//UpdateEnemy(dt);
 
 		/* Update player */
 		player->Update(dt, myKeys);
+
+		/* Update puzzle (put above check collision with door since we need response for door) */
+		UpdatePuzzle(dt, myKeys);
 
 		if(myKeys[KEY_K])
 		{
@@ -238,19 +241,20 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 		}
 
 		player->dropItem(dt, item, myKeys);
-	
-		/* check collision with object */
-		//start: Set up collision bound before checking with the others
-		player->StartCollisionCheck();
 
-		for (int i = 0; i < level_map->size(); i++)
+		/* Collision checking */
+		UpdateCollision();
+
+		/** If stop game **/
+		if (player->getHealth() == 0)
 		{
-			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
-			{
-				//(*(*level_map))[i]->getWalkable(player->getPosition().x, player->getPosition().y);
-			}
+			stopGame = true;
 		}
+	}
+}
 
+void Model_Level2::UpdateCollision()
+{
 		/* check collision with object */
 		//start: Set up collision bound before checking with the others
 		player->StartCollisionCheck();
@@ -261,12 +265,12 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 		{
 			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				(*level_map)[i]->CheckCollisionWith(player);
+				if((*level_map)[i]->CheckCollisionWith(player))
+				{
+					
+				}
 			}
 		}
-
-		/* Update puzzle (put above check collision with door since we need response for door) */
-		UpdatePuzzle(dt, myKeys);
 
 		/** Check collision with doors */
 		for(int i = 0; i < 2; ++i)
@@ -274,18 +278,12 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 			if(doors[i]->getActive())	//only check collide if active
 				player->CollisionCheck(doors[i]);
 		}
-		
-		player->dropItem(dt, item, myKeys);
 
 		/*** Change to next level ***/
-		mapTimer += dt;
 		if (player->CollisionCheck(staircase))
 		{
-			if (mapTimer > 5)
-			{
-				goNextLevel = true;
-				mapTimer = 0;
-			}
+			goNextLevel = true;
+			mapTimer = 0;
 		}
 
 		/** Reset collision **/
@@ -293,17 +291,19 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 
 		/** Collision response (if any) **/
 		player->CollisionResponse();	//translate to new pos if collides
-
-		/** If stop game **/
-		if (player->getHealth() == 0)
-		{
-			stopGame = true;
-		}
-	}
 }
 
 void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 {
+	/* Get damaged by spike trap */
+	if(spikeTrap->getActive())
+	{
+		if(player->QuickAABBDetection(spikeTrap))
+		{
+			player->setHealth(player->getHealth() - SPIKE_DMG);
+		}
+	}
+
 	/* go invisible */
 	if(myKeys[KEY_C])
 	{
@@ -327,15 +327,15 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 			else
 			{
 				/* if note that we pick up is note 0 */
-				if(pickedUpNotes[0])
+				if(!puzzleNotes[0]->getItemFloor())
 				{
-					puzzleMessage.SetMessage("NIKKI MANAJ");
+					puzzleMessage.SetMessage("Blueberry and Corn");
 					puzzleMessage.SetActive(true);
 				}
 				/* if note that we pick up is note 0 */
-				else if(pickedUpNotes[1])
+				else if(!puzzleNotes[1]->getItemFloor())
 				{
-					puzzleMessage.SetMessage("I CAME IN LIKE A WRECKING BALL LALALALALALA");
+					puzzleMessage.SetMessage("Lever");
 					puzzleMessage.SetActive(true);
 				}
 			}
@@ -350,7 +350,6 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 			if(player->pickUp(puzzleNotes[0], myKeys))
 			{
 				level_state = STAGE_2;
-				pickedUpNotes[0] = true;
 				tutorialUI.SetActive(false);	//pick up then can disable tutorial
 			}
 
@@ -362,7 +361,7 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 			if(stage2Area.QuickAABBDetection(player->getCollideBound()))
 			{
 				tutorialUI.SetActive(true);
-				tutorialUI.SetMessage("Congrats on finding the area! Press E multiple times to shake the box and get the contents");
+				tutorialUI.SetMessage("Congrats on finding where the clue leads!/ Press E multiple times to shake the box/ and get the contents");
 			}
 
 			/* see if click at trigger area to get hidden key and message */
@@ -382,12 +381,9 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 				tutorialUI.SetActive(false);
 
 				puzzleNotes[1]->setActive(true);	//must be active before can add
-				pickedUpNotes[1] = true;
-				pickedUpNotes[0] = false;
 				player->getInventory()->addItem(puzzleNotes[1]);	//note 2
 				puzzleKeys[0]->setActive(true);	//must be active before can add
 				player->getInventory()->addItem(puzzleKeys[0]);	//key 1
-				pickedUpKeys[0] = true;
 				level_state = STAGE_3;
 			}
 
@@ -405,8 +401,10 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 				tutorialUI.SetActive(false);
 
 			/* check if can open door */
-			if(player->QuickAABBDetection(doors[0]) && pickedUpKeys[0])	//picked up key 0?
+			if(player->QuickAABBDetection(doors[0]) && !puzzleKeys[0]->getItemFloor())	//picked up key 0?
 			{
+				/* Open only when holding key */
+				if(player->getInventory()->currentItemID() == Item::KEY)
 				doors[0]->setActive(false);
 				sfx_man->play_unlock();
 			}
@@ -441,13 +439,12 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 					if(player->pickUp(puzzleKeys[1], myKeys))
 					{
 						keyPressedTimer = 0.0;
-						pickedUpKeys[1] = true;
 					}
 				}
 			}
 
 			/* if got key: can unlock door */
-			if(player->QuickAABBDetection(doors[1]) && pickedUpKeys[1])	//picked up key 0?
+			if(player->QuickAABBDetection(doors[1]) && !puzzleKeys[1]->getItemFloor())	//picked up key 0?
 			{
 				doors[1]->setActive(false);
 				sfx_man->play_unlock();

@@ -121,7 +121,7 @@ void View_Level::RenderHUD()
 			{
 				ss.str("");
 				ss << o->GetMessageString();
-				RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0, 0), 5, o->getPosition().x, o->getPosition().y);
+				RenderTextOnScreenCutOff(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0, 0), 5, o->getPosition().x, o->getPosition().y);
 			}
 		}
 
@@ -352,13 +352,14 @@ void View_Level::RenderObject()
 	}
 }
 
+vector<Map*>* level_map;
 void View_Level::RenderTileMap()
 {
 	TileObject* tileObject = NULL;
 
 	//Render main and other tile maps
 	//Number of maps
-	vector<Map*>* level_map = model_level->getLevelMap();
+	level_map = model_level->getLevelMap();
 
 	float z = -4.f;
 	//Render first map, usually floor

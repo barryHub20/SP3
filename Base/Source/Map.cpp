@@ -201,12 +201,12 @@ bool Map::CheckCollisionWith(GameObject* checkWithMe)
 			{
 				if (checkWithMe->CollisionCheck(tileObj))
 				{
-					return false;
+					return true;
 				}
-
 			}
 		}
 	}
+	return false;
 }
 
 bool Map::QuickAABBCheckMap(GameObject * checkWithMe)
