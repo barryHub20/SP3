@@ -244,6 +244,22 @@ void View_Level::RenderInstruction()
 	}
 }
 
+void View_Level::RenderWinScreen()
+{
+	for (vector<UI_Object*>::iterator it = model_level->getUIList()->begin(); it != model_level->getUIList()->end(); ++it)
+	{
+		UI_Object* o = (UI_Object*)*it;
+
+		if (o->getActive())
+		{
+			modelStack.PushMatrix();
+			modelStack.LoadMatrix(*(o->getTRS()));
+			RenderMeshIn2D(o->getMesh(), o->getLight(), o->getScale().x, o->getScale().y, o->getScale().z, o->getPosition().x, o->getPosition().y, o->getPosition().z, 0);
+			modelStack.PopMatrix();
+		}
+	}
+}
+
 void View_Level::RenderGame()
 {
 	/* tile map */

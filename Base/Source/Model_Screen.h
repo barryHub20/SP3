@@ -19,6 +19,8 @@ public:
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState);
 	void UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y);	//updating main menu
 	void UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y);
+	void UpdateWinScreen(double dt, bool* myKeys, double mouse_x, double mouse_y);
+	void UpdateLoseScreen(double dt, bool* myKeys, double mouse_x, double mouse_y);
 
 	virtual void Exit();
 

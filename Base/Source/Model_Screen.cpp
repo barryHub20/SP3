@@ -40,20 +40,40 @@ void Model_Screen::Init()
 		pauseGame = true;
 		pressTimer = 0;
 
-		cursor.Init(Geometry::meshList[Geometry::GEO_JINFLOOR],
+		cursor.Init(Geometry::meshList[Geometry::GEO_CURSOR],
 			Vector3(m_2D_view_width * 0.5f, 0, 1.95f), Vector3(10, 10, 1),
-			"", UI_Object::MAIN_MENU_BACKGROUND, true);
+			"", UI_Object::MOUSE_CURSOR, true);
 		UI_List.push_back(&cursor);
 
-		start_Game.Init(Geometry::meshList[Geometry::GEO_JINFLOOR],
-			Vector3(m_2D_view_width * 0.5f, 50, 1.95f), Vector3(30, 10, 1),
-			"", UI_Object::MAIN_MENU_BACKGROUND, true);
+		start_Game.Init(Geometry::meshList[Geometry::GEO_STARTGAME],
+			Vector3(m_2D_view_width * 0.5f, 50, 1.95f), Vector3(40, 20, 1),
+			"", UI_Object::STARTGAME, true);
 		UI_List.push_back(&start_Game);
 
-		instruction.Init(Geometry::meshList[Geometry::GEO_JINFLOOR],
-			Vector3(m_2D_view_width * 0.5f, 30, 1.95f), Vector3(30, 10, 1),
-			"", UI_Object::MAIN_MENU_BACKGROUND, true);
+		instruction.Init(Geometry::meshList[Geometry::GEO_INSTRUCTIONS],
+			Vector3(m_2D_view_width * 0.5f, 30, 1.95f), Vector3(40, 20, 1),
+			"", UI_Object::INSTRUCTIONS, true);
 		UI_List.push_back(&instruction);
+
+		restart.Init(Geometry::meshList[Geometry::GEO_TRYAGAIN],
+			Vector3(m_2D_view_width * 0.5f, 30, 1.95f), Vector3(30, 10, 1),
+			"", UI_Object::RESTART, true);
+		UI_List.push_back(&restart);
+
+		backmenu.Init(Geometry::meshList[Geometry::GEO_RETURN],
+			Vector3(m_2D_view_width * 0.5f, 30, 1.95f), Vector3(30, 10, 1),
+			"", UI_Object::BACKMAIN, true);
+		UI_List.push_back(&backmenu);
+
+		winGame.Init(Geometry::meshList[Geometry::GEO_WINSCREEN],
+			Vector3(m_2D_view_width * 0.5f, 30, 1.95f), Vector3(30, 10, 1),
+			"", UI_Object::WIN, true);
+		UI_List.push_back(&winGame);
+
+		loseGame.Init(Geometry::meshList[Geometry::GEO_LOSESCREEN],
+			Vector3(m_2D_view_width * 0.5f, 30, 1.95f), Vector3(30, 10, 1),
+			"", UI_Object::LOSE, true);
+		UI_List.push_back(&loseGame);
 
 		state = StateManager::MAIN_MENU;
 	}
@@ -85,6 +105,10 @@ void Model_Screen::Update(double dt, bool* myKeys, Vector3 mousePos, StateManage
 		goNextLevel = true;
 		setNextLevel(goNextLevel);
 		break;
+	case StateManager::WIN_SCREEN:
+		UpdateWinScreen(dt, myKeys, mousePos.x, mousePos.y);
+		break;
+
 	case StateManager::TRANSITION:
 		break;
 	}
@@ -126,6 +150,20 @@ void Model_Screen::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, doubl
 		instruction.SetActive(false);
 		go_back.SetActive(true);
 		state = StateManager::INSTRUCTION;
+		//Model_Level::stateManager.ChangeState(Model_Level::stateManager.INSTRUCTION);
+	}
+}
+
+void Model_Screen::UpdateWinScreen(double dt, bool* myKeys, double mouse_x, double mouse_y)
+{
+	/* Update cursor */
+	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
+
+										/* Check collide */
+	if (cursor.QuickAABBDetection(&backmenu) && myKeys[KEY_LMOUSE])	//pressed instructions
+	{
+		backmenu.SetActive(true);
+		state = StateManager::MAIN_MENU;
 		//Model_Level::stateManager.ChangeState(Model_Level::stateManager.INSTRUCTION);
 	}
 }

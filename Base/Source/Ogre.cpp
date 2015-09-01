@@ -44,6 +44,16 @@ Ogre::Ogre(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, boo
 	collided = false;
 	this->setDestinationReached(false);
 	this->setDestination(Vector2(400, 400));
+
+	storeSpriteAnimation("ogre", 21, 13, "Image//Sprites//orc.tga");
+	processSpriteAnimation(ES_WALK_UP, 0.5f, 0, 8, 8, 8, 1);
+	processSpriteAnimation(ES_WALK_DOWN, 0.5f, 0, 10, 8, 10, 1);
+	processSpriteAnimation(ES_WALK_LEFT, 0.5f, 0, 9, 8, 9, 1);
+	processSpriteAnimation(ES_WALK_RIGHT, 0.5f, 0, 11, 8, 11, 1);
+	processSpriteAnimation(ES_ATTACK_UP, 0.5f, 0, 4, 7, 4, 1);
+	processSpriteAnimation(ES_ATTACK_DOWN, 0.5f, 0, 6, 7, 6, 1);
+	processSpriteAnimation(ES_ATTACK_LEFT, 0.5f, 0, 5, 7, 5, 1);
+	processSpriteAnimation(ES_ATTACK_RIGHT, 0.5f, 0, 7, 7, 7, 1);
 }
 
 void Ogre::StartCollisionCheck()
@@ -94,15 +104,149 @@ void Ogre::Update(float dt, vector<Map*>* level_map, vector<GameObject*>& goList
 
 	//reset
 	CollisionResponse();
+
+	//Sprite animation
+
+	//Sprite animation
+	switch (this->getState())
+	{
+	case ES_WALK_UP:
+	{
+		if (mesh != animationList[ES_WALK_UP])
+		{
+			setMesh(animationList[ES_WALK_UP]);
+		}
+		animationList[ES_WALK_UP]->Update(dt);
+		break;
+	}
+	case ES_WALK_DOWN:
+	{
+		if (mesh != animationList[ES_WALK_DOWN])
+		{
+			setMesh(animationList[ES_WALK_DOWN]);
+		}
+		animationList[ES_WALK_DOWN]->Update(dt);
+		break;
+	}
+	case ES_WALK_LEFT:
+	{
+		if (mesh != animationList[ES_WALK_LEFT])
+		{
+			setMesh(animationList[ES_WALK_LEFT]);
+		}
+		animationList[ES_WALK_LEFT]->Update(dt);
+		break;
+	}
+	case ES_WALK_RIGHT:
+	{
+		if (mesh != animationList[ES_WALK_RIGHT])
+		{
+			setMesh(animationList[ES_WALK_RIGHT]);
+		}
+		animationList[ES_WALK_RIGHT]->Update(dt);
+		break;
+	}
+	case ES_CHASE:
+	{
+		switch (lastState)
+		{
+		case ES_ATTACK_UP:
+		{
+			if (mesh != animationList[ES_ATTACK_UP])
+			{
+				setMesh(animationList[ES_ATTACK_UP]);
+			}
+			animationList[ES_ATTACK_UP]->Update(dt);
+			break;
+		}
+		case ES_ATTACK_DOWN:
+		{
+			if (mesh != animationList[ES_ATTACK_DOWN])
+			{
+				setMesh(animationList[ES_ATTACK_DOWN]);
+			}
+			animationList[ES_ATTACK_DOWN]->Update(dt);
+			break;
+		}
+		case ES_ATTACK_LEFT:
+		{
+			if (mesh != animationList[ES_ATTACK_LEFT])
+			{
+				setMesh(animationList[ES_ATTACK_LEFT]);
+			}
+			animationList[ES_ATTACK_LEFT]->Update(dt);
+			break;
+		}
+		case ES_ATTACK_RIGHT:
+		{
+			if (mesh != animationList[ES_ATTACK_RIGHT])
+			{
+				setMesh(animationList[ES_ATTACK_RIGHT]);
+			}
+			animationList[ES_ATTACK_RIGHT]->Update(dt);
+			break;
+		}
+		}
+		break;
+	
+	}
+	case ES_ATTACK:
+	{
+		switch(lastState)
+		{
+		case ES_ATTACK_UP:
+		{
+			if (mesh != animationList[ES_ATTACK_UP])
+			{
+				setMesh(animationList[ES_ATTACK_UP]);
+			}
+			animationList[ES_ATTACK_UP]->Update(dt);
+			break;
+		}
+		case ES_ATTACK_DOWN:
+		{
+			if (mesh != animationList[ES_ATTACK_DOWN])
+			{
+				setMesh(animationList[ES_ATTACK_DOWN]);
+			}
+			animationList[ES_ATTACK_DOWN]->Update(dt);
+			break;
+		}
+		case ES_ATTACK_LEFT:
+		{
+			if (mesh != animationList[ES_ATTACK_LEFT])
+			{
+				setMesh(animationList[ES_ATTACK_LEFT]);
+			}
+			animationList[ES_ATTACK_LEFT]->Update(dt);
+			break;
+		}
+		case ES_ATTACK_RIGHT:
+		{
+			if (mesh != animationList[ES_ATTACK_RIGHT])
+			{
+				setMesh(animationList[ES_ATTACK_RIGHT]);
+			}
+			animationList[ES_ATTACK_RIGHT]->Update(dt);
+			break;
+		}
+		}
+		break;
+	}
+	};
 }
 
 void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 {
-	
 	switch (this->getState())
 	{
 	case ES_WALK_DOWN:
 	{
+		if (animationList[ES_WALK_DOWN]->ended == true)
+		{
+			animationList[ES_WALK_DOWN]->Reset();
+		}
+
 		for (int i = 0; i < level_map->size(); i++)
 		{
 			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
@@ -119,6 +263,10 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 	}
 	case ES_WALK_UP:
 	{
+		if (animationList[ES_WALK_UP]->ended == true)
+		{
+			animationList[ES_WALK_UP]->Reset();
+		}
 		for (int i = 0; i < level_map->size(); i++)
 		{
 			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
@@ -135,6 +283,10 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 	}
 	case ES_WALK_RIGHT:
 	{
+		if (animationList[ES_WALK_RIGHT]->ended == true)
+		{
+			animationList[ES_WALK_RIGHT]->Reset();
+		}
 		for (int i = 0; i < level_map->size(); i++)
 		{
 			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
@@ -151,6 +303,10 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 	}
 	case ES_WALK_LEFT:
 	{
+		if (animationList[ES_WALK_LEFT]->ended == true)
+		{
+			animationList[ES_WALK_LEFT]->Reset();
+		}
 		for (int i = 0; i < level_map->size(); i++)
 		{
 			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
@@ -237,10 +393,12 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 			{
 				if(this->getPosition().y > Route.y )
 				{
+					lastState = ES_ATTACK_DOWN;
 					translateObject(0, -1, 0);
 				}
 				if(this->getPosition().y < Route.y )
 				{
+					lastState = ES_ATTACK_UP;
 					translateObject(0, 1, 0);
 				}
 			}
@@ -248,13 +406,51 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 			{
 				if(this->getPosition().x > Route.x )
 				{
+					lastState = ES_ATTACK_LEFT;
 					translateObject(-1, 0, 0);
 				}
 				if(this->getPosition().x < Route.x )
 				{
+					lastState = ES_ATTACK_RIGHT;
 					translateObject(1, 0, 0);
 				}
 
+			}
+			//Sprite animation when chasing
+			switch (lastState)
+			{
+			case ES_ATTACK_UP:
+			{
+				if (animationList[ES_ATTACK_UP]->ended == true)
+				{
+					animationList[ES_ATTACK_UP]->Reset();
+				}
+				break;
+			}
+			case ES_ATTACK_DOWN:
+			{
+				if (animationList[ES_ATTACK_DOWN]->ended == true)
+				{
+					animationList[ES_ATTACK_DOWN]->Reset();
+				}
+				break;
+			}
+			case ES_ATTACK_LEFT:
+			{
+				if (animationList[ES_ATTACK_LEFT]->ended == true)
+				{
+					animationList[ES_ATTACK_LEFT]->Reset();
+				}
+				break;
+			}
+			case ES_ATTACK_RIGHT:
+			{
+				if (animationList[ES_ATTACK_RIGHT]->ended == true)
+				{
+					animationList[ES_ATTACK_RIGHT]->Reset();
+				}
+				break;
+			}
 			}
 		}
 		else
@@ -289,6 +485,42 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 
 	case ES_ATTACK:
 		{
+			switch (lastState)
+			{
+			case ES_ATTACK_UP:
+			{
+				if (animationList[ES_ATTACK_UP]->ended == true)
+				{
+					animationList[ES_ATTACK_UP]->Reset();
+				}
+				break;
+			}
+			case ES_ATTACK_DOWN:
+			{
+				if (animationList[ES_ATTACK_DOWN]->ended == true)
+				{
+					animationList[ES_ATTACK_DOWN]->Reset();
+				}
+				break;
+			}
+			case ES_ATTACK_LEFT:
+			{
+				if (animationList[ES_ATTACK_LEFT]->ended == true)
+				{
+					animationList[ES_ATTACK_LEFT]->Reset();
+				}
+				break;
+			}
+			case ES_ATTACK_RIGHT:
+			{
+				if (animationList[ES_ATTACK_RIGHT]->ended == true)
+				{
+					animationList[ES_ATTACK_RIGHT]->Reset();
+				}
+				break;
+			}
+			}
+			
 			cout << "IM GONNA ATTACK NOW" << endl;
 			if(((this->getPosition() - player->getPosition()).Length() / 32) > 5)
 			{
@@ -298,7 +530,6 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 			}
 			break;
 		}
-
 	case ES_ALERT:
 	{
 		cout<<"I think i saw something!"<<endl;

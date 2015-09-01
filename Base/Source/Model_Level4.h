@@ -13,8 +13,11 @@ private:
 
 	TriggerObject *spikeTraps[3];
 
+	Ogre* ogres[3];
+
 	float invulerabilityFrame;
 	float damageTimer;
+	float ogreTimer;
 public:
 	/*********** constructor/destructor ***************/
 	Model_Level4();
@@ -35,7 +38,7 @@ public:
 	void UpdateEnemy(double dt);
 	void UpdateTraps(double dt, bool* myKeys);
 
-
+	virtual void ClearLevel();
 	virtual void Exit();
 };
 

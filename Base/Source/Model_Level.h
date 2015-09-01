@@ -52,6 +52,10 @@ public:
 	static UI_Object main_UI_bar;	//main UI in game
 	static UI_Object puzzleMessage;	//UI for puzzle message	(Use this to customise, take
 	static UI_Object tutorialUI;	//UI for showing tutorial (Lvl 1 and 2 only)
+	static UI_Object winGame;
+	static UI_Object loseGame;
+	static UI_Object restart;
+	static UI_Object backmenu;
 
 	/* Rate of pressing the see puzzle msg */
 	double puzzleMsgTimer;	
@@ -88,6 +92,7 @@ public:
 	
 	static bool goNextLevel;
 	static bool goPreviousLevel;
+	static bool goMainMenu;
 
 	/*********** constructor/destructor ***************/
 	Model_Level();
@@ -100,7 +105,7 @@ public:
 		void InitMaps(); //Initialize maps (RP)
 
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState);
-	static void ClearLevel();
+	virtual void ClearLevel();
 	
 	virtual void Exit();
 
@@ -109,6 +114,7 @@ public:
 	static bool PreviousLevel();
 	static void setNextLevel(bool i);	//whether can go to next level or not
 	static void setPreviousLevel(bool i);
+	static bool MainMenu();
 
 	StateManager::STATES getState();
 

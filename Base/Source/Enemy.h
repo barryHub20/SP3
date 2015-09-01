@@ -21,6 +21,10 @@ public:
 		ES_SCAN,
 		ES_CHASE,
 		ES_ATTACK,
+		ES_ATTACK_UP,
+		ES_ATTACK_DOWN,
+		ES_ATTACK_LEFT,
+		ES_ATTACK_RIGHT,
 		ES_TOTAL
 	};
 
@@ -45,6 +49,8 @@ public:
 
 	Enemy(void);
 	~Enemy(void);
+
+	ENEMY_STATE lastState;
 protected:
 	PathFinding PathFinder;
 

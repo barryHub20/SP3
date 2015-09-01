@@ -274,79 +274,81 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 		{
 			goNextLevel = true;
 			//Model_Level::mapManager.ChangeNextMap();
+			Model_Level::setNextLevel(true);
 			mapTimer = 0;
 		}
-	}
+		}
 
-	//player->dropItem(dt, item, myKeys);
+		//player->dropItem(dt, item, myKeys);
 
-	player->getCollideBound()->Reset();
+		player->getCollideBound()->Reset();
 
-	/* Collision response */
-	player->CollisionResponse();	//translate to new pos if collides
+		/* Collision response */
+		player->CollisionResponse();	//translate to new pos if collides
 
-	/* Test pick up items */
-	for (int i = 0; i < itemList.size(); ++i)
-	{
-		if (player->pickUp(itemList[i], myKeys))	//if successfully pick up
+		/* Test pick up items */
+		for (int i = 0; i < itemList.size(); ++i)
 		{
-			//if item is key
-			//cout << itemList[i]->getItemID() << endl;
-			if (itemList[i]->getItemID() == Item::KEY)
+			if (player->pickUp(itemList[i], myKeys))	//if successfully pick up
 			{
-				doorUnlocked = true;
+				//if item is key
+				//cout << itemList[i]->getItemID() << endl;
+				if (itemList[i]->getItemID() == Item::KEY)
+				{
+					doorUnlocked = true;
+				}
 			}
 		}
-	}
 
-	player->useItem(myKeys);
+		player->useItem(myKeys);
 
-	/* Update target */
-	camera.target = camera.position;
-	camera.target.z -= 10;
+		/* Update target */
+		camera.target = camera.position;
+		camera.target.z -= 10;
 
-	/* Press space to go back main menu */
-	if (myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
-	{
-		keyPressedTimer = 0.0;
-		//stateManager->ChangeState(stateManager->MAIN_MENU);
-	}
+		/* Press space to go back main menu */
+		if (myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
+		{
+			keyPressedTimer = 0.0;
+			//stateManager->ChangeState(stateManager->MAIN_MENU);
+		}
 
-	/* Key Q to open puzzle */
-	static bool ButtonQState = false;
-	if (!ButtonQState && myKeys[KEY_Q])
-	{
-		ButtonQState = true;
-		std::cout << "QBUTTON DOWN" << std::endl;
-		puzzleOpen = true;
-	}
-	else if (ButtonQState && !(myKeys[KEY_Q]))
-	{
-		ButtonQState = false;
-		std::cout << "QBUTTON UP" << std::endl;
-		puzzleOpen = false;
-	}
+		/* Key Q to open puzzle */
+		static bool ButtonQState = false;
+		if (!ButtonQState && myKeys[KEY_Q])
+		{
+			ButtonQState = true;
+			std::cout << "QBUTTON DOWN" << std::endl;
+			puzzleOpen = true;
+		}
+		else if (ButtonQState && !(myKeys[KEY_Q]))
+		{
+			ButtonQState = false;
+			std::cout << "QBUTTON UP" << std::endl;
+			puzzleOpen = false;
+		}
 
-	/* Load/change map */
-	//Key B to move to next map (RP)
-	static bool ButtonBState = false;
-	if (!ButtonBState && myKeys[KEY_B])
-	{
-		ButtonBState = true;
-		std::cout << "BBUTTON DOWN" << std::endl;
-		//stateManager->ChangeState(StateManager::MAIN_MENU);
-		//mapManager->ChangeNextMap();
-		puzzleManager->goToNextPart();
-	}
-	else if (ButtonBState && !(myKeys[KEY_B]))
-	{
-		ButtonBState = false;
-		std::cout << "BBUTTON UP" << std::endl;
-	}
+		/* Load/change map */
+		//Key B to move to next map (RP)
+		static bool ButtonBState = false;
+		if (!ButtonBState && myKeys[KEY_B])
+		{
+			ButtonBState = true;
+			std::cout << "BBUTTON DOWN" << std::endl;
+			//stateManager->ChangeState(StateManager::MAIN_MENU);
+			//mapManager->ChangeNextMap();
+			puzzleManager->goToNextPart();
+		}
+		else if (ButtonBState && !(myKeys[KEY_B]))
+		{
+			ButtonBState = false;
+			std::cout << "BBUTTON UP" << std::endl;
+		}
 
-	if (player->getHealth() == 0)
-	{
-		stopGame = true;
+		if (player->getHealth() == 0)
+		{
+			stopGame = true;
+		}
 	}
 }
 

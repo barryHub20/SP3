@@ -1,8 +1,5 @@
-//Enemy Info
-ENEMY: pos(50, 50, 0)  scale(50, 50, 1)  
-ENEMY: pos(50, 50, 0)  scale(50, 50, 1) 
-ENEMY: pos(50, 50, 0)  scale(50, 50, 1) 
 //Furniture Info
-DOOR: pos(785, 690, 0)  scale(40, 95, 1)
-RSTAIRCASEUP: pos(890, 670, 0) scale(50, 50, 1)
-
+RSTAIRCASEUP: pos(1460, 670, 0) scale(50, 50, 1)
+//Potion Info
+SPOTION: pos(200, 50, -1) scale(35, 35, 1)
+HPOTION: pos(650, 200, -1) scale(35, 35, 1)

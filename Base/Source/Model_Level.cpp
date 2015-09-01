@@ -16,6 +16,7 @@ Player* Model_Level::player = NULL;
 bool Model_Level::init_Already = false;
 bool Model_Level::goNextLevel = false;
 bool Model_Level::goPreviousLevel = false;
+bool Model_Level::goMainMenu = false;
 float Model_Level::hero_Health = 0;
 
 // UI 
@@ -26,6 +27,10 @@ UI_Object Model_Level::go_back;
 UI_Object Model_Level::main_UI_bar;	//main UI in game
 UI_Object Model_Level::puzzleMessage;	//UI for puzzle message	(Use this to customise, take
 UI_Object Model_Level::tutorialUI;	//UI for showing tutorial (Lvl 1 and 2 only)
+UI_Object Model_Level::winGame;
+UI_Object Model_Level::loseGame;
+UI_Object Model_Level::restart;
+UI_Object Model_Level::backmenu;
 
 // door/checkpoint 
 //TriggerObject* Model_Level::door = NULL;
@@ -60,12 +65,12 @@ void Model_Level::Init()
 		/* Init map */
 		InitMaps();
 
-		goNextLevel = goPreviousLevel = false;
+		goNextLevel = goPreviousLevel = goMainMenu = false;
 		init_Already = true;
 		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-		current_model = 0;
+		current_model = 3;
 
 		/* 1) Init static stuff: create object here */
 		main_UI_bar.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
@@ -342,6 +347,29 @@ void Model_Level::ClearLevel()
 {
 	player->getInventory()->clearFromInventory(Item::NOTE);
 	player->getInventory()->clearFromInventory(Item::KEY);
+	init_Already = false;
+	goList.clear();
+	for (int i = 0; i < goList.size(); i++)
+	{
+		delete goList[i];
+	}
+	for (int i = 0; i < collisionList.size(); i++)
+	{
+		delete collisionList[i];
+	}
+	for (int i = 0; i < itemList.size(); i++)
+	{
+		delete itemList[i];
+	}
+	for (int i = 0; i < UI_List.size(); i++)
+	{
+		delete UI_List[i];
+	}
+	for (int i = 0; i < triggerObject.size(); i++)
+	{
+		delete triggerObject[i];
+	}
+	initBasicsAlready = false;
 }
 
 void Model_Level::Exit()
@@ -364,6 +392,11 @@ void Model_Level::setNextLevel(bool i)
 void Model_Level::setPreviousLevel(bool i)
 {
 	goPreviousLevel = i;
+}
+
+bool Model_Level::MainMenu()
+{
+	return goMainMenu;
 }
 
 StateManager::STATES Model_Level::getState()

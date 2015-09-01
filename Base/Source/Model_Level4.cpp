@@ -40,6 +40,7 @@ void Model_Level4::Init()
 		haveFire = true;
 		Timer = 0;
 		mapTimer = 0;
+		ogreTimer = 0;
 
 		state = StateManager::GAME;
 
@@ -83,6 +84,11 @@ void Model_Level4::Init()
 	}
 	
 	camera.SetBound(player->getPosition());
+
+	for (int i = 0; i < 2; i++)
+	{
+		pickedUpKeys[i] = true;
+	}
 }
 
 void Model_Level4::InitUI()
@@ -96,8 +102,15 @@ void Model_Level4::InitObject()
 	ReadFromFile("Save_Load_File_lvl4.txt");
 
 	/** Set up enemy **/
-	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
-	goList.push_back(E_Ogre);
+
+	ogres[0] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(300, 200, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[0]);
+
+	ogres[1] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(900, 220, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[1]);
+
+	ogres[2] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(1300, 220, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[2]);
 
 	/** init **/
 	for (std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
@@ -190,10 +203,6 @@ void Model_Level4::InitTrigger()
 	spikeTraps[2]->duration = 1.f;
 		//GameObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], Vector3(1200, 480, 1), Vector3(50, 180, 1), true);
 	goList.push_back(spikeTraps[2]);
-
-	//Arrow trap
-	//triggerObject[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_ARROWLEFT], TriggerObject::ARROWTRAP, Vector3(940, 100, 0), Vector3(30, 30, 1), false, true, *sfx_man, player);
-	//goList.push_back(triggerObject[2]);
 }
 
 void Model_Level4::InitPuzzles()
@@ -201,17 +210,6 @@ void Model_Level4::InitPuzzles()
 	puzzleManager->addTextPuzzle(MapManager::MAP1, "blue crate");
 	puzzleManager->addTextPuzzle(MapManager::MAP1, "closed pot");
 	puzzleManager->addTextPuzzle(MapManager::MAP1, "next floor");
-	/*cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	puzzleManager->goToNextPart();
-	cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;*/
 }
 
 void Model_Level4::spawnItems()
@@ -254,16 +252,6 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 		//Update the traps
 		UpdateTraps(dt, myKeys);
 
-		//Drop item
-		player->dropItem(dt, item, myKeys);
-
-		/* check collision with object */
-		//start: Set up collision bound before checking with the others
-		player->StartCollisionCheck();
-
-		getCamera()->position.Set(player->getPosition().x-500, player->getPosition().y-400, 1);
-		getCamera()->target.Set(player->getPosition().x-500, player->getPosition().y-400, 0);
-
 		/* check collision with object */
 		//start: Set up collision bound before checking with the others
 		player->StartCollisionCheck();
@@ -280,6 +268,12 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 			}
 		}
 
+		player->getCollideBound()->Reset();
+
+		/* Collision response */
+		player->CollisionResponse();	//translate to new pos if collides
+
+		//Collision check with triggers
 		for (int i = 0; i < 2; i++)
 		{
 			if (doors[i]->getActive())
@@ -294,9 +288,6 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 				}
 			}
 		}
-		
-
-		player->dropItem(dt, item, myKeys);
 
 		/*** Change to next level ***/
 		mapTimer += dt;
@@ -310,14 +301,7 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 			}
 		}
 
-		//player->dropItem(dt, item, myKeys);
-
-		player->getCollideBound()->Reset();
-
-		/* Collision response */
-		player->CollisionResponse();	//translate to new pos if collides
-
-		/* Test pick up items */
+		/* Pick up items */
 		for (int i = 0; i < itemList.size(); ++i)
 		{
 			if (player->pickUp(itemList[i], myKeys))	//if successfully pick up
@@ -325,17 +309,21 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 				//if item is key
 				if (itemList[i]->getItemID() == Item::KEY)
 				{
-					pickedUpKeys[i] = true;
 					puzzleManager->goToNextPart();
 				}
 			}
 		}
-
+		
 		player->useItem(myKeys);
+		player->dropItem(dt, item, myKeys);
 
 		/* Update target */
 		camera.target = camera.position;
 		camera.target.z -= 10;
+
+		//Scrolling
+		getCamera()->position.Set(player->getPosition().x - 500, player->getPosition().y - 400, 1);
+		getCamera()->target.Set(player->getPosition().x - 500, player->getPosition().y - 400, 0);
 
 		/* Press space to go back main menu */
 		if (myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
@@ -369,7 +357,7 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 			std::cout << "BBUTTON DOWN" << std::endl;
 			//stateManager->ChangeState(StateManager::MAIN_MENU);
 			//mapManager->ChangeNextMap();
-			puzzleManager->goToNextPart();
+			//puzzleManager->goToNextPart();
 		}
 		else if (ButtonBState && !(myKeys[KEY_B]))
 		{
@@ -377,6 +365,7 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 			std::cout << "BBUTTON UP" << std::endl;
 		}
 
+		//Bring up the screen if the player dies ( restart or go back to main menu)
 		if (player->getHealth() == 0)
 		{
 			stopGame = true;
@@ -386,6 +375,7 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 
 void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 {
+	//Invulnerability frame
 	damageTimer += dt;
 	/* check with trigger objects fire */
 	for (int i = 0; i < triggerObjectSize; i++)
@@ -398,7 +388,6 @@ void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 		spikeTraps[i]->Update(dt, myKeys);
 	}
 
-	//Render
 	//Fire lever
 	if (triggerObject[0]->getTriggered() == false) //If lever is switched off
 	{
@@ -429,7 +418,13 @@ void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 	//Fire response
 	if (damageTimer > invulerabilityFrame)
 	{
-		if (triggerObject[2]->QuickAABBDetection(player) || triggerObject[5]->QuickAABBDetection(player))
+		if (triggerObject[2]->QuickAABBDetection(player) && triggerObject[2]->getActive())
+		{
+			player->setHealth(player->getHealth() - 20);
+			player->translateObject(Vector3(-50, 0, 0));
+			damageTimer = 0.f;
+		}
+		else if (triggerObject[5]->QuickAABBDetection(player) && triggerObject[5]->getActive())
 		{
 			player->setHealth(player->getHealth() - 20);
 			player->translateObject(Vector3(-50, 0, 0));
@@ -474,6 +469,7 @@ void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 		}
 	}
 
+	//Response
 	if (triggerObject[9]->QuickAABBDetection(player) && triggerObject[9]->getTriggered() == true)
 	{
 		triggerObject[9]->resetPosition();
@@ -501,6 +497,7 @@ void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 		}
 	}
 
+	//Response
 	if (triggerObject[11]->QuickAABBDetection(player) && triggerObject[11]->getTriggered() == true)
 	{
 		triggerObject[11]->resetPosition();
@@ -525,43 +522,54 @@ void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 		{
 			if (spikeTraps[i]->QuickAABBDetection(player) && spikeTraps[i]->getActive() == true)
 			{
-				player->setHealth(player->getHealth() - 90);
+				player->setHealth(player->getHealth() - SPIKE_DMG);
 				player->translateObject(Vector3(50, 0, 0));
 				damageTimer = 0.f;
 			}
 		}
 	}
-	
-	//for (int i = 0; i < level_map->size(); i++)
-	//{
-	//	if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
-	//	{
-	//		(*level_map)[i]->CheckCollisionWith(triggerObject[7]);
-	//	}
-	//}
-
-	//cout << triggerObject[7]->getTriggered() << endl;
 }
 
 void Model_Level4::UpdateEnemy(double dt)
 {
-	E_Ogre->Update(dt, level_map, goList);
-	//E_Ogre->Update(dt, &Model_Level::mapManager, goList);
-
-	/* start set up */
-	E_Ogre->StartCollisionCheck();
-
-	/* check with wall */
-	for (int i = 0; i < (*level_map).size(); i++)
+	ogreTimer += dt;
+	for (int i = 0; i < 3; i++)
 	{
-		(*level_map)[i]->CheckCollisionWith(E_Ogre);
+		ogres[i]->Update(dt, level_map, goList);
+		//ogres[i]->Update(dt, &Model_Level::mapManager, goList);
+
+		/* start set up */
+		ogres[i]->StartCollisionCheck();
+
+		/* check with wall */
+		for (int i = 0; i < (*level_map).size(); i++)
+		{
+			(*level_map)[i]->CheckCollisionWith(ogres[i]);
+		}
+
+		if (ogreTimer > 0.5)
+		{
+			if (player->QuickAABBDetection(ogres[i]))
+			{
+				player->setHealth(player->getHealth() - 5);
+				ogreTimer = 0;
+				if (player->getHealth() == 0)
+				{
+					player->setHealth(0);
+				}
+			}
+		}
+		/* check with all other objects */
+		ogres[i]->getCollideBound()->Reset();
+
+		//response
+		ogres[i]->CollisionResponse();
 	}
+}
 
-	/* check with all other objects */
-	E_Ogre->getCollideBound()->Reset();
-
-	//response
-	E_Ogre->CollisionResponse();
+void Model_Level4::ClearLevel()
+{	
+	Model_Level::ClearLevel();
 }
 
 void Model_Level4::Exit()

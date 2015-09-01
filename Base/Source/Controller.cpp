@@ -208,6 +208,19 @@ void Controller::modelTransitioning()
 			Model_Level::setPreviousLevel(false);
 			stateManager->ChangeState(StateManager::GAME);
 		}
+		else if (Model_Level::MainMenu()) //go back to main menu
+		{
+			Model_Level::goMainMenu = false; //main menu false
+			stateManager->ChangeState(StateManager::MAIN_MENU); //change state to main menu
+			view->SetModel(modelScreen);
+
+			//Reset all models
+			for (int i = 0; i < modelList.size(); i++)
+			{
+				modelList[i]->ClearLevel();
+			}
+			Model_Level::setCurrentModel(0);
+		}
 	}
 	else
 	{

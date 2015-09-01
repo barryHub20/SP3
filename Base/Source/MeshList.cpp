@@ -113,8 +113,26 @@ void Geometry::Init()
 	meshList[GEO_CURSOR] = MeshBuilder::GenerateQuad("cursor", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_CURSOR]->textureID[0] = LoadTGA("Image//HUD//sword_cursor.tga");
 
+	meshList[GEO_TRYAGAIN] = MeshBuilder::GenerateQuad("tryagain", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_TRYAGAIN]->textureID[0] = LoadTGA("Image//HUD//try_again.tga");
+
+	meshList[GEO_RETURN] = MeshBuilder::GenerateQuad("return_mainmenu", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_RETURN]->textureID[0] = LoadTGA("Image//HUD//backmenu.tga");
+
+	meshList[GEO_INSTRUCTIONS] = MeshBuilder::GenerateQuad("instructions", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_INSTRUCTIONS]->textureID[0] = LoadTGA("Image//HUD//instructions.tga");
+
+	meshList[GEO_STARTGAME] = MeshBuilder::GenerateQuad("startgame", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_STARTGAME]->textureID[0] = LoadTGA("Image//HUD//startgame.tga");
+
 	meshList[GEO_MAIN_BAR] = MeshBuilder::GenerateQuad("main UI bar", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_MAIN_BAR]->textureID[0] = LoadTGA("Image//HUD//player-bar.tga");
+
+	meshList[GEO_WINSCREEN] = MeshBuilder::GenerateQuad("winning screen", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_WINSCREEN]->textureID[0] = LoadTGA("Image//HUD//Win_Screen.tga");
+
+	meshList[GEO_LOSESCREEN] = MeshBuilder::GenerateQuad("losing screen", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_LOSESCREEN]->textureID[0] = LoadTGA("Image//HUD//Lose_Screen.tga");
 
 	meshList[GEO_WORDBOX] = MeshBuilder::GenerateQuad("wordBox", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_WORDBOX]->textureID[0] = LoadTGA("Image//HUD//wordBox.tga");

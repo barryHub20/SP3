@@ -14,6 +14,8 @@ public:
 		GAME, //maps
 		HIGHSCORE,
 		INSTRUCTION,
+		WIN_SCREEN,
+		LOSE_SCREEN,
 		MAX_STATES,
 	};
 private:
