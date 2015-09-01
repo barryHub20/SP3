@@ -93,8 +93,6 @@ public:
 
 	/*********** core functions ***************/
 	virtual void Init();
-		void InitSprite();
-		void InitStaticSprite();	//sprites like player which is a static object
 		void InitMaps(); //Initialize maps (RP)
 
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);

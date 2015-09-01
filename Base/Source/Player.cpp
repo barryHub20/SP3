@@ -33,6 +33,7 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	/* set physics */
 	info.setSpeed(Speed);
 	info.setDir(Vector2(1, 0));	//should be based on angle
+	info.setTimer(0);
 
 	/* set boundbox */
 	collideBound.Set(Pos, scale, Collision::BOX);
@@ -101,6 +102,9 @@ Player::~Player()
 void Player::Update(double dt, bool* myKey)
 {
 	Vector3 Pos;
+
+	// Counts from 0
+	info.setTimer(info.getTimer() + dt);
 
 	/* update inventory */
 	inventory.Update(dt, myKey);

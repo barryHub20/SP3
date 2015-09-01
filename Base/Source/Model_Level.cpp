@@ -24,8 +24,8 @@ UI_Object Model_Level::start_Game;
 UI_Object Model_Level::instruction;
 UI_Object Model_Level::go_back;
 UI_Object Model_Level::main_UI_bar;	//main UI in game
-UI_Object Model_Level::puzzleMessage;	//UI for puzzle message
-UI_Object Model_Level::tutorialUI;	//UI for showing tutorial
+UI_Object Model_Level::puzzleMessage;	//UI for puzzle message	(Use this to customise, take
+UI_Object Model_Level::tutorialUI;	//UI for showing tutorial (Lvl 1 and 2 only)
 
 // door/checkpoint 
 //TriggerObject* Model_Level::door = NULL;
@@ -65,7 +65,8 @@ void Model_Level::Init()
 		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-		current_model = 2;
+
+		current_model = 0;
 
 		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
 
