@@ -108,7 +108,7 @@ void Controller::Init()
 	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	stateManager = new StateManager;
-	stateManager->setState(StateManager::MAIN_MENU);
+	stateManager->setState(StateManager::LOSE_SCREEN);
 	view->SetModel(modelScreen);
 }
 

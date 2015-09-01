@@ -93,6 +93,7 @@ public:
 	static bool goNextLevel;
 	static bool goPreviousLevel;
 	static bool goMainMenu;
+	static bool restartLevel;
 
 	/*********** constructor/destructor ***************/
 	Model_Level();
@@ -115,6 +116,7 @@ public:
 	static void setNextLevel(bool i);	//whether can go to next level or not
 	static void setPreviousLevel(bool i);
 	static bool MainMenu();
+	static bool Restart();
 
 	StateManager::STATES getState();
 

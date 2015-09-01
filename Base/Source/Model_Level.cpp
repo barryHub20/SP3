@@ -17,6 +17,7 @@ bool Model_Level::init_Already = false;
 bool Model_Level::goNextLevel = false;
 bool Model_Level::goPreviousLevel = false;
 bool Model_Level::goMainMenu = false;
+bool Model_Level::restartLevel = false;
 float Model_Level::hero_Health = 0;
 
 // UI 
@@ -157,7 +158,7 @@ void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager
 
 	if(player->getHealth() == 0)
 	{
-
+		
 	}
 }
 
@@ -383,6 +384,7 @@ vector<UI_Object*>* Model_Level::getUIList(){return &UI_List;}
 vector<Item*>* Model_Level::getItemList(){return &itemList;}
 bool Model_Level::NextLevel(){return goNextLevel;}
 bool Model_Level::PreviousLevel(){return goPreviousLevel;}
+bool Model_Level::Restart() { return restartLevel; }
 
 void Model_Level::setNextLevel(bool i)
 {

@@ -349,7 +349,6 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 		{
 			stopGame = true;
 		}
-	}
 }
 
 void Model_Level1::UpdateTutorial(double dt, bool* myKeys)

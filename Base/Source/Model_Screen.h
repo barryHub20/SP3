@@ -27,8 +27,6 @@ public:
 	bool pauseGame;
 	bool wasdFinish;
 	double pressTimer;
-
-
 };
 
 #endif

@@ -37,7 +37,7 @@ public:
 	void RenderMainMenu();
 	void RenderInstruction();
 	void RenderWinScreen();
-	void RenderLoseSceen();
+	void RenderLoseScreen();
 	void RenderGame();
 	void RenderTransition();
 	void RenderTile(Mesh* mesh, bool enableLight, int tileNum);
