@@ -43,7 +43,6 @@ void Model_Level1::Init()
 		pauseGame = true;
 		pressTimer = 0;
 
-	state = StateManager::GAME;
 		//object
 		InitObject();
 
@@ -55,6 +54,8 @@ void Model_Level1::Init()
 
 		spawnItems();
 		InitTrigger();
+
+		state = StateManager::GAME;
 
 		//Model_Level::mapManager.SetMap(0);	//set to map 0 first
 		/* set current level map to level 1 */
@@ -89,10 +90,6 @@ void Model_Level1::InitObject()
 {	
 	/** Set up player **/
 	ReadFromFile("Save_Load_File_lvl1.txt");
-
-	/** Set up enemy **/
-	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 500, 0), Vector3(50, 50, 1), 0, 10, true);
-	goList.push_back(E_Ogre);
 }
 
 void Model_Level1::InitTrigger()
@@ -121,7 +118,7 @@ void Model_Level1::InitUI()
 	//Teach players movments first
 	tutorialUI.SetActive(true);
 	tutorialUI.SetMessage("Hello! Press W,A,S,D to walk! Go to the potion area!");
-	
+
 	GameObject* obj = new GameObject;
 
 	//Trigger Area for tutorial 2
@@ -192,13 +189,8 @@ void Model_Level1::Update(double dt, bool* myKeys, Vector3 mousePos, StateManage
 
 	if(keyPressedTimer < delayTime)
 		keyPressedTimer += dt;
-	/* Update based on states */
-	switch (currentState)
-	{
-	case StateManager::GAME:
-		UpdateGame(dt, myKeys);
-		break;
-	}
+
+	UpdateGame(dt, myKeys);
 }
 
 void Model_Level1::UpdateGame(double dt, bool* myKeys)
@@ -214,8 +206,6 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 
 	//Update the traps
 	UpdateTraps(dt, myKeys);
-
-	UpdateEnemy(dt);
 
 	if(myKeys[KEY_K])
 	{
@@ -269,11 +259,7 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 		{
 			if (doorUnlocked)
 			{
-				if (doorUnlocked)
-				{
-					door->setActive(false);
-					sfx_man->play_unlock();
-				}
+				door->setActive(false);
 			}
 		}
 	}
@@ -286,85 +272,81 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 	{
 		if (mapTimer > 5)
 		{
-			if (mapTimer > 5)
+			goNextLevel = true;
+			//Model_Level::mapManager.ChangeNextMap();
+			mapTimer = 0;
+		}
+	}
+
+	//player->dropItem(dt, item, myKeys);
+
+	player->getCollideBound()->Reset();
+
+	/* Collision response */
+	player->CollisionResponse();	//translate to new pos if collides
+
+	/* Test pick up items */
+	for (int i = 0; i < itemList.size(); ++i)
+	{
+		if (player->pickUp(itemList[i], myKeys))	//if successfully pick up
+		{
+			//if item is key
+			//cout << itemList[i]->getItemID() << endl;
+			if (itemList[i]->getItemID() == Item::KEY)
 			{
-				goNextLevel = true;
-				//Model_Level::mapManager.ChangeNextMap();
-				Model_Level::setNextLevel(true);
-				mapTimer = 0;
+				doorUnlocked = true;
 			}
 		}
+	}
 
-		//player->dropItem(dt, item, myKeys);
+	player->useItem(myKeys);
 
-		player->getCollideBound()->Reset();
+	/* Update target */
+	camera.target = camera.position;
+	camera.target.z -= 10;
 
-		/* Collision response */
-		player->CollisionResponse();	//translate to new pos if collides
+	/* Press space to go back main menu */
+	if (myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
+	{
+		keyPressedTimer = 0.0;
+		//stateManager->ChangeState(stateManager->MAIN_MENU);
+	}
 
-		/* Test pick up items */
-		for (int i = 0; i < itemList.size(); ++i)
-		{
-			if (player->pickUp(itemList[i], myKeys))	//if successfully pick up
-			{
-				//if item is key
-				//cout << itemList[i]->getItemID() << endl;
-				if (itemList[i]->getItemID() == Item::KEY)
-				{
-					doorUnlocked = true;
-				}
-			}
-		}
+	/* Key Q to open puzzle */
+	static bool ButtonQState = false;
+	if (!ButtonQState && myKeys[KEY_Q])
+	{
+		ButtonQState = true;
+		std::cout << "QBUTTON DOWN" << std::endl;
+		puzzleOpen = true;
+	}
+	else if (ButtonQState && !(myKeys[KEY_Q]))
+	{
+		ButtonQState = false;
+		std::cout << "QBUTTON UP" << std::endl;
+		puzzleOpen = false;
+	}
 
-		player->useItem(myKeys);
+	/* Load/change map */
+	//Key B to move to next map (RP)
+	static bool ButtonBState = false;
+	if (!ButtonBState && myKeys[KEY_B])
+	{
+		ButtonBState = true;
+		std::cout << "BBUTTON DOWN" << std::endl;
+		//stateManager->ChangeState(StateManager::MAIN_MENU);
+		//mapManager->ChangeNextMap();
+		puzzleManager->goToNextPart();
+	}
+	else if (ButtonBState && !(myKeys[KEY_B]))
+	{
+		ButtonBState = false;
+		std::cout << "BBUTTON UP" << std::endl;
+	}
 
-		/* Update target */
-		camera.target = camera.position;
-		camera.target.z -= 10;
-
-		/* Press space to go back main menu */
-		if (myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)
-		{
-			keyPressedTimer = 0.0;
-			//stateManager->ChangeState(stateManager->MAIN_MENU);
-		}
-
-		/* Key Q to open puzzle */
-		static bool ButtonQState = false;
-		if (!ButtonQState && myKeys[KEY_Q])
-		{
-			ButtonQState = true;
-			std::cout << "QBUTTON DOWN" << std::endl;
-			puzzleOpen = true;
-		}
-		else if (ButtonQState && !(myKeys[KEY_Q]))
-		{
-			ButtonQState = false;
-			std::cout << "QBUTTON UP" << std::endl;
-			puzzleOpen = false;
-		}
-
-		/* Load/change map */
-		//Key B to move to next map (RP)
-		static bool ButtonBState = false;
-		if (!ButtonBState && myKeys[KEY_B])
-		{
-			ButtonBState = true;
-			std::cout << "BBUTTON DOWN" << std::endl;
-			//stateManager->ChangeState(StateManager::MAIN_MENU);
-			//mapManager->ChangeNextMap();
-			puzzleManager->goToNextPart();
-		}
-		else if (ButtonBState && !(myKeys[KEY_B]))
-		{
-			ButtonBState = false;
-			std::cout << "BBUTTON UP" << std::endl;
-		}
-
-		if (player->getHealth() == 0)
-		{
-			stopGame = true;
-		}
+	if (player->getHealth() == 0)
+	{
+		stopGame = true;
 	}
 }
 
@@ -372,7 +354,7 @@ void Model_Level1::UpdateTutorial(double dt, bool* myKeys)
 {
 	switch(tutorial_state)
 	{
-		case TUTORIAL_1:
+	case TUTORIAL_1:
 		{
 			/* Check if player got use wasd */
 			if(myKeys[KEY_W] || myKeys[KEY_S] || myKeys[KEY_A] || myKeys[KEY_D])
@@ -505,76 +487,6 @@ void Model_Level1::UpdateTraps(double dt, bool* myKeys)
 		}
 	}
 
-}
-
-//void Model_Level1::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)
-//{
-//	/* Update cursor */
-//	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
-//
-//	/* Check collide */
-//	if(cursor.QuickAABBDetection(&go_back) && myKeys[KEY_LMOUSE])	//go back to main menu
-//	{
-//		go_back.SetActive(false);
-//		start_Game.SetActive(true);
-//		instruction.SetActive(true);
-//		//Model_Level::stateManager.ChangeState(Model_Level::stateManager.MAIN_MENU);
-//	}
-//}
-//
-//void Model_Level1::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
-//{
-//	/* Update cursor */
-//	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
-//
-//	/* Check collide */
-//	if(cursor.QuickAABBDetection(&start_Game) && myKeys[KEY_LMOUSE])	//pressed start game button
-//	{
-//		start_Game.SetActive(false);
-//		instruction.SetActive(false);
-//		go_back.SetActive(true);
-//		//Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
-//	}
-//	else if(cursor.QuickAABBDetection(&instruction) && myKeys[KEY_LMOUSE])	//pressed instructions
-//	{
-//		start_Game.SetActive(false);
-//		instruction.SetActive(false);
-//		go_back.SetActive(true);
-//		//Model_Level::stateManager.ChangeState(Model_Level::stateManager.INSTRUCTION);
-//	}
-//}
-
-void Model_Level1::UpdateEnemy(double dt)
-{
-	E_Ogre->Update(dt, level_map, goList);
-
-	/* start set up */
-	E_Ogre->StartCollisionCheck();
-
-	/* check with wall */
-	for (int i = 0; i < (*level_map).size(); i++)
-	{
-		(*level_map)[i]->CheckCollisionWith(E_Ogre);
-	}
-
-	if(player->getInfo().getTimer() >= 3)
-	{
-		if(player->QuickAABBDetection(E_Ogre))
-		{
-			player->setHealth(player->getHealth() - 1);
-			player->getInfo().setTimer(0);
-			if(player->getHealth() == 0)
-			{
-				player->setHealth(0);
-			}
-		}
-	}
-
-	/* check with all other objects */
-	E_Ogre->getCollideBound()->Reset();
-
-	//response
-	E_Ogre->CollisionResponse();
 }
 
 void Model_Level1::Exit()

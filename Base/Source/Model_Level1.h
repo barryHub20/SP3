@@ -45,7 +45,6 @@ public:
 		//void UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y);
 		void UpdateTutorial(double dt, bool* myKeys);
 		void UpdateTraps(double dt, bool* myKeys);
-		void UpdateEnemy(double dt);
 
 	virtual void Exit();
 
