@@ -162,9 +162,12 @@ void Geometry::Init()
 	meshList[GEO_LSTAIRCASEUP] = MeshBuilder::GenerateQuad("staircase up left", Color(1, 1, 1), 1.f);
 	meshList[GEO_LSTAIRCASEUP]->textureID[0] = LoadTGA("Image//Sprites//staircaseUL.tga");
 
+	meshList[GEO_SCROLL_SEALED] = MeshBuilder::GenerateQuad("staircase up left", Color(1, 1, 1), 1.f);
+	meshList[GEO_SCROLL_SEALED]->textureID[0] = LoadTGA("Image//scroll_sealed.tga");
+
 	/* animation */
 	meshList[GEO_GUARD] = MeshBuilder::GenerateSpriteAnimation("guard", 21, 13, 1.f);
-	meshList[GEO_GUARD]->textureID[0] = LoadTGA("Image//Sprites//guard.tga");
+	meshList[GEO_GUARD]->textureID[0] = LoadTGA("Image//Sprites//guard_invisibility.tga");
 
 	meshList[GEO_ISTRIGGER] = MeshBuilder::GenerateQuad("is triggered", Color(1, 1, 1), 1.f);
 	meshList[GEO_ISTRIGGER]->textureID[0] = LoadTGA("Image//isTriggered.tga");

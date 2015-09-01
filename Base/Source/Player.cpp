@@ -57,6 +57,8 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 
 	/* Store all non-invisibility sprites */
 	//Player sprites
+	Sprite_invisibility_texture_file_path = "Image//Sprites//guard_invisibility.tga";
+
 	storeSpriteAnimation("black guard", 21, 13, "Image//Sprites//guard.tga");
 	processSpriteAnimation(Player::UP, 0.5f, 0, 8, 8, 8, 1);
 	processSpriteAnimation(Player::DOWN, 0.5f, 0, 10, 8, 10, 1);
@@ -66,17 +68,6 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	processSpriteAnimation(Player::ATTACKDOWN, 0.5f, 0, 6, 7, 6, 1);
 	processSpriteAnimation(Player::ATTACKLEFT, 0.5f, 0, 5, 7, 5, 1);
 	processSpriteAnimation(Player::ATTACKRIGHT, 0.5f, 0, 7, 7, 7, 1);
-
-	//invisbility
-	Sprite_invisibility_texture_file_path = "Image//Sprites//guard_invisibility.tga";
-	animationList[UP]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
-	animationList[DOWN]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
-	animationList[LEFT]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
-	animationList[RIGHT]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
-	animationList[ATTACKUP]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
-	animationList[ATTACKDOWN]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
-	animationList[ATTACKLEFT]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
-	animationList[ATTACKRIGHT]->textureID[0] = LoadTGA(Sprite_invisibility_texture_file_path);
 }
 
 void Player::switchInvisibleState()
@@ -85,12 +76,12 @@ void Player::switchInvisibleState()
 	if(invisible)
 	{
 		invisible = false;
-		txt = Sprite_invisibility_texture_file_path;
+		txt = Sprite_texture_file_path;
 	}
 	else
 	{
 		invisible = true;
-		txt = Sprite_texture_file_path;
+		txt = Sprite_invisibility_texture_file_path;
 	}
 
 	animationList[UP]->textureID[0] = LoadTGA(txt);
@@ -455,6 +446,9 @@ bool Player::dropItem(double dt, Item* item, bool* myKey)
 
 		if(myKey[KEY_O])
 		{
+			if(item->getItemID() == Item::NOTE)	//notes are non disposable
+				return false;
+
 			if(inventory.removeItem(this->position))
 			{
 				cout << "DROP SUCCESSFUL" << endl;

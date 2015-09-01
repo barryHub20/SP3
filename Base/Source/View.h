@@ -121,8 +121,8 @@ public:
 	/* Text */
 	void RenderText(Mesh* mesh, std::string text, Color color);
 
-	//render text with cutoff: if string longer than cutoff, go to next line
-	void RenderTextOnScreenCutOff(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z = 1.f, int cutOff = 32);
+	//render text with cutoff: add slash to part where supposed to go to next line
+	void RenderTextOnScreenCutOff(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z = 1.f);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z = 1.f);
 
 	/* Render mesh */

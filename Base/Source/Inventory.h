@@ -14,6 +14,7 @@ public:
 
 	bool addItem(Item*);
 	bool deleteItem(Vector3 currentPos);
+	void ClearAll();	//USE WISELY LOL: set all items active to false
 	Item* getHighest();
 
 	int getCurrentSize();
@@ -57,6 +58,8 @@ public:
 	int currentSize(int slot);	//get size of certain slot
 	string currentItemName(int slot);
 	Mesh* currentItemMesh(int slot);
+	Item::ITEM_TYPE currentItemID();
+	bool clearFromInventory(Item::ITEM_TYPE typeToDispose);	//clear all items of this type
 private:
 	InventorySlot* arrSize[MAX_SLOT];	//array of slots
 	int currentSlot;	//current slot

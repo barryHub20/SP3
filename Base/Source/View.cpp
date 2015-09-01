@@ -370,6 +370,7 @@ void View::RenderText(Mesh* mesh, std::string text, Color color)
 }
 
 float lengthOffset = 0;
+float len = 0;
 float zOffset = 0;
 float textLength = 0;
 float textXLength = 0;
@@ -430,7 +431,7 @@ void View::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float s
 	glEnable(GL_DEPTH_TEST);
 }
 
-void View::RenderTextOnScreenCutOff(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z, int cutOff)
+void View::RenderTextOnScreenCutOff(Mesh* mesh, std::string text, Color color, float size, float x, float y, float z)
 {
 	if(!mesh || mesh->textureID[0] <= 0 || text.length() == 0)
 		return;
@@ -454,31 +455,40 @@ void View::RenderTextOnScreenCutOff(Mesh* mesh, std::string text, Color color, f
 	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 
-	/* start counting */
+	/* get total scale.x of string */
 	textLength = text.length();
-	lengthOffset = 0.f;
-	float yp = 0.f;
+	textXLength = 0.f;
+	for(unsigned i = 0; i < textLength && text[i] != '/'; ++i)
+	{
+		textXLength += FontData[text[i]];
+	}
+
+	y = 0.f;
+	lengthOffset = (textXLength * -0.5f) + (FontData[text[0]] * 0.5f);	//make sure is start from center
+	len = lengthOffset;
 	for(unsigned i = 0; i < textLength; ++i)
 	{
-		if(i >= cutOff)	//if exceedd cutoff, go to next line
+		if(text[i] == '/' && i + 1 < textLength)
 		{
-			cutOff *= 2;
-			yp -= 1.f;
-			lengthOffset = 0.f;
+			y -= 1.f;
+			len = lengthOffset;
+			++i;
 		}
 
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(lengthOffset, yp, 0); //1.0f is the spacing of each character, you may change this value
+
+		characterSpacing.SetToTranslation(len, y, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
-		lengthOffset += FontData[text[i]];
+		len += FontData[text[i]];
 
 		mesh->Render((unsigned)text[i] * 6, 6);
 	}
 
 	lengthOffset = 0.f;	//reset length
 	textXLength = 0.f;
+	len = 0.f;
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
@@ -626,18 +636,3 @@ View::RENDER_TYPE View::getRenderType()
 {
 	return render_type;
 }
-
-//Model_Level* View::getModel(int index)
-//{
-//	return modelList[index];
-//}
-//
-//int View::modelListSize()
-//{
-//	return modelList.size();
-//}
-//
-//void View::SetNewModel(int index)
-//{
-//	this->model = modelList[index];
-//}

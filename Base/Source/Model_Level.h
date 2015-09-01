@@ -71,6 +71,9 @@ public:
 	static double Timer;
 	static double mapTimer;
 
+	/* damage values here */
+	const static int SPIKE_DMG = 10;
+
 	/* Common game objects */
 	//objects
 	Ogre* E_Ogre;
@@ -95,6 +98,7 @@ public:
 		void InitMaps(); //Initialize maps (RP)
 
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
+	static void ClearLevel();	//if this level is cleared, reset player notes
 
 	virtual void Exit();
 

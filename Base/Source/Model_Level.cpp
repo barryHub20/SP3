@@ -334,6 +334,12 @@ bool Model_Level::ReadFromFile(char* text)
 	return true;
 }
 
+void Model_Level::ClearLevel()
+{
+	player->getInventory()->clearFromInventory(Item::NOTE);
+	player->getInventory()->clearFromInventory(Item::KEY);
+}
+
 void Model_Level::Exit()
 {
 	Model::Exit();

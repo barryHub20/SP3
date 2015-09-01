@@ -90,6 +90,16 @@ string InventorySlot::getCurrentItemTypeName()
 	}
 }
 
+void InventorySlot::ClearAll()
+{
+	for(int i = 0; i < currentSize; ++i)
+	{
+		SlotSize[i]->setActive(false);
+		SlotSize[i] = NULL;
+	}
+	currentSize = 0;
+}
+
 int InventorySlot::getCurrentSize()
 {
 	return currentSize;
@@ -205,6 +215,31 @@ bool Inventory::addItem(Item* item)
 		}
 
 		++counter;
+	}
+	return false;
+}
+
+Item::ITEM_TYPE Inventory::currentItemID()
+{
+	if(arrSize[currentSlot]->getHighest() != NULL)
+	{
+		return arrSize[currentSlot]->getHighest()->getItemID();
+	}
+	return Item::UNDEFINED;
+}
+
+bool Inventory::clearFromInventory(Item::ITEM_TYPE typeToDispose)
+{
+	for(int i = 0; i < MAX_SLOT; ++i)
+	{
+		if(arrSize[i]->getHighest() != NULL)	//if got item
+		{
+			if(arrSize[i]->getHighest()->getItemID() == typeToDispose)	//if match, clear all items
+			{
+				arrSize[i]->ClearAll();
+				return true;
+			}
+		}
 	}
 	return false;
 }
