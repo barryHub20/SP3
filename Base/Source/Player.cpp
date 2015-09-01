@@ -19,7 +19,7 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	PLAYER_SPEED = 4;
 	score = 0;
 	health = 100;
-	stamina = 100;
+	stamina = 60;
 	damage = 10;
 
 	/* set object */

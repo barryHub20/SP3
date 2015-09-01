@@ -65,8 +65,7 @@ void Model_Level::Init()
 		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-
-		current_model = 0;
+		current_model = 4;
 
 		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
 
@@ -103,33 +102,38 @@ void Model_Level::Init()
 
 void Model_Level::InitMaps()
 {
-	/** Create maps for all levels **/
+	///** Create maps for all levels **/
 
-	/** Level 1 set to MapManager::MAP1 **/
-	//Model_Level::mapManager.CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-	Model_Level::mapManager.CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
-	//Model_Level::mapManager.CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
-	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
-	//Model_Level::mapManager.AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
-	//Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
-	//Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
-	
-	/** Level 2 set to MapManager::MAP2 **/
-	Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
-	//Model_Level::mapManager.CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
-	Model_Level::mapManager.AddRear(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map2_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-	Model_Level::mapManager.AddRear(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map2_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
-	
-	/** Level 3 set to MapManager::MAP3 **/
-	Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
-	Model_Level::mapManager.AddRear(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level3_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-	Model_Level::mapManager.AddRear(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level3_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
+	///** Level 1 set to MapManager::MAP1 **/
+	////Model_Level::mapManager.CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	//Model_Level::mapManager.CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	////Model_Level::mapManager.CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
+	//Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	//Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
+	////Model_Level::mapManager.AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
+	////Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
+	////Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
+	//
+	///** Level 2 set to MapManager::MAP2 **/
+	//Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	////Model_Level::mapManager.CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
+	//Model_Level::mapManager.AddRear(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map2_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	//Model_Level::mapManager.AddRear(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map2_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
+	//
+	///** Level 3 set to MapManager::MAP3 **/
+	//Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	//Model_Level::mapManager.AddRear(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level3_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	//Model_Level::mapManager.AddRear(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level3_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
 
-	/** Level 4 set to MapManager::MAP4 **/
-	Model_Level::mapManager.CreateMap(MapManager::MAP4, Map::FLOORMAP, 16, 13, 64, "Image//Map//level4_floor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
-	Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
-	Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_ULTIMATESPRITE]);
+	///** Level 4 set to MapManager::MAP4 **/
+	//Model_Level::mapManager.CreateMap(MapManager::MAP4, Map::FLOORMAP, 16, 13, 64, "Image//Map//level4_floor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	//Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	//Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_ULTIMATESPRITE]);
+
+	/** Level 5 set to MapManager::MAP5 **/
+	Model_Level::mapManager.CreateMap(MapManager::MAP5, Map::FLOORMAP, 16, 13, 64, "Image//Map//level5_floor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	Model_Level::mapManager.AddRear(MapManager::MAP5, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level5_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
+	Model_Level::mapManager.AddRear(MapManager::MAP5, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level5_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_ULTIMATESPRITE]);
 }
 
 void Model_Level::InitSprite()
