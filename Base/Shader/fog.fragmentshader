@@ -101,86 +101,16 @@ uniform bool textEnabled;
 uniform vec3 textColor;
 
 void main(){
-	if(lightEnabled == true)
-	{
-		// Material properties
-		vec4 materialColor = vec4(0, 0, 0, 0);
-		int texCount = 0;
-
-		for(int i = 0; i < MAX_TEXTURES; ++i)
-		{
-			if(colorTextureEnabled[i] == true)
-			{
-				materialColor += texture2D( colorTexture[i], texCoord );
-				++texCount;
-			}
-		}
-
-		if(texCount > 0)		
-		{
-			materialColor = materialColor / texCount;
-		}
-
-		else
-		{
-			materialColor = vec4( fragmentColor, 1 );
-		}
-
-		// Vectors
-		vec3 eyeDirection_cameraspace = - vertexPosition_cameraspace;
-		vec3 E = normalize(eyeDirection_cameraspace);
-		vec3 N = normalize( vertexNormal_cameraspace );
-		
-		// Ambient : simulates indirect lighting
-		color = materialColor * vec4(material.kAmbient, 1);
-		
-		for(int i = 0; i < numLights; ++i)
-		{
-			// Light direction
-			float spotlightEffect = 1;
-			vec3 lightDirection_cameraspace;
-			if(lights[i].type == 1) {
-				lightDirection_cameraspace = lights[i].position_cameraspace;
-			}
-			else if(lights[i].type == 2) {
-				lightDirection_cameraspace = lights[i].position_cameraspace - vertexPosition_cameraspace;
-				spotlightEffect = getSpotlightEffect(lights[i], lightDirection_cameraspace);
-			}
-			else {
-				lightDirection_cameraspace = lights[i].position_cameraspace - vertexPosition_cameraspace;
-			}
-			// Distance to the light
-			float distance = length( lightDirection_cameraspace );
-			
-			// Light attenuation
-			float attenuationFactor = getAttenuation(lights[i], distance);
-
-			vec3 L = normalize( lightDirection_cameraspace );
-			float cosTheta = clamp( dot( N, L ), 0, 1 );
-			
-			vec3 R = reflect(-L, N);
-			float cosAlpha = clamp( dot( E, R ), 0, 1 );
-			
-			color +=
-				// Diffuse : "color" of the object
-				materialColor * vec4(material.kDiffuse, 1) * vec4(lights[i].color, 1) * lights[i].power * cosTheta * attenuationFactor * spotlightEffect +
-				
-				// Specular : reflective highlight, like a mirror
-				vec4(material.kSpecular, 1) * vec4(lights[i].color, 1) * lights[i].power * pow(cosAlpha, material.kShininess) * attenuationFactor * spotlightEffect;
-		}
-
-		if(fogParam.enabled)
-		{
-			float fogDistance = abs(vertexPosition_cameraspace.z);
-			float fogFactor = getFogFactor(fogParam, fogDistance);
-			color = mix(color, vec4(fogParam.color, 1), fogFactor);
-		}
-	}
-	else
-	{
+	
 		if(colorTextureEnabled[0] == true && textEnabled == true)
 		{
 			color = texture2D( colorTexture[0], texCoord ) * vec4( textColor, 1 );
+
+			// if this pixel is in alpha .. do not do shit
+			if(color.a < 0.5)
+			{
+				discard;
+			}
 		}
 
 		else
@@ -201,20 +131,22 @@ void main(){
 			if(texCount > 0)		
 			{
 				color = color / texCount;
+				if(color.a < 0.5)
+				{
+					discard;
+				}
 			}
 
 			else
 			{
 				color = vec4( fragmentColor, 1 );
-			}
 
-			if(fogParam.enabled)
-			{
-				float fogDistance = abs(vertexPosition_cameraspace.z);
-				float fogFactor = getFogFactor(fogParam, fogDistance);
-				color = mix(color, vec4(fogParam.color, 1), fogFactor);
+				if(color.a < 0.5)
+				{
+					discard;
+				}
 			}
 		}
-	}
+	
 
 }

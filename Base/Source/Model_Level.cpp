@@ -149,6 +149,11 @@ void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager
 
 	/* update camera */
 	camera.Update(dt, player->getPosition(), player->getScale());
+
+	if(player->getHealth() == 0)
+	{
+
+	}
 }
 
 bool Model_Level::ReadFromFile(char* text)
