@@ -18,12 +18,15 @@ bool Model_Level::goNextLevel = false;
 bool Model_Level::goPreviousLevel = false;
 bool Model_Level::goMainMenu = false;
 bool Model_Level::restartLevel = false;
+bool Model_Level::playerDie = false;
 float Model_Level::hero_Health = 0;
 
 // UI 
 UI_Object Model_Level::cursor;
 UI_Object Model_Level::start_Game;
 UI_Object Model_Level::instruction;
+UI_Object Model_Level::instructionscreen;
+UI_Object Model_Level::mainmenu;
 UI_Object Model_Level::go_back;
 UI_Object Model_Level::main_UI_bar;	//main UI in game
 UI_Object Model_Level::puzzleMessage;	//UI for puzzle message	(Use this to customise, take
@@ -66,7 +69,7 @@ void Model_Level::Init()
 		/* Init map */
 		InitMaps();
 
-		goNextLevel = goPreviousLevel = goMainMenu = false;
+		goNextLevel = goPreviousLevel = goMainMenu = restartLevel  = playerDie = false;
 		init_Already = true;
 		openTutorial = true;
 	
@@ -158,7 +161,7 @@ void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager
 
 	if(player->getHealth() == 0)
 	{
-		
+		playerDie = true;
 	}
 }
 
@@ -385,6 +388,7 @@ vector<Item*>* Model_Level::getItemList(){return &itemList;}
 bool Model_Level::NextLevel(){return goNextLevel;}
 bool Model_Level::PreviousLevel(){return goPreviousLevel;}
 bool Model_Level::Restart() { return restartLevel; }
+bool Model_Level::playerGG() {return playerDie; }
 
 void Model_Level::setNextLevel(bool i)
 {

@@ -47,6 +47,8 @@ public:
 	// UI
 	static UI_Object cursor;
 	static UI_Object start_Game;
+	static UI_Object mainmenu;
+	static UI_Object instructionscreen;
 	static UI_Object instruction;
 	static UI_Object go_back;
 	static UI_Object main_UI_bar;	//main UI in game
@@ -89,6 +91,7 @@ public:
 	PuzzleManager *puzzleManager;
 	bool puzzleOpen;
 	bool openTutorial;
+	static bool playerDie;
 	
 	static bool goNextLevel;
 	static bool goPreviousLevel;
@@ -117,6 +120,7 @@ public:
 	static void setPreviousLevel(bool i);
 	static bool MainMenu();
 	static bool Restart();
+	static bool playerGG();
 
 	StateManager::STATES getState();
 

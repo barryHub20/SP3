@@ -206,55 +206,68 @@ void View_Level::RenderMainMenu()
 		}
 	}
 
-	std::ostringstream ss;	//universal
-	ss.precision(5);
-	ss << "BREAK-IN!";
-	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 6, 80, 67);
-	ss.str("");
+	//std::ostringstream ss;	//universal
+	//ss.precision(5);
+	//ss << "BREAK-IN!";
+	//RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 6, 80, 67);
+	//ss.str("");
 
-	if (Controller::mouse_current_x < 618 && Controller::mouse_current_x > 243 && Controller::mouse_current_y < 631 && Controller::mouse_current_y > 600)
-	{
-		ss << "Click HERE to start!";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 4, 80, 5);
-		ss.str("");
-	}
-	else
-	{
-		ss << "Click HERE to start!";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 4, 80, 5);
-		ss.str("");
-	}
+	//if (Controller::mouse_current_x < 618 && Controller::mouse_current_x > 243 && Controller::mouse_current_y < 631 && Controller::mouse_current_y > 600)
+	//{
+	//	ss << "Click HERE to start!";
+	//	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 4, 80, 5);
+	//	ss.str("");
+	//}
+	//else
+	//{
+	//	ss << "Click HERE to start!";
+	//	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 4, 80, 5);
+	//	ss.str("");
+	//}
 
-	if (Controller::mouse_current_x < 581 && Controller::mouse_current_x > 336 && Controller::mouse_current_y < 656 && Controller::mouse_current_y > 636)
-	{
-		ss << "( Instructions )";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 3, 80, 3);
-	}
-	else
-	{
-		ss << "( Instructions )";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 3, 80, 3);
-	}
+	//if (Controller::mouse_current_x < 581 && Controller::mouse_current_x > 336 && Controller::mouse_current_y < 656 && Controller::mouse_current_y > 636)
+	//{
+	//	ss << "( Instructions )";
+	//	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 3, 80, 3);
+	//}
+	//else
+	//{
+	//	ss << "( Instructions )";
+	//	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 3, 80, 3);
+	//}
 }
 
 void View_Level::RenderInstruction()
 {
-	std::ostringstream ss;	//universal
-	ss.precision(5);
-	ss << "WASD - Movement";
-	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 100, 600);
-	ss.str("");
+	for (vector<UI_Object*>::iterator it = model_level->getUIList()->begin(); it != model_level->getUIList()->end(); ++it)
+	{
+		UI_Object* o = (UI_Object*)*it;
 
-	if (Controller::mouse_current_x < 280 && Controller::mouse_current_x > 60 && Controller::mouse_current_y < 540 && Controller::mouse_current_y > 520)
-	{
-		ss << "<--- Back";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 90, 150);
+		if (o->getActive())
+		{
+			modelStack.PushMatrix();
+			modelStack.LoadMatrix(*(o->getTRS()));
+			RenderMeshIn2D(o->getMesh(), o->getLight(), o->getScale().x, o->getScale().y, o->getScale().z, o->getPosition().x, o->getPosition().y, o->getPosition().z, 0);
+			modelStack.PopMatrix();
+		}
 	}
-	else
-	{
-		ss << "<--- Back";
-		RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 40, 90, 150);
-	}
+
+	//std::ostringstream ss;	//universal
+	//ss.precision(5);
+	//ss << "WASD - Movement";
+	//RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 100, 600);
+	//ss.str("");
+
+	//if (Controller::mouse_current_x < 280 && Controller::mouse_current_x > 60 && Controller::mouse_current_y < 540 && Controller::mouse_current_y > 520)
+	//{
+	//	ss << "<--- Back";
+	//	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 0), 40, 90, 150);
+	//}
+	//else
+	//{
+	//	ss << "<--- Back";
+	//	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 0.5f, 0), 40, 90, 150);
+	//}
 }
 
 void View_Level::RenderWinScreen()

@@ -119,14 +119,20 @@ void Geometry::Init()
 	meshList[GEO_RETURN] = MeshBuilder::GenerateQuad("return_mainmenu", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_RETURN]->textureID[0] = LoadTGA("Image//HUD//backmenu.tga");
 
-	meshList[GEO_INSTRUCTIONS] = MeshBuilder::GenerateQuad("instructions", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_INSTRUCTIONS]->textureID[0] = LoadTGA("Image//HUD//instructions.tga");
+	meshList[GEO_INSTRUCTIONSCREEN] = MeshBuilder::GenerateQuad("instructions screen", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_INSTRUCTIONSCREEN]->textureID[0] = LoadTGA("Image//HUD//instruction.tga");
+
+	meshList[GEO_INSTRUCTION] = MeshBuilder::GenerateQuad("instructions", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_INSTRUCTION]->textureID[0] = LoadTGA("Image//HUD//instructions.tga");
 
 	meshList[GEO_STARTGAME] = MeshBuilder::GenerateQuad("startgame", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_STARTGAME]->textureID[0] = LoadTGA("Image//HUD//startgame.tga");
 
 	meshList[GEO_MAIN_BAR] = MeshBuilder::GenerateQuad("main UI bar", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_MAIN_BAR]->textureID[0] = LoadTGA("Image//HUD//player-bar.tga");
+
+	meshList[GEO_MAINMENU] = MeshBuilder::GenerateQuad("mainmenu", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_MAINMENU]->textureID[0] = LoadTGA("Image//HUD//mainmenu.tga");
 
 	meshList[GEO_WINSCREEN] = MeshBuilder::GenerateQuad("winning screen", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_WINSCREEN]->textureID[0] = LoadTGA("Image//HUD//Win_Screen.tga");

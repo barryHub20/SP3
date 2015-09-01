@@ -108,7 +108,7 @@ void Controller::Init()
 	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	stateManager = new StateManager;
-	stateManager->setState(StateManager::LOSE_SCREEN);
+	stateManager->setState(StateManager::MAIN_MENU);
 	view->SetModel(modelScreen);
 }
 
@@ -220,6 +220,13 @@ void Controller::modelTransitioning()
 				modelList[i]->ClearLevel();
 			}
 			Model_Level::setCurrentModel(0);
+		}
+
+		else if(Model_Level::playerGG()) //if player dies
+		{
+			//Model_Level::playerDie = false; //player die false
+			//stateManager->ChangeState(StateManager::LOSE_SCREEN);
+			//view->SetModel(modelScreen);
 		}
 	}
 	else
