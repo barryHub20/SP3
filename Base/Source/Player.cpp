@@ -479,32 +479,37 @@ bool Player::useItem(bool* myKey)
 		return false;
 	}
 	
-	if(myKey[KEY_L] && health < 100 && ptr->getItemID() == Item::H_POTION)
+	if(info.getTimer() > 0.5)
 	{
-		if(inventory.removeItem(this->position))
+		if(myKey[KEY_L] && health < 100 && ptr->getItemID() == Item::H_POTION)
 		{
-			ptr->setActive(false);
+			if(inventory.removeItem(this->position))
+			{
+				ptr->setActive(false);
+			}
+			setHealth(getHealth() + 10);
+			if(getHealth() >= 100)
+			{
+				health = 100;
+			}
+			my_sfx_man->play_yummy();
+			info.setTimer(0);
 		}
-		setHealth(getHealth() + 10);
-		if(getHealth() >= 100)
-		{
-			health = 100;
-		}
-		my_sfx_man->play_yummy();
-	}
 
-	else if(myKey[KEY_L] && stamina < 100 && ptr->getItemID() == Item::S_POTION)
-	{
-		if(inventory.removeItem(this->position))
+		else if(myKey[KEY_L] && stamina < 100 && ptr->getItemID() == Item::S_POTION)
 		{
-			ptr->setActive(false);
+			if(inventory.removeItem(this->position))
+			{
+				ptr->setActive(false);
+			}
+			setStamina(getStamina() + 20);
+			if(getStamina() >= 100)
+			{
+				stamina = 100;
+			}
+			my_sfx_man->play_yummy();
+			info.setTimer(0);
 		}
-		setStamina(getStamina() + 20);
-		if(getStamina() >= 100)
-		{
-			stamina = 100;
-		}
-		my_sfx_man->play_yummy();
 	}
 	return false;
 }

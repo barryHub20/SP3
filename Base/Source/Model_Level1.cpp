@@ -141,7 +141,7 @@ void Model_Level1::InitUI()
 	goList.push_back(obj);
 
 	//Trigger Area for tutorial 4
-	tutorial4Area.Set(Vector3(300, 690, 1), Vector3(180, 150, 1), Collision::BOX);	
+	tutorial4Area.Set(Vector3(350, 690, 1), Vector3(180, 150, 1), Collision::BOX);	
 	obj = new GameObject;
 	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
 	obj->translateObject(tutorial4Area.position);
@@ -556,12 +556,16 @@ void Model_Level1::UpdateEnemy(double dt)
 		(*level_map)[i]->CheckCollisionWith(E_Ogre);
 	}
 
-	if(player->QuickAABBDetection(E_Ogre))
+	if(player->getInfo().getTimer() >= 3)
 	{
-		player->setHealth(player->getHealth() - 1);
-		if(player->getHealth() == 0)
+		if(player->QuickAABBDetection(E_Ogre))
 		{
-			player->setHealth(0);
+			player->setHealth(player->getHealth() - 1);
+			player->getInfo().setTimer(0);
+			if(player->getHealth() == 0)
+			{
+				player->setHealth(0);
+			}
 		}
 	}
 
