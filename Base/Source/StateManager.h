@@ -24,12 +24,12 @@ private:
 protected:
 	void setTransition();
 	void resetTransition();
-	void setState(STATES state);
 public:
 
 	StateManager();
 	~StateManager();
 
+	void setState(STATES state);
 	StateManager::STATES GetState();
 	void ChangeState(STATES state);
 	void SetTransitionTime(float transitionTime);

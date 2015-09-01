@@ -64,9 +64,6 @@ protected:
 	static Position lightPos[TOTAL_LIGHTS];
 
 public:
-/******************** Game state (Only one for all levels) ************************/
-	static StateManager stateManager;
-
 	/*********** constructor/destructor ***************/
 	Model();
 	virtual ~Model();

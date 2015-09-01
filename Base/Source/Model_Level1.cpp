@@ -43,6 +43,7 @@ void Model_Level1::Init()
 		pauseGame = true;
 		pressTimer = 0;
 
+	state = StateManager::GAME;
 		//object
 		InitObject();
 
@@ -184,31 +185,19 @@ void Model_Level1::spawnItems()
 	itemList.push_back(item);
 }
 
-void Model_Level1::Update(double dt, bool* myKeys, Vector3 mousePos)
+void Model_Level1::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState)
 {
 	/* parent class update */
-	Model_Level::Update(dt, myKeys, mousePos);
+	Model_Level::Update(dt, myKeys, mousePos, currentState);
 
 	if(keyPressedTimer < delayTime)
 		keyPressedTimer += dt;
 	/* Update based on states */
-	switch (Model_Level::stateManager.GetState())
+	switch (currentState)
 	{
-	case StateManager::MAIN_MENU:
-		UpdateMainMenu(dt, myKeys, mousePos.x,  mousePos.y);
-		break;
 	case StateManager::GAME:
 		UpdateGame(dt, myKeys);
 		break;
-	case StateManager::INSTRUCTION:
-		UpdateInstructions(dt, myKeys, mousePos.x, mousePos.y);
-		break;
-	}
-
-	/* If in transition */
-	if (Model_Level::stateManager.isTransition())
-	{
-		Model_Level::stateManager.UpdateTransitionTime(dt);
 	}
 }
 
@@ -297,9 +286,12 @@ void Model_Level1::UpdateGame(double dt, bool* myKeys)
 	{
 		if (mapTimer > 5)
 		{
-			goNextLevel = true;
-			//Model_Level::mapManager.ChangeNextMap();
-			mapTimer = 0;
+			if (mapTimer > 5)
+			{
+				goNextLevel = true;
+				//Model_Level::mapManager.ChangeNextMap();
+				Model_Level::setNextLevel(true);
+				mapTimer = 0;
 		}
 	}
 
@@ -514,42 +506,42 @@ void Model_Level1::UpdateTraps(double dt, bool* myKeys)
 
 }
 
-void Model_Level1::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)
-{
-	/* Update cursor */
-	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
-
-	/* Check collide */
-	if(cursor.QuickAABBDetection(&go_back) && myKeys[KEY_LMOUSE])	//go back to main menu
-	{
-		go_back.SetActive(false);
-		start_Game.SetActive(true);
-		instruction.SetActive(true);
-		Model_Level::stateManager.ChangeState(Model_Level::stateManager.MAIN_MENU);
-	}
-}
-
-void Model_Level1::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
-{
-	/* Update cursor */
-	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
-
-	/* Check collide */
-	if(cursor.QuickAABBDetection(&start_Game) && myKeys[KEY_LMOUSE])	//pressed start game button
-	{
-		start_Game.SetActive(false);
-		instruction.SetActive(false);
-		go_back.SetActive(true);
-		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
-	}
-	else if(cursor.QuickAABBDetection(&instruction) && myKeys[KEY_LMOUSE])	//pressed instructions
-	{
-		start_Game.SetActive(false);
-		instruction.SetActive(false);
-		go_back.SetActive(true);
-		Model_Level::stateManager.ChangeState(Model_Level::stateManager.INSTRUCTION);
-	}
-}
+//void Model_Level1::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)
+//{
+//	/* Update cursor */
+//	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
+//
+//	/* Check collide */
+//	if(cursor.QuickAABBDetection(&go_back) && myKeys[KEY_LMOUSE])	//go back to main menu
+//	{
+//		go_back.SetActive(false);
+//		start_Game.SetActive(true);
+//		instruction.SetActive(true);
+//		//Model_Level::stateManager.ChangeState(Model_Level::stateManager.MAIN_MENU);
+//	}
+//}
+//
+//void Model_Level1::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y)
+//{
+//	/* Update cursor */
+//	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
+//
+//	/* Check collide */
+//	if(cursor.QuickAABBDetection(&start_Game) && myKeys[KEY_LMOUSE])	//pressed start game button
+//	{
+//		start_Game.SetActive(false);
+//		instruction.SetActive(false);
+//		go_back.SetActive(true);
+//		//Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
+//	}
+//	else if(cursor.QuickAABBDetection(&instruction) && myKeys[KEY_LMOUSE])	//pressed instructions
+//	{
+//		start_Game.SetActive(false);
+//		instruction.SetActive(false);
+//		go_back.SetActive(true);
+//		//Model_Level::stateManager.ChangeState(Model_Level::stateManager.INSTRUCTION);
+//	}
+//}
 
 void Model_Level1::UpdateEnemy(double dt)
 {

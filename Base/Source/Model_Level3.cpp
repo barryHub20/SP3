@@ -43,6 +43,8 @@ void Model_Level3::Init()
 		Timer = 0;
 		mapTimer = 0;
 
+		state = StateManager::GAME;
+
 		//player
 		if(player != NULL)
 		{
@@ -169,10 +171,10 @@ void Model_Level3::spawnItems()
 	itemList.push_back(item);
 }
 
-void Model_Level3::Update(double dt, bool* myKeys, Vector3 mousePos)
+void Model_Level3::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState)
 {
 	/* parent class update */
-	Model_Level::Update(dt, myKeys, mousePos);
+	Model_Level::Update(dt, myKeys, mousePos, currentState);
 
 	if(keyPressedTimer < delayTime)
 		keyPressedTimer += dt;
@@ -181,10 +183,10 @@ void Model_Level3::Update(double dt, bool* myKeys, Vector3 mousePos)
 	UpdateGame(dt, myKeys);
 
 	/* If in transition */
-	if (Model_Level::stateManager.isTransition())
-	{
-		Model_Level::stateManager.UpdateTransitionTime(dt);
-	}
+	//if (Model_Level::stateManager.isTransition())
+	//{
+	//	Model_Level::stateManager.UpdateTransitionTime(dt);
+	//}
 }
 
 void Model_Level3::UpdateGame(double dt, bool* myKeys)

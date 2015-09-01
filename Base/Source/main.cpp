@@ -4,6 +4,7 @@
 #include "Model_Level2.h"
 #include "Model_Level3.h"
 #include "Model_Level4.h"
+#include "Model_Screen.h"
 
 int main( void )
 {
@@ -11,12 +12,16 @@ int main( void )
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );	//c all this if program does not exit at same place everytime
 
 	/* Create Model */
+	Model_Screen* mmptr;
 	Model_Level1* mptr;
 	Model_Level2* m2ptr;
 	Model_Level3* m3ptr;
 	Model_Level4* m4ptr;
 	vector<Model_Level*> myModel;
 	
+	/* Create screens*/
+	mmptr = new Model_Screen;
+
 	/* Create level 1 */
 	mptr = new Model_Level1;
 	myModel.push_back(mptr);
@@ -37,7 +42,7 @@ int main( void )
 	View_Level myView(896, 700, View::TWO_D);
 
 	/* Pass in View into Controller and set mode (2D/3D) */
-	Controller myController(myModel, &myView);
+	Controller myController(myModel, mmptr, &myView);
 
 	/* Init, Run and Exit */
 	myController.Init();

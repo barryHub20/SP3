@@ -39,13 +39,14 @@ public:
 	Collision tutorial5Area;
 
 	//Update
-	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
-	void UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y);	//updating main menu
-	void UpdateGame(double dt, bool* myKeys);
-	void UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y);
-	void UpdateTutorial(double dt, bool* myKeys);
-	void UpdateTraps(double dt, bool* myKeys);
-	void UpdateEnemy(double dt);
+	virtual void Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState);
+		//void UpdateMainMenu(double dt, bool* myKeys, double mouse_x, double mouse_y);	//updating main menu
+		void UpdateGame(double dt, bool* myKeys);
+		//void UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y);
+		void UpdateTutorial(double dt, bool* myKeys);
+		void UpdateTraps(double dt, bool* myKeys);
+		void UpdateEnemy(double dt);
+
 	virtual void Exit();
 
 	bool pauseGame;

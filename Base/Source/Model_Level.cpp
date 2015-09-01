@@ -65,9 +65,7 @@ void Model_Level::Init()
 		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-		current_model = 4;
-
-		Model_Level::stateManager.ChangeState(Model_Level::stateManager.GAME);
+		current_model = 0;
 
 		/* 1) Init static stuff: create object here */
 		main_UI_bar.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
@@ -145,13 +143,12 @@ void Model_Level::InitStaticSprite()
 {
 }
 
-void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos)
+void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState)
 {
 	Model::Update(dt, myKeys, mousePos);
 
 	/* update camera */
 	camera.Update(dt, player->getPosition(), player->getScale());
-
 }
 
 bool Model_Level::ReadFromFile(char* text)
@@ -362,6 +359,11 @@ void Model_Level::setNextLevel(bool i)
 void Model_Level::setPreviousLevel(bool i)
 {
 	goPreviousLevel = i;
+}
+
+StateManager::STATES Model_Level::getState()
+{
+	return state;
 }
 
 vector<Map*>* Model_Level::getLevelMap()

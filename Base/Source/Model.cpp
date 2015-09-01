@@ -10,7 +10,6 @@ unsigned short Model::m_2D_view_height;
 bool Model::bLightEnabled;
 float Model::fps;
 Position Model::lightPos[TOTAL_LIGHTS];
-StateManager Model::stateManager;
 int Model::model_count = 0;
  int Model::current_model = 0;
  SoundManager* Model::sfx_man;

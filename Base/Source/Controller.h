@@ -14,6 +14,9 @@
 #include "View.h"
 #include "timer.h"
 
+#include "StateManager.h"
+#include "Model_Screen.h"
+
 class Controller
 {
 public:
@@ -61,7 +64,7 @@ public:
 
 	/********************* constructor / destructor *********************/
 	Controller();
-	Controller(vector<Model_Level*>& modelList, View* view);
+	Controller(vector<Model_Level*>& modelList, Model_Screen* modelScreen, View* view);
 	~Controller();
 private:
 	/********************** Input **********************/
@@ -72,6 +75,7 @@ private:
 	/********************** model and view ptr **********************/
 	//Model_Level** model; //array
 	vector<Model_Level*> modelList;
+	Model_Level* modelScreen;
 	View* view;
 
 	/********************** Declare a window object **********************/
@@ -92,6 +96,8 @@ private:
 	static double scrollyPos;
 
 	float fps;
+
+	StateManager  *stateManager;
 };
 
 #endif

@@ -57,7 +57,7 @@ void View_Level::Render(const float fps)
 {
 	View::Render(fps);
 
-	switch (model_level->stateManager.GetState())
+	switch (model_level->getState())
 	{
 		case StateManager::GAME:
 		{
@@ -90,7 +90,7 @@ void View_Level::RenderCollideBox()
 {
 	Vector3 pos, scale;
 
-	if (model_level->stateManager.GetState() == model_level->stateManager.GAME)	// If GAME is current state
+	if (model_level->getState() == StateManager::GAME)	// If GAME is current state
 	{
 		for(vector<GameObject*>::iterator it = model_level->getObject()->begin(); it != model_level->getObject()->end(); ++it)
 		{
@@ -325,7 +325,7 @@ void View_Level::RenderLight()
 void View_Level::RenderObject()
 {
 	/* Renders all objects */
-	if (Model_Level::stateManager.GetState() == Model_Level::stateManager.GAME)
+	if (model_level->getState() == StateManager::GAME)
 	{
 		for(vector<GameObject*>::iterator it = model_level->getObject()->begin(); it != model_level->getObject()->end(); ++it)
 		{
@@ -344,11 +344,6 @@ void View_Level::RenderObject()
 				modelStack.PopMatrix();
 			}
 		}
-	}
-
-	if (Model_Level::stateManager.GetState() == Model_Level::stateManager.MAIN_MENU || Model_Level::stateManager.GetState() == Model_Level::stateManager.INSTRUCTION || Model_Level::stateManager.GetState() == Model_Level::stateManager.TRANSITION)
-	{
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_JINFLOOR],false,160,1,1,0,0);
 	}
 }
 

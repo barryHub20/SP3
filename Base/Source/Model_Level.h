@@ -26,6 +26,8 @@ protected:
 
 	static bool init_Already;	//init all parent class stuff already?
 	bool initBasicsAlready;	//init child class basics already?
+
+	StateManager::STATES state;
 public:
 /************ current level map ************/ 
 	vector<Map*>* level_map;
@@ -97,9 +99,9 @@ public:
 		void InitStaticSprite();
 		void InitMaps(); //Initialize maps (RP)
 
-	virtual void Update(double dt, bool* myKeys, Vector3 mousePos);
-	static void ClearLevel();	//if this level is cleared, reset player notes
-
+	virtual void Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState);
+	static void ClearLevel();
+	
 	virtual void Exit();
 
 	/*********** getter/setter ***************/
@@ -107,6 +109,8 @@ public:
 	static bool PreviousLevel();
 	static void setNextLevel(bool i);	//whether can go to next level or not
 	static void setPreviousLevel(bool i);
+
+	StateManager::STATES getState();
 
 	/********** Utilities *************/
 	bool ReadFromFile(char* text);

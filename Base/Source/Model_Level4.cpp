@@ -41,6 +41,8 @@ void Model_Level4::Init()
 		Timer = 0;
 		mapTimer = 0;
 
+		state = StateManager::GAME;
+
 		invulerabilityFrame = 1.0f;
 		damageTimer = 0.f;
 
@@ -223,22 +225,16 @@ void Model_Level4::spawnItems()
 	itemList.push_back(keys[1]);
 }
 
-void Model_Level4::Update(double dt, bool* myKeys, Vector3 mousePos)
+void Model_Level4::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState)
 {
 	/* parent class update */
-	Model_Level::Update(dt, myKeys, mousePos);
+	Model_Level::Update(dt, myKeys, mousePos, currentState);
 
 	if (keyPressedTimer < delayTime)
 		keyPressedTimer += dt;
 
 	/* Update game */
 	UpdateGame(dt, myKeys);
-
-	/* If in transition */
-	if (Model_Level::stateManager.isTransition())
-	{
-		Model_Level::stateManager.UpdateTransitionTime(dt);
-	}
 }
 
 void Model_Level4::UpdateGame(double dt, bool* myKeys)

@@ -33,13 +33,14 @@ Controller::Controller() : view(NULL)
 {
 }
 
-Controller::Controller(vector<Model_Level*>& modelList, View* view) : view(view)
+Controller::Controller(vector<Model_Level*>& modelList, Model_Screen* modelScreen, View* view) : view(view)
 {
 	this->modelList.resize(modelList.size());
 	for(int i = 0; i < modelList.size(); ++i)
 	{
 		this->modelList[i] = modelList[i];
 	}
+	this->modelScreen = modelScreen;
 }
 
 Controller::~Controller()
@@ -98,12 +99,17 @@ void Controller::Init()
 		modelList[i]->Init();
 	}
 
+	modelScreen->Init();
+
 	/* set current model */
 	view->SetModel(modelList[Model::getCurrentModel()]);
 
 	//hide the cursor
 	glfwSetInputMode(view->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
+	stateManager = new StateManager;
+	stateManager->setState(StateManager::MAIN_MENU);
+	view->SetModel(modelScreen);
 }
 
 void Controller::Run()
@@ -130,8 +136,19 @@ void Controller::Run()
 			getKeyboardUpdate();
 
 			/** model update **/
+			if (stateManager->GetState() == StateManager::GAME)
+			{
+				modelList[Model::getCurrentModel()]->Update(m_dElapsedTime, myKeys, GetMousePos(), stateManager->GetState());
+			}
+			else if (stateManager->isTransition())
+			{
+				stateManager->UpdateTransitionTime(m_dElapsedTime);
+			}
+			else
+			{
+				modelScreen->Update(m_dElapsedTime, myKeys, GetMousePos(), stateManager->GetState());
+			}
 			modelTransitioning();
-			modelList[Model::getCurrentModel()]->Update(m_dElapsedTime, myKeys, GetMousePos());
 			m_dAccumulatedTime_thread1 = 0.0;
 		}
 		if(m_dAccumulatedTime_thread2 > 0.003)	//render: render fps is _dAccumulatedTime_thread1 > fps
@@ -173,19 +190,32 @@ bool Controller::IsKeyPressed(unsigned short key)
 /********************** model transitioning **********************/
 void Controller::modelTransitioning()
 {
-	if( Model_Level::NextLevel() )	//if go next level
+	if (stateManager->GetState() == StateManager::GAME)
 	{
-		Model_Level::setCurrentModel(Model_Level::getCurrentModel() + 1);
-		view->SetModel(modelList[Model::getCurrentModel()]);
-		modelList[Model::getCurrentModel()]->Init();
-		Model_Level::setNextLevel(false);
+		if (Model_Level::NextLevel())	//if go next level
+		{
+			Model_Level::setCurrentModel(Model_Level::getCurrentModel() + 1);
+			view->SetModel(modelList[Model::getCurrentModel()]);
+			modelList[Model::getCurrentModel()]->Init();
+			Model_Level::setNextLevel(false);
+			stateManager->ChangeState(StateManager::GAME);
+		}
+		else if (Model_Level::PreviousLevel())	//if go previous level
+		{
+			Model_Level::setCurrentModel(Model_Level::getCurrentModel() - 1);
+			view->SetModel(modelList[Model::getCurrentModel()]);
+			modelList[Model::getCurrentModel()]->Init();
+			Model_Level::setPreviousLevel(false);
+			stateManager->ChangeState(StateManager::GAME);
+		}
 	}
-	else if( Model_Level::PreviousLevel() )	//if go previous level
+	else
 	{
-		Model_Level::setCurrentModel(Model_Level::getCurrentModel() - 1);
-		view->SetModel(modelList[Model::getCurrentModel()]);
-		modelList[Model::getCurrentModel()]->Init();
-		Model_Level::setPreviousLevel(false);
+		stateManager->setState(modelScreen->getState());
+		if (modelScreen->getState() == StateManager::GAME)
+		{
+			view->SetModel(modelList[Model::getCurrentModel()]);
+		}
 	}
 }
 

@@ -40,6 +40,8 @@ void Model_Level2::Init()
 		Timer = 0;
 		mapTimer = 0;
 
+		state = StateManager::GAME;
+
 		//player
 		if(player != NULL)
 		{
@@ -106,7 +108,7 @@ void Model_Level2::InitPuzzles()
 	//puzzleManager->addTextPuzzle(MapManager::MAP2, "test3");
 	//puzzleManager->addTextPuzzle(MapManager::MAP3, "test4");
 
-	///*cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
+	//*cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
 	//puzzleManager->goToNextPart();
 	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
 	//puzzleManager->goToNextPart();
@@ -200,10 +202,10 @@ void Model_Level2::spawnItems()
 {
 }
 
-void Model_Level2::Update(double dt, bool* myKeys, Vector3 mousePos)
+void Model_Level2::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState)
 {
 	/* parent class update */
-	Model_Level::Update(dt, myKeys, mousePos);
+	Model_Level::Update(dt, myKeys, mousePos, currentState);
 	//cout << player->getPosition() << endl;
 
 	if(keyPressedTimer < delayTime)
@@ -213,10 +215,10 @@ void Model_Level2::Update(double dt, bool* myKeys, Vector3 mousePos)
 	UpdateGame(dt, myKeys);
 
 	/* If in transition */
-	if (Model_Level::stateManager.isTransition())
+	/*if (Model_Level::stateManager.isTransition())
 	{
 		Model_Level::stateManager.UpdateTransitionTime(dt);
-	}
+	}*/
 }
 
 void Model_Level2::UpdateGame(double dt, bool* myKeys)
@@ -283,6 +285,7 @@ void Model_Level2::UpdateCollision()
 		if (player->CollisionCheck(staircase))
 		{
 			goNextLevel = true;
+			Model_Level::setNextLevel(goNextLevel);
 			mapTimer = 0;
 		}
 
