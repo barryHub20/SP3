@@ -134,6 +134,9 @@
     <ClCompile Include="Source\Model_Screen.cpp">
       <Filter>Levels</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Model_Level5.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\MiniMap.h" />
@@ -275,6 +278,9 @@
       <Filter>Levels</Filter>
     </ClInclude>
     <ClInclude Include="Source\Model_Screen.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model_Level5.h">
       <Filter>Levels</Filter>
     </ClInclude>
   </ItemGroup>

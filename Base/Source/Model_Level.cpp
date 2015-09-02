@@ -58,12 +58,6 @@ void Model_Level::Init()
 		current_model = 4;
 	}
 
-	/* Player */
-	if(player != NULL)
-	{
-		goList.push_back(player);
-	}
-
 	/* 1) Init UI stuff */
 	main_UI_bar.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
 		Vector3(m_2D_view_width * 0.5f, 0, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),

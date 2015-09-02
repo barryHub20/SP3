@@ -58,7 +58,7 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 
 	/* Store all non-invisibility sprites */
 	//Player sprites
-	Sprite_invisibility_texture_file_path = "Image//Sprites//guard_invisibility.tga";
+	Sprite_invisibility_texture_file_path = "Image//Sprites//Hero2_invisible.tga";
 
 	storeSpriteAnimation("black guard", 21, 13, "Image//Sprites//Hero2.tga");
 	processSpriteAnimation(Player::UP, 0.5f, 0, 8, 8, 8, 1);

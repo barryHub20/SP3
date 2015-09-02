@@ -52,6 +52,13 @@ void Model_Level1::Init()
 
 		state = StateManager::GAME;
 
+
+		//player
+		if(player != NULL)
+		{
+			goList.push_back(player);
+		}
+
 		//Model_Level::mapManager.SetMap(0);	//set to map 0 first
 		/* set current level map to level 1 */
 		level_map = Model_Level::mapManager.GetMap(LEVEL_1);

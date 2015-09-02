@@ -305,12 +305,6 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 		}
 	}
 
-	/* go invisible */
-	if(myKeys[KEY_C])
-	{
-		player->switchInvisibleState();
-	}
-
 	/* See puzzle message */
 	if(puzzleMsgTimer < puzzleMsgTime)
 	{
@@ -460,6 +454,12 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 
 void Model_Level2::UpdateEnemy(double dt)
 {
+
+	/*if(player->getInvisible())
+	{
+		E_Ogre->setDetectedPlayer(false);
+	}*/
+
 	E_Ogre->Update(dt, level_map, goList);
 
 	/* start set up */
