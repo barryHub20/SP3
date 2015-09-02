@@ -140,7 +140,7 @@ void Model_Screen::Update(double dt, bool* myKeys, Vector3 mousePos, StateManage
 	case StateManager::TRANSITION:
 		break;
 	}
-	cout << state << endl;
+	//cout << state << endl;
 }
 
 void Model_Screen::UpdateInstructions(double dt, bool* myKeys, double mouse_x, double mouse_y)

@@ -41,6 +41,7 @@ void Model_Level4::Init()
 		Timer = 0;
 		mapTimer = 0;
 		ogreTimer = 0;
+		delayTime = 0.3;
 
 		state = StateManager::GAME;
 
@@ -103,21 +104,12 @@ void Model_Level4::Init()
 	
 	camera.SetBound(player->getPosition());
 
-	for (int i = 0; i < 2; i++)
-	{
-		pickedUpKeys[i] = true;
-	}
 
 	/* Clear inventory */
 	player->getInventory()->clearFromInventory(Item::KEY);
 	player->getInventory()->clearFromInventory(Item::NOTE);
-
-	/** init **/
-	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
-	{
-		Object *go = (Object *)*it;
-		go->Init();
-	}
+	
+	firstKey = secondKey = false;
 }
 
 void Model_Level4::InitUI()
@@ -153,8 +145,14 @@ void Model_Level4::InitObject()
 	goList.push_back(doors[0]);
 
 	//door 2
-	doors[1] = new GameObject(Geometry::meshList[Geometry::GEO_DOORY], Vector3(1360, 680, 0), Vector3(40, 95, 1), true);
+	doors[1] = new GameObject(Geometry::meshList[Geometry::GEO_DOORY], Vector3(1360, 690, 0), Vector3(40, 95, 1), true);
 	goList.push_back(doors[1]);
+
+	staircases[0] = new GameObject(Geometry::meshList[Geometry::GEO_RSTAIRCASEDOWN], Vector3(1460, 670, 0), Vector3(50, 50, 1), true);
+	goList.push_back(staircases[0]);
+
+	staircases[1] = new GameObject(Geometry::meshList[Geometry::GEO_LSTAIRCASEUP], Vector3(120, 1070, 0), Vector3(50, 50, 1), true);
+	goList.push_back(staircases[1]);
 }
 
 int Model_Level4::triggerObjectSize = 12;
@@ -232,24 +230,46 @@ void Model_Level4::InitTrigger()
 	spikeTraps[2]->duration = 1.f;
 		//GameObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], Vector3(1200, 480, 1), Vector3(50, 180, 1), true);
 	goList.push_back(spikeTraps[2]);
+
+	keyActiveArea[0].Set(Vector3(60, 180, 1), Vector3(25, 25, 1), 5);	//press 5 times
+	GameObject* obj = new GameObject;
+	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
+	obj->translateObject(keyActiveArea[0].position);
+	obj->scaleObject(keyActiveArea[0].scale.x, keyActiveArea[0].scale.y, 1);
+	goList.push_back(obj);
+
+	keyActiveArea[1].Set(Vector3(1300, 315, 1), Vector3(25, 25, 1), 5);	//press 5 times
+	GameObject* obj2 = new GameObject;
+	obj2->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
+	obj2->translateObject(keyActiveArea[1].position);
+	obj2->scaleObject(keyActiveArea[1].scale.x, keyActiveArea[1].scale.y, 1);
+	goList.push_back(obj2);
 }
 
 void Model_Level4::InitPuzzles()
 {
-	puzzleManager->addTextPuzzle(MapManager::MAP1, "blue crate");
-	puzzleManager->addTextPuzzle(MapManager::MAP1, "closed pot");
-	puzzleManager->addTextPuzzle(MapManager::MAP1, "next floor");
+	puzzleManager->addTextPuzzle("");
+	puzzleManager->addTextPuzzle("blue crate");
+	puzzleManager->addTextPuzzle("blue crate");
+	puzzleManager->addTextPuzzle("closed pot");
+	puzzleManager->addTextPuzzle("next floor");
 }
 
 void Model_Level4::spawnItems()
 {
 	keys[0] = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(60, 180, 0), Vector3(25, 25, 1));
-	goList.push_back(keys[0]);
+	keys[0]->setActive(false);
 	itemList.push_back(keys[0]);
+	goList.push_back(keys[0]);
 
 	keys[1] = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(1300, 315, 0), Vector3(25, 25, 1));
-	goList.push_back(keys[1]);
+	keys[1]->setActive(false);
 	itemList.push_back(keys[1]);
+	goList.push_back(keys[1]);
+
+	puzzleNote = new Item(Geometry::meshList[Geometry::GEO_SCROLL_SEALED], Item::NOTE, true, Vector3(400, 980, 1), Vector3(35, 35, 1));
+	itemList.push_back(puzzleNote);
+	goList.push_back(puzzleNote);
 }
 
 void Model_Level4::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState)
@@ -273,7 +293,7 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 		sfx_man->play_ambience();
 
 		//Update enemy
-		UpdateEnemy(dt);
+	UpdateEnemy(dt);
 
 		/* Update player */
 		player->Update(dt, myKeys);
@@ -297,11 +317,6 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 			}
 		}
 
-		player->getCollideBound()->Reset();
-
-		/* Collision response */
-		player->CollisionResponse();	//translate to new pos if collides
-
 		//Collision check with triggers
 		for (int i = 0; i < 2; i++)
 		{
@@ -309,7 +324,12 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 			{
 				if (player->CollisionCheck(doors[i]))
 				{
-					if (pickedUpKeys[i] == true)
+					if (i == 0 && firstKey == true)
+					{
+						doors[i]->setActive(false);
+						sfx_man->play_unlock();
+					}
+					else if (i == 1 && secondKey == true)
 					{
 						doors[i]->setActive(false);
 						sfx_man->play_unlock();
@@ -318,29 +338,68 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 			}
 		}
 
-		/*** Change to next level ***/
-		mapTimer += dt;
-		if (player->CollisionCheck(staircase))
-		{
-			if (mapTimer > 5)
-			{
-				goNextLevel = true;
-				//Model_Level::mapManager.ChangeNextMap();
-				mapTimer = 0;
-			}
-		}
-
-		/* Pick up items */
+		//Item pickup
 		for (int i = 0; i < itemList.size(); ++i)
 		{
 			if (player->pickUp(itemList[i], myKeys))	//if successfully pick up
 			{
 				//if item is key
-				if (itemList[i]->getItemID() == Item::KEY)
+				//cout << itemList[i]->getItemID() << endl;
+				if (itemList[i]->getItemID() == Item::NOTE)
 				{
 					puzzleManager->goToNextPart();
 				}
 			}
+		}
+
+		/*** Change to next level ***/
+		mapTimer += dt;
+		if (player->CollisionCheck(staircases[0]))
+		{
+			if (mapTimer > 5)
+			{
+				goNextLevel = true;
+				mapTimer = 0;
+			}
+		}
+		if (player->CollisionCheck(staircases[1]))
+		{
+			if (mapTimer > 5)
+			{
+				goPreviousLevel = true;
+				mapTimer = 0;
+			}
+		}
+
+		/* see if click at trigger area to get hidden key and message */
+		if (keyPressedTimer >= delayTime)
+		{
+			if (myKeys[KEY_E])
+			{
+				keyPressedTimer = 0.0;
+				keyActiveArea[0].QuickAABBDetection(player->getCollideBound(), true);
+				keyActiveArea[1].QuickAABBDetection(player->getCollideBound(), true);
+			}
+		}
+
+		/* if activated: get key and puzzle */
+		if (keyActiveArea[0].getActivated() && firstKey == false)
+		{
+			firstKey = true;
+			keys[0]->setActive(true);
+			player->getInventory()->addItem(keys[0]);	//note 
+			if (puzzleManager->getCurrentPuzzle()->getTextPuzzle() == "")
+			{
+				puzzleManager->goToNextPart();
+			}
+			puzzleManager->goToNextPart();
+		}
+		if (keyActiveArea[1].getActivated() && secondKey == false)
+		{
+			secondKey = true;
+			keys[1]->setActive(true);
+			player->getInventory()->addItem(keys[1]);	//note 
+			puzzleManager->goToNextPart();
 		}
 		
 		player->useItem(myKeys);
@@ -360,6 +419,11 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 			keyPressedTimer = 0.0;
 			//stateManager->ChangeState(stateManager->MAIN_MENU);
 		}
+
+		player->getCollideBound()->Reset();
+
+		/* Collision response */
+		player->CollisionResponse();	//translate to new pos if collides
 
 		/* Key Q to open puzzle */
 		static bool ButtonQState = false;
@@ -445,21 +509,21 @@ void Model_Level4::UpdateTraps(double dt, bool* myKeys)
 	}
 
 	//Fire response
-	if (damageTimer > invulerabilityFrame)
-	{
+	/*if (damageTimer > invulerabilityFrame)
+	{*/
 		if (triggerObject[2]->QuickAABBDetection(player) && triggerObject[2]->getActive())
 		{
-			player->setHealth(player->getHealth() - 20);
-			player->translateObject(Vector3(-50, 0, 0));
+			player->setHealth(player->getHealth() - 1);
+			//player->translateObject(Vector3(-50, 0, 0));
 			damageTimer = 0.f;
 		}
 		else if (triggerObject[5]->QuickAABBDetection(player) && triggerObject[5]->getActive())
 		{
-			player->setHealth(player->getHealth() - 20);
-			player->translateObject(Vector3(-50, 0, 0));
+			player->setHealth(player->getHealth() - 1);
+			//player->translateObject(Vector3(-50, 0, 0));
 			damageTimer = 0.f;
 		}
-	}
+	//}
 
 	//First arrow trap, activate/reactivate arrow trap
 	if (triggerObject[7]->getTriggered() == false && triggerObject[7]->getActive() == false && triggerObject[7]->arrowCooldown > 1.f)

@@ -8,8 +8,12 @@ private:
 	static int triggerObjectSize;
 	GameObject *doors[2];
 	Item *keys[2];
-	Item *puzzleNotes[2];
-	bool pickedUpKeys[2];
+	Item *puzzleNote;
+	bool firstKey;
+	bool secondKey;
+	GameObject *staircases[2];
+
+	TriggerArea keyActiveArea[2];
 
 	TriggerObject *spikeTraps[3];
 

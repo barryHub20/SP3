@@ -149,11 +149,11 @@ void View_Level::RenderHUD()
 		playerStamina = model_level->player->getStamina();
 		
 		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARBG], false, 50.f, 5.f, 1.f, 5.f, 114.f, 0.f, 0.f);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARCOLOR], false, 47.f * 0.01f * playerHealth, 1.5f, 1.f, 4.5f, 116.25f, 1.f, 0.f);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARMARKER], false, 1.f, 4.f, 2.f,  47.f * 0.01f * playerHealth + 3.75f, 115.f, 2.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARCOLOR], false, 46.f * 0.01f * playerHealth, 1.5f, 1.f, 6.f, 116.25f, 1.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARMARKER], false, 1.f, 4.f, 2.f,  46.f * 0.01f * playerHealth + 5.25f, 115.f, 2.f, 0.f);
 		
 		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARCOLOR], false, 47.f * 0.01f * playerStamina, 3.f, 1.f, 4.5f, 110.25f, 1.f, 0.f);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARMARKER], false, 8.f, 8.f, 2.f, 47.f * 0.01f * playerStamina - 1.f, 109.f, 2.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARMARKER], false, 8.f, 8.f, 2.f, 47.f * 0.01f * playerStamina , 109.f, 2.f, 0.f);
 
 		//fps
 		ss.str("");

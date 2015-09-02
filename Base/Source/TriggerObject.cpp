@@ -31,6 +31,9 @@ TriggerObject::TriggerObject(Mesh* mesh, TRIGGEROBJECTS objectName, Vector3 Pos,
 	arrowCooldown = 1.f;
 
 	my_sfx_man = &sfx_mano;
+
+	triggerTimer = 0.f;
+	duration = 0.f;
 }
 
 void TriggerObject::setState(TRIGGEROBJECTS state)

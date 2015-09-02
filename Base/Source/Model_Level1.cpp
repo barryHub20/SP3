@@ -187,11 +187,11 @@ void Model_Level1::InitUI()
 
 void Model_Level1::InitPuzzles()
 {
-	puzzleManager->addTextPuzzle(MapManager::MAP1, "test1");
-	puzzleManager->addTextPuzzle(MapManager::MAP1, "test2");
-	puzzleManager->addPicturePuzzle(MapManager::MAP1, "Image//Sprites//guard.tga");
-	puzzleManager->addTextPuzzle(MapManager::MAP2, "test3");
-	puzzleManager->addTextPuzzle(MapManager::MAP3, "test4");
+	puzzleManager->addTextPuzzle("test1");
+	puzzleManager->addTextPuzzle("test2");
+	puzzleManager->addPicturePuzzle("Image//Sprites//guard.tga");
+	puzzleManager->addTextPuzzle("test3");
+	puzzleManager->addTextPuzzle("test4");
 
 	/*cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
 	puzzleManager->goToNextPart();

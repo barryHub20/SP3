@@ -5,7 +5,7 @@
 void StateManager::UpdateTransitionTime(float dt)
 {
 	transitionTime += dt;
-	if (transitionTime > 0.1f)
+	if (transitionTime > 2.f)
 	{
 		resetTransition();
 		if (stateToChangeTo != NO_STATE)

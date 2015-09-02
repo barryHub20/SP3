@@ -11,15 +11,15 @@ class PuzzleManager
 private:
 	int currentPuzzleNumber;
 	int currentPart;
-	vector<vector<Puzzle*>> puzzleList;
+	vector<Puzzle*> puzzleList;
 	Puzzle* currentPuzzle;
 public:
 	PuzzleManager();
 	~PuzzleManager();
 
 	void Init(int noOfPuzzles);
-	void addPicturePuzzle(int mapNumber, const char * picture_file_path); //initialize puzzles from text files
-	void addTextPuzzle(int mapNumber, std::string puzzleText);
+	void addPicturePuzzle(const char * picture_file_path); //initialize puzzles from text files
+	void addTextPuzzle(std::string puzzleText);
 
 	Puzzle* getCurrentPuzzle();
 	void goToNextPart();//proceed with current puzzle

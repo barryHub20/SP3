@@ -20,10 +20,10 @@ PuzzleManager::~PuzzleManager()
 
 void PuzzleManager::Init(int noOfPuzzles)
 {
-	puzzleList.resize(noOfPuzzles);
+	//puzzleList.resize(noOfPuzzles);
 }
 
-void PuzzleManager::addPicturePuzzle(int mapNumber, const char * picture_file_path)
+void PuzzleManager::addPicturePuzzle(const char * picture_file_path)
 {
 	Mesh* tempMesh;
 	tempMesh = MeshBuilder::GenerateQuad("puzzle picture", Color(1, 1, 1));
@@ -32,30 +32,30 @@ void PuzzleManager::addPicturePuzzle(int mapNumber, const char * picture_file_pa
 	tempPuzzle = new Puzzle();
 	tempPuzzle->setType(Puzzle::PICTURE);
 	tempPuzzle->setPicturePuzzle(tempMesh);
-	puzzleList[mapNumber].push_back(tempPuzzle);
+	puzzleList.push_back(tempPuzzle);
 }
 
-void PuzzleManager::addTextPuzzle(int mapNumber, std::string puzzleText)
+void PuzzleManager::addTextPuzzle(std::string puzzleText)
 {
 	Puzzle* tempPuzzle;
 	tempPuzzle = new Puzzle();
 	tempPuzzle->setType(Puzzle::WORD);
 	tempPuzzle->setTextPuzzle(puzzleText);
-	puzzleList[mapNumber].push_back(tempPuzzle);
+	puzzleList.push_back(tempPuzzle);
 }
 
 Puzzle * PuzzleManager::getCurrentPuzzle()
 {
 	if (currentPuzzle == NULL)
 	{
-		currentPuzzle = puzzleList[0][0];
+		currentPuzzle = puzzleList[0];
 	}
 	return currentPuzzle;
 }
 
 void PuzzleManager::goToNextPart()
 {
-	if (currentPart + 1 >= puzzleList[currentPuzzleNumber].size())
+	if (currentPart + 1 >= puzzleList.size())
 	{
 		changePuzzle();
 	}
@@ -63,7 +63,7 @@ void PuzzleManager::goToNextPart()
 	{
 		++currentPart;
 	}
-	currentPuzzle = puzzleList[currentPuzzleNumber][currentPart];
+	currentPuzzle = puzzleList[currentPart];
 }
 
 void PuzzleManager::changePuzzle()
@@ -72,7 +72,7 @@ void PuzzleManager::changePuzzle()
 	int tempPuzzleNo;
 	tempPuzzleNo = currentPart;
 	currentPart = 0;
-	if (currentPuzzleNumber >= puzzleList.size()|| puzzleList[currentPuzzleNumber].size() == 0)
+	if (currentPuzzleNumber >= puzzleList.size()|| puzzleList.size() == 0)
 	{
 		currentPuzzleNumber -= 1;
 		currentPart = tempPuzzleNo;
@@ -83,13 +83,10 @@ void PuzzleManager::cleanUp()
 {
 	for (int i = 0; i < puzzleList.size(); i++)
 	{
-		for (int j = 0; j < puzzleList[i].size(); j++)
+		if (puzzleList[i] != NULL)
 		{
-			if (puzzleList[i][j] != NULL)
-			{
-				puzzleList[i][j]->cleanUp();
-				delete puzzleList[i][j];
-			}
+			puzzleList[i]->cleanUp();
+			delete puzzleList[i];
 		}
 	}
 }

@@ -445,33 +445,33 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 			{
 			case ES_ATTACK_UP:
 			{
-				if (animationList[ES_ATTACK_UP]->ended == true)
+				if (animationList[ES_WALK_UP]->ended == true)
 				{
-					animationList[ES_ATTACK_UP]->Reset();
+					animationList[ES_WALK_UP]->Reset();
 				}
 				break;
 			}
 			case ES_ATTACK_DOWN:
 			{
-				if (animationList[ES_ATTACK_DOWN]->ended == true)
+				if (animationList[ES_WALK_DOWN]->ended == true)
 				{
-					animationList[ES_ATTACK_DOWN]->Reset();
+					animationList[ES_WALK_DOWN]->Reset();
 				}
 				break;
 			}
 			case ES_ATTACK_LEFT:
 			{
-				if (animationList[ES_ATTACK_LEFT]->ended == true)
+				if (animationList[ES_WALK_LEFT]->ended == true)
 				{
-					animationList[ES_ATTACK_LEFT]->Reset();
+					animationList[ES_WALK_LEFT]->Reset();
 				}
 				break;
 			}
 			case ES_ATTACK_RIGHT:
 			{
-				if (animationList[ES_ATTACK_RIGHT]->ended == true)
+				if (animationList[ES_WALK_RIGHT]->ended == true)
 				{
-					animationList[ES_ATTACK_RIGHT]->Reset();
+					animationList[ES_WALK_RIGHT]->Reset();
 				}
 				break;
 			}

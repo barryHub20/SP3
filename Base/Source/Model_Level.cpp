@@ -109,7 +109,7 @@ void Model_Level::InitMaps()
 	Model_Level::mapManager.AddRear(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//level3_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
 
 	/** Level 4 set to MapManager::MAP4 **/
-	Model_Level::mapManager.CreateMap(MapManager::MAP4, Map::FLOORMAP, 16, 13, 64, "Image//Map//level4_floor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
+	Model_Level::mapManager.CreateMap(MapManager::MAP4, Map::FLOORMAP, 24, 18, 64, "Image//Map//level4_floor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
 	Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
 	Model_Level::mapManager.AddRear(MapManager::MAP4, Map::COLLISIONMAP, 48, 37, 32, "Image//Map//level4_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_ULTIMATESPRITE]);
 
@@ -330,6 +330,16 @@ bool Model_Level::ReadFromFile(char* text)
 		if (object_word == "RSTAIRCASEUP")
 		{
 			staircase = new TriggerObject(Geometry::meshList[Geometry::GEO_RSTAIRCASEUP], TriggerObject::TRIGGERWHENCOLLIDE, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
+			goList.push_back(staircase);
+		}
+		if (object_word == "LSTAIRCASEUP")
+		{
+			staircase = new TriggerObject(Geometry::meshList[Geometry::GEO_LSTAIRCASEUP], TriggerObject::TRIGGERWHENCOLLIDE, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
+			goList.push_back(staircase);
+		}
+		if (object_word == "RSTAIRCASEDOWN")
+		{
+			staircase = new TriggerObject(Geometry::meshList[Geometry::GEO_RSTAIRCASEDOWN], TriggerObject::TRIGGERWHENCOLLIDE, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, true, *sfx_man, player);
 			goList.push_back(staircase);
 		}
 		if(object_word == "HPOTION")
