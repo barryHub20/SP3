@@ -140,6 +140,9 @@ void Geometry::Init()
 	meshList[GEO_LOSESCREEN] = MeshBuilder::GenerateQuad("losing screen", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_LOSESCREEN]->textureID[0] = LoadTGA("Image//HUD//Lose_Screen.tga");
 
+	meshList[GEO_LOADING] = MeshBuilder::GenerateQuad("loading screen", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_LOADING]->textureID[0] = LoadTGA("Image//HUD//loading.tga");
+
 	meshList[GEO_WORDBOX] = MeshBuilder::GenerateQuad("wordBox", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_WORDBOX]->textureID[0] = LoadTGA("Image//HUD//wordBox.tga");
 

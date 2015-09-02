@@ -55,7 +55,7 @@ void Model_Level::Init()
 		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-		current_model = 4;
+		current_model = 0;
 	}
 
 	/* 1) Init UI stuff */
@@ -131,6 +131,8 @@ void Model_Level::InitStaticSprite()
 void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState)
 {
 	Model::Update(dt, myKeys, mousePos);
+
+	state = currentState;
 
 	/* update camera */
 	camera.Update(dt, player->getPosition(), player->getScale());

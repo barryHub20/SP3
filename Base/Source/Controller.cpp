@@ -143,13 +143,14 @@ void Controller::Run()
 			else if (stateManager->GetState() == StateManager::TRANSITION)
 			{
 				stateManager->UpdateTransitionTime(m_dElapsedTime);
+				modelList[Model::getCurrentModel()]->Update(m_dElapsedTime, myKeys, GetMousePos(), stateManager->GetState());
 			}
 			else
 			{
 				modelScreen->Update(m_dElapsedTime, myKeys, GetMousePos(), stateManager->GetState());
 			}
 			modelTransitioning();
-			
+			//cout << stateManager->GetState() << endl;
 			m_dAccumulatedTime_thread1 = 0.0;
 		}
 		if(m_dAccumulatedTime_thread2 > 0.003)	//render: render fps is _dAccumulatedTime_thread1 > fps
@@ -241,8 +242,10 @@ void Controller::modelTransitioning()
 		stateManager->setState(modelScreen->getState());
 		if (modelScreen->getState() == StateManager::GAME)
 		{
-			view->SetModel(modelList[Model::getCurrentModel()]);
 			stateManager->ChangeState(StateManager::GAME);
+
+			modelList[Model::getCurrentModel()]->Init();
+			view->SetModel(modelList[Model::getCurrentModel()]);
 		}
 	}
 }

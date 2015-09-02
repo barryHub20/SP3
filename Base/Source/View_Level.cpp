@@ -152,13 +152,13 @@ void View_Level::RenderHUD()
 		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARCOLOR], false, 46.f * 0.01f * playerHealth, 1.5f, 1.f, 6.f, 116.25f, 1.f, 0.f);
 		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_HEALTHBARMARKER], false, 1.f, 4.f, 2.f,  46.f * 0.01f * playerHealth + 5.25f, 115.f, 2.f, 0.f);
 		
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARCOLOR], false, 47.f * 0.01f * playerStamina, 3.f, 1.f, 4.5f, 110.25f, 1.f, 0.f);
-		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARMARKER], false, 8.f, 8.f, 2.f, 47.f * 0.01f * playerStamina , 109.f, 2.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARCOLOR], false, 46.f * 0.01f * playerStamina, 3.f, 1.f, 4.5f, 110.25f, 1.f, 0.f);
+		RenderMeshIn2D(Geometry::meshList[Geometry::GEO_STAMINABARMARKER], false, 8.f, 8.f, 2.f, 46.f * 0.01f * playerStamina , 109.f, 2.f, 0.f);
 
 		//fps
 		ss.str("");
 		ss.precision(3);
-		ss << "FPS: " << model_level->getFPS();
+		ss << "FPS: " << model_level->getFPS() * 10.f;
 		if (model_level->getFPS() < 50)
 		{
 			//cout << "below 50" << endl;
@@ -319,11 +319,7 @@ void View_Level::RenderGame()
 
 void View_Level::RenderTransition()
 {
-	std::ostringstream ss;	//universal
-	ss.precision(5);
-	ss << "----- LOADING -----";
-	RenderTextOnScreen(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(1, 1, 1), 60, 240, 300);
-	ss.str("");
+	RenderMeshIn2D(Geometry::meshList[Geometry::GEO_LOADING], false, model->get2DViewWidth(), model->get2DViewHeight(), 5.f, model->get2DViewWidth() * 0.5f, model->get2DViewHeight() * 0.5f, 5.f);
 }
 
 void View_Level::RenderLight()

@@ -51,7 +51,7 @@ void Model_Screen::Init()
 		pressTimer = 0;
 
 		cursor.Init(Geometry::meshList[Geometry::GEO_CURSOR],
-			Vector3(m_2D_view_width * 0.5f, 0, 1.95f), Vector3(10, 10, 1),
+			Vector3(m_2D_view_width * 0.5f, 0, 2.5f), Vector3(10, 10, 1),
 			"", UI_Object::MOUSE_CURSOR, true);
 		UI_List.push_back(&cursor);
 
@@ -67,32 +67,32 @@ void Model_Screen::Init()
 
 		instructionscreen.Init(Geometry::meshList[Geometry::GEO_INSTRUCTIONSCREEN],
 			Vector3(m_2D_view_width * 0.5f, 60, 1.95f), Vector3(170, 120, 1),
-			"", UI_Object::INSTRUCTIONSCREEN, true);
+			"", UI_Object::INSTRUCTIONSCREEN, false);
 		UI_List.push_back(&instructionscreen);
 
 		instruction.Init(Geometry::meshList[Geometry::GEO_INSTRUCTION],
-			Vector3(m_2D_view_width * 0.5f, 40, 1.95f), Vector3(40, 20, 1),
+			Vector3(m_2D_view_width * 0.5f, 40, 2.f), Vector3(40, 20, 1),
 			"", UI_Object::INSTRUCTIONS, true);
 		UI_List.push_back(&instruction);
 
 		restart.Init(Geometry::meshList[Geometry::GEO_TRYAGAIN],
 			Vector3(m_2D_view_width * 0.5f, 60, 1.95f), Vector3(40, 20, 1),
-			"", UI_Object::RESTART, true);
+			"", UI_Object::RESTART, false);
 		UI_List.push_back(&restart);
 
 		backmenu.Init(Geometry::meshList[Geometry::GEO_RETURN],
-			Vector3(m_2D_view_width * 0.5f, 60, 1.95f), Vector3(40, 20, 1),
-			"", UI_Object::BACKMAIN, true);
+			Vector3(m_2D_view_width * 0.5f, 20, 2.f), Vector3(40, 20, 1),
+			"", UI_Object::BACKMAIN, false);
 		UI_List.push_back(&backmenu);
 
 		winGame.Init(Geometry::meshList[Geometry::GEO_WINSCREEN],
 			Vector3(m_2D_view_width * 0.5f, 60, 1.95f), Vector3(170, 120, 1),
-			"", UI_Object::WIN, true);
+			"", UI_Object::WIN, false);
 		UI_List.push_back(&winGame);
 
 		loseGame.Init(Geometry::meshList[Geometry::GEO_LOSESCREEN],
 			Vector3(m_2D_view_width * 0.5f, 60, 1.95f), Vector3(170, 120, 1),
-			"", UI_Object::LOSE, true);
+			"", UI_Object::LOSE, false);
 		UI_List.push_back(&loseGame);
 
 		state = StateManager::MAIN_MENU;
@@ -111,6 +111,8 @@ void Model_Screen::Update(double dt, bool* myKeys, Vector3 mousePos, StateManage
 {
 	/* parent class update */
 	state = currentState;
+	//cout << state << endl;
+
 	Model_Level::Update(dt, myKeys, mousePos, currentState);
 
 	if (keyPressedTimer < delayTime)
@@ -127,8 +129,8 @@ void Model_Screen::Update(double dt, bool* myKeys, Vector3 mousePos, StateManage
 		break;
 	case StateManager::GAME:
 		//UpdateGame(dt, myKeys);
-		goNextLevel = true;
-		setNextLevel(goNextLevel);
+		//goNextLevel = true;
+		//setNextLevel(goNextLevel);
 		break;
 	case StateManager::WIN_SCREEN:
 		UpdateWinScreen(dt, myKeys, mousePos.x, mousePos.y);
@@ -136,9 +138,10 @@ void Model_Screen::Update(double dt, bool* myKeys, Vector3 mousePos, StateManage
 	case StateManager::LOSE_SCREEN:
 		UpdateLoseScreen(dt, myKeys, mousePos.x, mousePos.y);
 		break;
-
 	case StateManager::TRANSITION:
+	{
 		break;
+	}	
 	}
 	//cout << state << endl;
 }
@@ -152,20 +155,16 @@ void Model_Screen::UpdateInstructions(double dt, bool* myKeys, double mouse_x, d
 	instruction.SetActive(false);
 	instructionscreen.SetActive(true);
 	mainmenu.SetActive(false);
-	go_back.SetActive(false);
-	loseGame.SetActive(false);
-	winGame.SetActive(false);
-	restart.SetActive(false);
 	backmenu.SetActive(true);
 
 	if(pressTimer > 1)
 	{
-		if (cursor.QuickAABBDetection(&go_back) && myKeys[KEY_LMOUSE])	//go back to main menu
+		if (cursor.QuickAABBDetection(&backmenu) && myKeys[KEY_LMOUSE])	//go back to main menu
 		{
 			go_back.SetActive(false);
 			start_Game.SetActive(true);
 			instructionscreen.SetActive(false);
-			instruction.SetActive(false);
+			instruction.SetActive(true);
 			mainmenu.SetActive(false);
 			loseGame.SetActive(false);
 			winGame.SetActive(false);
@@ -183,14 +182,8 @@ void Model_Screen::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, doubl
 	cursor.Follow(mouse_x, mouse_y);	//hard coded console height
 
 	start_Game.SetActive(true);
-	instruction.SetActive(true);
-	instructionscreen.SetActive(false);
 	mainmenu.SetActive(true);
-	go_back.SetActive(false);
-	loseGame.SetActive(false);
-	winGame.SetActive(false);
-	restart.SetActive(false);
-	backmenu.SetActive(false);
+	instruction.SetActive(true);
 
 	if (pressTimer > 1)
 	{
@@ -201,9 +194,6 @@ void Model_Screen::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, doubl
 			instructionscreen.SetActive(false);
 			mainmenu.SetActive(false);
 			go_back.SetActive(true);
-			loseGame.SetActive(false);
-			winGame.SetActive(false);
-			restart.SetActive(false);
 			backmenu.SetActive(false);
 			state = StateManager::GAME;
 
@@ -213,12 +203,8 @@ void Model_Screen::UpdateMainMenu(double dt, bool* myKeys, double mouse_x, doubl
 		{
 			start_Game.SetActive(false);
 			instruction.SetActive(false);
-			instructionscreen.SetActive(false);
+			instructionscreen.SetActive(true);
 			mainmenu.SetActive(false);
-			go_back.SetActive(false);
-			loseGame.SetActive(false);
-			winGame.SetActive(false);
-			restart.SetActive(false);
 			backmenu.SetActive(true);
 			state = StateManager::INSTRUCTION;
 
@@ -274,6 +260,7 @@ void Model_Screen::UpdateLoseScreen(double dt, bool* myKeys, double mouse_x, dou
 	restart.SetActive(true);
 	winGame.SetActive(false);
 	loseGame.SetActive(true);
+
 	if (pressTimer > 1)
 	{
 		if (cursor.QuickAABBDetection(&restart) && myKeys[KEY_LMOUSE])	//press to play game again

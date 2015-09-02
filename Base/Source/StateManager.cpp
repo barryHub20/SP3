@@ -41,7 +41,7 @@ StateManager::STATES StateManager::GetState()
 
 void StateManager::ChangeState(STATES state)
 {
-	std::cout << "Switching state with transition" << std::endl;
+	//std::cout << "Switching state with transition" << std::endl;
 	stateToChangeTo = state;
 	setTransition();
 	transition = true;

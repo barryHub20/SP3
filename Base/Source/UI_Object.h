@@ -22,6 +22,7 @@ public:
 		RESTART,
 		TUTORIAL,
 		TUTORIAL_BIG,
+		LOADING,
 		TOTAL_TYPE,
 	};
 

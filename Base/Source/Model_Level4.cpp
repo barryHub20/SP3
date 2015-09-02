@@ -54,9 +54,6 @@ void Model_Level4::Init()
 			goList.push_back(player);
 		}
 
-		/* !! Remember to set player pos to where ever you want */
-		player->translate(100, 100, 1);
-
 		//object
 		InitObject();
 		spawnItems();
@@ -84,7 +81,7 @@ void Model_Level4::Init()
 			, m_view_width, m_view_height, mapSize.x, mapSize.y);
 
 		/* Set original player position */
-		originalPos.Set(100, 100, 2);
+		originalPos.Set(200, 1100, 2);
 
 		/* Coin list */
 		if(player != NULL)
@@ -293,11 +290,11 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 		sfx_man->play_ambience();
 
 		//Update enemy
-	UpdateEnemy(dt);
+		UpdateEnemy(dt);
 
 		/* Update player */
 		player->Update(dt, myKeys);
-
+		
 		//Update the traps
 		UpdateTraps(dt, myKeys);
 
