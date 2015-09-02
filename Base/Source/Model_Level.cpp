@@ -20,27 +20,7 @@ bool Model_Level::goMainMenu = false;
 bool Model_Level::restartLevel = false;
 bool Model_Level::playerDie = false;
 float Model_Level::hero_Health = 0;
-
-// UI 
-UI_Object Model_Level::cursor;
-UI_Object Model_Level::start_Game;
-UI_Object Model_Level::instruction;
-UI_Object Model_Level::instructionscreen;
-UI_Object Model_Level::mainmenu;
-UI_Object Model_Level::go_back;
-UI_Object Model_Level::main_UI_bar;	//main UI in game
-UI_Object Model_Level::puzzleMessage;	//UI for puzzle message	(Use this to customise, take
-UI_Object Model_Level::tutorialUI;	//UI for showing tutorial (Lvl 1 and 2 only)
-UI_Object Model_Level::winGame;
-UI_Object Model_Level::loseGame;
-UI_Object Model_Level::restart;
-UI_Object Model_Level::backmenu;
-
-// door/checkpoint 
-//TriggerObject* Model_Level::door = NULL;
-//TriggerObject* Model_Level::staircase = NULL;
 bool Model_Level::stopGame = false;
-//bool Model_Level::doorUnlocked = false;
 bool Model_Level::haveFire = false;
 double Model_Level::Timer = 0.0;
 double Model_Level::mapTimer = 0.0;
@@ -59,6 +39,7 @@ Model_Level::~Model_Level()
 /*********** core functions ***************/
 void Model_Level::Init()
 {
+	/* Init all static stuff already? */
 	if(!init_Already)
 	{
 		Model::Init();
@@ -74,40 +55,44 @@ void Model_Level::Init()
 		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-		current_model = 3;
-
-		/* 1) Init static stuff: create object here */
-		main_UI_bar.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
-			Vector3(m_2D_view_width * 0.5f, 0, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
-			"", UI_Object::MAIN_MENU_BACKGROUND, true);
-
-		/* puzzle message: the pop up box when u press a key (B) */
-		puzzleMessage.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
-			Vector3(m_2D_view_width * 0.5f, m_2D_view_width * 0.5f, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
-			"dszfse", UI_Object::POP_UP, true);
-		puzzleMessage.SetActive(false);	//only show when prompted
-
-		/* tutorial message: the pop up box when teaching you to do something */
-		tutorialUI.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
-			Vector3(m_2D_view_width * 0.5f, m_2D_view_width * 0.5f, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
-			"dszfse", UI_Object::POP_UP, true);
-		tutorialUI.SetActive(false);	//only show when prompted
+		current_model = 0;
 	}
 
 	/* Player */
-	goList.push_back(player);
+	if(player != NULL)
+	{
+		goList.push_back(player);
+	}
+
+	/* 1) Init UI stuff */
+	main_UI_bar.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
+		Vector3(m_2D_view_width * 0.5f, 0, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
+		"", UI_Object::MAIN_MENU_BACKGROUND, true);
+
+	/* puzzle message: the pop up box when u press a key (B) */
+	puzzleMessage.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
+		Vector3(m_2D_view_width * 0.5f, m_2D_view_width * 0.5f, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
+		"dsze", UI_Object::POP_UP, true);
+
+	/* tutorial message: the pop up box when teaching you to do something */
+	tutorialUI.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
+		Vector3(m_2D_view_width * 0.5f, m_2D_view_width * 0.5f, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
+		"dszfse", UI_Object::POP_UP, true);
 
 	/* 2) push back any static object to their respective vectors */
-	if(current_model < 2)
-	{
-		UI_List.push_back(&main_UI_bar);
-		UI_List.push_back(&puzzleMessage);
-		UI_List.push_back(&tutorialUI);
-	}
+	puzzleMessage.SetActive(false);
+	tutorialUI.SetActive(false);
+	UI_List.push_back(&main_UI_bar);
+	UI_List.push_back(&puzzleMessage);
+	UI_List.push_back(&tutorialUI);
 
 	/* Puzzle msg timer */
 	puzzleMsgTime = 0.2f;
 	puzzleMsgTimer = puzzleMsgTime;
+
+	/* Rate of pressing invisbility */
+	inviTime = 0.2f;
+	inviTimer = inviTime;
 }
 
 void Model_Level::InitMaps()
@@ -115,18 +100,12 @@ void Model_Level::InitMaps()
 	/** Create maps for all levels **/
 
 	/** Level 1 set to MapManager::MAP1 **/
-	//Model_Level::mapManager.CreateMap(MapManager::MAP1, 32, 25, 32, "Image//Map//test.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
 	Model_Level::mapManager.CreateMap(MapManager::MAP1, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
-	//Model_Level::mapManager.CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
 	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
 	Model_Level::mapManager.AddRear(MapManager::MAP1, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
-	//Model_Level::mapManager.AddRear(MapManager::MAP1, Map::NOCOLLISIONMAP, 32, 25, 32, "Image//Map//map1_Tile Layer 3.csv", Geometry::meshList[Geometry::GEO_TILESET1], false);
-	//Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl1.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
-	//Model_Level::mapManager.CreateMap(MapManager::MAP3, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//MapDesign_lvl2.csv", Geometry::meshList[Geometry::GEO_TILEMAP]);
-	
+
 	/** Level 2 set to MapManager::MAP2 **/
 	Model_Level::mapManager.CreateMap(MapManager::MAP2, Map::FLOORMAP, 16, 13, 64, "Image//Map//tempfloor.csv", Geometry::meshList[Geometry::GEO_TEMPFLOOR], false);
-	//Model_Level::mapManager.CreateMapFloor(MapManager::MAP1, 32, 25, 32, Geometry::meshList[Geometry::GEO_JINFLOOR]);
 	Model_Level::mapManager.AddRear(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map2_Tile Layer 1.csv", Geometry::meshList[Geometry::GEO_DUNGEONTILE]);
 	Model_Level::mapManager.AddRear(MapManager::MAP2, Map::COLLISIONMAP, 32, 25, 32, "Image//Map//map2_Tile Layer 2.csv", Geometry::meshList[Geometry::GEO_TILESET1]);
 	
@@ -171,6 +150,18 @@ void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager
 		if(player->coinList[i]->getActive())
 		{
 			player->coinList[i]->Update(dt, level_map);
+		}
+	}
+
+	/* If press C, go invisible */
+	if(inviTimer < inviTime)
+		inviTimer += dt;
+	else
+	{
+		if(myKeys[KEY_C])
+		{
+			inviTimer = 0.0;
+			player->switchInvisibleState();
 		}
 	}
 
@@ -315,14 +306,9 @@ bool Model_Level::ReadFromFile(char* text)
 		{
 			if(player == NULL)
 			{
-				player = new Player(Geometry::meshList[Geometry::GEO_GUARD], Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
+				player = new Player(Geometry::meshList[Geometry::GEO_GUARD], Vector3(tmp_pos.x, tmp_pos.y, 1), Vector3(tmp_scale.x, tmp_scale.y, 1), 0, 10, true, *sfx_man);
 				player->getInventory()->Set(0.48f, 0.05f, m_2D_view_width, m_2D_view_height, 0.97f, 0.0f);
 				goList.push_back(player);
-				/* Coin list */
-				for(int i = 0; i < player->coinList.size(); ++i)
-				{
-					goList.push_back(player->coinList[i]);
-				}
 			}
 		}
 

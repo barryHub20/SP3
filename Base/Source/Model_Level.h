@@ -44,24 +44,19 @@ public:
 	static Player* player;
 	static float hero_Health;
 
-	// UI
-	static UI_Object cursor;
-	static UI_Object start_Game;
-	static UI_Object mainmenu;
-	static UI_Object instructionscreen;
-	static UI_Object instruction;
-	static UI_Object go_back;
-	static UI_Object main_UI_bar;	//main UI in game
-	static UI_Object puzzleMessage;	//UI for puzzle message	(Use this to customise, take
-	static UI_Object tutorialUI;	//UI for showing tutorial (Lvl 1 and 2 only)
-	static UI_Object winGame;
-	static UI_Object loseGame;
-	static UI_Object restart;
-	static UI_Object backmenu;
+	// UI objects
+	/* In game */
+	UI_Object main_UI_bar;	//main UI in game
+	UI_Object puzzleMessage;	//UI for puzzle message	(Use this to customise, take
+	UI_Object tutorialUI;	//UI for showing tutorial (Lvl 1 and 2 only)
 
 	/* Rate of pressing the see puzzle msg */
 	double puzzleMsgTimer;	
 	double puzzleMsgTime;
+
+	/* Rate of pressing invisbility */
+	double inviTimer;
+	double inviTime;
 
 	// door/checkpoint 
 	TriggerObject* door;
@@ -82,8 +77,11 @@ public:
 	/* damage values here */
 	const static int SPIKE_DMG = 10;
 
+	/* Player stuff */
+	Vector3 originalPos;	//original player position
+
 	/* Common game objects */
-	//objects
+	//Enemy
 	Ogre* E_Ogre;
 	Item* item;
 
@@ -110,7 +108,6 @@ public:
 
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState);
 	virtual void ClearLevel();
-	
 	virtual void Exit();
 
 	/*********** getter/setter ***************/

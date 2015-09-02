@@ -80,10 +80,39 @@ void Model_Level3::Init()
 		puzzleManager = new PuzzleManager;
 		puzzleManager->Init(MapManager::MAX_MAP);
 		InitPuzzles();
+
+		/* Set original player position */
+		originalPos.Set(100, 90, 2);
+
+		/* Coin list */
+		if(player != NULL)
+		{
+			for(int i = 0; i < player->coinList.size(); ++i)
+			{
+				goList.push_back(player->coinList[i]);
+			}
+		}
 	}
+
+	//set UI
+	main_UI_bar.SetActive(true);
+
+	/* set player */
+	player->Translate(originalPos);
 
 	/* set bounds so camera spawns at correct place each time reenter this level */
 	camera.SetBound(player->getPosition());
+
+	/* Clear inventory */
+	player->getInventory()->clearFromInventory(Item::KEY);
+	player->getInventory()->clearFromInventory(Item::NOTE);
+
+	/** init **/
+	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
+	{
+		Object *go = (Object *)*it;
+		go->Init();
+	}
 }
 
 void Model_Level3::InitUI()
@@ -108,13 +137,6 @@ void Model_Level3::InitObject()
 		// Post for bottom left key
 	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(230, 400, 0), Vector3(50, 50, 1), 0, 10, true);
 	goList.push_back(E_Ogre);
-
-	/** init **/
-	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
-	{
-		Object *go = (Object *)*it;
-		go->Init();
-	}
 }
 
 void Model_Level3::InitTrigger()
@@ -182,7 +204,7 @@ void Model_Level3::Update(double dt, bool* myKeys, Vector3 mousePos, StateManage
 	/* Update game */
 	UpdateGame(dt, myKeys);
 
-	/* If in transition */
+	///* If in transition */
 	//if (Model_Level::stateManager.isTransition())
 	//{
 	//	Model_Level::stateManager.UpdateTransitionTime(dt);

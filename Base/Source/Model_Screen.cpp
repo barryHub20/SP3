@@ -10,7 +10,17 @@
 #include <sstream>
 
 #include "StaticObject.h"
-//(tip) If create bullet, bullet class has a static TRS so that TRS update with current bullet pos
+// UI 
+UI_Object Model_Screen::cursor;
+UI_Object Model_Screen::start_Game;
+UI_Object Model_Screen::instruction;
+UI_Object Model_Screen::instructionscreen;
+UI_Object Model_Screen::mainmenu;
+UI_Object Model_Screen::go_back;
+UI_Object Model_Screen::winGame;
+UI_Object Model_Screen::loseGame;
+UI_Object Model_Screen::restart;
+UI_Object Model_Screen::backmenu;
 
 /*********** constructor/destructor ***************/
 Model_Screen::Model_Screen()
@@ -87,6 +97,11 @@ void Model_Screen::Init()
 
 		state = StateManager::MAIN_MENU;
 	}
+
+	//set UI
+	main_UI_bar.SetActive(false);
+	tutorialUI.SetActive(false);
+	puzzleMessage.SetActive(false);
 
 	/* set bounds so camera spawns at correct place each time reenter this level */
 	camera.SetBound(player->getPosition());

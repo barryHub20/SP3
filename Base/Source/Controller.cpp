@@ -190,12 +190,18 @@ bool Controller::IsKeyPressed(unsigned short key)
 /********************** model transitioning **********************/
 void Controller::modelTransitioning()
 {
+	/* If in GAME state, focus will be on model_level vector */
 	if (stateManager->GetState() == StateManager::GAME)
 	{
 		if (Model_Level::NextLevel())	//if go next level
 		{
+			/* Set current model (int) to next model */
 			Model_Level::setCurrentModel(Model_Level::getCurrentModel() + 1);
+
+			/* Set View to the next model */
 			view->SetModel(modelList[Model::getCurrentModel()]);
+
+			/* init the model */
 			modelList[Model::getCurrentModel()]->Init();
 			Model_Level::setNextLevel(false);
 			stateManager->ChangeState(StateManager::GAME);

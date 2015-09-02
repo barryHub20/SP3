@@ -71,10 +71,43 @@ void Model_Level5::Init()
 		initBasicsAlready = true;
 
 		doorUnlocked = false;
+
+		/* Set original player position */
+		originalPos.Set(100, 100, 2);
+
+		/* Coin list */
+		if(player != NULL)
+		{
+			for(int i = 0; i < player->coinList.size(); ++i)
+			{
+				goList.push_back(player->coinList[i]);
+			}
+		}
 	}
+
+	//set UI
+	main_UI_bar.SetActive(true);
+
+
+	/* set player */
+	player->Translate(originalPos);
 
 	/* set bounds so camera spawns at correct place each time reenter this level */
 	camera.SetBound(player->getPosition());
+
+	/* set player */
+	player->Translate(originalPos);
+
+	/* Clear inventory */
+	player->getInventory()->clearFromInventory(Item::KEY);
+	player->getInventory()->clearFromInventory(Item::NOTE);
+
+	/** init **/
+	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
+	{
+		Object *go = (Object *)*it;
+		go->Init();
+	}
 }
 
 void Model_Level5::InitObject()

@@ -96,7 +96,7 @@ Coin::Coin(Mesh* mesh, bool onFloor)
 
 	Set("items", mesh, NULL, false, false);
 	translateObject(0, 0, 0);
-	scaleObject(50, 50, 1);
+	scaleObject(10, 10, 1);
 
 	/* set boundbox */
 	collideBound.Set(position, scale, Collision::BOX);
@@ -124,8 +124,6 @@ void Coin::Activate(Vector3& playerPos, float x, float y)
 	//Set to starting position
 	translate(playerPos.x, playerPos.y, 2);
 	setActive(true);
-
-	cout << position << ' ' << scale << endl;
 }
 
 /* Update coin */
@@ -134,7 +132,7 @@ void Coin::Update(double dt, vector<Map*>* currentMap)
 {
 	/* Update pos */
 	translateObject(info.getForce());
-	info.setSpeed(info.getSpeed() - 200 * dt);
+	info.setSpeed(info.getSpeed() - 50 * dt);
 
 	/* Update timer */
 	info.setTimer(info.getTimer() - dt);

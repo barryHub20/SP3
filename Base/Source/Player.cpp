@@ -74,7 +74,7 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	for(int i = 0; i < 20; ++i)
 	{
 		Coin* coin;
-		coin = new Coin(Geometry::meshList[Geometry::GEO_CUBE], false);
+		coin = new Coin(Geometry::meshList[Geometry::GEO_COIN], false);
 		coinList.push_back(coin);
 	}
 

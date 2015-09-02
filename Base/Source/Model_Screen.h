@@ -4,6 +4,18 @@
 
 class Model_Screen : public Model_Level
 {
+	//UI
+	/* Main menu */
+	static UI_Object cursor;
+	static UI_Object start_Game;
+	static UI_Object mainmenu;
+	static UI_Object instructionscreen;
+	static UI_Object instruction;
+	static UI_Object go_back;
+	static UI_Object winGame;
+	static UI_Object loseGame;
+	static UI_Object restart;
+	static UI_Object backmenu;
 public:
 	/*********** constructor/destructor ***************/
 	Model_Screen();

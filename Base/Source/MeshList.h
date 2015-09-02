@@ -74,6 +74,7 @@ public:
 		GEO_RSTAIRCASEUP,
 		GEO_LSTAIRCASEDOWN,
 		GEO_SCROLL_SEALED,	//for scroll on the ground
+		GEO_COIN,
 
 		GEO_KEYY,
 		GEO_KEYR,

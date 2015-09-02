@@ -81,13 +81,42 @@ void Model_Level4::Init()
 
 		camera.Init(Vector3(0, -120, 0), Vector3(0, 0, -10), Vector3(0, 1, 0), m_view_width * 0.2f, m_view_height * 0.2f
 			, m_view_width, m_view_height, mapSize.x, mapSize.y);
+
+		/* Set original player position */
+		originalPos.Set(100, 100, 2);
+
+		/* Coin list */
+		if(player != NULL)
+		{
+			for(int i = 0; i < player->coinList.size(); ++i)
+			{
+				goList.push_back(player->coinList[i]);
+			}
+		}
 	}
+
+	//set UI
+	main_UI_bar.SetActive(true);
+
+	/* set player */
+	player->Translate(originalPos);
 	
 	camera.SetBound(player->getPosition());
 
 	for (int i = 0; i < 2; i++)
 	{
 		pickedUpKeys[i] = true;
+	}
+
+	/* Clear inventory */
+	player->getInventory()->clearFromInventory(Item::KEY);
+	player->getInventory()->clearFromInventory(Item::NOTE);
+
+	/** init **/
+	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
+	{
+		Object *go = (Object *)*it;
+		go->Init();
 	}
 }
 

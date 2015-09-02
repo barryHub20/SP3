@@ -239,6 +239,8 @@ void Geometry::Init()
 	meshList[GEO_SCROLL] = MeshBuilder::GenerateQuad("Scroll", Color(1, 1, 1));
 	meshList[GEO_SCROLL]->textureID[0] = LoadTGA("Image//Sprites//scroll.tga");
 
+	meshList[GEO_COIN] = MeshBuilder::GenerateQuad("coin", Color(1, 1, 1));
+	meshList[GEO_COIN]->textureID[0] = LoadTGA("Image//coin.tga");
 }
 
 void Geometry::Exit()

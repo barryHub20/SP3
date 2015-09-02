@@ -73,28 +73,34 @@ void Model_Level2::Init()
 		//object
 		InitObject();
 		InitPuzzles();
-		cout << goList.size() << endl;
-		///* Coin list */
-		//for(int i = 0; i < player->coinList.size(); ++i)
-		//{
-		//	goList.push_back(player->coinList[i]);
-		//}
+		
+		/* Set original player position */
+		originalPos.Set(100, 100, 2);
 
 		level_state = STAGE_1;
+
+		/* Coin list */
+		if(player != NULL)
+		{
+			for(int i = 0; i < player->coinList.size(); ++i)
+			{
+				goList.push_back(player->coinList[i]);
+			}
+		}
 	}
+
+	//set UI
+	main_UI_bar.SetActive(true);
+
+	/* set player */
+	player->Translate(originalPos);
 
 	/* set bounds so camera spawns at correct place each time reenter this level */
 	camera.SetBound(player->getPosition());
-}
 
-void Model_Level2::InitObject()
-{	
-	/** Set up player **/
-	ReadFromFile("Save_Load_File_lvl2.txt");
-	cout << goList.size() << endl;
-	/** Set up enemy **/
-	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
-	goList.push_back(E_Ogre);
+	/* Clear inventory */
+	player->getInventory()->clearFromInventory(Item::KEY);
+	player->getInventory()->clearFromInventory(Item::NOTE);
 
 	/** init **/
 	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
@@ -104,6 +110,16 @@ void Model_Level2::InitObject()
 	}
 }
 
+void Model_Level2::InitObject()
+{	
+	/** Set up player **/
+	ReadFromFile("Save_Load_File_lvl2.txt");
+
+	// Post for bottom left key
+	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(230, 400, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(E_Ogre);
+}
+
 void Model_Level2::InitTrigger()
 {
 	//TriggerArea puzzleActivateArea[TOTAL_PUZZLE];	//there are 3 puzzles
@@ -111,24 +127,6 @@ void Model_Level2::InitTrigger()
 
 void Model_Level2::InitPuzzles()
 {
-	//puzzleManager->addTextPuzzle(MapManager::MAP1, "test1");
-	//puzzleManager->addTextPuzzle(MapManager::MAP1, "test2");
-	//puzzleManager->addPicturePuzzle(MapManager::MAP1, "Image//Sprites//guard.tga");
-	//puzzleManager->addTextPuzzle(MapManager::MAP2, "test3");
-	//puzzleManager->addTextPuzzle(MapManager::MAP3, "test4");
-
-	//*cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	//puzzleManager->goToNextPart();
-	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	//puzzleManager->goToNextPart();
-	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	//puzzleManager->goToNextPart();
-	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	//puzzleManager->goToNextPart();
-	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;
-	//puzzleManager->goToNextPart();
-	//cout << puzzleManager->getCurrentPuzzle()->getTextPuzzle() << endl;*/
-
 	Vector3 winDimension(m_2D_view_width/2, m_2D_view_height/2, 1);
 
 	/* State 1 */
@@ -222,12 +220,6 @@ void Model_Level2::Update(double dt, bool* myKeys, Vector3 mousePos, StateManage
 	
 	/* Update game */
 	UpdateGame(dt, myKeys);
-
-	/* If in transition */
-	/*if (Model_Level::stateManager.isTransition())
-	{
-		Model_Level::stateManager.UpdateTransitionTime(dt);
-	}*/
 }
 
 void Model_Level2::UpdateGame(double dt, bool* myKeys)
@@ -235,10 +227,10 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 	if (stopGame == false)
 	{
 		// Sound - ambience
-		//sfx_man->play_ambience();
+		sfx_man->play_ambience();
 
 		//Update enemy
-		//UpdateEnemy(dt);
+		UpdateEnemy(dt);
 
 		/* Update player */
 		player->Update(dt, myKeys);
@@ -276,10 +268,7 @@ void Model_Level2::UpdateCollision()
 		{
 			if ((*level_map)[i]->getMapType() == Map::COLLISIONMAP)
 			{
-				if((*level_map)[i]->CheckCollisionWith(player))
-				{
-					
-				}
+				(*level_map)[i]->CheckCollisionWith(player);
 			}
 		}
 
@@ -358,6 +347,8 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 	{
 	case STAGE_1:
 		{
+			tutorialUI.SetActive(true);	//only show when prompted
+
 			/* Check if collide with note 1 */
 			if(player->pickUp(puzzleNotes[0], myKeys))
 			{

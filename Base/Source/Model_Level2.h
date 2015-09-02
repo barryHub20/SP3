@@ -35,8 +35,6 @@ private:
 	Collision stage3Area;	//stage 3 area
 
 	//keys
-	//bool pickedUpKeys[2];
-	//bool pickedUpNotes[2];
 	Item* puzzleNotes[2];
 	Item* puzzleKeys[2];
 
@@ -69,8 +67,8 @@ public:
 		void UpdateCollision();	//anything that needs to be collided, put here
 		void UpdateEnemy(double dt);
 
-
 	virtual void Exit();
+
 };
 
 #endif

@@ -392,11 +392,6 @@ void View_Level::RenderObject()
 			if(o->getActive())
 			{
 				modelStack.PushMatrix();
-				modelStack.LoadMatrix(*(o->getTRS()));
-				RenderMesh(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], false);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
 				modelStack.LoadMatrix( *(o->getTRS()) );
 				RenderMesh(o->getMesh(), o->getLight());
 				modelStack.PopMatrix();
@@ -541,11 +536,6 @@ void View_Level::RenderInventory(Inventory* inventory)
 		//set pos to next slot
 		startX += inventory->getDistBtwSlot();
 	}
-
-	////test
-	//ss.str("");
-	//ss << "Hey I just met yyou and this is crazy so heres my number so call me maybe";
-	//RenderTextOnScreenCutOff(Geometry::meshList[Geometry::GEO_AR_CHRISTY], ss.str(), Color(32.f / 255.f, 94.f / 255.f, 11.f / 255.f), 5, 50, 50, 3.1f, 32);
 }
 
 void View_Level::RenderRearMap()

@@ -25,6 +25,7 @@ Model_Level1::~Model_Level1()
 /*********** core functions ***************/
 void Model_Level1::Init()
 {
+	/* Init all objects of this level already? */
 	if(!initBasicsAlready)
 	{
 		initBasicsAlready = true;
@@ -74,10 +75,39 @@ void Model_Level1::Init()
 		InitPuzzles();
 
 		tutorial_state = TUTORIAL_1;
+
+		/* Set original player position */
+		originalPos.Set(100, 100, 1);
+
+		/* Coin list */
+		if(player != NULL)
+		{
+			for(int i = 0; i < player->coinList.size(); ++i)
+			{
+				goList.push_back(player->coinList[i]);
+			}
+		}
 	}
+
+	/* set player */
+	player->Translate(originalPos);
 
 	/* set bounds so camera spawns at correct place each time reenter this level */
 	camera.SetBound(player->getPosition());
+
+	//set UI
+	main_UI_bar.SetActive(true);
+
+	/* Clear inventory */
+	player->getInventory()->clearFromInventory(Item::KEY);
+	player->getInventory()->clearFromInventory(Item::NOTE);
+
+	/** init **/
+	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
+	{
+		Object *go = (Object *)*it;
+		go->Init();
+	}
 }
 
 void Model_Level1::InitObject()
