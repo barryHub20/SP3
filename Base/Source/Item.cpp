@@ -32,6 +32,9 @@ Item::Item(Mesh* mesh, ITEM_TYPE itemID, bool onFloor, Vector3 Pos, Vector3 scal
 	case ATK_POTION:
 		typeName = "Attack";
 		break;
+	case ARTIFACT:
+		typeName = "Artifact";
+		break;
 	case KEY:
 		typeName = "Key";
 		break;

@@ -15,7 +15,7 @@
 /*********** constructor/destructor ***************/
 Model_Level5::Model_Level5()
 {
-	
+
 }
 
 Model_Level5::~Model_Level5()
@@ -44,7 +44,7 @@ void Model_Level5::Init()
 		}
 
 		/* !! Remember to set player pos to where ever you want */
-		
+
 
 		//object
 		InitObject();
@@ -71,6 +71,8 @@ void Model_Level5::Init()
 		initBasicsAlready = true;
 
 		doorUnlocked = false;
+
+		ogreTimer = 0;
 
 		/* Set original player position */
 		originalPos.Set(100, 100, 2);
@@ -116,8 +118,20 @@ void Model_Level5::InitObject()
 	ReadFromFile("Save_Load_File_lvl5.txt");
 
 	/** Set up enemy **/
-	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
-	goList.push_back(E_Ogre);
+	ogres[0] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(700, 600, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[0]);
+
+	ogres[1] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(950, 600, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[1]);
+
+	ogres[2] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(100, 300, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[2]);
+
+	ogres[3] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(400, 100, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[3]);
+
+	ogres[4] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(750, 600, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[4]);
 
 	/** init **/
 	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
@@ -130,7 +144,7 @@ void Model_Level5::InitObject()
 void Model_Level5::InitTrigger()
 {
 	bool EndInit = false;
-	
+
 	for(int i = 0; EndInit == false; ++i)
 	{
 		triggerObject.resize(triggerObject.size()+1);
@@ -196,13 +210,13 @@ void Model_Level5::InitTrigger()
 		}
 	}
 
-	 
+
 	/* Trigger area */
 	TriggerArea* ArrowFly = new TriggerArea;
 	ArrowFly->Set(Vector3(827, 90, 1), Vector3(20, 20, 1), 5);	//press 5 times
 	TriggerAreaList.push_back(ArrowFly);
 
-	
+
 
 	GameObject* obj = new GameObject;
 	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
@@ -264,7 +278,7 @@ void Model_Level5::Update(double dt, bool* myKeys, Vector3 mousePos, StateManage
 
 	if(keyPressedTimer < delayTime)
 		keyPressedTimer += dt;
-	
+
 	/* Update game */
 	UpdateGame(dt, myKeys);
 
@@ -284,7 +298,7 @@ void Model_Level5::UpdateGame(double dt, bool* myKeys)
 
 		//Update enemy
 		UpdateEnemy(dt);
-		
+
 		//Update the traps
 		UpdateTraps(dt, myKeys);
 
@@ -292,7 +306,7 @@ void Model_Level5::UpdateGame(double dt, bool* myKeys)
 		player->Update(dt, myKeys);
 
 		player->dropItem(dt, item, myKeys);
-	
+
 		/* check collision with object */
 		//start: Set up collision bound before checking with the others
 		player->StartCollisionCheck();
@@ -309,21 +323,19 @@ void Model_Level5::UpdateGame(double dt, bool* myKeys)
 
 		/* Update puzzle (put above check collision with door since we need response for door) */
 		UpdatePuzzle(dt, myKeys);
-		
-		player->dropItem(dt, item, myKeys);
 
-		
+		player->dropItem(dt, item, myKeys);
 
 		/*** Change to next level ***/
 		mapTimer += dt;
-		if (player->CollisionCheck(staircase))
-		{
-			if (mapTimer > 5)
-			{
-				goNextLevel = true;
-				mapTimer = 0;
-			}
-		}
+		//if (player->CollisionCheck(staircase))
+		//{
+		//	if (mapTimer > 5)
+		//	{
+		//		goNextLevel = true;
+		//		mapTimer = 0;
+		//	}
+		//}
 
 		//Door & Key
 		if(door->getActive() == true)
@@ -385,6 +397,10 @@ void Model_Level5::UpdateGame(double dt, bool* myKeys)
 				if (itemList[i]->getItemID() == Item::KEYG)
 				{
 					doorGUnlocked = true;
+				}
+				if(itemList[i]->getItemID() == Item::ARTIFACT)
+				{
+					playerWin = true;
 				}
 			}
 		}
@@ -451,7 +467,7 @@ void Model_Level5::UpdateTraps(double dt, bool* myKeys)
 	//Fire 1
 
 	//Fire 2
-	
+
 	//Timer for lever and damage, health
 	if(Timer >= 0.5)
 	{
@@ -491,50 +507,46 @@ void Model_Level5::UpdateTraps(double dt, bool* myKeys)
 			}
 		}
 	}
-		
-
-	
-	
 }
 void Model_Level5::UpdatePuzzle(double dt, bool* myKeys)
 {
-	
+
 }
 
 void Model_Level5::UpdateEnemy(double dt)
 {
-	E_Ogre->Update(dt, level_map, goList);
-
-	/* start set up */
-	E_Ogre->StartCollisionCheck();
-
-	/* check with wall */
-	for (int i = 0; i < (*level_map).size(); i++)
+	ogreTimer += dt;
+	for(int i = 0; i < 5; i++)
 	{
-		(*level_map)[i]->CheckCollisionWith(E_Ogre);
+		ogres[i]->Update(dt, level_map, goList);
+
+		/* start set up */
+		ogres[i]->StartCollisionCheck();
+
+		for (int i = 0; i < (*level_map).size(); i++)
+		{
+			(*level_map)[i]->CheckCollisionWith(ogres[i]);
+		}
+
+		if (ogreTimer > 0.5)
+		{
+			if (player->QuickAABBDetection(ogres[i]))
+			{
+				player->setHealth(player->getHealth() - 5);
+				ogreTimer = 0;
+				if (player->getHealth() == 0)
+				{
+					player->setHealth(0);
+				}
+			}
+		}
+
+		/* check with all other objects */
+		ogres[i]->getCollideBound()->Reset();
+
+		//response
+		ogres[i]->CollisionResponse();
 	}
-
-
-	/*for(int i = 0; i < player->coinList.size(); ++i)
-	{
-		if(player->coinList[i]->getActive())
-		{
-			E_Ogre->UpdateCoinDetection(player->coinList[i]);
-		}
-
-		else
-		{
-			Coin* coin = new Coin;
-			coin->setActive(false);
-			E_Ogre->UpdateCoinDetection(coin);
-		}
-	}*/
-
-	/* check with all other objects */
-	E_Ogre->getCollideBound()->Reset();
-
-	//response
-	E_Ogre->CollisionResponse();
 }
 
 void Model_Level5::Exit()

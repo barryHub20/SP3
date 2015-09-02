@@ -89,6 +89,7 @@ public:
 	PuzzleManager *puzzleManager;
 	bool puzzleOpen;
 	bool openTutorial;
+	static bool playerWin;
 	static bool playerDie;
 	
 	static bool goNextLevel;
@@ -117,9 +118,11 @@ public:
 	static void setPreviousLevel(bool i);
 	static bool MainMenu();
 	static bool Restart();
-	static bool playerGG();
+	static bool WinGame();
+	static bool LoseGame();
 
 	StateManager::STATES getState();
+	void setState(StateManager::STATES state);
 
 	/********** Utilities *************/
 	bool ReadFromFile(char* text);

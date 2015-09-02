@@ -247,6 +247,12 @@ void Geometry::Init()
 
 	meshList[GEO_COIN] = MeshBuilder::GenerateQuad("coin", Color(1, 1, 1));
 	meshList[GEO_COIN]->textureID[0] = LoadTGA("Image//coin.tga");
+
+	meshList[GEO_ARTIFACT] = MeshBuilder::GenerateQuad("artifact", Color(1, 1, 1));
+	meshList[GEO_ARTIFACT]->textureID[0] = LoadTGA("Image//artifact.tga");
+
+	meshList[GEO_ARTIFACTSTAND] = MeshBuilder::GenerateQuad("artifact_stand", Color(1, 1, 1));
+	meshList[GEO_ARTIFACTSTAND]->textureID[0] = LoadTGA("Image//artifact_stand.tga");
 }
 
 void Geometry::Exit()

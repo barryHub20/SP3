@@ -19,6 +19,7 @@ bool Model_Level::goPreviousLevel = false;
 bool Model_Level::goMainMenu = false;
 bool Model_Level::restartLevel = false;
 bool Model_Level::playerDie = false;
+bool Model_Level::playerWin = false;
 float Model_Level::hero_Health = 0;
 bool Model_Level::stopGame = false;
 bool Model_Level::haveFire = false;
@@ -53,6 +54,7 @@ void Model_Level::Init()
 		goNextLevel = goPreviousLevel = goMainMenu = restartLevel  = playerDie = false;
 		init_Already = true;
 		openTutorial = true;
+		playerWin = false;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
 		current_model = 0;
@@ -160,6 +162,11 @@ void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager
 			inviTimer = 0.0;
 			player->switchInvisibleState();
 		}
+	}
+
+	if(player->getHealth() <= 0)
+	{
+		player->setHealth(0);
 	}
 
 	if(player->getHealth() == 0)
@@ -356,6 +363,20 @@ bool Model_Level::ReadFromFile(char* text)
 			goList.push_back(item);
 			itemList.push_back(item);
 		}
+
+		if(object_word == "ARTIFACT")
+		{
+			item = new Item(Geometry::meshList[Geometry::GEO_ARTIFACT], Item::ARTIFACT, true, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1));
+			goList.push_back(item);
+			itemList.push_back(item);
+		}
+
+		if(object_word == "ARTIFACTSTAND")
+		{
+			item = new Item(Geometry::meshList[Geometry::GEO_ARTIFACTSTAND], Item::ARTIFACTSTAND, true, Vector3(tmp_pos.x, tmp_pos.y, 0), Vector3(tmp_scale.x, tmp_scale.y, 1));
+			goList.push_back(item);
+			itemList.push_back(item);
+		}
 	}
 	myFile.close();
 
@@ -403,7 +424,8 @@ vector<Item*>* Model_Level::getItemList(){return &itemList;}
 bool Model_Level::NextLevel(){return goNextLevel;}
 bool Model_Level::PreviousLevel(){return goPreviousLevel;}
 bool Model_Level::Restart() { return restartLevel; }
-bool Model_Level::playerGG() {return playerDie; }
+bool Model_Level::WinGame() {return playerWin; }
+bool Model_Level::LoseGame() {return playerDie; }
 
 void Model_Level::setNextLevel(bool i)
 {
@@ -423,6 +445,11 @@ bool Model_Level::MainMenu()
 StateManager::STATES Model_Level::getState()
 {
 	return state;
+}
+
+void Model_Level::setState(StateManager::STATES state)
+{
+	this->state = state;
 }
 
 vector<Map*>* Model_Level::getLevelMap()

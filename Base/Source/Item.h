@@ -25,6 +25,8 @@ public:
 		H_POTION,
 		S_POTION,
 		ATK_POTION,
+		ARTIFACT,
+		ARTIFACTSTAND,
 		TOTAL_TYPE,
 	};
 

@@ -127,16 +127,16 @@ void Model_Level3::InitObject()
 	ReadFromFile("Save_Load_File_lvl3.txt");
 
 	/** Set up enemy **/
-	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(925, 700, 0), Vector3(50, 50, 1), 0, 10, true);
-	goList.push_back(E_Ogre);
+	ogres[0] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(900, 700, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[0]);
 
-		// Post for bottom middle key
-	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(540, 210, 0), Vector3(50, 50, 1), 0, 10, true);
-	goList.push_back(E_Ogre);
+	// Post for bottom middle key
+	ogres[1] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(540, 210, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[1]);
 
-		// Post for bottom left key
-	E_Ogre = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(230, 400, 0), Vector3(50, 50, 1), 0, 10, true);
-	goList.push_back(E_Ogre);
+	// Post for bottom left key
+	ogres[2] = new Ogre(Geometry::meshList[Geometry::GEO_CUBE], Vector3(230, 400, 0), Vector3(50, 50, 1), 0, 10, true);
+	goList.push_back(ogres[2]);
 }
 
 void Model_Level3::InitTrigger()
@@ -450,22 +450,30 @@ void Model_Level3::UpdateTraps(double dt, bool* myKeys)
 
 void Model_Level3::UpdateEnemy(double dt)
 {
-	E_Ogre->Update(dt, level_map, goList);
-
-	/* start set up */
-	E_Ogre->StartCollisionCheck();
-
-	/* check with wall */
-	for (int i = 0; i < (*level_map).size(); i++)
+	for(int i = 0; i < 3; i++)
 	{
-		(*level_map)[i]->CheckCollisionWith(E_Ogre);
+		ogres[i]->Update(dt, level_map, goList);
+
+		/* start set up */
+		ogres[i]->StartCollisionCheck();
+
+		/* check with wall */
+		for (int i = 0; i < (*level_map).size(); i++)
+		{
+			(*level_map)[i]->CheckCollisionWith(ogres[i]);
+		}
+
+		/* check with all other objects */
+		ogres[i]->getCollideBound()->Reset();
+
+		//response
+		ogres[i]->CollisionResponse();
 	}
+}
 
-	/* check with all other objects */
-	E_Ogre->getCollideBound()->Reset();
-
-	//response
-	E_Ogre->CollisionResponse();
+void Model_Level3::ClearLevel()
+{
+	Model_Level::ClearLevel();
 }
 
 void Model_Level3::Exit()

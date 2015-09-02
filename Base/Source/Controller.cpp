@@ -150,7 +150,7 @@ void Controller::Run()
 				modelScreen->Update(m_dElapsedTime, myKeys, GetMousePos(), stateManager->GetState());
 			}
 			modelTransitioning();
-			//cout << stateManager->GetState() << endl;
+
 			m_dAccumulatedTime_thread1 = 0.0;
 		}
 		if(m_dAccumulatedTime_thread2 > 0.003)	//render: render fps is _dAccumulatedTime_thread1 > fps
@@ -230,11 +230,20 @@ void Controller::modelTransitioning()
 			Model_Level::setCurrentModel(0);
 		}
 
-		else if(Model_Level::playerGG()) //if player dies
+		else if(Model_Level::WinGame()) //if player wins
 		{
-			//Model_Level::playerDie = false; //player die false
-			//stateManager->ChangeState(StateManager::LOSE_SCREEN);
-			//view->SetModel(modelScreen);
+			Model_Level::playerWin = false; //player win false
+			stateManager->setState(StateManager::WIN_SCREEN);
+			modelScreen->setState(StateManager::WIN_SCREEN);
+			view->SetModel(modelScreen);
+		}
+
+		else if(Model_Level::LoseGame()) // if player dies
+		{
+			Model_Level::playerDie = false; //player die false
+			stateManager->setState(StateManager::LOSE_SCREEN);
+			modelScreen->setState(StateManager::LOSE_SCREEN);
+			view->SetModel(modelScreen);
 		}
 	}
 	else

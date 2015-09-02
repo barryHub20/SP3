@@ -4,12 +4,15 @@
 
 class Model_Level3 : public Model_Level
 {
+private:
+	Ogre* ogres[3];
+
 public:
-/*********** constructor/destructor ***************/
+	/*********** constructor/destructor ***************/
 	Model_Level3();
 	~Model_Level3();
 
-/*********** core functions ***************/
+	/*********** core functions ***************/
 	//Initialize
 	virtual void Init();
 	void InitTrigger();
@@ -20,10 +23,10 @@ public:
 
 	//Update
 	virtual void Update(double dt, bool* myKeys, Vector3 mousePos, StateManager::STATES currentState);
-		void UpdateGame(double dt, bool* myKeys);
-		void UpdateEnemy(double dt);
-		void UpdateTraps(double dt, bool* myKeys);
-
+	void UpdateGame(double dt, bool* myKeys);
+	void UpdateEnemy(double dt);
+	void UpdateTraps(double dt, bool* myKeys);
+	virtual void ClearLevel();
 
 	virtual void Exit();
 };

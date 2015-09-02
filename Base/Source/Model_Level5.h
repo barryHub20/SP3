@@ -46,6 +46,9 @@ private:
 
 	//keys
 	Item* keyList[3];
+
+	Ogre* ogres[5];
+	float ogreTimer;
 public:
 /*********** constructor/destructor ***************/
 	Model_Level5();
