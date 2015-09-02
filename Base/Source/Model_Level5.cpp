@@ -514,6 +514,21 @@ void Model_Level5::UpdateEnemy(double dt)
 		(*level_map)[i]->CheckCollisionWith(E_Ogre);
 	}
 
+	for(int i = 0; i < player->coinList.size(); ++i)
+	{
+		if(player->coinList[i]->getActive())
+		{
+			E_Ogre->UpdateCoinDetection(player->coinList[i]);
+		}
+
+		else
+		{
+			Coin* coin = new Coin;
+			coin->setActive(false);
+			E_Ogre->UpdateCoinDetection(coin);
+		}
+	}
+
 	/* check with all other objects */
 	E_Ogre->getCollideBound()->Reset();
 

@@ -55,7 +55,7 @@ void Model_Level::Init()
 		openTutorial = true;
 	
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
-		current_model = 0;
+		current_model = 4;
 	}
 
 	/* Player */
@@ -151,6 +151,7 @@ void Model_Level::Update(double dt, bool* myKeys, Vector3 mousePos, StateManager
 		{
 			player->coinList[i]->Update(dt, level_map);
 		}
+
 	}
 
 	/* If press C, go invisible */

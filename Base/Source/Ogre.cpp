@@ -41,6 +41,7 @@ Ogre::Ogre(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed, boo
 	this->setName("Ogre");
 	this->setHealth(100);
 	detectedPlayer = false;
+	detectedCoin = false;
 	collided = false;
 	this->setDestinationReached(false);
 	this->setDestination(Vector2(400, 400));
@@ -77,8 +78,6 @@ void Ogre::CollisionResponse()
 
 void Ogre::Update(float dt, vector<Map*>* level_map, vector<GameObject*>& goList)
 {
-	//cout<<Route;
-
 	info.setTimer(info.getTimer() - dt);
 
 	for (int i = 0; i < goList.size(); ++i)
@@ -152,38 +151,38 @@ void Ogre::Update(float dt, vector<Map*>* level_map, vector<GameObject*>& goList
 		{
 		case ES_ATTACK_UP:
 		{
-			if (mesh != animationList[ES_ATTACK_UP])
+			if (mesh != animationList[ES_WALK_UP])
 			{
-				setMesh(animationList[ES_ATTACK_UP]);
+				setMesh(animationList[ES_WALK_UP]);
 			}
-			animationList[ES_ATTACK_UP]->Update(dt);
+			animationList[ES_WALK_UP]->Update(dt);
 			break;
 		}
 		case ES_ATTACK_DOWN:
 		{
-			if (mesh != animationList[ES_ATTACK_DOWN])
+			if (mesh != animationList[ES_WALK_DOWN])
 			{
-				setMesh(animationList[ES_ATTACK_DOWN]);
+				setMesh(animationList[ES_WALK_DOWN]);
 			}
-			animationList[ES_ATTACK_DOWN]->Update(dt);
+			animationList[ES_WALK_DOWN]->Update(dt);
 			break;
 		}
 		case ES_ATTACK_LEFT:
 		{
-			if (mesh != animationList[ES_ATTACK_LEFT])
+			if (mesh != animationList[ES_WALK_LEFT])
 			{
-				setMesh(animationList[ES_ATTACK_LEFT]);
+				setMesh(animationList[ES_WALK_LEFT]);
 			}
-			animationList[ES_ATTACK_LEFT]->Update(dt);
+			animationList[ES_WALK_LEFT]->Update(dt);
 			break;
 		}
 		case ES_ATTACK_RIGHT:
 		{
-			if (mesh != animationList[ES_ATTACK_RIGHT])
+			if (mesh != animationList[ES_WALK_RIGHT])
 			{
-				setMesh(animationList[ES_ATTACK_RIGHT]);
+				setMesh(animationList[ES_WALK_RIGHT]);
 			}
-			animationList[ES_ATTACK_RIGHT]->Update(dt);
+			animationList[ES_WALK_RIGHT]->Update(dt);
 			break;
 		}
 		}
@@ -362,29 +361,54 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 	}
 	case ES_CHASE:
 		{
-			cout<<"Chasing"<<endl;
-
-			Cell* EnemyPos = new Cell(this->getPosition().x ,this->getPosition().y);
-			Cell* PlayerPos = new Cell(player->getPosition().x,player->getPosition().y);
-
-			RouteList = this->PathFinder.FindPath(EnemyPos, PlayerPos, level_map); // returns a vector of Cell
-			Route = Vector3(RouteList[RouteToTake]->getTileX()*32,RouteList[RouteToTake]->getTileY()*32); // Route is a vector3 
-
-			if(((this->getPosition() - player->getPosition()).Length() / 32) > 10)
+			if(detectedCoin == true)
 			{
-				setState(ES_IDLE);
-				info.setTimer(1);
-				cout << "GOING TO IDLE NOW" << endl;
-			}
-			cout<<static_cast<int>((this->getPosition() - player->getPosition()).Length() / 32)<<endl;
-			if(static_cast<int>((this->getPosition() - player->getPosition()).Length() / 32) < 2)
-			{
-				setState(ES_ATTACK);
+				cout<<"Chasing"<<endl;
+
+				Cell* EnemyPos = new Cell(this->getPosition().x ,this->getPosition().y);
+				Cell* PlayerPos = new Cell(player->getPosition().x,player->getPosition().y);
+
+				RouteList = this->PathFinder.FindPath(EnemyPos, PlayerPos, level_map); // returns a vector of Cell
+				Route = Vector3(RouteList[RouteToTake]->getTileX()*32,RouteList[RouteToTake]->getTileY()*32); // Route is a vector3 
+
+				if(detectedPlayer == false)
+				{
+					setState(ES_IDLE);
+					info.setTimer(1);
+					cout << "GOING TO IDLE NOW" << endl;
+				}
+				cout<<static_cast<int>((this->getPosition() - player->getPosition()).Length() / 32)<<endl;
+				if(static_cast<int>((this->getPosition() - player->getPosition()).Length() / 32) < 2)
+				{
+					setState(ES_ATTACK);
+				}
+
+				info.setTimer(1); 
+
+				isDestReached = false;
 			}
 
-			info.setTimer(1); 
-			
-			isDestReached = false;
+			else
+			{
+				cout<<"COIN CHASING LA"<<endl;
+
+				Cell* EnemyPos = new Cell(this->getPosition().x ,this->getPosition().y);
+				Cell* CoinPos = new Cell(coin->getPosition().x,coin->getPosition().y);
+
+				RouteList = this->PathFinder.FindPath(EnemyPos, CoinPos, level_map); // returns a vector of Cell
+				Route = Vector3(RouteList[RouteToTake]->getTileX()*32,RouteList[RouteToTake]->getTileY()*32); // Route is a vector3 
+
+				if(detectedCoin == false)
+				{
+					setState(ES_IDLE);
+					info.setTimer(1);
+					cout << "GOING TO IDLE NOW" << endl;
+				}
+
+				info.setTimer(1); 
+
+				isDestReached = false;
+			}
 		}
 
 		if(this->getPosition() != Route)
@@ -560,6 +584,21 @@ void Ogre::setDetecionBound()
 Collision Ogre::getDetecionBound()
 {
 	return DetectionBound;
+}
+
+void Ogre::UpdateCoinDetection(Coin* coin)
+{
+	this->coin = coin;
+	if(coin->getActive() == true)
+	{
+		setState(ES_CHASE);
+		detectedCoin = true;
+	}
+
+	else
+	{
+		detectedCoin = false;
+	}
 }
 
 Ogre::~Ogre(void)
