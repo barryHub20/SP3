@@ -515,7 +515,7 @@ void Model_Level5::UpdateEnemy(double dt)
 	}
 
 
-	for(int i = 0; i < player->coinList.size(); ++i)
+	/*for(int i = 0; i < player->coinList.size(); ++i)
 	{
 		if(player->coinList[i]->getActive())
 		{
@@ -528,7 +528,7 @@ void Model_Level5::UpdateEnemy(double dt)
 			coin->setActive(false);
 			E_Ogre->UpdateCoinDetection(coin);
 		}
-	}
+	}*/
 
 	/* check with all other objects */
 	E_Ogre->getCollideBound()->Reset();

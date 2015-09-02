@@ -37,9 +37,6 @@ private:
 	// Sound
 	SoundManager *my_sfx_man;
 
-	//invisible?
-	bool invisible;
-
 	//Inventory
 	Inventory inventory;
 	Inventory weaponInventory;

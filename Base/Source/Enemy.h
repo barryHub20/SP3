@@ -10,7 +10,7 @@ public:
 	enum ENEMY_STATE
 	{
 		ES_START,
-		ES_ESCAPE,
+		ES_STOP,
 		ES_WALK_LEFT,
 		ES_WALK_RIGHT,
 		ES_WALK_UP,
@@ -51,7 +51,7 @@ public:
 	~Enemy(void);
 
 	ENEMY_STATE lastState;
-protected:
+public:
 	PathFinding PathFinder;
 
 private:

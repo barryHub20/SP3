@@ -81,7 +81,12 @@ public:
 
 	static int getObjCount();
 
+	bool getInvisible(){return invisible;}	//(ONLY FOR PLAYER)
+	
 protected:
+
+	//invisible? (ONLY FOR PLAYER)
+	bool invisible;
 
 	GO_TYPE Type;	//type
 	Physics info;	// Physics related info

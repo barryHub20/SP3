@@ -12,6 +12,7 @@ GameObject::GameObject(void)
 	SpriteCol = NULL;
 	SpriteRow = NULL;
 	Sprite_texture_file_path = "";
+	invisible = false;
 }
 
 GameObject::GameObject(Mesh* mesh, Vector3 Pos, Vector3 scale, bool active)
