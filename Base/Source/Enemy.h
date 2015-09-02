@@ -10,7 +10,6 @@ public:
 	enum ENEMY_STATE
 	{
 		ES_START,
-		ES_STOP,
 		ES_WALK_LEFT,
 		ES_WALK_RIGHT,
 		ES_WALK_UP,

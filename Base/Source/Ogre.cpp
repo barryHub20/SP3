@@ -68,11 +68,8 @@ void Ogre::CollisionResponse()
 	DetectionBound.Reset();
 
 	//response
-	if(detectedPlayer == true && getState() != ES_ALERT && getState() != ES_SCAN && getState() != ES_CHASE && getState() != ES_ATTACK)
-	{
-		setState(ES_ALERT);
-		info.setTimer(2);
-	}
+	
+
 }
 
 void Ogre::Update(float dt, vector<Map*>* level_map, vector<GameObject*>& goList)
@@ -237,22 +234,14 @@ void Ogre::Update(float dt, vector<Map*>* level_map, vector<GameObject*>& goList
 
 void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 {
-	if(player->getInvisible() == true && detectedPlayer == true)
+	if(detectedPlayer == true && player->getInvisible() == false && getState() != ES_SCAN && getState() != ES_CHASE && getState() != ES_ATTACK)
 	{
-		setState(ES_STOP);
-	}
-	
-	if(player->getInvisible() == false && detectedPlayer == false)
-	{
-		setState(ES_IDLE);
+		setState(ES_SCAN);
+		info.setTimer(0.5);
 	}
 
 	switch (this->getState())
 	{
-	case ES_STOP:
-		{
-			break;
-		}
 	case ES_WALK_DOWN:
 	{
 		if (animationList[ES_WALK_DOWN]->ended == true)
@@ -308,6 +297,7 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 				{
 					this->setState(ES_IDLE);
 				}
+
 			}
 		}
 		translateObject(1, 0, 0);
@@ -375,14 +365,14 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 	}
 	case ES_CHASE:
 		{
-
+			cout<<"Chase"<<endl;
 			Cell* EnemyPos = new Cell(this->getPosition().x ,this->getPosition().y);
 			Cell* PlayerPos = new Cell(player->getPosition().x,player->getPosition().y);
 
 			RouteList = this->PathFinder.FindPath(EnemyPos, PlayerPos, level_map); // returns a vector of Cell
 			Route = Vector3(RouteList[RouteToTake]->getTileX()*32,RouteList[RouteToTake]->getTileY()*32); // Route is a vector3 
 
-			if(((this->getPosition() - player->getPosition()).Length() / 32) > 10)
+			if(detectedPlayer == false )
 			{
 				setState(ES_IDLE);
 				info.setTimer(1);
@@ -475,18 +465,20 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 	case ES_SCAN:
 	{
 
-			if(info.getTimer() < 0 && detectedPlayer == true)
+		if(info.getTimer() < 0 && player->getInvisible() == false && detectedPlayer == true)
 			{
-			
 				setState(ES_CHASE);
-				//info.setTimer(1);
 				break;
 			}
-			if(info.getTimer() < 0 && detectedPlayer == false)
-			{
-				setState(ES_IDLE);
+		if(info.getTimer() < 0 && player->getInvisible() == true)
+		{
+			setState(ES_IDLE);
 				break;	
-			}
+		}
+			/*if(info.getTimer() < 0 && detectedPlayer == false)
+			{
+				
+			}*/
 			break;	
 	}	
 
@@ -535,15 +527,6 @@ void Ogre::UpdateStateResponse(vector<Map*>* level_map, GameObject* player)
 			}
 			break;
 		}
-	case ES_ALERT:
-	{
-		if (info.getTimer() < 0)
-		{
-			this->setState(ES_SCAN);
-			info.setTimer(1);
-		}
-		break;
-	}
 	default:
 	{
 		break;

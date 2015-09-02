@@ -2,6 +2,9 @@
 #include "Application.h"
 #include "LoadTGA.h"
 
+const int Player::COIN_PRICE = 50;
+const float Player::INVISIBILITY_PRICE = 10;
+
 Player::Player()
 {
 	for(int i = 0; i < MAX_STATES; i++)
@@ -19,8 +22,9 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 	PLAYER_SPEED = 4;
 	score = 0;
 	health = 100;
-	stamina = 60;
+	stamina = 100;
 	damage = 10;
+	throwingCoin = false;
 
 	/* set object */
 	Set("sdfdf", mesh, NULL, false, false);
@@ -78,7 +82,7 @@ Player::Player(Mesh* mesh, Vector3 Pos, Vector3 scale, float angle, float Speed,
 		coinList.push_back(coin);
 	}
 
-	throwTime = 0.5f;
+	throwTime = 7.f;
 	throwTimer = throwTime;
 }
 
@@ -112,6 +116,11 @@ Player::~Player()
 
 void Player::throwCoin(double dt, bool throwKey)
 {
+	if(getStamina() < COIN_PRICE)	//not enough price to throw coin :(
+	{
+		return;
+	}
+
 	/* Set coin list */
 	if(throwTimer < throwTime)
 		throwTimer += dt;
@@ -119,9 +128,11 @@ void Player::throwCoin(double dt, bool throwKey)
 	{
 		if(throwKey)
 		{
+			/* throwing coin flag to true */
+			throwingCoin = true;
 			throwTimer = 0.0;
 	
-			for(int i = 0; i < 20; ++i)
+			for(int i = 0; i < coinList.size(); ++i)
 			{
 				/* If not active, activate */
 				if(!coinList[i]->getActive())
@@ -147,6 +158,30 @@ void Player::Update(double dt, bool* myKey)
 
 	// Counts from 0
 	info.setTimer(info.getTimer() + dt);
+
+	/* if invisible, staminia */
+	if(invisible)
+	{
+		setStamina(getStamina() - INVISIBILITY_PRICE * dt);	
+	}
+
+	/* if throw coin */
+	if(throwingCoin)
+	{
+		throwingCoin = false;
+		setStamina(getStamina() - COIN_PRICE);
+	}
+
+	/* If not enough staminia, invisible 0 */
+	if(getStamina() <= 0)
+	{
+		setStamina(0);
+
+		if(invisible)
+		{
+			switchInvisibleState();
+		}
+	}
 
 	/* update inventory */
 	inventory.Update(dt, myKey);
@@ -510,6 +545,11 @@ bool Player::dropItem(double dt, Item* item, bool* myKey)
 		}
 	}
 	return false;
+}
+
+bool Player::getThrowingCoin()
+{
+	return throwingCoin;
 }
 
 bool Player::useItem(bool* myKey)

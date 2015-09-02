@@ -183,7 +183,7 @@ void Model_Level2::InitPuzzles()
 	goList.push_back(leverOpen);
 
 	/* State 4 */
-	spikeTrap = new GameObject(Geometry::meshList[Geometry::GEO_CUBE], Vector3(80, 403, 1), Vector3(100, 100, 1), true);
+	spikeTrap = new GameObject(Geometry::meshList[Geometry::GEO_SPIKE], Vector3(80, 403, 1), Vector3(100, 100, 1), true);
 	goList.push_back(spikeTrap);
 
 	//doors

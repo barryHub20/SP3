@@ -105,8 +105,17 @@ void Model_Level4::Init()
 	/* Clear inventory */
 	player->getInventory()->clearFromInventory(Item::KEY);
 	player->getInventory()->clearFromInventory(Item::NOTE);
-	
+	player->getInventory()->clearFromInventory(Item::KEYR);
+	player->getInventory()->clearFromInventory(Item::KEYP);
+
 	firstKey = secondKey = false;
+	
+	/** init **/
+	for(std::vector<GameObject*>::iterator it = goList.begin(); it != goList.end(); ++it)
+	{
+		Object *go = (Object *)*it;
+		go->Init();
+	}
 }
 
 void Model_Level4::InitUI()
@@ -405,10 +414,6 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 		/* Update target */
 		camera.target = camera.position;
 		camera.target.z -= 10;
-
-		//Scrolling
-		getCamera()->position.Set(player->getPosition().x - 500, player->getPosition().y - 400, 1);
-		getCamera()->target.Set(player->getPosition().x - 500, player->getPosition().y - 400, 0);
 
 		/* Press space to go back main menu */
 		if (myKeys[KEY_SPACE] && keyPressedTimer >= delayTime)

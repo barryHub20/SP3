@@ -221,6 +221,9 @@ void Geometry::Init()
 	meshList[GEO_KEYY] = MeshBuilder::GenerateQuad("Yellow Key", Color(1, 1, 1), 1.f);
 	meshList[GEO_KEYY]->textureID[0] = LoadTGA("Image//keyY.tga");
 
+	meshList[GEO_SPIKE] = MeshBuilder::GenerateQuad("Spike", Color(1, 1, 1), 1.f);
+	meshList[GEO_SPIKE]->textureID[0] = LoadTGA("Image//spike_floor.tga");
+
 	meshList[GEO_KEYR] = MeshBuilder::GenerateQuad("Red Key", Color(1, 1, 1), 1.f);
 	meshList[GEO_KEYR]->textureID[0] = LoadTGA("Image//keyR.tga");
 

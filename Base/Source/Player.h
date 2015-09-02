@@ -21,6 +21,10 @@ public:
 		JUMP,
 		MAX_STATES,
 	};
+
+	const static int COIN_PRICE;
+	const static float INVISIBILITY_PRICE;
+
 private:	
 	int score;
 	double health;
@@ -36,6 +40,7 @@ private:
 
 	// Sound
 	SoundManager *my_sfx_man;
+	bool throwingCoin;
 
 	//Inventory
 	Inventory inventory;
@@ -96,6 +101,8 @@ public:
 	bool dropItem(double dt, Item* item, bool* myKey);
 
 	bool useItem(bool* myKey);
+
+	bool getThrowingCoin();
 
 	bool getInvisible();
 	void setInvisible(bool b);
