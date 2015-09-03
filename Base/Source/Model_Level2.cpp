@@ -138,11 +138,6 @@ void Model_Level2::InitPuzzles()
 
 	/* State 2 */
 	puzzleActivateArea.Set(Vector3(827, 90, 1), Vector3(20, 20, 1), 5);	//press 5 times
-	GameObject* obj = new GameObject;
-	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
-	obj->translateObject(puzzleActivateArea.position);
-	obj->scaleObject(puzzleActivateArea.scale.x, puzzleActivateArea.scale.y, 1);
-	goList.push_back(obj);
 
 	//key: to unlock door 0
 	puzzleKeys[0] = new Item(Geometry::meshList[Geometry::GEO_KEYY], Item::KEY, true, Vector3(200, 500, 0), Vector3(35, 35, 1));
@@ -160,19 +155,9 @@ void Model_Level2::InitPuzzles()
 
 	//player 2 zone
 	stage2Area.Set(Vector3(827, 90, 1), Vector3(120, 120, 1), Collision::BOX);	
-	obj = new GameObject;
-	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
-	obj->translateObject(stage2Area.position);
-	obj->scaleObject(stage2Area.scale.x, stage2Area.scale.y, 1);
-	goList.push_back(obj);
 
 	/* State 3 */
 	stage3Area.Set(Vector3(877, 190, 1), Vector3(120, 120, 1), Collision::BOX);	
-	obj = new GameObject;
-	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
-	obj->translateObject(stage3Area.position);
-	obj->scaleObject(stage3Area.scale.x, stage3Area.scale.y, 1);
-	goList.push_back(obj);
 
 	//lever to remove traps
 	leverClose = new TriggerObject(Geometry::meshList[Geometry::GEO_NOTTRIGGER], TriggerObject::FIRETRIGGER, Vector3(60, 654, 1), Vector3(45, 45, 1), 0, true, *sfx_man, player);
@@ -237,11 +222,6 @@ void Model_Level2::UpdateGame(double dt, bool* myKeys)
 
 		/* Update puzzle (put above check collision with door since we need response for door) */
 		UpdatePuzzle(dt, myKeys);
-
-		if(myKeys[KEY_K])
-		{
-			player->Translate(Vector3(659, 389, 0));
-		}
 
 		player->dropItem(dt, item, myKeys);
 
@@ -313,7 +293,7 @@ void Model_Level2::UpdatePuzzle(double dt, bool* myKeys)
 	else
 	{
 		puzzleMsgTimer = 0.0;
-		if(myKeys[KEY_B])
+		if(myKeys[KEY_Q])
 		{
 			if(puzzleMessage.getActive())
 			{

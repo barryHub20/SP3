@@ -154,35 +154,15 @@ void Model_Level1::InitUI()
 
 	//Trigger Area for tutorial 2
 	tutorial2Area.Set(Vector3(180, 305, 1), Vector3(300, 160, 1), Collision::BOX);	
-	obj = new GameObject;
-	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
-	obj->translateObject(tutorial2Area.position);
-	obj->scaleObject(tutorial2Area.scale.x, tutorial2Area.scale.y, 1);
-	goList.push_back(obj);
 
 	//Trigger Area for tutorial 3
 	tutorial3Area.Set(Vector3(400, 305, 1), Vector3(120, 120, 1), Collision::BOX);	
-	obj = new GameObject;
-	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
-	obj->translateObject(tutorial3Area.position);
-	obj->scaleObject(tutorial3Area.scale.x, tutorial3Area.scale.y, 1);
-	goList.push_back(obj);
 
 	//Trigger Area for tutorial 4
 	tutorial4Area.Set(Vector3(350, 690, 1), Vector3(180, 150, 1), Collision::BOX);	
-	obj = new GameObject;
-	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
-	obj->translateObject(tutorial4Area.position);
-	obj->scaleObject(tutorial4Area.scale.x, tutorial4Area.scale.y, 1);
-	goList.push_back(obj);
 
 	//Trigger Area for tutorial 5
 	tutorial5Area.Set(Vector3(750, 470, 1), Vector3(150, 150, 1), Collision::BOX);	
-	obj = new GameObject;
-	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
-	obj->translateObject(tutorial5Area.position);
-	obj->scaleObject(tutorial5Area.scale.x, tutorial5Area.scale.y, 1);
-	goList.push_back(obj);
 }
 
 void Model_Level1::InitPuzzles()

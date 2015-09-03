@@ -55,7 +55,7 @@ void Model_Level::Init()
 		init_Already = true;
 		openTutorial = true;
 		playerWin = false;
-	
+ 
 		/** Change starting level to ur own level: current_model = ur level num - 1 **/
 		current_model = 0;
 	}
@@ -66,12 +66,12 @@ void Model_Level::Init()
 		"", UI_Object::MAIN_MENU_BACKGROUND, true);
 
 	/* puzzle message: the pop up box when u press a key (B) */
-	puzzleMessage.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
+	puzzleMessage.Init(Geometry::meshList[Geometry::GEO_WORDBOX],
 		Vector3(m_2D_view_width * 0.5f, m_2D_view_width * 0.5f, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
 		"dsze", UI_Object::POP_UP, true);
 
 	/* tutorial message: the pop up box when teaching you to do something */
-	tutorialUI.Init(Geometry::meshList[Geometry::GEO_MAIN_BAR], 
+	tutorialUI.Init(Geometry::meshList[Geometry::GEO_WORDBOX],
 		Vector3(m_2D_view_width * 0.5f, m_2D_view_width * 0.5f, 1.95f), Vector3(m_2D_view_width * 1.05f, m_2D_view_height * 0.3f, 1),
 		"dszfse", UI_Object::POP_UP, true);
 

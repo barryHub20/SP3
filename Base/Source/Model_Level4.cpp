@@ -222,40 +222,29 @@ void Model_Level4::InitTrigger()
 	goList.push_back(triggerObject[11]);
 
 	//Spike traps
-	spikeTraps[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], TriggerObject::SPIKEREAPPEAR, Vector3(800, 480, 1), Vector3(50, 180, 1), 0.f, true, *sfx_man, player);
+	spikeTraps[0] = new TriggerObject(Geometry::meshList[Geometry::GEO_SPIKE], TriggerObject::SPIKEREAPPEAR, Vector3(800, 480, 1), Vector3(50, 180, 1), 0.f, true, *sfx_man, player);
 	spikeTraps[0]->duration = 1.f;
 		//GameObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], Vector3(800, 480, 1), Vector3(50, 180, 1), true);
 	goList.push_back(spikeTraps[0]);
 
-	spikeTraps[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], TriggerObject::SPIKEREAPPEAR, Vector3(1000, 480, 1), Vector3(50, 180, 1), 0.f, true, *sfx_man, player );
+	spikeTraps[1] = new TriggerObject(Geometry::meshList[Geometry::GEO_SPIKE], TriggerObject::SPIKEREAPPEAR, Vector3(1000, 480, 1), Vector3(50, 180, 1), 0.f, true, *sfx_man, player );
 	spikeTraps[1]->duration = 1.5f;
 		//GameObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], Vector3(1000, 480, 1), Vector3(50, 180, 1), true);
 	goList.push_back(spikeTraps[1]);
 
-	spikeTraps[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], TriggerObject::SPIKEREAPPEAR, Vector3(1200, 480, 1), Vector3(50, 180, 1), 0.f, true, *sfx_man, player);
+	spikeTraps[2] = new TriggerObject(Geometry::meshList[Geometry::GEO_SPIKE], TriggerObject::SPIKEREAPPEAR, Vector3(1200, 480, 1), Vector3(50, 180, 1), 0.f, true, *sfx_man, player);
 	spikeTraps[2]->duration = 1.f;
 		//GameObject(Geometry::meshList[Geometry::GEO_DEBUG_CUBE], Vector3(1200, 480, 1), Vector3(50, 180, 1), true);
 	goList.push_back(spikeTraps[2]);
 
 	keyActiveArea[0].Set(Vector3(60, 180, 1), Vector3(25, 25, 1), 5);	//press 5 times
-	GameObject* obj = new GameObject;
-	obj->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
-	obj->translateObject(keyActiveArea[0].position);
-	obj->scaleObject(keyActiveArea[0].scale.x, keyActiveArea[0].scale.y, 1);
-	goList.push_back(obj);
 
 	keyActiveArea[1].Set(Vector3(1300, 315, 1), Vector3(25, 25, 1), 5);	//press 5 times
-	GameObject* obj2 = new GameObject;
-	obj2->Set("Debug cube for trigger area", Geometry::meshList[Geometry::GEO_DEBUG_CUBE], NULL, false, false);
-	obj2->translateObject(keyActiveArea[1].position);
-	obj2->scaleObject(keyActiveArea[1].scale.x, keyActiveArea[1].scale.y, 1);
-	goList.push_back(obj2);
 }
 
 void Model_Level4::InitPuzzles()
 {
 	puzzleManager->addTextPuzzle("");
-	puzzleManager->addTextPuzzle("blue crate");
 	puzzleManager->addTextPuzzle("blue crate");
 	puzzleManager->addTextPuzzle("closed pot");
 	puzzleManager->addTextPuzzle("next floor");
@@ -394,10 +383,6 @@ void Model_Level4::UpdateGame(double dt, bool* myKeys)
 			firstKey = true;
 			keys[0]->setActive(true);
 			player->getInventory()->addItem(keys[0]);	//note 
-			if (puzzleManager->getCurrentPuzzle()->getTextPuzzle() == "")
-			{
-				puzzleManager->goToNextPart();
-			}
 			puzzleManager->goToNextPart();
 		}
 		if (keyActiveArea[1].getActivated() && secondKey == false)

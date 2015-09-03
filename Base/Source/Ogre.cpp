@@ -148,38 +148,38 @@ void Ogre::Update(float dt, vector<Map*>* level_map, vector<GameObject*>& goList
 		{
 		case ES_ATTACK_UP:
 		{
-			if (mesh != animationList[ES_ATTACK_UP])
+			if (mesh != animationList[ES_WALK_UP])
 			{
-				setMesh(animationList[ES_ATTACK_UP]);
+				setMesh(animationList[ES_WALK_UP]);
 			}
-			animationList[ES_ATTACK_UP]->Update(dt);
+			animationList[ES_WALK_UP]->Update(dt);
 			break;
 		}
 		case ES_ATTACK_DOWN:
 		{
-			if (mesh != animationList[ES_ATTACK_DOWN])
+			if (mesh != animationList[ES_WALK_DOWN])
 			{
-				setMesh(animationList[ES_ATTACK_DOWN]);
+				setMesh(animationList[ES_WALK_DOWN]);
 			}
-			animationList[ES_ATTACK_DOWN]->Update(dt);
+			animationList[ES_WALK_DOWN]->Update(dt);
 			break;
 		}
 		case ES_ATTACK_LEFT:
 		{
-			if (mesh != animationList[ES_ATTACK_LEFT])
+			if (mesh != animationList[ES_WALK_LEFT])
 			{
-				setMesh(animationList[ES_ATTACK_LEFT]);
+				setMesh(animationList[ES_WALK_LEFT]);
 			}
-			animationList[ES_ATTACK_LEFT]->Update(dt);
+			animationList[ES_WALK_LEFT]->Update(dt);
 			break;
 		}
 		case ES_ATTACK_RIGHT:
 		{
-			if (mesh != animationList[ES_ATTACK_RIGHT])
+			if (mesh != animationList[ES_WALK_RIGHT])
 			{
-				setMesh(animationList[ES_ATTACK_RIGHT]);
+				setMesh(animationList[ES_WALK_RIGHT]);
 			}
-			animationList[ES_ATTACK_RIGHT]->Update(dt);
+			animationList[ES_WALK_RIGHT]->Update(dt);
 			break;
 		}
 		}

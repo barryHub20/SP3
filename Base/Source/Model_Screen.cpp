@@ -76,12 +76,12 @@ void Model_Screen::Init()
 		UI_List.push_back(&instruction);
 
 		restart.Init(Geometry::meshList[Geometry::GEO_TRYAGAIN],
-			Vector3(m_2D_view_width * 0.5f, 60, 1.95f), Vector3(40, 20, 1),
+			Vector3(m_2D_view_width * 0.5f, 70, 1.95f), Vector3(40, 20, 1),
 			"", UI_Object::RESTART, false);
 		UI_List.push_back(&restart);
 
 		backmenu.Init(Geometry::meshList[Geometry::GEO_RETURN],
-			Vector3(m_2D_view_width * 0.5f, 20, 2.f), Vector3(40, 20, 1),
+			Vector3(m_2D_view_width * 0.5f, 30, 2.f), Vector3(40, 20, 1),
 			"", UI_Object::BACKMAIN, false);
 		UI_List.push_back(&backmenu);
 
